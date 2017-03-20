@@ -8,13 +8,22 @@ import './style/calculations.css';
 export default class Calculation extends React.Component{
   constructor(props) {
     super(props)
+    this.state = {
+      data: []
+    }
+    
+    this.onDataChange = this.onDataChange.bind(this);
+  }
+  
+  onDataChange(data) {
+    this.setState({ data });
   }
   
   render() {
     return (
       <div className="calculation">
-        <PieChart />
-        <EstimateOptions />
+        <PieChart data={this.state.data}/>
+        <EstimateOptions onDataChnage={this.onDataChange}/>
       </div>
     )
   }
