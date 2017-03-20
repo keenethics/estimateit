@@ -27,14 +27,19 @@ export default class Header extends React.Component {
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
-    console.log(dateString);
+    this.setState({ date: dateString }, () => {
+      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      console.log(JSON.stringify(this.state));
+    });
   }
 
   componentDidMount() {
     const loc = decodeURIComponent(location.href);
-    const state = loc.split('?state=').pop();
-    console.log(loc.split('?state=').pop());
-    console.log(JSON.parse(state));
+    const state = JSON.parse(loc.split('?state=').pop());
+    console.log(state);
+    this.setState(Object.assign({}, state), () => {
+      console.log(this.state);
+    })
   }
 
   renderTasks() {
@@ -62,6 +67,7 @@ export default class Header extends React.Component {
   }
 
   render () {
+    const date = this.state.date;
     return (
       <div>
         <div className="left-part" style={{float: 'left', marginRight: '50px'}}>
