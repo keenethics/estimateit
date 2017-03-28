@@ -45,12 +45,12 @@ export default class PieChart extends React.Component{
   }
   
   generateData() {
-    this.data[0].value = this.props.data.bugFixes || 10;
-    this.data[1].value = this.props.data.pm || 10;
-    this.data[2].value = this.props.data.qa || 10;
-    this.data[3].value = this.props.data.risks || 10;
-    this.data[4].value = this.props.data.completing || 90;
-    
+    this.data[0].value = this.props.data.bugFixes;
+    this.data[1].value = this.props.data.pm;
+    this.data[2].value = this.props.data.qa;
+    this.data[3].value = this.props.data.risks;
+    this.data[4].value = this.props.data.completing;
+
   }
   
   render() {

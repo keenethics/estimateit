@@ -12,24 +12,40 @@ export default class EstimateOptions extends React.Component{
       completing: 90
     };
     
+    this.rate = 25;
+    this.onRateChange = this.onRateChange.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
   }
   
   onFieldChange(e) {
     this.estimateFields[e.target.name] = +e.target.value;
-    this.props.onDataChnage(this.estimateFields);
+    this.props.onDataChange(this.estimateFields);
+  }
+  
+  onRateChange(e) {
+    this.rate = e.target.value;
+    this.props.onRateChange(this.rate);
   }
   
   componentDidMount() {
-    this.props.onDataChnage(this.estimateFields)
+    this.props.onDataChange(this.estimateFields)
   }
   
   render() {
     return (
       <div className="estimateOptions">
-        <div>Rate USD</div>
+        <div>
+          <span>Rate USD</span>
+          <input 
+            name="qa"
+            type="number" 
+            min="0" 
+            step="1" 
+            onChange={this.onRateChange}
+            defaultValue="25"/>
+        </div>
         <div className="estimateOption">
-          <span>QA</span>
+          <span>QA </span>
           <input 
             name="qa"
             type="range" 
@@ -38,9 +54,10 @@ export default class EstimateOptions extends React.Component{
             step="1" 
             onChange={this.onFieldChange}
             defaultValue="10"/>
+            <span>{this.estimateFields.qa}</span>
         </div>
         <div className="estimateOption">
-          <span>PM</span>
+          <span>PM </span>
           <input 
             name="pm"
             type="range" 
@@ -49,9 +66,10 @@ export default class EstimateOptions extends React.Component{
             step="1" 
             onChange={this.onFieldChange}
             defaultValue="10"/>
+            <span>{this.estimateFields.pm}</span>
         </div>
         <div className="estimateOption">
-          <span>Bug Fixes</span>
+          <span>Bug Fixes </span>
           <input 
             name="bugFixes"
             type="range" 
@@ -60,9 +78,10 @@ export default class EstimateOptions extends React.Component{
             step="1" 
             onChange={this.onFieldChange}
             defaultValue="10"/>
+            <span>{this.estimateFields.bugFixes}</span>
         </div>
         <div className="estimateOption">
-          <span>Risks</span>
+          <span>Risks </span>
           <input 
             name="risks"
             type="range" 
@@ -71,9 +90,10 @@ export default class EstimateOptions extends React.Component{
             step="1" 
             onChange={this.onFieldChange}
             defaultValue="10"/>
+            <span>{this.estimateFields.risks}</span>
         </div>
         <div className="estimateOption">
-          <span>Probability of project <br /> completing in time</span>
+          <span>Probability of project <br />completing in time</span>
           <input 
             name="completing"
             type="range" 
@@ -82,6 +102,7 @@ export default class EstimateOptions extends React.Component{
             step="1" 
             onChange={this.onFieldChange}
             defaultValue="90"/>
+            <span>{this.estimateFields.completing}</span>
         </div>
       </div>
     )

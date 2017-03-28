@@ -30,17 +30,21 @@ export default class LineChart  extends React.Component{
       }
     }
     
+    this.getChart = this.getChart.bind(this);
     this.generateData = this.generateData.bind(this);
   }
   
+  getChart(chartComponent) {
+    if(chartComponent) {
+      console.log(chartComponent.getChart());;
+    }
+  }
+  
   generateData() {
-    const labels = this.props.vector.map((item) => Math.round(item));
-    const data = this.props.vector.map((item, i) => Math.round(100 * i / (this.props.vector.length - 1)));
-    
       this.data = {
         datasets:[
         {
-          data,
+          data: this.props.data,
           fillColor: 'rgba(220,220,220,0.2)',
           label: 'estimate',
           pointColor: 'rgba(220,220,220,1)',
@@ -50,7 +54,7 @@ export default class LineChart  extends React.Component{
           strokeColor: 'rgba(220,220,220,1)',
         }
       ],
-      labels,
+      labels: this.props.labels,
     }
   }
   
@@ -58,7 +62,12 @@ export default class LineChart  extends React.Component{
     this.generateData();
     return (
       <div className="lineChartWrapper">
-        <Line data={this.data} options={this.options} width="500" height="200" />
+        <Line 
+          data={this.data} 
+          ref={this.getChart}
+          options={this.options} 
+          width="500" 
+          height="200" />
       
       </div>
     )

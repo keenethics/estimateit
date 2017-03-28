@@ -6,6 +6,7 @@
   "dependencies": {
     "chart.js": "^1.1.1",
     "discrete-vector": "0.0.15",
+    "dom-to-image": "^2.5.2",
     "path": "^0.12.7",
     "react": "^15.4.2",
     "react-chartjs": "^0.8.0",
