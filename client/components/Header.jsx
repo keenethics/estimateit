@@ -85,21 +85,41 @@ export default class Header extends React.Component {
   }
 
   setParentId(e) {
+    debugger;
     const id = e.currentTarget.dataset.id;
     this.setState({ parentTaskId: id })
   }
 
   renderTasks(tasks, iterator) {
-
+    // debugger;
     return tasks.map((task, i) =>
       <div key={task.id} style={{marginLeft: `${iterator*10}px` }}>
-        <input data-id={task.id} style={{marginRight: '20px'}} name='taskName' value={task.taskName}  onChange={this.onEditTask}/>
-        <input data-id={task.id} type="number" value={task.minimumHours} name='minimumHours' onChange={this.onEditTask}/>
-        <input data-id={task.id} type="number" value={task.maximumHours} name='maximumHours' onChange={this.onEditTask}/>
-        <button data-id={task.id} onClick={this.setParentId} >Add subtask</button>
+        <input
+          data-id={task.id}
+          style={{marginRight: '20px'}}
+          name='taskName' value={task.taskName}
+          onChange={this.onEditTask}
+          onClick={this.setParentId}/>
+        <input
+          data-id={task.id}
+          type="number"
+          value={task.minimumHours}
+          name='minimumHours'
+          onChange={this.onEditTask}
+          onClick={this.setParentId}/>
+        <input
+          data-id={task.id}
+          type="number"
+          value={task.maximumHours}
+          name='maximumHours'
+          onChange={this.onEditTask}
+          onClick={this.setParentId}/>
+        {(iterator < 2) ?
+          <button data-id={task.id} onClick={this.setParentId} >Add subtask</button> :
+        ''}
         <button data-id={task.id} onClick={this.deleteTask}>Delete</button>
-        {this.state.parentTaskId == task.id && i < 3? this.renderAddTaskForm(this.state.parentTaskId) : ''}
-        {task.tasks && this.renderTasks(task.tasks, i + 1)}
+
+        {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
       </div>
     )
   }
@@ -154,20 +174,9 @@ export default class Header extends React.Component {
   addTask(e) {
     const newTask = this.state.newTask;
     newTask.id = new Date().getTime();
-    // if(parentTaskId) {
-    //   const taskToEdit = this.state.tasks.filter(t => t.id == this.state.parentTaskId)[0];
-    //   taskToEdit.subtasks.push(newTask);
-    //   const tasks = this.state.tasks.filter(t => t.id != this.state.parentTaskId);
-    //   tasks.push(taskToEdit);
-    //   this.setState({ tasks }, () => {
-    //     history.replaceState({}, "", "/?" + JSON.stringify(this.state));
-    //   });
-    //
-    // } else {
     this.setState({ tasks: [...this.state.tasks, newTask], parentTaskId: '', newTask: null} , () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
-    // }
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName =='INPUT' ? i.value = '' : '')
   }
 
