@@ -52,6 +52,9 @@ export default class Header extends React.Component {
     this.setParentId = this.setParentId.bind(this);
     this.preAddTask = this.preAddTask.bind(this);
     this.findTaskAndModify = this.findTaskAndModify.bind(this);
+    this.findTaskAndDelete = this.findTaskAndDelete.bind(this);
+    this.deleteParentId = this.deleteParentId.bind(this);
+    this.insertTask = this.insertTask.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -87,13 +90,25 @@ export default class Header extends React.Component {
     return tasks;
   }
 
+  findTaskAndDelete(id, tasks) {
+    for(let i = 0; i < tasks.length; i++) {
+      if(tasks[i].id == id) {
+        tasks.splice(i, 1);
+        break;
+      }
+      if(tasks[i].tasks && tasks[i].tasks.length == 0) return;
+      if(tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndDelete(id, tasks[i].tasks);
+    }
+    return tasks;
+  }
+
   onEditTask(e) {
     const id = e.currentTarget.dataset.id;
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
 
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
-    debugger;
+    
     this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
@@ -102,7 +117,6 @@ export default class Header extends React.Component {
   setParentId(e) {
     const id = e.currentTarget.dataset.id;
     this.setState({ parentTaskId: id });
-
   }
 
   renderTasks(tasks, iterator) {
@@ -153,15 +167,22 @@ export default class Header extends React.Component {
     })
   }
 
+  deleteParentId(e) {
+    this.setState({ parentTaskId: null }, () => {
+      console.log(this.state.parentTaskId);
+    });
+  }
+
   renderAddTaskForm(parentTaskId) {
     return (
-      <div className='header--addTaskForm'>
+      <div className='header--addTaskForm' data-parentId={parentTaskId}>
         <input
           data-parentId={parentTaskId}
           type='text'
           placeholder='task'
           name='taskName'
           onChange={this.preAddTask}
+
         />
         <input
           data-parentId={parentTaskId}
@@ -169,6 +190,7 @@ export default class Header extends React.Component {
           placeholder='minimum hours'
           name='minimumHours'
           onChange={this.preAddTask}
+
         />
         <input
           data-parentId={parentTaskId}
@@ -176,6 +198,7 @@ export default class Header extends React.Component {
           placeholder='maximum hours'
           name='maximumHours'
           onChange={this.preAddTask}
+
         />
       <button onClick={this.addTask}>Add task</button>
       </div>
@@ -184,22 +207,52 @@ export default class Header extends React.Component {
 
   deleteTask(e) {
     const id = e.currentTarget.dataset.id;
-    this.setState({ tasks: this.state.tasks.filter(t => t.id != id) }, () => {
+    const tasks = this.state.tasks.slice();
+    const newTasks = this.findTaskAndDelete(id, tasks);
+    this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
+
+  }
+
+  insertTask(tasks, id, newTask) {
+    for(let i=0; i < tasks.length; i++) {
+      if(tasks[i].id == id) {
+        if(tasks[i].tasks && tasks[i].tasks.length) {
+          tasks[i].tasks.push(newTask);
+          break;
+        } else {
+          tasks[i].tasks = [];
+          tasks[i].tasks.push(newTask);
+          break;
+        }
+      }
+      if(tasks[i].tasks && tasks[i].tasks.length) this.insertTask(tasks[i].tasks, id, newTask);
+    }
+    return tasks;
   }
 
   addTask(e) {
+    const parent = e.currentTarget.parentNode.dataset.parentid;
+    console.log(parent);
     const newTask = this.state.newTask;
     newTask.id = new Date().getTime();
-    this.setState({ tasks: [...this.state.tasks, newTask], parentTaskId: '', newTask: null} , () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
-    });
+    const tasks = this.state.tasks.slice();
+    if(!parent) {
+      this.setState({ tasks: [...this.state.tasks, newTask], parentTaskId: '', newTask: null} , () => {
+        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      });
+    } else {
+      const newTasks = this.insertTask(tasks, parent, newTask);
+      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null} , () => {
+        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      });
+    }
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName =='INPUT' ? i.value = '' : '')
   }
 
   render () {
-    const tasks = this.state.tasks.sort((a, b) => a.id > b.id);
+    const tasks = this.state.tasks;//.sort((a, b) => a.id > b.id);
     return (
       <div>
         <div className={styles.left__part}>
