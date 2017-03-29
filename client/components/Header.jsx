@@ -10,29 +10,32 @@ export default class Header extends React.Component {
     this.state = {
       tasks: [
         {
-          id: 2,
+          id: 11,
           maximumHours: 3,
           minimumHours:2,
           taskName: 'test1',
+          parentId: null,
           tasks: [
             {
-              id: 3,
+              id: 22,
               maximumHours: 3,
               minimumHours:2,
               taskName: 'test2',
+              parentId: 11,
               tasks: [
                 {
-                  id: 4,
+                  id: 44,
                   maximumHours: 3,
                   minimumHours:2,
                   taskName: 'test3',
-
+                  parentId: 22,
                 },
                 {
-                  id: 5,
+                  id: 55,
                   maximumHours: 3,
                   minimumHours:2,
                   taskName: 'test2',
+                  parentId: 22,
                 }
               ]
             }
@@ -48,6 +51,7 @@ export default class Header extends React.Component {
     this.onEditTask = this.onEditTask.bind(this);
     this.setParentId = this.setParentId.bind(this);
     this.preAddTask = this.preAddTask.bind(this);
+    this.findTaskAndModify = this.findTaskAndModify.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -71,55 +75,69 @@ export default class Header extends React.Component {
     });
   }
 
+  findTaskAndModify(tasks, id, name, value) {
+    for(let i = 0; i < tasks.length; i++) {
+      if(tasks[i].id == id){
+        tasks[i][name] = value;
+        break;
+      };
+      if(tasks[i].tasks && tasks[i].tasks.length == 0) return;
+      if(tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
+    }
+    return tasks;
+  }
+
   onEditTask(e) {
     const id = e.currentTarget.dataset.id;
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
-    const taskToEdit = this.state.tasks.filter(t => t.id == id)[0];
-    taskToEdit[name] = value;
-    const tasks = this.state.tasks.filter(t => t.id != id);
-    tasks.push(taskToEdit);
-    this.setState({ tasks }, () => {
+
+    const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
+    debugger;
+    this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
   }
 
   setParentId(e) {
-    debugger;
     const id = e.currentTarget.dataset.id;
-    this.setState({ parentTaskId: id })
+    this.setState({ parentTaskId: id });
+
   }
 
   renderTasks(tasks, iterator) {
-    // debugger;
+    const { parentTaskId } = this.state;
+    console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
-      <div key={task.id} style={{marginLeft: `${iterator*10}px` }}>
+      <div key={task.id} style={{marginLeft: `20px` }}>
         <input
           data-id={task.id}
           style={{marginRight: '20px'}}
-          name='taskName' value={task.taskName}
+          name='taskName'
+          value={task.taskName}
           onChange={this.onEditTask}
-          onClick={this.setParentId}/>
+        />
         <input
           data-id={task.id}
           type="number"
           value={task.minimumHours}
           name='minimumHours'
           onChange={this.onEditTask}
-          onClick={this.setParentId}/>
+        />
         <input
           data-id={task.id}
           type="number"
           value={task.maximumHours}
           name='maximumHours'
           onChange={this.onEditTask}
-          onClick={this.setParentId}/>
+        />
         {(iterator < 2) ?
           <button data-id={task.id} onClick={this.setParentId} >Add subtask</button> :
         ''}
         <button data-id={task.id} onClick={this.deleteTask}>Delete</button>
 
         {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
+        {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
       </div>
     )
   }
