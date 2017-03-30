@@ -1,0 +1,35 @@
+.calculation {
+  border: 1px solid black;
+  padding: 10px;
+  width: 600px;
+  margin: 0 auto;
+  height: 200px;
+  margin-bottom: 10px;
+  
+}
+
+.pieChartWrapper {
+  float: left;
+}
+
+.estimateOptions {
+  float: right;
+}
+
+.estimateOption {
+  padding: 5px;
+  width: 275px;
+}
+
+.estimateOption > input {
+  float: right;
+}
+
+.lineChartWrapper{
+  border: 1px solid black;
+  padding: 10px;
+  width: 600px;
+  margin: 0 auto;
+  height: 200px;
+  margin-bottom: 10px;
+}
