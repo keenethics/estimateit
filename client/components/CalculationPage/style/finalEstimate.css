@@ -10,7 +10,7 @@
 .estimateTitle {
   background-color: #ababab;
   border: 1px solid gray;
-  width: 100px;
+  width: 150px;
   padding: 5px;
 }
 
@@ -18,4 +18,3 @@
   display: inline-block;
   margin-right: 50px;
 }
-

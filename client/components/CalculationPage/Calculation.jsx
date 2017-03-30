@@ -8,15 +8,29 @@ import './style/calculations.css';
 export default class Calculation extends React.Component{
   constructor(props) {
     super(props)
+
+    this.onDataChange = this.onDataChange.bind(this);
+    this.onRateChange = this.onRateChange.bind(this);
   }
-  
+
+  onDataChange(data) {
+     this.props.onCalculationChange(data)
+  }
+
+  onRateChange(rate) {
+    this.props.onRateChange(rate)
+
+  }
+
   render() {
     return (
       <div className="calculation">
-        <PieChart />
-        <EstimateOptions />
+        <PieChart data={this.props.data}/>
+        <EstimateOptions
+          onRateChange={this.onRateChange}
+          onDataChange={this.onDataChange}/>
       </div>
     )
   }
-  
+
 }

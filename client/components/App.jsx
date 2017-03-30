@@ -10,8 +10,6 @@ export default class App extends React.Component {
     return (
       <div className={styles.main}>
         <Header />
-       
-        {this.props.children}
         <CalculationPage />
       </div>
     );

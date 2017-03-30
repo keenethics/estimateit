@@ -5,10 +5,11 @@
   "main": "webpack.config.js",
   "dependencies": {
     "moment": "^2.18.0",
-    "path": "^0.12.7",
+    "chart.js": "^1.1.1",
+    "discrete-vector": "0.0.15",
+    "dom-to-image": "^2.5.2",
     "react": "^15.4.2",
     "react-date-picker": "^5.3.28",
-    "chart.js": "^1.1.1",
     "path": "^0.12.7",
     "react-chartjs": "^0.8.0",
     "react-dom": "^15.4.2"
