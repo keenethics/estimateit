@@ -55,12 +55,22 @@ export default class Header extends React.Component {
     this.findTaskAndDelete = this.findTaskAndDelete.bind(this);
     this.deleteParentId = this.deleteParentId.bind(this);
     this.insertTask = this.insertTask.bind(this);
+    this.textAreaAdjust = this.textAreaAdjust.bind(this);
+    this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
     if(nextState.date !== this.state.date) {
       this.datefield.setValue(nextState.date);
     }
+  }
+
+  headerInfoCollector(e) {
+    this.setState({
+      [e.currentTarget.name]: e.currentTarget.value
+    }, () => {
+      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+    })
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
@@ -108,7 +118,7 @@ export default class Header extends React.Component {
     const value = e.currentTarget.value;
 
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
-    
+
     this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
@@ -126,13 +136,14 @@ export default class Header extends React.Component {
       <div key={task.id} style={{marginLeft: `20px` }}>
         <input
           data-id={task.id}
-          style={{marginRight: '20px'}}
+          className={styles.task__input}
           name='taskName'
           value={task.taskName}
           onChange={this.onEditTask}
         />
         <input
           data-id={task.id}
+          className={styles.task__input}
           type="number"
           value={task.minimumHours}
           name='minimumHours'
@@ -140,6 +151,7 @@ export default class Header extends React.Component {
         />
         <input
           data-id={task.id}
+          className={styles.task__input}
           type="number"
           value={task.maximumHours}
           name='maximumHours'
@@ -182,7 +194,7 @@ export default class Header extends React.Component {
           placeholder='task'
           name='taskName'
           onChange={this.preAddTask}
-
+          className={styles.task__input}
         />
         <input
           data-parentId={parentTaskId}
@@ -190,7 +202,7 @@ export default class Header extends React.Component {
           placeholder='minimum hours'
           name='minimumHours'
           onChange={this.preAddTask}
-
+          className={styles.task__input}
         />
         <input
           data-parentId={parentTaskId}
@@ -198,7 +210,7 @@ export default class Header extends React.Component {
           placeholder='maximum hours'
           name='maximumHours'
           onChange={this.preAddTask}
-
+          className={styles.task__input}
         />
       <button onClick={this.addTask}>Add task</button>
       </div>
@@ -251,8 +263,18 @@ export default class Header extends React.Component {
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName =='INPUT' ? i.value = '' : '')
   }
 
+  textAreaAdjust(e) {
+    e.target.style.height = '1px';
+    e.target.style.height = (10+e.target.scrollHeight)+"px";
+    this.setState({
+      [e.currentTarget.name]: e.currentTarget.value,
+    }, () => {
+      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+    })
+  }
+
   render () {
-    const tasks = this.state.tasks;//.sort((a, b) => a.id > b.id);
+    const tasks = this.state.tasks;
     return (
       <div>
         <div className={styles.left__part}>
@@ -273,7 +295,7 @@ export default class Header extends React.Component {
         <div className={styles.right__part}>
           <div className={styles.emphasize}>ESTIMATE</div>
           <span>
-            <label htmlFor="datePicker">Enter the date:</label>
+            <label htmlFor="datePicker">Date:</label>
             <DateField
               htmlFor='datePicker'
               dateFormat='YYYY-MM-DD'
@@ -284,17 +306,23 @@ export default class Header extends React.Component {
           <span>
             <label htmlFor="clientName">Client name:</label>
             <input
-              ref={(clientName) => { this.clientName = clientName; }}
+              name='clientName'
+              value={this.state.clientName}
               type='text'
               id="clientName"
+              className={styles.underlined__input}
+              onChange={this.headerInfoCollector}
             />
           </span>
           <span>
             <label htmlFor="projectName">Project name:</label>
             <input
-              ref={(projectName) => { this.projectName = projectName; }}
               type='text'
               id="projectName"
+              name='projectName'
+              value={this.state.projectName}
+              className={styles.underlined__input}
+              onChange={this.headerInfoCollector}
             />
           </span>
           <span>
@@ -302,16 +330,29 @@ export default class Header extends React.Component {
             <input
               type='number'
               id="sprintNumber"
-              ref={(sprintNumber) => { this.sprintNumber = sprintNumber; }}
+              name='sprintNumber'
+              value={this.state.sprintNumber}
+              className={styles.underlined__input}
+              onChange={this.headerInfoCollector}
             />
           </span>
         </div>
           <div className={styles.clearfix}></div>
-          <textarea placeholder="Technologies, libraries, APIs" /><br />
+          <textarea
+            onChange={this.textAreaAdjust}
+            placeholder="Technologies, libraries, APIs"
+            value={this.state.technologies}
+            name='technologies'
+          /><br />
           <div className='tasks'>{this.renderTasks(tasks, 0)}</div>
           <br/>
           {this.renderAddTaskForm()}
-          <textarea placeholder="Comments" /><br />
+          <textarea
+            onChange={this.textAreaAdjust}
+            value={this.state.comments}
+            placeholder="Comments"
+            name='comments'
+          /><br />
       </div>
     )
   }
