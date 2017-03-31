@@ -11,24 +11,18 @@ export default class CalculationPage extends React.Component{
   }
 
   saveAsPdf() {
-    debugger;
     const root = document.getElementById('root');
     domtoimage.toPng(root)
     .then(function (dataUrl) {
-        var img = new Image();
+        const img = new Image();
         img.src = dataUrl;
 
-        var doc = new jsPDF('p', 'mm', [(root.clientHeight * 25.4) / 90, 300]);
+        const doc = new jsPDF('p', 'mm', [(root.clientHeight * 25.4) / 90, 300]);
 
         doc.addImage(img, 'PNG', 2, 2);
         doc.save('a4.pdf');
 
     })
-    // const doc = new jsPDF('p', 'pt', 'a4');
-    // doc.addHTML(document.getElementById('root'), {pagesplit: true}, () => {
-    //   doc.save('a4.pdf');
-    // });
-
   }
 
   render() {
