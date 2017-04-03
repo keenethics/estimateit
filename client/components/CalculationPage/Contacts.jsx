@@ -12,15 +12,6 @@ export default class Contacts extends React.Component{
     //this.onContactsChange = this.onContactsChange.bind(this);
   }
 
-  componentDidMount() {
-    const loc = decodeURIComponent(location.href);
-    const state = JSON.parse(loc.split('?').pop());
-    console.log(state, 'stataaaate');
-    this.setState(Object.assign({}, state), () => {
-      console.log(this.state);
-    });
-  };
-
   onContactsChange(e) {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
