@@ -8,40 +8,7 @@ export default class Header extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasks: [
-        {
-          id: 11,
-          maximumHours: 3,
-          minimumHours:2,
-          taskName: 'test1',
-          parentId: null,
-          tasks: [
-            {
-              id: 22,
-              maximumHours: 3,
-              minimumHours:2,
-              taskName: 'test2',
-              parentId: 11,
-              tasks: [
-                {
-                  id: 44,
-                  maximumHours: 3,
-                  minimumHours:2,
-                  taskName: 'test3',
-                  parentId: 22,
-                },
-                {
-                  id: 55,
-                  maximumHours: 3,
-                  minimumHours:2,
-                  taskName: 'test2',
-                  parentId: 22,
-                }
-              ]
-            }
-          ],
-        }
-      ],
+      tasks: [],
       parentTaskId: '',
     };
     this.onDateChange = this.onDateChange.bind(this);
@@ -80,6 +47,7 @@ export default class Header extends React.Component {
   }
 
   componentDidMount() {
+    if (location.href === location.origin + '/') return;
     const loc = decodeURIComponent(location.href);
     const state = JSON.parse(loc.split('?').pop());
     console.log(state, 'stataaaate');
@@ -121,6 +89,7 @@ export default class Header extends React.Component {
 
     this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      this.props.onChangeState(newTasks);
     });
   }
 
@@ -224,6 +193,7 @@ export default class Header extends React.Component {
     this.setState({ tasks: newTasks }, () => {
       history.replaceState({}, "", "/?" + JSON.stringify(this.state));
     });
+    this.props.onChangeState(newTasks);
 
   }
 
@@ -250,16 +220,19 @@ export default class Header extends React.Component {
     const newTask = this.state.newTask;
     newTask.id = new Date().getTime();
     const tasks = this.state.tasks.slice();
+    let newTasks = [];
     if(!parent) {
-      this.setState({ tasks: [...this.state.tasks, newTask], parentTaskId: '', newTask: null} , () => {
+      newTasks = [...this.state.tasks, newTask];
+      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null} , () => {
         history.replaceState({}, "", "/?" + JSON.stringify(this.state));
       });
     } else {
-      const newTasks = this.insertTask(tasks, parent, newTask);
+      newTasks = this.insertTask(tasks, parent, newTask);
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null} , () => {
         history.replaceState({}, "", "/?" + JSON.stringify(this.state));
       });
     }
+    this.props.onChangeState(newTasks);
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName =='INPUT' ? i.value = '' : '')
   }
 

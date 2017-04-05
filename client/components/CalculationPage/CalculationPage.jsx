@@ -10,7 +10,7 @@ export default class CalculationPage extends React.Component{
   constructor(props) {
     super(props)
     this.state = {
-      tasks: [[5,10], [8, 16], [30, 40], [1, 3]],
+      labels: [],
       calculationData: {
         qa: 10,
         pm: 10,
@@ -23,7 +23,6 @@ export default class CalculationPage extends React.Component{
     }
 
     this.T = []
-    this.tasks = [[5,10], [8, 16], [30, 40], [1, 3]];
 
     this.embodiment = this.embodiment.bind(this);
     this.transformToVector = this.transformToVector.bind(this);
@@ -34,6 +33,7 @@ export default class CalculationPage extends React.Component{
   }
 
   componentDidMount() {
+    if (location.href === location.origin + '/') return;
     const loc = decodeURIComponent(location.href);
     const state = JSON.parse(loc.split('?').pop());
     const tasks = this.parseUrlData(state.tasks);
@@ -61,7 +61,6 @@ export default class CalculationPage extends React.Component{
       return value.concat(itemArr);
     }, []);
 
-    console.log(arr, 'resuuuult');
     return arr;
   }
 
@@ -70,10 +69,13 @@ export default class CalculationPage extends React.Component{
   }
 
   transformToVector() {
-    const vector = new DiscreteVector(this.state.tasks);
-    this.T = Array(vector.combinations).fill().map((prev, item) => this.embodiment(this.state.tasks, vector.next())).sort((a, b) => a - b);
+    const tasksHours = this.parseUrlData(this.props.someProp);
+    const vector = new DiscreteVector(tasksHours);
+
+    this.T = Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b);
     this.labels = this.T.map((item) => Math.round(item));
     this.data = this.T.map((item, i) => Math.round(100 * i / (this.T.length - 1)));
+    this.calculateAmountOfHours();
   }
 
   calculateAmountOfHours() {
@@ -91,7 +93,7 @@ export default class CalculationPage extends React.Component{
 
     const totalHours = Math.round(hours + additionalHourse);
 
-    this.setState({ hours:totalHours });
+    this.hours = totalHours;
   }
 
   onCalculationChange(calculationData) {
@@ -118,7 +120,7 @@ export default class CalculationPage extends React.Component{
             onRateChange={this.onRateChange}
             onCalculationChange={this.onCalculationChange} />
           <FinalEstimate
-            hours={this.state.hours}
+            hours={this.hours}
             rate={this.state.rate} />
           <Contacts />
         </div>
