@@ -31,7 +31,8 @@
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "webpack -p"
   },
   "repository": {
     "type": "git",
