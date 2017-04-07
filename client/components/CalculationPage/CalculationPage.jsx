@@ -115,6 +115,7 @@ export default class CalculationPage extends React.Component{
             labels={this.labels}
             data={this.data} />
           <Calculation
+            hours={this.hours}
             data={this.state.calculationData}
             rate={this.state.rate}
             onRateChange={this.onRateChange}

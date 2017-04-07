@@ -21,7 +21,7 @@
 
 .estimateOption {
   padding: 5px;
-  width: 275px;
+  width: 340px;
 }
 
 .estimateOption > input {
@@ -33,4 +33,16 @@
   margin: 0 auto;
   height: 205px;
   margin-bottom: 350px;
+}
+
+input.radarChartPart {
+  width: inherit;
+}
+
+.estimateOption {
+  margin-bottom: 20px;
+}
+
+.estimateOption.rate {
+  display: flex;
 }

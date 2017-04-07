@@ -3,7 +3,7 @@ import domtoimage from 'dom-to-image';
 
 import './style/finalEstimate.css';
 
-export default class CalculationPage extends React.Component{
+export default class FinalEstimate extends React.Component{
   constructor(props) {
     super(props)
 
@@ -11,7 +11,8 @@ export default class CalculationPage extends React.Component{
   }
   
   filter(node) {
-    return (node.tagName !== 'BUTTON' && node.className !== 'header--addTaskForm');
+    return (node.tagName !== 'BUTTON'
+      && node.className !== 'header--addTaskForm' && node.className !== 'radarChartPart');
   }
 
   saveAsPdf() {

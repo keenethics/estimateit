@@ -27,6 +27,7 @@ export default class Calculation extends React.Component{
       <div className="calculation">
         <PieChart data={this.props.data}/>
         <EstimateOptions
+          hours={this.props.hours}
           onRateChange={this.onRateChange}
           onDataChange={this.onDataChange}/>
       </div>
