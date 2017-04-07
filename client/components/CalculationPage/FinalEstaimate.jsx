@@ -9,10 +9,14 @@ export default class CalculationPage extends React.Component{
 
     this.saveAsPdf = this.saveAsPdf.bind(this);
   }
+  
+  filter(node) {
+    return (node.tagName !== 'BUTTON');
+  }
 
   saveAsPdf() {
     const root = document.getElementById('root');
-    domtoimage.toPng(root)
+    domtoimage.toPng(root, {filter: this.filter})
     .then(function (dataUrl) {
         const img = new Image();
         img.src = dataUrl;
