@@ -1,0 +1,112 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  margin: 0 auto;
+}
+
+body {
+  background: #fff;
+  width: 1080px;
+  font-family: Arial;
+  border: 1px solid black;
+}
+
+.main {
+  width: 90%;
+  margin: 0 auto;
+}
+
+.company__name {
+  font-size: 24px;
+  color: rgb(222,79,79);
+  font-weight: 700;
+}
+
+.emphasize {
+  font-size: 30px;
+  font-weight: 700;
+  margin: 37px;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.left__part {
+  float:left;
+  margin-right: 50px;
+  width: 40%;
+}
+
+.right__part {
+  margin-top: 20px;
+  span {
+    display: block;
+    margin-bottom: 24px;
+    label {
+      padding-right: 12px;
+    }
+  }
+}
+
+.task__input {
+  margin-right: 12px;
+  margin-bottom: 12px;
+  border-radius: 5px;
+  line-height: 22px;
+  border:1px solid black;
+  padding: 5px;
+  font-size: 15px;
+}
+
+input[type=number] {
+  width: 60px;
+}
+
+button {
+  width: 100px;
+  border:1px solid black;
+  border-radius: 5px;
+  line-height: 22px;
+  padding: 5px;
+  background-color: #ff7978;
+  &:hover {
+    cursor: pointer;
+    background-color: #fd4140;
+    color: white;
+  }
+  margin-right: 12px;
+}
+
+textarea {
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 4px;
+}
+
+.header__contacts{
+  margin-top: 20px;
+  padding: 15px;
+  width: 85%;
+  border: 2px solid rgb(222,79,79);
+  border-radius: 5px;
+  span {
+    display: block;
+    margin-bottom: 24px;
+    font-weight: 600;
+    &:first-child {
+      margin-top: 24px;
+      color: red;
+    }
+  }
+}
+
+.underlined__input {
+  border: 0;
+  border-bottom: 1px solid black;
+  font-size: 18px;
+}
