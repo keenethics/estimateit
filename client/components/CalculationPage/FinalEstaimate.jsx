@@ -11,7 +11,7 @@ export default class CalculationPage extends React.Component{
   }
   
   filter(node) {
-    return (node.tagName !== 'BUTTON');
+    return (node.tagName !== 'BUTTON' && node.className !== 'header--addTaskForm');
   }
 
   saveAsPdf() {
@@ -39,7 +39,7 @@ export default class CalculationPage extends React.Component{
            <div className="estimateTitle">Total sum: {this.props.hours * this.props.rate}$</div>
         </div>
 
-        <div><button onClick={this.saveAsPdf}>Generate PDF</button></div>
+        <div className="estimateResult"><button onClick={this.saveAsPdf}>Generate PDF</button></div>
       </div>
     )
   }
