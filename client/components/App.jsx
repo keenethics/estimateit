@@ -20,9 +20,8 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    if (location.href === location.origin + '/') return;
-    const loc = decodeURIComponent(location.href);
-    const state = JSON.parse(loc.split('?').pop());
+    if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';
+    const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
     this.setState({tasksData: state.tasks});
   }
 
