@@ -281,16 +281,15 @@ export default class Header extends React.Component {
             <Form>
               <CardTitle>ESTIMATE</CardTitle>
               <FormGroup className={styles.item}>
-                <Label htmlFor="datePicker">Date:</Label>
                 <DateField
                   htmlFor='datePicker'
                   dateFormat='YYYY-MM-DD'
                   ref={(dateField) => { this.datefield = dateField; }}
                   onChange={this.onDateChange}
+                  placeholder="Date:"
                 />
               </FormGroup>
               <FormGroup className={styles.items}>
-                <Label htmlFor="clientName">Client name:</Label>
                 <Input
                   name='clientName'
                   value={this.state.clientName}
@@ -298,10 +297,10 @@ export default class Header extends React.Component {
                   id="clientName"
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
+                  placeholder="Client name:"
                 />
               </FormGroup>
               <FormGroup className={styles.item}>
-                <Label htmlFor="projectName">Project name:</Label>
                 <Input
                   type='text'
                   id="projectName"
@@ -309,10 +308,10 @@ export default class Header extends React.Component {
                   value={this.state.projectName}
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
+                  placeholder="Project name:"
                 />
               </FormGroup>
               <FormGroup className={styles.item}>
-                <Label htmlFor="sprintNumber">Sprint #</Label>
                 <Input
                   type='number'
                   id="sprintNumber"
@@ -320,6 +319,7 @@ export default class Header extends React.Component {
                   value={this.state.sprintNumber}
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
+                  placeholder="Sprint:"
                 />
               </FormGroup>
             </Form>

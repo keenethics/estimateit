@@ -48,22 +48,17 @@ input[type=number] {
 }
 
 .header__contacts{
-  margin-top: 20px;
+  margin-top: 9px;
   padding: 15px;
-  width: 85%;
-  border: 2px solid rgb(222,79,79);
+  border: 2px solid #d9534f;
   border-radius: 5px;
   span {
     display: block;
-    margin-bottom: 24px;
+    margin-bottom: 18px;
     font-weight: 600;
     &:first-child {
       margin-top: 24px;
-      color: red;
+      color: #d9534f;
     }
   }
-}
-
-.underlined__input {
-  margin-bottom: 10px;
 }
