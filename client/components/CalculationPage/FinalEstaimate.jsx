@@ -1,24 +1,24 @@
-import React from 'react';
-import domtoimage from 'dom-to-image';
-
-import './style/finalEstimate.css';
+import React from "react";
+import { Button, Card, CardBlock } from "reactstrap";
+import domtoimage from "dom-to-image";
+import styles from "./style/finalEstimate.scss";
 
 export default class FinalEstimate extends React.Component{
   constructor(props) {
-    super(props)
+    super(props);
 
     this.saveAsPdf = this.saveAsPdf.bind(this);
   }
-  
+
   filter(node) {
     return (node.tagName !== 'BUTTON'
-      && node.className !== 'header--addTaskForm' && node.className !== 'radarChartPart');
+    && node.className !== 'header--addTaskForm' && node.className !== 'radarChartPart');
   }
 
   saveAsPdf() {
     const root = document.getElementById('root');
     domtoimage.toPng(root, {filter: this.filter})
-    .then(function (dataUrl) {
+      .then(function (dataUrl) {
         const img = new Image();
         img.src = dataUrl;
 
@@ -27,21 +27,24 @@ export default class FinalEstimate extends React.Component{
         doc.addImage(img, 'PNG', 2, 2);
         doc.save('a4.pdf');
 
-    })
+      })
   }
 
   render() {
     return (
-      <div className="finalEstimate">
-       <div className="estimateResult">
-          <div className="estimateTitle">Total hours: {this.props.hours}</div>
-       </div>
-        <div className="estimateResult">
-           <div className="estimateTitle">Total sum: {this.props.hours * this.props.rate}$</div>
-        </div>
-
-        <div className="estimateResult"><button onClick={this.saveAsPdf}>Generate PDF</button></div>
-      </div>
+      <Card className={styles.finalEstimate}>
+        <CardBlock className={styles.finalEstimate__wrapper}>
+          <div className={styles.estimateResult}>
+            <Button color="default">Total hours: {this.props.hours}</Button>
+          </div>
+          <div className={styles.estimateResult}>
+            <Button color="default">Total sum: {this.props.hours * this.props.rate}$</Button>
+          </div>
+          <div className={styles.estimateResult}>
+            <Button color="danger" onClick={this.saveAsPdf}>Generate PDF</Button>
+          </div>
+        </CardBlock>
+      </Card>
     )
   }
 }

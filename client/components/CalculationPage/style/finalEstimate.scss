@@ -1,0 +1,22 @@
+.finalEstimate {
+  margin-bottom: 1rem;
+  width: 100%;
+  &__wrapper {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+}
+
+.estimateTitle {
+  background-color: #ababab;
+  width: 150px;
+  padding: 5px;
+  border-radius: 5px;
+  justify-content: center;
+}
+
+.estimateResult {
+  display: inline-block;
+}

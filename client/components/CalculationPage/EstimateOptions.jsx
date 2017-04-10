@@ -1,9 +1,9 @@
 import React from 'react';
+import { FormGroup, Input, Label, } from 'reactstrap';
 
 export default class EstimateOptions extends React.Component{
   constructor(props) {
-    super(props)
-
+    super(props);
     this.estimateFields = {
       qa: 10,
       pm: 10,
@@ -18,7 +18,7 @@ export default class EstimateOptions extends React.Component{
     this.onRateChange = this.onRateChange.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
   }
-  
+
   onFieldChange(e) {
     this.estimateFields[e.target.name] = +e.target.value;
     this.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.estimateFields[e.target.name] / 100);
@@ -45,78 +45,78 @@ export default class EstimateOptions extends React.Component{
   render() {
     return (
       <div className="estimateOptions">
-        <div className="estimateOption rate">
-          <span>Rate USD</span>
-          <div><input
+        <FormGroup className="estimateOption rate">
+          <Label>Rate USD</Label>
+          <Input
             className="radarChartPart estimate"
             name="qa"
-            type="number" 
-            min="0" 
-            step="1" 
+            type="number"
+            min="0"
+            step="1"
             onChange={this.onRateChange}
-            defaultValue="25"/></div>
-        </div>
+            defaultValue="25"/>
+        </FormGroup>
         <div className="estimateOption">
-          <span>QA </span>
-          <input
+          <Label>QA </Label>
+          <Input
             className="radarChartPart"
             name="qa"
-            type="range" 
-            min="0" 
-            max="100" 
-            step="1" 
+            type="range"
+            min="0"
+            max="100"
+            step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-            <span>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</span>
+          <span>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</span>
         </div>
         <div className="estimateOption">
-          <span>PM </span>
-          <input
+          <Label>PM </Label>
+          <Input
             className="radarChartPart"
             name="pm"
-            type="range" 
-            min="0" 
-            max="100" 
-            step="1" 
+            type="range"
+            min="0"
+            max="100"
+            step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-            <span>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</span>
+          <span>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</span>
         </div>
         <div className="estimateOption">
-          <span>Bug Fixes </span>
-          <input
+          <Label>Bug Fixes </Label>
+          <Input
             className="radarChartPart"
             name="bugFixes"
-            type="range" 
-            min="0" 
-            max="100" 
-            step="1" 
+            type="range"
+            min="0"
+            max="100"
+            step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-            <span>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</span>
+          <span>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</span>
         </div>
         <div className="estimateOption">
-          <span>Risks </span>
-          <input
+          <Label>Risks </Label>
+          <Input
             className="radarChartPart"
             name="risks"
-            type="range" 
-            min="0" 
-            max="100" 
-            step="1" 
+            type="range"
+            min="0"
+            max="100"
+            step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-            <span>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</span>
+          <span>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</span>
         </div>
         <div className="estimateOption">
-          <span>Probability </span>
-          <input
+          <Label>Probability </Label>
+          <Input
             className="radarChartPart"
             name="completing"
-            type="range" 
-            min="0" 
-            max="100" 
-            step="1" 
+            type="range"
+            min="0"
+            max="100"
+            step="1"
             onChange={this.onFieldChange}
             defaultValue="90"/>
           <span>{this.estimateFields.completing}%, {this.estimateFieldsAmount.completing} h</span>

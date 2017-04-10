@@ -1,20 +1,19 @@
-import React from 'react';
+import React from "react";
+import { Card, CardBlock, Col } from "reactstrap";
+import EstimateOptions from "./EstimateOptions.jsx";
+import PieChart from "./PieChart.jsx";
 
-import EstimateOptions from './EstimateOptions.jsx';
-import PieChart from './PieChart.jsx';
-
-import './style/calculations.css';
+import styles from "./style/calculations.scss";
 
 export default class Calculation extends React.Component{
   constructor(props) {
-    super(props)
-
+    super(props);
     this.onDataChange = this.onDataChange.bind(this);
     this.onRateChange = this.onRateChange.bind(this);
   }
 
   onDataChange(data) {
-     this.props.onCalculationChange(data)
+    this.props.onCalculationChange(data)
   }
 
   onRateChange(rate) {
@@ -24,13 +23,19 @@ export default class Calculation extends React.Component{
 
   render() {
     return (
-      <div className="calculation">
-        <PieChart data={this.props.data}/>
-        <EstimateOptions
-          hours={this.props.hours}
-          onRateChange={this.onRateChange}
-          onDataChange={this.onDataChange}/>
-      </div>
+      <Card className={styles.calculation}>
+        <CardBlock className={styles.calculation__wrapper}>
+          <Col xs="12" md="5">
+            <PieChart data={this.props.data}/>
+          </Col>
+          <Col xs="12" md="7">
+            <EstimateOptions
+              hours={this.props.hours}
+              onRateChange={this.onRateChange}
+              onDataChange={this.onDataChange}/>
+          </Col>
+        </CardBlock>
+      </Card>
     )
   }
 

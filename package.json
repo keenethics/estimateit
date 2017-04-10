@@ -4,16 +4,20 @@
   "description": "",
   "main": "webpack.config.js",
   "dependencies": {
+    "bootstrap": "^4.0.0-alpha.6",
     "chart.js": "^1.1.1",
     "discrete-vector": "0.0.15",
     "dom-to-image": "^2.5.2",
     "moment": "^2.18.0",
     "path": "^0.12.7",
-    "react": "^15.4.2",
+    "react": "^15.5.3",
+    "react-addons-css-transition-group": "^15.5.2",
+    "react-addons-transition-group": "^15.5.2",
     "react-chartjs": "^0.8.0",
     "react-date-picker": "^5.3.28",
-    "react-dom": "^15.4.2",
-    "react-highcharts": "^11.5.0"
+    "react-dom": "^15.5.3",
+    "react-highcharts": "^11.5.0",
+    "reactstrap": "^4.5.0"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

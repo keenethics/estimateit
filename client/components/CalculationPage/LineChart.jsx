@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card, CardBlock } from 'reactstrap';
 import { Line } from "react-chartjs";
 import ReactHighcharts from 'react-highcharts';
 
@@ -13,7 +14,7 @@ export default class LineChart  extends React.Component{
 
   getChart(chartComponent) {
     if(chartComponent) {
-      console.log(chartComponent.getChart());;
+      console.log(chartComponent.getChart());
     }
   }
 
@@ -23,70 +24,72 @@ export default class LineChart  extends React.Component{
 
     this.config = {
       chart: {
-       type: 'spline',
-       inverted: false
-       },
-       title: {
-           text: 'Probability of project completing'
-       },
-       subtitle: {
-           text: 'According to filled tasks and params'
-       },
-       xAxis: {
-           title: {
-               text: 'Hours'
-           },
-           labels: {
-               formatter: function () {
-                   return this.value + 'h';
-               }
-           },
-           lineWidth: 2
-       },
-       yAxis: {
-           reversed: false,
-           title: {
-               enabled: true,
-               text: 'Probability (Code Quality)'
-           },
-           labels: {
-               formatter: function () {
-                   return this.value + '%';
-               }
-           },
-           maxPadding: 0.05,
-           showLastLabel: false
-       },
-       legend: {
-           enabled: false
-       },
-       tooltip: {
-           headerFormat: '<b>{series.name}</b><br/>',
-           pointFormat: '{point.x}h:  {point.y}%'
-       },
-       plotOptions: {
-           spline: {
-               marker: {
-                   enable: false
-               }
-           }
-       },
-       series: [{
-           name: 'Probability',
-           data: data
-       }]
+        type: 'spline',
+        inverted: false
+      },
+      title: {
+        text: 'Probability of project completing'
+      },
+      subtitle: {
+        text: 'According to filled tasks and params'
+      },
+      xAxis: {
+        title: {
+          text: 'Hours'
+        },
+        labels: {
+          formatter: function () {
+            return this.value + 'h';
+          }
+        },
+        lineWidth: 2
+      },
+      yAxis: {
+        reversed: false,
+        title: {
+          enabled: true,
+          text: 'Probability (Code Quality)'
+        },
+        labels: {
+          formatter: function () {
+            return this.value + '%';
+          }
+        },
+        maxPadding: 0.05,
+        showLastLabel: false
+      },
+      legend: {
+        enabled: false
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br/>',
+        pointFormat: '{point.x}h:  {point.y}%'
+      },
+      plotOptions: {
+        spline: {
+          marker: {
+            enable: false
+          }
+        }
+      },
+      series: [{
+        name: 'Probability',
+        data: data
+      }]
     };
   }
 
   render() {
     this.generateData();
     return (
-      <div className="lineChartWrapper">
-        <ReactHighcharts
-        config={this.config}
-        ref={this.getChart}
-        width="800" height="500" />
-      </div>
+      <Card className="lineChartWrapper">
+        <CardBlock>
+          <ReactHighcharts
+            config={this.config}
+            ref={this.getChart}
+            width="800" height="500" />
+        </CardBlock>
+      </Card>
     )
   }
 }

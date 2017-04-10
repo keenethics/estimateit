@@ -1,44 +1,22 @@
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+.estimator {
+  padding: 20px 0;
   margin: 0 auto;
-}
+  &__header {
+    margin-bottom: 1rem;
 
-body {
-  background: #fff;
-  width: 1080px;
-  font-family: Arial;
-  border: 1px solid black;
-}
+  }
+  &__body {
 
-.main {
-  width: 90%;
-  margin: 0 auto;
+  }
 }
-
 .company__name {
   font-size: 24px;
   color: rgb(222,79,79);
   font-weight: 700;
 }
 
-.emphasize {
-  font-size: 30px;
-  font-weight: 700;
-  margin: 37px;
-}
-
-.clearfix:after {
-  content: "";
-  display: table;
-  clear: both;
-}
 
 .left__part {
-  float:left;
-  margin-right: 50px;
-  width: 40%;
 }
 
 .right__part {
@@ -53,39 +31,20 @@ body {
 }
 
 .task__input {
-  margin-right: 12px;
-  margin-bottom: 12px;
-  border-radius: 5px;
-  line-height: 22px;
-  border:1px solid black;
-  padding: 5px;
-  font-size: 15px;
-}
-
-input[type=number] {
-  width: 60px;
-}
-
-button {
-  width: 100px;
-  border:1px solid black;
-  border-radius: 5px;
-  line-height: 22px;
-  padding: 5px;
-  background-color: #ff7978;
-  &:hover {
-    cursor: pointer;
-    background-color: #fd4140;
-    color: white;
+  margin-bottom: 10px;
+  &:not(:last-child) {
+    margin-right: 10px;
   }
-  margin-right: 12px;
 }
-
-textarea {
-  width: 100%;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  padding: 4px;
+.item {
+  display: flex;
+  flex-wrap: wrap;
+}
+input[type=text] {
+  flex: 1 0 50%;
+}
+input[type=number] {
+  flex: 1 0 100px;
 }
 
 .header__contacts{
@@ -106,7 +65,5 @@ textarea {
 }
 
 .underlined__input {
-  border: 0;
-  border-bottom: 1px solid black;
-  font-size: 18px;
+  margin-bottom: 10px;
 }

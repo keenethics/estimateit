@@ -1,0 +1,39 @@
+
+
+.calculation {
+  margin-bottom: 1rem;
+  flex-direction: row;
+  justify-content: space-around;
+  &__wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+}
+
+
+.estimateOption {
+  width: 100%;
+  min-width: 240px;
+}
+
+.estimateOption > input {
+  float: right;
+}
+
+.lineChartWrapper{
+
+  margin-bottom: 1rem;
+}
+
+input.radarChartPart {
+  width: inherit;
+}
+
+.estimateOption {
+  margin-bottom: 20px;
+}
+
+.estimateOption.rate {
+  display: flex;
+}

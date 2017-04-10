@@ -1,7 +1,7 @@
 import React from 'react';
+import {Row, Col, Card, CardTitle, Button, Form, FormGroup, Input, Label} from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css';
-import moment from 'moment';
 import styles from './style.scss';
 
 export default class Header extends React.Component {
@@ -101,38 +101,45 @@ export default class Header extends React.Component {
     const { parentTaskId } = this.state;
     console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
-      <div key={task.id} style={{marginLeft: `20px` }}>
-        <input
+      <FormGroup className={styles.item}
+                 key={task.id}>
+        <Input
           data-id={task.id}
           className={styles.task__input}
           name='taskName'
           value={task.taskName}
           onChange={this.onEditTask}
         />
-        <input
+        <Input
           data-id={task.id}
           className={styles.task__input}
           type="number"
           value={task.minimumHours}
           name='minimumHours'
+          placeholder=' - minimum hours'
           onChange={this.onEditTask}
         />
-        <input
+        <Input
           data-id={task.id}
           className={styles.task__input}
           type="number"
           value={task.maximumHours}
           name='maximumHours'
+          placeholder=' - maximum hours'
           onChange={this.onEditTask}
         />
         {(iterator < 2) ?
-          <button data-id={task.id} onClick={this.setParentId} >Add subtask</button> :
-        ''}
-        <button data-id={task.id} onClick={this.deleteTask}>Delete</button>
+          <Button color="danger"
+                  className={styles.task__input}
+                  data-id={task.id}
+                  onClick={this.setParentId}>Add subtask</Button> :
+          ''}
+        <Button color="danger"
+                className={styles.task__input} data-id={task.id} onClick={this.deleteTask}>Delete</Button>
 
         {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
         {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
-      </div>
+      </FormGroup>
     )
   }
 
@@ -155,8 +162,9 @@ export default class Header extends React.Component {
 
   renderAddTaskForm(parentTaskId) {
     return (
-      <div className='header--addTaskForm' data-parentId={parentTaskId}>
-        <input
+      <FormGroup className={styles.item}
+                 data-parentId={parentTaskId}>
+        <Input
           data-parentId={parentTaskId}
           type='text'
           placeholder='task'
@@ -164,7 +172,7 @@ export default class Header extends React.Component {
           onChange={this.preAddTask}
           className={styles.task__input}
         />
-        <input
+        <Input
           data-parentId={parentTaskId}
           type='number'
           placeholder='minimum hours'
@@ -172,7 +180,7 @@ export default class Header extends React.Component {
           onChange={this.preAddTask}
           className={styles.task__input}
         />
-        <input
+        <Input
           data-parentId={parentTaskId}
           type='number'
           placeholder='maximum hours'
@@ -180,8 +188,10 @@ export default class Header extends React.Component {
           onChange={this.preAddTask}
           className={styles.task__input}
         />
-      <button onClick={this.addTask}>Add task</button>
-      </div>
+        <Button color="danger"
+                className={styles.task__input}
+                onClick={this.addTask}>Add task</Button>
+      </FormGroup>
     )
   }
 
@@ -249,82 +259,90 @@ export default class Header extends React.Component {
     const tasks = this.state.tasks;
     return (
       <div>
-        <div className={styles.left__part}>
-          <img
-            src={require('../pictures/logo.png')}
-            height={50}
-            width={50}
-          />
-          <span className={styles.company__name}>
+        <Row className={styles.estimator__header}>
+          <Col xs="12" md="5"
+               className={styles.left__part}>
+            <img
+              src={require('../pictures/logo.png')}
+              height={50}
+              width={50}
+            />
+            <span className={styles.company__name}>
             Keenethics </span>
-          <div className={styles.header__contacts}>
-            <span>3, Lytvynenka street, Lviv</span>
-            <span>Keenethics Phone: [+38 096 814 72 66]</span>
-            <span>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></span>
-            <span><a href="https://keenethics.com/">keenethics.com</a></span>
-          </div>
-        </div>
-        <div className={styles.right__part}>
-          <div className={styles.emphasize}>ESTIMATE</div>
-          <span>
-            <label htmlFor="datePicker">Date:</label>
-            <DateField
-              htmlFor='datePicker'
-              dateFormat='YYYY-MM-DD'
-              ref={(dateField) => { this.datefield = dateField; }}
-              onChange={this.onDateChange}
-            />
-          </span>
-          <span>
-            <label htmlFor="clientName">Client name:</label>
-            <input
-              name='clientName'
-              value={this.state.clientName}
-              type='text'
-              id="clientName"
-              className={styles.underlined__input}
-              onChange={this.headerInfoCollector}
-            />
-          </span>
-          <span>
-            <label htmlFor="projectName">Project name:</label>
-            <input
-              type='text'
-              id="projectName"
-              name='projectName'
-              value={this.state.projectName}
-              className={styles.underlined__input}
-              onChange={this.headerInfoCollector}
-            />
-          </span>
-          <span>
-            <label htmlFor="sprintNumber">Sprint #</label>
-            <input
-              type='number'
-              id="sprintNumber"
-              name='sprintNumber'
-              value={this.state.sprintNumber}
-              className={styles.underlined__input}
-              onChange={this.headerInfoCollector}
-            />
-          </span>
-        </div>
-          <div className={styles.clearfix}></div>
-          <textarea
-            onChange={this.textAreaAdjust}
-            placeholder="Technologies, libraries, APIs"
-            value={this.state.technologies}
-            name='technologies'
-          /><br />
-          <div className='tasks'>{this.renderTasks(tasks, 0)}</div>
-          <br/>
-          {this.renderAddTaskForm()}
-          <textarea
-            onChange={this.textAreaAdjust}
-            value={this.state.comments}
-            placeholder="Comments"
-            name='comments'
-          /><br />
+            <div className={styles.header__contacts}>
+              <span>3, Lytvynenka street, Lviv</span>
+              <span>Keenethics Phone: [+38 096 814 72 66]</span>
+              <span>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></span>
+              <span><a href="https://keenethics.com/">keenethics.com</a></span>
+            </div>
+          </Col>
+          <Col xs="12" md="7"
+               className={styles.right__part}>
+            <Form>
+              <CardTitle>ESTIMATE</CardTitle>
+              <FormGroup className={styles.item}>
+                <Label htmlFor="datePicker">Date:</Label>
+                <DateField
+                  htmlFor='datePicker'
+                  dateFormat='YYYY-MM-DD'
+                  ref={(dateField) => { this.datefield = dateField; }}
+                  onChange={this.onDateChange}
+                />
+              </FormGroup>
+              <FormGroup className={styles.items}>
+                <Label htmlFor="clientName">Client name:</Label>
+                <Input
+                  name='clientName'
+                  value={this.state.clientName}
+                  type='text'
+                  id="clientName"
+                  className={styles.underlined__input}
+                  onChange={this.headerInfoCollector}
+                />
+              </FormGroup>
+              <FormGroup className={styles.item}>
+                <Label htmlFor="projectName">Project name:</Label>
+                <Input
+                  type='text'
+                  id="projectName"
+                  name='projectName'
+                  value={this.state.projectName}
+                  className={styles.underlined__input}
+                  onChange={this.headerInfoCollector}
+                />
+              </FormGroup>
+              <FormGroup className={styles.item}>
+                <Label htmlFor="sprintNumber">Sprint #</Label>
+                <Input
+                  type='number'
+                  id="sprintNumber"
+                  name='sprintNumber'
+                  value={this.state.sprintNumber}
+                  className={styles.underlined__input}
+                  onChange={this.headerInfoCollector}
+                />
+              </FormGroup>
+            </Form>
+          </Col>
+        </Row>
+        <FormGroup className={styles.item}>
+          <Input type="textarea"
+                 onChange={this.textAreaAdjust}
+                 placeholder="Technologies, libraries, APIs"
+                 value={this.state.technologies}
+                 name='technologies'
+          />
+        </FormGroup>
+        <FormGroup className='tasks'>{this.renderTasks(tasks, 0)}</FormGroup>
+        {this.renderAddTaskForm()}
+        <FormGroup className={styles.item}>
+          <Input type="textarea"
+                 onChange={this.textAreaAdjust}
+                 value={this.state.comments}
+                 placeholder="Comments"
+                 name='comments'
+          />
+        </FormGroup>
       </div>
     )
   }

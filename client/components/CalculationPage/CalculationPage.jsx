@@ -1,6 +1,6 @@
 import React from 'react';
+import { Container, Row, Col } from 'reactstrap';
 import DiscreteVector from 'discrete-vector';
-
 import Calculation from './Calculation.jsx';
 import FinalEstimate from './FinalEstaimate.jsx';
 import Contacts from './Contacts.jsx';
@@ -8,7 +8,7 @@ import LineChart from './LineChart.jsx';
 
 export default class CalculationPage extends React.Component{
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       labels: [],
       calculationData: {
@@ -20,10 +20,9 @@ export default class CalculationPage extends React.Component{
       },
       rate: 25,
       hours: 0,
-    }
+    };
 
-    this.T = []
-
+    this.T = [];
     this.embodiment = this.embodiment.bind(this);
     this.transformToVector = this.transformToVector.bind(this);
     this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
@@ -109,24 +108,29 @@ export default class CalculationPage extends React.Component{
   render() {
     this.transformToVector();
     return (
-      <div className="container">
-        <div className="wrapper">
+      <Row>
+        <Col xs="12">
           <LineChart
             labels={this.labels}
             data={this.data} />
+        </Col>
+        <Col xs="12">
           <Calculation
             hours={this.hours}
             data={this.state.calculationData}
             rate={this.state.rate}
             onRateChange={this.onRateChange}
             onCalculationChange={this.onCalculationChange} />
+        </Col>
+        <Col xs="12">
           <FinalEstimate
             hours={this.hours}
             rate={this.state.rate} />
+        </Col>
+        <Col xs="12">
           <Contacts />
-        </div>
-      </div>
+        </Col>
+      </Row>
     )
   }
-
 }
