@@ -13,10 +13,13 @@
 .estimator {
   padding: 20px 0;
   margin: 0 auto;
+  &__header {
+    margin-bottom: 1rem;
+  }
 }
 .company__name {
-  font-size: 24px;
   color: rgb(222,79,79);
+  font-size: 24px;
   font-weight: 700;
 }
 
