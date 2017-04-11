@@ -1,8 +1,8 @@
-import React from 'react';
-import { Row, Col, CardTitle, Button, Form, FormGroup, Input } from 'reactstrap';
-import { DateField } from 'react-date-picker';
-import 'react-date-picker/index.css';
-import styles from './style.scss';
+import React from "react";
+import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from "reactstrap";
+import { DateField } from "react-date-picker";
+import "react-date-picker/index.css";
+import styles from "./style.scss";
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -41,10 +41,13 @@ export default class Header extends React.Component {
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
-    this.setState({ date: dateString }, () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
-    });
+    if(dateString) {
+      this.setState({ date: dateString }, () => {
+        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      });
+    }
   }
+
 
   componentDidMount() {
     if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';

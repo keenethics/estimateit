@@ -15,7 +15,6 @@
     "react-addons-transition-group": "^15.5.2",
     "react-chartjs": "^0.8.0",
     "react-date-picker": "^5.3.28",
-    "react-datepicker": "^0.44.0",
     "react-dom": "^15.5.3",
     "react-highcharts": "^11.5.0",
     "reactstrap": "^4.5.0"
