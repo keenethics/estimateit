@@ -75,7 +75,7 @@ export default class LineChart  extends React.Component{
       series: [{
         name: 'Probability',
         data: data
-      }]
+      }],
     };
   }
 

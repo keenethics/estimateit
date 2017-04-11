@@ -1,6 +1,9 @@
 .finalEstimate {
   margin-bottom: 1rem;
   width: 100%;
+  button {
+    min-width: 140px;
+  }
   &__wrapper {
     display: flex;
     justify-content: space-around;
@@ -19,4 +22,5 @@
 
 .estimateResult {
   display: inline-block;
+  margin: .5rem 0;
 }

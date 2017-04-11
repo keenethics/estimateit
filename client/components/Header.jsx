@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Card, CardTitle, Button, Form, FormGroup, Input, Label} from 'reactstrap';
+import { Row, Col, CardTitle, Button, Form, FormGroup, Input } from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css';
 import styles from './style.scss';

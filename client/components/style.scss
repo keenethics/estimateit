@@ -1,11 +1,20 @@
+:global {
+  .react-date-field__input {
+    padding: 0;
+  }
+  .react-date-field--theme-default {
+    width: 100%;
+    padding: .5rem .75rem;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+  }
+}
+
 .estimator {
   padding: 20px 0;
   margin: 0 auto;
   &__header {
     margin-bottom: 1rem;
-
-  }
-  &__body {
 
   }
 }
@@ -61,4 +70,8 @@ input[type=number] {
       color: #d9534f;
     }
   }
+}
+
+.underlined__input {
+  margin-bottom: .5rem;
 }
