@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import { Line } from "react-chartjs";
 import ReactHighcharts from 'react-highcharts';
-
+import styles from './style/calculations.scss';
 
 export default class LineChart  extends React.Component{
   constructor(props) {
@@ -82,7 +82,7 @@ export default class LineChart  extends React.Component{
   render() {
     this.generateData();
     return (
-      <Card className="lineChartWrapper">
+      <Card className={styles.lineChartWrapper}>
         <CardBlock>
           <ReactHighcharts
             config={this.config}

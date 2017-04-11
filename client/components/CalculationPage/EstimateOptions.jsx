@@ -1,5 +1,6 @@
 import React from 'react';
 import { FormGroup, Input, Label, } from 'reactstrap';
+import styles from './style/calculations.scss';
 
 export default class EstimateOptions extends React.Component{
   constructor(props) {
@@ -44,8 +45,8 @@ export default class EstimateOptions extends React.Component{
 
   render() {
     return (
-      <div className="estimateOptions">
-        <FormGroup className="estimateOption rate">
+      <div className={styles.estimateOptions}>
+        <FormGroup className={styles.estimateOption}>
           <Label>Rate USD</Label>
           <Input
             className="radarChartPart estimate"
@@ -56,7 +57,7 @@ export default class EstimateOptions extends React.Component{
             onChange={this.onRateChange}
             defaultValue="25"/>
         </FormGroup>
-        <div className="estimateOption">
+        <div className={styles.estimateOption}>
           <Label>QA </Label>
           <Input
             className="radarChartPart"
@@ -69,7 +70,7 @@ export default class EstimateOptions extends React.Component{
             defaultValue="10"/>
           <span>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</span>
         </div>
-        <div className="estimateOption">
+        <div className={styles.estimateOption}>
           <Label>PM </Label>
           <Input
             className="radarChartPart"
@@ -82,7 +83,7 @@ export default class EstimateOptions extends React.Component{
             defaultValue="10"/>
           <span>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</span>
         </div>
-        <div className="estimateOption">
+        <div className={styles.estimateOption}>
           <Label>Bug Fixes </Label>
           <Input
             className="radarChartPart"
@@ -95,7 +96,7 @@ export default class EstimateOptions extends React.Component{
             defaultValue="10"/>
           <span>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</span>
         </div>
-        <div className="estimateOption">
+        <div className={styles.estimateOption}>
           <Label>Risks </Label>
           <Input
             className="radarChartPart"
@@ -108,7 +109,7 @@ export default class EstimateOptions extends React.Component{
             defaultValue="10"/>
           <span>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</span>
         </div>
-        <div className="estimateOption">
+        <div className={styles.estimateOption}>
           <Label>Probability </Label>
           <Input
             className="radarChartPart"

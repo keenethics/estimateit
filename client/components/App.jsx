@@ -31,7 +31,8 @@ export default class App extends React.Component {
     return (
       <Container>
         <Card>
-          <Col xs="10" className={styles.estimator}>
+          <Col xs="12" md="10"
+               className={styles.estimator}>
             <Header onChangeState={this.changeState}/>
             <CalculationPage className={styles.estimator__body} someProp={this.state.tasksData} />
           </Col>

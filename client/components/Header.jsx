@@ -116,7 +116,7 @@ export default class Header extends React.Component {
           type="number"
           value={task.minimumHours}
           name='minimumHours'
-          placeholder=' - minimum hours'
+          placeholder=' - min'
           onChange={this.onEditTask}
         />
         <Input
@@ -125,7 +125,7 @@ export default class Header extends React.Component {
           type="number"
           value={task.maximumHours}
           name='maximumHours'
-          placeholder=' - maximum hours'
+          placeholder=' - max'
           onChange={this.onEditTask}
         />
         {(iterator < 2) ?
@@ -175,7 +175,7 @@ export default class Header extends React.Component {
         <Input
           data-parentId={parentTaskId}
           type='number'
-          placeholder='minimum hours'
+          placeholder='min'
           name='minimumHours'
           onChange={this.preAddTask}
           className={styles.task__input}
@@ -183,7 +183,7 @@ export default class Header extends React.Component {
         <Input
           data-parentId={parentTaskId}
           type='number'
-          placeholder='maximum hours'
+          placeholder='max'
           name='maximumHours'
           onChange={this.preAddTask}
           className={styles.task__input}

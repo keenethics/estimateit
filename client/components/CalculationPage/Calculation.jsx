@@ -2,7 +2,6 @@ import React from "react";
 import { Card, CardBlock, Col } from "reactstrap";
 import EstimateOptions from "./EstimateOptions.jsx";
 import PieChart from "./PieChart.jsx";
-
 import styles from "./style/calculations.scss";
 
 export default class Calculation extends React.Component{
@@ -25,10 +24,12 @@ export default class Calculation extends React.Component{
     return (
       <Card className={styles.calculation}>
         <CardBlock className={styles.calculation__wrapper}>
-          <Col xs="12" md="5">
+          <Col xs="12" md="5"
+               className={styles.calculation__pie}>
             <PieChart data={this.props.data}/>
           </Col>
-          <Col xs="12" md="7">
+          <Col xs="12" md="7"
+               className={styles.calculation__options}>
             <EstimateOptions
               hours={this.props.hours}
               onRateChange={this.onRateChange}

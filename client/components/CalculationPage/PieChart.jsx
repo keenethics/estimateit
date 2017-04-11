@@ -3,7 +3,7 @@ import { Pie } from "react-chartjs";
 
 export default class PieChart extends React.Component{
   constructor(props) {
-    super(props)
+    super(props);
     this.data = [
       {
         color: '#F7464A',
@@ -40,6 +40,9 @@ export default class PieChart extends React.Component{
     this.options = {
       animation:{
         animateScale:true
+      },
+      options: {
+        responsive: true
       }
     }
   }
@@ -57,7 +60,7 @@ export default class PieChart extends React.Component{
     this.generateData();
     return (
       <div className="pieChartWrapper">
-        <Pie data={this.data} options={this.options} width="300" height="300" />
+        <Pie data={this.data} options={this.options} />
       </div>
     )
   }

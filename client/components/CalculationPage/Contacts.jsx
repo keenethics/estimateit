@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBlock, CardHeader, Input } from 'reactstrap'
-import './style/contacts.css';
+import './style/contacts.scss';
 import styles from '../style.scss';
 
 export default class Contacts extends React.Component{
