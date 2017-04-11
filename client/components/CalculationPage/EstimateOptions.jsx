@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormGroup, Input, Label, } from 'reactstrap';
+import { FormGroup, Input, Label, InputGroup, InputGroupAddon} from 'reactstrap';
 import styles from './style/calculations.scss';
 
 export default class EstimateOptions extends React.Component{
@@ -46,8 +46,8 @@ export default class EstimateOptions extends React.Component{
   render() {
     return (
       <div className={styles.estimateOptions}>
-        <FormGroup className={styles.estimateOption}>
-          <Label>Rate USD</Label>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>Rate USD</InputGroupAddon>
           <Input
             className="radarChartPart estimate"
             name="qa"
@@ -56,11 +56,12 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onRateChange}
             defaultValue="25"/>
-        </FormGroup>
-        <div className={styles.estimateOption}>
-          <Label>QA </Label>
+        </InputGroup>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>QA</InputGroupAddon>
           <Input
             className="radarChartPart"
+            id="radarChartPart"
             name="qa"
             type="range"
             min="0"
@@ -68,10 +69,10 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-          <span>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</span>
-        </div>
-        <div className={styles.estimateOption}>
-          <Label>PM </Label>
+          <InputGroupAddon>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</InputGroupAddon>
+        </InputGroup>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>PM </InputGroupAddon>
           <Input
             className="radarChartPart"
             name="pm"
@@ -81,10 +82,10 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-          <span>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</span>
-        </div>
-        <div className={styles.estimateOption}>
-          <Label>Bug Fixes </Label>
+          <InputGroupAddon>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</InputGroupAddon>
+        </InputGroup>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>Bug Fixes</InputGroupAddon>
           <Input
             className="radarChartPart"
             name="bugFixes"
@@ -94,10 +95,10 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-          <span>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</span>
-        </div>
-        <div className={styles.estimateOption}>
-          <Label>Risks </Label>
+          <InputGroupAddon>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
+        </InputGroup>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>Risks</InputGroupAddon>
           <Input
             className="radarChartPart"
             name="risks"
@@ -107,10 +108,10 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onFieldChange}
             defaultValue="10"/>
-          <span>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</span>
-        </div>
-        <div className={styles.estimateOption}>
-          <Label>Probability </Label>
+          <InputGroupAddon>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</InputGroupAddon>
+        </InputGroup>
+        <InputGroup className={styles.estimateOption}>
+          <InputGroupAddon>Probability </InputGroupAddon>
           <Input
             className="radarChartPart"
             name="completing"
@@ -120,8 +121,8 @@ export default class EstimateOptions extends React.Component{
             step="1"
             onChange={this.onFieldChange}
             defaultValue="90"/>
-          <span>{this.estimateFields.completing}%, {this.estimateFieldsAmount.completing} h</span>
-        </div>
+          <InputGroupAddon>{this.estimateFields.completing}%, {this.estimateFieldsAmount.completing} h</InputGroupAddon>
+        </InputGroup>
       </div>
     )
   }

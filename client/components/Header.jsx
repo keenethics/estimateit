@@ -287,9 +287,10 @@ export default class Header extends React.Component {
                   ref={(dateField) => { this.datefield = dateField; }}
                   onChange={this.onDateChange}
                   placeholder="Date:"
+                  className={styles.underlined__input}
                 />
               </FormGroup>
-              <FormGroup className={styles.items}>
+              <FormGroup className={styles.item}>
                 <Input
                   name='clientName'
                   value={this.state.clientName}

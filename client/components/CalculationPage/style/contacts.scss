@@ -9,3 +9,15 @@
   border-radius: 3px;
   padding: 5px;
 }
+:global {
+  .input-group-addon {
+    display: inline-block;
+    width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: inherit;
+    &:last-child {
+      width: 100px;
+    }
+  }
+}

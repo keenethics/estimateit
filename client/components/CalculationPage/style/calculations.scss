@@ -21,9 +21,17 @@
 }
 .estimateOption {
   width: 100%;
-  min-width: 200px;
   span {
     font-size: 14px;
+  }
+  @media screen and (max-width: 1000px){
+    flex-wrap: wrap;
+    * {
+      width: 100% !important;
+    }
+    div {
+      border: none;
+    }
   }
   @media screen and (max-width: 600px){
     text-align: center;
@@ -39,7 +47,7 @@ input.radarChartPart {
 }
 
 .estimateOption {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
 }
 
 .estimateOption.rate {
@@ -47,10 +55,12 @@ input.radarChartPart {
 }
 
 /*       RANGE        */
+
 input[type=range] {
   -webkit-appearance: none;
-  margin: 10px 0;
+  //margin: 10px 0;
   width: 100%;
+  flex: 1 1 200px !important;
 }
 input[type=range]:focus {
   outline: none;

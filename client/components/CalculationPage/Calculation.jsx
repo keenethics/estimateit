@@ -24,11 +24,11 @@ export default class Calculation extends React.Component{
     return (
       <Card className={styles.calculation}>
         <CardBlock className={styles.calculation__wrapper}>
-          <Col xs="12" md="5"
+          <Col xs="12" lg="4"
                className={styles.calculation__pie}>
             <PieChart data={this.props.data}/>
           </Col>
-          <Col xs="12" md="7"
+          <Col xs="12" lg="8"
                className={styles.calculation__options}>
             <EstimateOptions
               hours={this.props.hours}
