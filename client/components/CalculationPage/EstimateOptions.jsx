@@ -1,8 +1,8 @@
 import React from 'react';
-import { FormGroup, Input, Label, InputGroup, InputGroupAddon} from 'reactstrap';
+import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import styles from './style/calculations.scss';
 
-export default class EstimateOptions extends React.Component{
+export default class EstimateOptions extends React.Component {
   constructor(props) {
     super(props);
     this.estimateFields = {
@@ -10,7 +10,7 @@ export default class EstimateOptions extends React.Component{
       pm: 10,
       bugFixes: 10,
       risks: 10,
-      completing: 90
+      completing: 90,
     };
 
     this.estimateFieldsAmount = {};
@@ -32,7 +32,7 @@ export default class EstimateOptions extends React.Component{
   }
 
   componentDidMount() {
-    this.props.onDataChange(this.estimateFields)
+    this.props.onDataChange(this.estimateFields);
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.hours === nextProps.hours) return;
@@ -55,7 +55,8 @@ export default class EstimateOptions extends React.Component{
             min="0"
             step="1"
             onChange={this.onRateChange}
-            defaultValue="25"/>
+            defaultValue="25"
+          />
         </InputGroup>
         <InputGroup className={styles.estimateOption}>
           <InputGroupAddon>QA</InputGroupAddon>
@@ -68,7 +69,8 @@ export default class EstimateOptions extends React.Component{
             max="100"
             step="1"
             onChange={this.onFieldChange}
-            defaultValue="10"/>
+            defaultValue="10"
+          />
           <InputGroupAddon>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.estimateOption}>
@@ -81,7 +83,8 @@ export default class EstimateOptions extends React.Component{
             max="100"
             step="1"
             onChange={this.onFieldChange}
-            defaultValue="10"/>
+            defaultValue="10"
+          />
           <InputGroupAddon>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.estimateOption}>
@@ -94,7 +97,8 @@ export default class EstimateOptions extends React.Component{
             max="100"
             step="1"
             onChange={this.onFieldChange}
-            defaultValue="10"/>
+            defaultValue="10"
+          />
           <InputGroupAddon>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.estimateOption}>
@@ -107,7 +111,8 @@ export default class EstimateOptions extends React.Component{
             max="100"
             step="1"
             onChange={this.onFieldChange}
-            defaultValue="10"/>
+            defaultValue="10"
+          />
           <InputGroupAddon>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.estimateOption}>
@@ -120,10 +125,11 @@ export default class EstimateOptions extends React.Component{
             max="100"
             step="1"
             onChange={this.onFieldChange}
-            defaultValue="90"/>
+            defaultValue="90"
+          />
           <InputGroupAddon>{this.estimateFields.completing}%, {this.estimateFieldsAmount.completing} h</InputGroupAddon>
         </InputGroup>
       </div>
-    )
+    );
   }
 }

@@ -1,8 +1,8 @@
-import React from "react";
-import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from "reactstrap";
-import { DateField } from "react-date-picker";
-import "react-date-picker/index.css";
-import styles from "./style.scss";
+import React from 'react';
+import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
+import { DateField } from 'react-date-picker';
+import 'react-date-picker/index.css';
+import styles from './style.scss';
 
 export default class Header extends React.Component {
   constructor(props) {
@@ -27,23 +27,23 @@ export default class Header extends React.Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if(nextState.date !== this.state.date) {
+    if (nextState.date !== this.state.date) {
       this.datefield.setValue(nextState.date);
     }
   }
 
   headerInfoCollector(e) {
     this.setState({
-      [e.currentTarget.name]: e.currentTarget.value
+      [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
-    })
+      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+    });
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
-    if(dateString) {
+    if (dateString) {
       this.setState({ date: dateString }, () => {
-        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
       });
     }
   }
@@ -52,32 +52,33 @@ export default class Header extends React.Component {
   componentDidMount() {
     if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';
     const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-    console.log(state, 'stataaaate');
     this.setState(Object.assign({}, state), () => {
       console.log(this.state);
     });
   }
 
   findTaskAndModify(tasks, id, name, value) {
-    for(let i = 0; i < tasks.length; i++) {
-      if(tasks[i].id == id){
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id == id) {
         tasks[i][name] = value;
         break;
-      };
-      if(tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if(tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
+      }
+      if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
+      if (tasks[i].tasks && tasks[i].tasks.length) {
+        this.findTaskAndModify(tasks[i].tasks, id, name, value);
+      }
     }
     return tasks;
   }
 
   findTaskAndDelete(id, tasks) {
-    for(let i = 0; i < tasks.length; i++) {
-      if(tasks[i].id == id) {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id == id) {
         tasks.splice(i, 1);
         break;
       }
-      if(tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if(tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndDelete(id, tasks[i].tasks);
+      if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
+      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndDelete(id, tasks[i].tasks);
     }
     return tasks;
   }
@@ -90,7 +91,7 @@ export default class Header extends React.Component {
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
     this.setState({ tasks: newTasks }, () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
       this.props.onChangeState(newTasks);
     });
   }
@@ -104,12 +105,14 @@ export default class Header extends React.Component {
     const { parentTaskId } = this.state;
     console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
-      <FormGroup className={styles.item}
-                 key={task.id}>
+      <FormGroup
+        className={styles.item}
+        key={task.id}
+      >
         <Input
           data-id={task.id}
           className={styles.task__input}
-          name='taskName'
+          name="taskName"
           value={task.taskName}
           onChange={this.onEditTask}
         />
@@ -118,8 +121,8 @@ export default class Header extends React.Component {
           className={styles.task__input}
           type="number"
           value={task.minimumHours}
-          name='minimumHours'
-          placeholder=' - min'
+          name="minimumHours"
+          placeholder=" - min"
           onChange={this.onEditTask}
         />
         <Input
@@ -127,23 +130,27 @@ export default class Header extends React.Component {
           className={styles.task__input}
           type="number"
           value={task.maximumHours}
-          name='maximumHours'
-          placeholder=' - max'
+          name="maximumHours"
+          placeholder=" - max"
           onChange={this.onEditTask}
         />
         {(iterator < 2) ?
-          <Button color="danger"
-                  className={styles.task__input}
-                  data-id={task.id}
-                  onClick={this.setParentId}>Add subtask</Button> :
+          <Button
+            color="danger"
+            className={styles.task__input}
+            data-id={task.id}
+            onClick={this.setParentId}
+          >Add subtask</Button> :
           ''}
-        <Button color="danger"
-                className={styles.task__input} data-id={task.id} onClick={this.deleteTask}>Delete</Button>
+        <Button
+          color="danger"
+          className={styles.task__input} data-id={task.id} onClick={this.deleteTask}
+        >Delete</Button>
 
         {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
         {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
-      </FormGroup>
-    )
+      </FormGroup>,
+    );
   }
 
   preAddTask(e) {
@@ -154,7 +161,7 @@ export default class Header extends React.Component {
       newTask,
     }, () => {
       console.log(this.state);
-    })
+    });
   }
 
   deleteParentId(e) {
@@ -165,37 +172,41 @@ export default class Header extends React.Component {
 
   renderAddTaskForm(parentTaskId) {
     return (
-      <FormGroup className={styles.item}
-                 data-parentId={parentTaskId}>
+      <FormGroup
+        className={styles.item}
+        data-parentId={parentTaskId}
+      >
         <Input
           data-parentId={parentTaskId}
-          type='text'
-          placeholder='task'
-          name='taskName'
+          type="text"
+          placeholder="task"
+          name="taskName"
           onChange={this.preAddTask}
           className={styles.task__input}
         />
         <Input
           data-parentId={parentTaskId}
-          type='number'
-          placeholder='min'
-          name='minimumHours'
+          type="number"
+          placeholder="min"
+          name="minimumHours"
           onChange={this.preAddTask}
           className={styles.task__input}
         />
         <Input
           data-parentId={parentTaskId}
-          type='number'
-          placeholder='max'
-          name='maximumHours'
+          type="number"
+          placeholder="max"
+          name="maximumHours"
           onChange={this.preAddTask}
           className={styles.task__input}
         />
-        <Button color="danger"
-                className={styles.task__input}
-                onClick={this.addTask}>Add task</Button>
+        <Button
+          color="danger"
+          className={styles.task__input}
+          onClick={this.addTask}
+        >Add task</Button>
       </FormGroup>
-    )
+    );
   }
 
   deleteTask(e) {
@@ -203,16 +214,15 @@ export default class Header extends React.Component {
     const tasks = this.state.tasks.slice();
     const newTasks = this.findTaskAndDelete(id, tasks);
     this.setState({ tasks: newTasks }, () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
     });
     this.props.onChangeState(newTasks);
-
   }
 
   insertTask(tasks, id, newTask) {
-    for(let i=0; i < tasks.length; i++) {
-      if(tasks[i].id == id) {
-        if(tasks[i].tasks && tasks[i].tasks.length) {
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasks[i].id == id) {
+        if (tasks[i].tasks && tasks[i].tasks.length) {
           tasks[i].tasks.push(newTask);
           break;
         } else {
@@ -221,7 +231,7 @@ export default class Header extends React.Component {
           break;
         }
       }
-      if(tasks[i].tasks && tasks[i].tasks.length) this.insertTask(tasks[i].tasks, id, newTask);
+      if (tasks[i].tasks && tasks[i].tasks.length) this.insertTask(tasks[i].tasks, id, newTask);
     }
     return tasks;
   }
@@ -233,38 +243,40 @@ export default class Header extends React.Component {
     newTask.id = new Date().getTime();
     const tasks = this.state.tasks.slice();
     let newTasks = [];
-    if(!parent) {
+    if (!parent) {
       newTasks = [...this.state.tasks, newTask];
-      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null} , () => {
-        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
+        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
       });
     } else {
       newTasks = this.insertTask(tasks, parent, newTask);
-      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null} , () => {
-        history.replaceState({}, "", "/?" + JSON.stringify(this.state));
+      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
+        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
       });
     }
     this.props.onChangeState(newTasks);
-    e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName =='INPUT' ? i.value = '' : '')
+    e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
   }
 
   textAreaAdjust(e) {
     e.target.style.height = '1px';
-    e.target.style.height = (10+e.target.scrollHeight)+"px";
+    e.target.style.height = `${10 + e.target.scrollHeight}px`;
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.replaceState({}, "", "/?" + JSON.stringify(this.state));
-    })
+      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+    });
   }
 
-  render () {
+  render() {
     const tasks = this.state.tasks;
     return (
       <div>
         <Row className={styles.estimator__header}>
-          <Col xs="12" md="5"
-               className={styles.left__part}>
+          <Col
+            xs="12" md="5"
+            className={styles.left__part}
+          >
             <img
               src={require('../pictures/logo.png')}
               height={50}
@@ -279,14 +291,16 @@ export default class Header extends React.Component {
               <span><a href="https://keenethics.com/">keenethics.com</a></span>
             </div>
           </Col>
-          <Col xs="12" md="7"
-               className={styles.right__part}>
+          <Col
+            xs="12" md="7"
+            className={styles.right__part}
+          >
             <Form>
               <CardTitle>ESTIMATE</CardTitle>
               <FormGroup className={styles.item}>
                 <DateField
-                  htmlFor='datePicker'
-                  dateFormat='YYYY-MM-DD'
+                  htmlFor="datePicker"
+                  dateFormat="YYYY-MM-DD"
                   ref={(dateField) => { this.datefield = dateField; }}
                   onChange={this.onDateChange}
                   placeholder="Date:"
@@ -295,9 +309,9 @@ export default class Header extends React.Component {
               </FormGroup>
               <FormGroup className={styles.item}>
                 <Input
-                  name='clientName'
+                  name="clientName"
                   value={this.state.clientName}
-                  type='text'
+                  type="text"
                   id="clientName"
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
@@ -306,9 +320,9 @@ export default class Header extends React.Component {
               </FormGroup>
               <FormGroup className={styles.item}>
                 <Input
-                  type='text'
+                  type="text"
                   id="projectName"
-                  name='projectName'
+                  name="projectName"
                   value={this.state.projectName}
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
@@ -317,9 +331,9 @@ export default class Header extends React.Component {
               </FormGroup>
               <FormGroup className={styles.item}>
                 <Input
-                  type='number'
+                  type="number"
                   id="sprintNumber"
-                  name='sprintNumber'
+                  name="sprintNumber"
                   value={this.state.sprintNumber}
                   className={styles.underlined__input}
                   onChange={this.headerInfoCollector}
@@ -330,24 +344,26 @@ export default class Header extends React.Component {
           </Col>
         </Row>
         <FormGroup className={styles.item}>
-          <Input type="textarea"
-                 onChange={this.textAreaAdjust}
-                 placeholder="Technologies, libraries, APIs"
-                 value={this.state.technologies}
-                 name='technologies'
+          <Input
+            type="textarea"
+            onChange={this.textAreaAdjust}
+            placeholder="Technologies, libraries, APIs"
+            value={this.state.technologies}
+            name="technologies"
           />
         </FormGroup>
-        <FormGroup className='tasks'>{this.renderTasks(tasks, 0)}</FormGroup>
+        <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         {this.renderAddTaskForm()}
         <FormGroup className={styles.item}>
-          <Input type="textarea"
-                 onChange={this.textAreaAdjust}
-                 value={this.state.comments}
-                 placeholder="Comments"
-                 name='comments'
+          <Input
+            type="textarea"
+            onChange={this.textAreaAdjust}
+            value={this.state.comments}
+            placeholder="Comments"
+            name="comments"
           />
         </FormGroup>
       </div>
-    )
+    );
   }
 }

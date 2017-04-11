@@ -1,9 +1,9 @@
-import React from "react";
-import { Button, Card, CardBlock, FormGroup} from "reactstrap";
-import domtoimage from "dom-to-image";
-import styles from "./style/finalEstimate.scss";
+import React from 'react';
+import { Button, Card, CardBlock } from 'reactstrap';
+import domtoimage from 'dom-to-image';
+import styles from './style/finalEstimate.scss';
 
-export default class FinalEstimate extends React.Component{
+export default class FinalEstimate extends React.Component {
   constructor(props) {
     super(props);
 
@@ -17,8 +17,8 @@ export default class FinalEstimate extends React.Component{
 
   saveAsPdf() {
     const root = document.getElementById('root');
-    domtoimage.toPng(root, {filter: this.filter})
-      .then(function (dataUrl) {
+    domtoimage.toPng(root, { filter: this.filter })
+      .then((dataUrl) => {
         const img = new Image();
         img.src = dataUrl;
 
@@ -26,8 +26,7 @@ export default class FinalEstimate extends React.Component{
 
         doc.addImage(img, 'PNG', 2, 2);
         doc.save('a4.pdf');
-
-      })
+      });
   }
 
   render() {
@@ -45,6 +44,6 @@ export default class FinalEstimate extends React.Component{
           </div>
         </CardBlock>
       </Card>
-    )
+    );
   }
 }

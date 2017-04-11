@@ -1,7 +1,7 @@
 import React from 'react';
-import { Pie } from "react-chartjs";
+import { Pie } from 'react-chartjs';
 
-export default class PieChart extends React.Component{
+export default class PieChart extends React.Component {
   constructor(props) {
     super(props);
     this.data = [
@@ -34,17 +34,17 @@ export default class PieChart extends React.Component{
         highlight: '#616774',
         label: 'completing',
         value: 50,
-      }
-    ]
+      },
+    ];
 
     this.options = {
-      animation:{
-        animateScale:true
+      animation: {
+        animateScale: true,
       },
       options: {
-        responsive: true
-      }
-    }
+        responsive: true,
+      },
+    };
   }
 
   generateData() {
@@ -53,7 +53,6 @@ export default class PieChart extends React.Component{
     this.data[2].value = this.props.data.qa;
     this.data[3].value = this.props.data.risks;
     this.data[4].value = this.props.data.completing;
-
   }
 
   render() {
@@ -62,7 +61,7 @@ export default class PieChart extends React.Component{
       <div className="pieChartWrapper">
         <Pie data={this.data} options={this.options} />
       </div>
-    )
+    );
   }
 
 }
