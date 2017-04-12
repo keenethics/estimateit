@@ -5,6 +5,7 @@ import Calculation from '../Calculation';
 import FinalEstimate from '../FinalEstimate';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
+import styles from './styles.scss';
 
 export default class CalculationPage extends Component {
   constructor(props) {
@@ -105,7 +106,7 @@ export default class CalculationPage extends Component {
   render() {
     this.transformToVector();
     return (
-      <Row>
+      <Row className={styles.calculationPage}>
         <Col xs="12">
           <LineChart
             labels={this.labels}

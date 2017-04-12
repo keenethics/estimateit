@@ -1,3 +1,10 @@
+@import "../ui";
+
+.estimator {
+  padding: 20px 0;
+  margin: 0 auto;
+}
+
 :global {
   .react-date-field__input {
     padding: 0;
@@ -48,23 +55,23 @@ input[type=range]::-webkit-slider-runnable-track {
   cursor: pointer;
   animate: .2s;
   box-shadow: 0 0 0 #000;
-  background: #ff7671;
+  background: $primary-color-light;
   border-radius: 1px;
   border: 0 solid #000;
 }
 input[type=range]::-webkit-slider-thumb {
   box-shadow: 0 0 0 #000;
-  border: 1px solid #d9534f;
+  border: 1px solid $primary-color;
   height: 18px;
   width: 18px;
   border-radius: 25px;
-  background: #d9534f;
+  background: $primary-color;
   cursor: pointer;
   -webkit-appearance: none;
   margin-top: -7px;
 }
 input[type=range]:focus::-webkit-slider-runnable-track {
-  background: #ff7671;
+  background: $primary-color-light;
 }
 input[type=range]::-moz-range-track {
   width: 100%;
@@ -72,17 +79,17 @@ input[type=range]::-moz-range-track {
   cursor: pointer;
   animate: .2s;
   box-shadow: 0 0 0 #000;
-  background: #ff7671;
+  background: $primary-color-light;
   border-radius: 1px;
   border: 0 solid #000;
 }
 input[type=range]::-moz-range-thumb {
   box-shadow: 0 0 0 #000;
-  border: 1px solid #d9534f;
+  border: 1px solid $primary-color;
   height: 18px;
   width: 18px;
   border-radius: 25px;
-  background: #d9534f;
+  background: $primary-color;
   cursor: pointer;
 }
 input[type=range]::-ms-track {
@@ -95,29 +102,29 @@ input[type=range]::-ms-track {
   color: transparent;
 }
 input[type=range]::-ms-fill-lower {
-  background: #ff7671;
+  background: $primary-color-light;
   border: 0 solid #000;
   border-radius: 2px;
   box-shadow: 0 0 0 #000;
 }
 input[type=range]::-ms-fill-upper {
-  background: #ff7671;
+  background: $primary-color-light;
   border: 0 solid #000;
   border-radius: 2px;
   box-shadow: 0 0 0 #000;
 }
 input[type=range]::-ms-thumb {
   box-shadow: 0 0 0 #000;
-  border: 1px solid #d9534f;
+  border: 1px solid $primary-color;
   height: 18px;
   width: 18px;
   border-radius: 25px;
-  background: #d9534f;
+  background: $primary-color;
   cursor: pointer;
 }
 input[type=range]:focus::-ms-fill-lower {
-  background: #ff7671;
+  background: $primary-color-light;
 }
 input[type=range]:focus::-ms-fill-upper {
-  background: #ff7671;
+  background: $primary-color-light;
 }

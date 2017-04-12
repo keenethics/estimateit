@@ -1,0 +1,7 @@
+@import "../../../ui";
+
+.calculationPage {
+  & > div:not(:last-child) {
+    margin-bottom: $margin-card;
+  }
+}

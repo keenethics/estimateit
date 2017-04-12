@@ -1,51 +1,60 @@
+@import "../../../ui";
 
-.estimator {
-  padding: 20px 0;
-  margin: 0 auto;
-  &__header {
-    margin-bottom: 1rem;
+.header {
+  .left {
+    &__company {
+      color: $primary-color;
+      font-size: 24px;
+      font-weight: 700;
+    }
+    &__contacts {
+      margin-top: 9px;
+      padding: 15px;
+      border: 2px solid $primary-color;
+      border-radius: 5px;
+      margin-bottom: $margin-card;
+      span {
+        display: block;
+        margin-bottom: 18px;
+        font-weight: 600;
+        &:first-child {
+          margin-top: 24px;
+          color: $primary-color;
+        }
+      }
+    }
   }
-}
-.company__name {
-  color: rgb(222,79,79);
-  font-size: 24px;
-  font-weight: 700;
-}
-
-.header__contacts{
-  margin-top: 9px;
-  padding: 15px;
-  border: 2px solid #d9534f;
-  border-radius: 5px;
-  span {
-    display: block;
-    margin-bottom: 18px;
-    font-weight: 600;
-    &:first-child {
-      margin-top: 24px;
-      color: #d9534f;
+  &__right {
+    margin-top: 20px;
+    span {
+      display: block;
+      margin-bottom: 24px;
+      label {
+        padding-right: 12px;
+      }
     }
   }
 }
-
-.right__part {
-  margin-top: 20px;
-  span {
-    display: block;
-    margin-bottom: 24px;
-    label {
-      padding-right: 12px;
+.right {
+  &__inputGroup {
+    display: flex;
+    flex-wrap: wrap;
+    &_item {
+      margin-bottom: $margin-input;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
     }
   }
 }
-
-.item {
+.tasks {
   display: flex;
   flex-wrap: wrap;
-}
-.task__input {
-  margin-bottom: 10px;
-  &:not(:last-child) {
-    margin-right: 10px;
+  margin-bottom: .5rem!important;
+  &_item {
+    margin-bottom: $margin-input;
+    &:not(:last-child) {
+      margin-right: 10px;
+    }
   }
 }

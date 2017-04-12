@@ -22,11 +22,11 @@ export default class Contacts extends Component {
   render() {
     return (
 
-      <Card className="contacts">
+      <Card className={styles.contacts}>
         <CardHeader>If you have any questions about this estimate, please contact</CardHeader>
         <CardBlock>
           <Input
-            className={styles.underlined__input}
+            className={styles.contacts__input}
             type="text"
             placeholder="PM's name"
             name="pm"
@@ -34,25 +34,25 @@ export default class Contacts extends Component {
             onChange={this.onContactsChange.bind(this)}
           />
           <Input
-            className={styles.underlined__input}
+            className={styles.contacts__input}
             type="text"
-            placeholder="position"
+            placeholder="Position"
             name="position"
             value={this.state.position}
             onChange={this.onContactsChange.bind(this)}
           />
           <Input
-            className={styles.underlined__input}
+            className={styles.contacts__input}
             type="email"
-            placeholder="email"
+            placeholder="Email"
             name="email"
             value={this.state.email}
             onChange={this.onContactsChange.bind(this)}
           />
           <Input
-            className={styles.underlined__input}
+            className={styles.contacts__input}
             type="text"
-            placeholder="skype"
+            placeholder="Skype"
             name="skype"
             value={this.state.skype}
             onChange={this.onContactsChange.bind(this)}

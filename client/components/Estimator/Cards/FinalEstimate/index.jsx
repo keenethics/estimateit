@@ -6,15 +6,12 @@ import styles from './styles.scss';
 export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
-
     this.saveAsPdf = this.saveAsPdf.bind(this);
   }
-
   filter(node) {
     return (node.tagName !== 'BUTTON'
     && node.className !== 'header--addTaskForm' && node.className !== 'radarChartPart');
   }
-
   saveAsPdf() {
     const root = document.getElementById('root');
     domtoimage.toPng(root, { filter: this.filter })
@@ -33,13 +30,13 @@ export default class FinalEstimate extends Component {
     return (
       <Card className={styles.finalEstimate}>
         <CardBlock className={styles.finalEstimate__wrapper}>
-          <div className={styles.estimateResult}>
+          <div className={styles.finalEstimate__result}>
             <Button color="default">Total hours: {this.props.hours}</Button>
           </div>
-          <div className={styles.estimateResult}>
+          <div className={styles.finalEstimate__result}>
             <Button color="default">Total sum: {this.props.hours * this.props.rate}$</Button>
           </div>
-          <div className={styles.estimateResult}>
+          <div className={styles.finalEstimate__result}>
             <Button color="danger" onClick={this.saveAsPdf}>Generate PDF</Button>
           </div>
         </CardBlock>

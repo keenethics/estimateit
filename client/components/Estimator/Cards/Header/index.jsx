@@ -106,19 +106,19 @@ export default class Header extends Component {
     console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
       <FormGroup
-        className={styles.item}
+        className={styles.tasks}
         key={task.id}
       >
         <Input
           data-id={task.id}
-          className={styles.task__input}
+          className={styles.tasks__item}
           name="taskName"
           value={task.taskName}
           onChange={this.onEditTask}
         />
         <Input
           data-id={task.id}
-          className={styles.task__input}
+          className={styles.tasks__item}
           type="number"
           value={task.minimumHours}
           name="minimumHours"
@@ -127,7 +127,7 @@ export default class Header extends Component {
         />
         <Input
           data-id={task.id}
-          className={styles.task__input}
+          className={styles.tasks__item}
           type="number"
           value={task.maximumHours}
           name="maximumHours"
@@ -137,16 +137,16 @@ export default class Header extends Component {
         {(iterator < 2) ?
           <Button
             color="danger"
-            className={styles.task__input}
+            className={styles.tasks__item}
             data-id={task.id}
             onClick={this.setParentId}
           >Add subtask</Button> :
           ''}
         <Button
           color="danger"
-          className={styles.task__input} data-id={task.id} onClick={this.deleteTask}
+          className={styles.tasks__item}
+          data-id={task.id} onClick={this.deleteTask}
         >Delete</Button>
-
         {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
         {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
       </FormGroup>,
@@ -173,7 +173,7 @@ export default class Header extends Component {
   renderAddTaskForm(parentTaskId) {
     return (
       <FormGroup
-        className={styles.item}
+        className={styles.right__inputGroup}
         data-parentId={parentTaskId}
       >
         <Input
@@ -182,7 +182,7 @@ export default class Header extends Component {
           placeholder="task"
           name="taskName"
           onChange={this.preAddTask}
-          className={styles.task__input}
+          className={styles.right__inputGroup_item}
         />
         <Input
           data-parentId={parentTaskId}
@@ -190,7 +190,7 @@ export default class Header extends Component {
           placeholder="min"
           name="minimumHours"
           onChange={this.preAddTask}
-          className={styles.task__input}
+          className={styles.right__inputGroup_item}
         />
         <Input
           data-parentId={parentTaskId}
@@ -198,11 +198,11 @@ export default class Header extends Component {
           placeholder="max"
           name="maximumHours"
           onChange={this.preAddTask}
-          className={styles.task__input}
+          className={styles.right__inputGroup_item}
         />
         <Button
           color="danger"
-          className={styles.task__input}
+          className={styles.right__inputGroup_item}
           onClick={this.addTask}
         >Add task</Button>
       </FormGroup>
@@ -272,19 +272,19 @@ export default class Header extends Component {
     const tasks = this.state.tasks;
     return (
       <div>
-        <Row className={styles.estimator__header}>
+        <Row className={styles.header}>
           <Col
             xs="12" md="5"
-            className={styles.left__part}
+            className={`${styles.header__left} ${styles.left}`}
           >
             <img
               src={require('../../../../pictures/logo.png')}
               height={50}
               width={50}
             />
-            <span className={styles.company__name}>
+            <span className={styles.left__company}>
             Keenethics </span>
-            <div className={styles.header__contacts}>
+            <div className={styles.left__contacts}>
               <span>3, Lytvynenka street, Lviv</span>
               <span>Keenethics Phone: [+38 096 814 72 66]</span>
               <span>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></span>
@@ -293,11 +293,11 @@ export default class Header extends Component {
           </Col>
           <Col
             xs="12" md="7"
-            className={styles.right__part}
+            className={styles.header__right}
           >
-            <Form>
+            <Form className={styles.right}>
               <CardTitle>ESTIMATE</CardTitle>
-              <FormGroup className={styles.item}>
+              <FormGroup className={styles.right__inputGroup}>
                 <DateField
                   htmlFor="datePicker"
                   dateFormat="YYYY-MM-DD"
@@ -306,38 +306,38 @@ export default class Header extends Component {
                   }}
                   onChange={this.onDateChange}
                   placeholder="Date:"
-                  className={styles.underlined__input}
+                  className={styles.right__inputGroup_item}
                 />
               </FormGroup>
-              <FormGroup className={styles.item}>
+              <FormGroup className={styles.right__inputGroup}>
                 <Input
                   name="clientName"
                   value={this.state.clientName}
                   type="text"
                   id="clientName"
-                  className={styles.underlined__input}
+                  className={styles.right__inputGroup_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Client name:"
                 />
               </FormGroup>
-              <FormGroup className={styles.item}>
+              <FormGroup className={styles.right__inputGroup}>
                 <Input
                   type="text"
                   id="projectName"
                   name="projectName"
                   value={this.state.projectName}
-                  className={styles.underlined__input}
+                  className={styles.right__inputGroup_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Project name:"
                 />
               </FormGroup>
-              <FormGroup className={styles.item}>
+              <FormGroup className={styles.right__inputGroup}>
                 <Input
                   type="number"
                   id="sprintNumber"
                   name="sprintNumber"
                   value={this.state.sprintNumber}
-                  className={styles.underlined__input}
+                  className={styles.right__inputGroup_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Sprint:"
                 />
@@ -345,7 +345,7 @@ export default class Header extends Component {
             </Form>
           </Col>
         </Row>
-        <FormGroup className={styles.item}>
+        <FormGroup className={styles.right__inputGroup}>
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
@@ -356,7 +356,7 @@ export default class Header extends Component {
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         {this.renderAddTaskForm()}
-        <FormGroup className={styles.item}>
+        <FormGroup className={styles.right__inputGroup}>
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
