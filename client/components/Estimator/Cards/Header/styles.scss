@@ -51,9 +51,9 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: .5rem!important;
-  &_item {
+  &__item {
     margin-bottom: $margin-input;
-    &:not(:last-child) {
+    &:not(:nth-child(5n+5)) {
       margin-right: 10px;
     }
   }

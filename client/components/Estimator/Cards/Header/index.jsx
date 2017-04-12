@@ -203,7 +203,7 @@ export default class Header extends Component {
         />
         <Button
           color="danger"
-          className={styles.right__inputGroup_item}
+            className={styles.right__inputGroup_item}
           onClick={this.addTask}
         >Add task</Button>
       </FormGroup>
