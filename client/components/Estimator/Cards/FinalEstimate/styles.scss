@@ -2,9 +2,6 @@
 
 .finalEstimate {
   width: 100%;
-  button {
-    min-width: 140px;
-  }
   &__wrapper {
     display: flex;
     justify-content: space-around;
@@ -13,6 +10,20 @@
   }
   &__result {
     display: inline-block;
+    min-width: 140px;
     margin: $margin-input 0;
+    &_info {
+      display: inline-block;
+      font-weight: normal;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      border: 1px solid transparent;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      background: #dddddd;
+    }
   }
 }

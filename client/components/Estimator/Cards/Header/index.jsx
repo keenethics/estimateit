@@ -173,6 +173,7 @@ export default class Header extends Component {
   renderAddTaskForm(parentTaskId) {
     return (
       <FormGroup
+        id="screenShot"
         className={styles.right__inputGroup}
         data-parentId={parentTaskId}
       >

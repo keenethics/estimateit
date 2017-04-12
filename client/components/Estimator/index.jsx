@@ -27,7 +27,7 @@ export default class App extends Component {
   render() {
     return (
       <Container>
-        <Card>
+        <Card id="screen">
           <Col
             xs="12" md="10"
             className={styles.estimator}

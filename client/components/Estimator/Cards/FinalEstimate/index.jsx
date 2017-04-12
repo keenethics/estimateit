@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBlock } from 'reactstrap';
-import domtoimage from 'dom-to-image';
+  import domtoimage from 'dom-to-image';
 import styles from './styles.scss';
 
 export default class FinalEstimate extends Component {
@@ -10,10 +10,10 @@ export default class FinalEstimate extends Component {
   }
   filter(node) {
     return (node.tagName !== 'BUTTON'
-    && node.className !== 'header--addTaskForm' && node.className !== 'radarChartPart');
+    && node.id !== 'screenShot' && node.className !== 'radarChartPart');
   }
   saveAsPdf() {
-    const root = document.getElementById('root');
+    const root = document.getElementById('screen');
     domtoimage.toPng(root, { filter: this.filter })
       .then((dataUrl) => {
         const img = new Image();
@@ -31,10 +31,10 @@ export default class FinalEstimate extends Component {
       <Card className={styles.finalEstimate}>
         <CardBlock className={styles.finalEstimate__wrapper}>
           <div className={styles.finalEstimate__result}>
-            <Button color="default">Total hours: {this.props.hours}</Button>
+            <div className={styles.finalEstimate__result_info}>Total hours: {this.props.hours}</div>
           </div>
           <div className={styles.finalEstimate__result}>
-            <Button color="default">Total sum: {this.props.hours * this.props.rate}$</Button>
+            <div className={styles.finalEstimate__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
           <div className={styles.finalEstimate__result}>
             <Button color="danger" onClick={this.saveAsPdf}>Generate PDF</Button>
