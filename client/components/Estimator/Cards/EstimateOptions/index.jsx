@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import styles from './style/calculations.scss';
+import styles from './styles.scss';
 
-export default class EstimateOptions extends React.Component {
+export default class EstimateOptions extends Component {
   constructor(props) {
     super(props);
     this.estimateFields = {

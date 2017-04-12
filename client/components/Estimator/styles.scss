@@ -1,64 +1,40 @@
-
-
-.calculation {
-  margin-bottom: 1rem;
-  justify-content: space-around;
-  &__wrapper {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
+:global {
+  .react-date-field__input {
+    padding: 0;
   }
-  &__pie {
+  .react-date-field--theme-default {
+    width: 100%;
+    padding: .5rem .75rem;
+    border: 1px solid rgba(0, 0, 0, .15);
+    border-radius: .25rem;
+  }
+  .input-group-addon {
+    display: inline-block;
+    width: 140px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: inherit;
+    &:last-child {
+      width: 100px;
+    }
+  }
+  input.radarChartPart {
+    width: inherit;
+  }
+  .react-flex {
     display: flex;
     justify-content: center;
   }
 }
 
-.estimateOptions {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
+input[type=text] {
+  flex: 1 0 50%;
 }
-.estimateOption {
-  width: 100%;
-  span {
-    font-size: 14px;
-  }
-  @media screen and (max-width: 1000px){
-    flex-wrap: wrap;
-    * {
-      width: 100% !important;
-    }
-    div {
-      border: none;
-    }
-  }
-  @media screen and (max-width: 600px){
-    text-align: center;
-  }
+input[type=number] {
+  flex: 1 0 50px;
 }
-
-.lineChartWrapper{
-  margin-bottom: 1rem;
-}
-
-input.radarChartPart {
-  width: inherit;
-}
-
-.estimateOption {
-  margin-bottom: 1rem;
-}
-
-.estimateOption.rate {
-  display: flex;
-}
-
-/*       RANGE        */
-
 input[type=range] {
   -webkit-appearance: none;
-  //margin: 10px 0;
   width: 100%;
   flex: 1 1 200px !important;
 }

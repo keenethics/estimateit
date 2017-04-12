@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardBlock, CardHeader, Input } from 'reactstrap';
-import './style/contacts.scss';
-import styles from '../style.scss';
+import styles from './styles.scss';
 
-export default class Contacts extends React.Component {
+export default class Contacts extends Component {
   constructor(props) {
     super(props);
     this.state = {

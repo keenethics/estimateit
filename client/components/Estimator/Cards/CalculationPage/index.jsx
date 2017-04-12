@@ -1,12 +1,12 @@
-import React from 'react';
-import { Container, Row, Col } from 'reactstrap';
+import React, { Component } from 'react';
+import { Row, Col } from 'reactstrap';
 import DiscreteVector from 'discrete-vector';
-import Calculation from './Calculation.jsx';
-import FinalEstimate from './FinalEstaimate.jsx';
-import Contacts from './Contacts.jsx';
-import LineChart from './LineChart.jsx';
+import Calculation from '../Calculation';
+import FinalEstimate from '../FinalEstimate';
+import Contacts from '../Contacts';
+import LineChart from '../LineChart';
 
-export default class CalculationPage extends React.Component {
+export default class CalculationPage extends Component {
   constructor(props) {
     super(props);
     this.state = {

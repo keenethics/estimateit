@@ -1,12 +1,11 @@
-import React from 'react';
-import { Container, Col, Row, Card } from 'reactstrap';
-import Header from './Header.jsx';
-import CalculationPage from './CalculationPage/CalculationPage.jsx';
-import styles from './style.scss';
+import React, { Component } from 'react';
+import { Container, Col, Card } from 'reactstrap';
+import Header from './Cards/Header';
+import CalculationPage from './Cards/CalculationPage';
+import styles from './styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
-export default class App extends React.Component {
+export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +32,14 @@ export default class App extends React.Component {
             xs="12" md="10"
             className={styles.estimator}
           >
-            <Header onChangeState={this.changeState} />
-            <CalculationPage className={styles.estimator__body} someProp={this.state.tasksData} />
+            <Header
+              className={styles.estimator__header}
+              onChangeState={this.changeState}
+            />
+            <CalculationPage
+              className={styles.estimator__body}
+              someProp={this.state.tasksData}
+            />
           </Col>
         </Card>
       </Container>

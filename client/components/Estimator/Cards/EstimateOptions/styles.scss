@@ -1,0 +1,29 @@
+
+.estimateOptions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.estimateOption {
+  width: 100%;
+  margin-bottom: 1rem;
+  span {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 1000px){
+    flex-wrap: wrap;
+    * {
+      width: 100% !important;
+    }
+    div {
+      border: none;
+    }
+  }
+  @media screen and (max-width: 600px){
+    text-align: center;
+  }
+}
+
+.estimateOption.rate {
+  display: flex;
+}

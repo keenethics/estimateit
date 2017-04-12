@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css';
-import styles from './style.scss';
+import styles from './styles.scss';
 
-export default class Header extends React.Component {
+export default class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -278,7 +278,7 @@ export default class Header extends React.Component {
             className={styles.left__part}
           >
             <img
-              src={require('../pictures/logo.png')}
+              src={require('../../../../pictures/logo.png')}
               height={50}
               width={50}
             />
@@ -301,7 +301,9 @@ export default class Header extends React.Component {
                 <DateField
                   htmlFor="datePicker"
                   dateFormat="YYYY-MM-DD"
-                  ref={(dateField) => { this.datefield = dateField; }}
+                  ref={(dateField) => {
+                    this.datefield = dateField;
+                  }}
                   onChange={this.onDateChange}
                   placeholder="Date:"
                   className={styles.underlined__input}

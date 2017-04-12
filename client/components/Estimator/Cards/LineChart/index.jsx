@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import ReactHighcharts from 'react-highcharts';
-import styles from './style/calculations.scss';
+import styles from './styles.scss';
 
-export default class LineChart extends React.Component {
+export default class LineChart extends Component {
   constructor(props) {
     super(props);
 

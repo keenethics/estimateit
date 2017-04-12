@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Pie } from 'react-chartjs';
 
-export default class PieChart extends React.Component {
+export default class PieChart extends Component {
   constructor(props) {
     super(props);
     this.data = [
@@ -58,7 +58,7 @@ export default class PieChart extends React.Component {
   render() {
     this.generateData();
     return (
-      <div className="pieChartWrapper">
+      <div>
         <Pie data={this.data} options={this.options} />
       </div>
     );

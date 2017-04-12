@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardBlock, Col } from 'reactstrap';
-import EstimateOptions from './EstimateOptions.jsx';
-import PieChart from './PieChart.jsx';
-import styles from './style/calculations.scss';
+import EstimateOptions from '../EstimateOptions';
+import PieChart from '../PieChart';
+import styles from './styles.scss';
 
-export default class Calculation extends React.Component {
+export default class Calculation extends Component {
   constructor(props) {
     super(props);
     this.onDataChange = this.onDataChange.bind(this);

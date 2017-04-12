@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Button, Card, CardBlock } from 'reactstrap';
 import domtoimage from 'dom-to-image';
-import styles from './style/finalEstimate.scss';
+import styles from './styles.scss';
 
-export default class FinalEstimate extends React.Component {
+export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
 

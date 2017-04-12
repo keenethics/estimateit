@@ -1,0 +1,13 @@
+.calculation {
+  margin-bottom: 1rem;
+  justify-content: space-around;
+  &__wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  &__pie {
+    display: flex;
+    justify-content: center;
+  }
+}
