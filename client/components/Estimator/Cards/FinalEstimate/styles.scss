@@ -2,16 +2,19 @@
 
 .finalEstimate {
   width: 100%;
+  display: flex;
+  justify-content: center;
   &__wrapper {
-    display: flex;
+    @extend .grid-media;
     justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
+    grid-template-columns: repeat(3, 140px);
+    @media screen and (max-width: 800px){
+      grid-template-columns: 1fr;
+    }
   }
   &__result {
-    display: inline-block;
-    min-width: 140px;
-    margin: $margin-input 0;
+    display: grid !important;
+
     &_info {
       display: inline-block;
       font-weight: normal;
@@ -20,10 +23,10 @@
       white-space: nowrap;
       vertical-align: middle;
       border: 1px solid transparent;
-      padding: 0.5rem 1rem;
+      padding: .5rem 1rem;
       font-size: 1rem;
-      border-radius: 0.25rem;
-      background: #dddddd;
+      border-radius: .25rem;
+      background: #ddd;
     }
   }
 }

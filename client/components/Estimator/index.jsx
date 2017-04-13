@@ -29,7 +29,7 @@ export default class App extends Component {
       <Container>
         <Card id="screen">
           <Col
-            xs="12" md="10"
+            xs="12" md="12" lg="10"
             className={styles.estimator}
           >
             <Header

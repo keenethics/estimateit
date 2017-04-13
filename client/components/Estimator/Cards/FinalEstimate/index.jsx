@@ -1,12 +1,21 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBlock } from 'reactstrap';
-  import domtoimage from 'dom-to-image';
+import { Button, Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import domtoimage from 'dom-to-image';
 import styles from './styles.scss';
 
 export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      dropdownOpen: false,
+    };
     this.saveAsPdf = this.saveAsPdf.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
+  toggle() {
+    this.setState({
+      dropdownOpen: !this.state.dropdownOpen,
+    });
   }
   filter(node) {
     return (node.tagName !== 'BUTTON'
@@ -36,9 +45,22 @@ export default class FinalEstimate extends Component {
           <div className={styles.finalEstimate__result}>
             <div className={styles.finalEstimate__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
-          <div className={styles.finalEstimate__result}>
-            <Button color="danger" onClick={this.saveAsPdf}>Generate PDF</Button>
-          </div>
+          <ButtonDropdown
+            className={styles.finalEstimate__result}
+            isOpen={this.state.dropdownOpen}
+            toggle={this.toggle}
+          >
+            <DropdownToggle
+              color="danger"
+              caret
+            >
+              Generate Report
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
+              <DropdownItem>Generate CSV</DropdownItem>
+            </DropdownMenu>
+          </ButtonDropdown>
         </CardBlock>
       </Card>
     );

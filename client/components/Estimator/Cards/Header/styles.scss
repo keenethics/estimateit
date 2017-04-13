@@ -35,26 +35,14 @@
     }
   }
 }
-.right {
+
+.tasks {
   &__inputGroup {
-    display: flex;
-    flex-wrap: wrap;
-    &_item {
-      margin-bottom: $margin-input;
-      &:not(:last-child) {
-        margin-right: 10px;
-      }
-    }
+    @extend .grid;
+    grid-template-columns: 3fr 1fr 1fr 1fr;
   }
 }
-.tasks {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: .5rem!important;
-  &__item {
-    margin-bottom: $margin-input;
-    &:not(:nth-child(5n+5)) {
-      margin-right: 10px;
-    }
-  }
+.subTasks {
+  @extend .grid;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
 }

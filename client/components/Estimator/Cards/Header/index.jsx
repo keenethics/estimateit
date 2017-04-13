@@ -105,51 +105,56 @@ export default class Header extends Component {
     const { parentTaskId } = this.state;
     console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
+    <div>
       <FormGroup
-        className={styles.tasks}
+        className={styles.subTasks}
         key={task.id}
       >
         <Input
           data-id={task.id}
-          className={styles.tasks__item}
+          className={styles.subTasks__item}
           name="taskName"
+          placeholder="subtask"
           value={task.taskName}
           onChange={this.onEditTask}
         />
         <Input
           data-id={task.id}
-          className={styles.tasks__item}
+          className={styles.subTasks__item}
           type="number"
           value={task.minimumHours}
           name="minimumHours"
-          placeholder=" - min"
+          placeholder="min"
           onChange={this.onEditTask}
         />
         <Input
           data-id={task.id}
-          className={styles.tasks__item}
+          className={styles.subTasks__item}
           type="number"
           value={task.maximumHours}
           name="maximumHours"
-          placeholder=" - max"
+          placeholder="max"
           onChange={this.onEditTask}
         />
         {(iterator < 2) ?
           <Button
             color="danger"
-            className={styles.tasks__item}
+            className={styles.subTasks__item}
             data-id={task.id}
             onClick={this.setParentId}
           >Add subtask</Button> :
           ''}
         <Button
           color="danger"
-          className={styles.tasks__item}
+          className={styles.subTasks__item}
           data-id={task.id} onClick={this.deleteTask}
         >Delete</Button>
+      </FormGroup>
+      <FormGroup>
         {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
         {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
-      </FormGroup>,
+      </FormGroup>
+    </div>,
     );
   }
 
@@ -174,7 +179,7 @@ export default class Header extends Component {
     return (
       <FormGroup
         id="screenShot"
-        className={styles.right__inputGroup}
+        className={styles.tasks__inputGroup}
         data-parentId={parentTaskId}
       >
         <Input
@@ -183,7 +188,7 @@ export default class Header extends Component {
           placeholder="task"
           name="taskName"
           onChange={this.preAddTask}
-          className={styles.right__inputGroup_item}
+          className={styles.tasks__inputGroup_item}
         />
         <Input
           data-parentId={parentTaskId}
@@ -191,7 +196,7 @@ export default class Header extends Component {
           placeholder="min"
           name="minimumHours"
           onChange={this.preAddTask}
-          className={styles.right__inputGroup_item}
+          className={styles.tasks__inputGroup_item}
         />
         <Input
           data-parentId={parentTaskId}
@@ -199,11 +204,11 @@ export default class Header extends Component {
           placeholder="max"
           name="maximumHours"
           onChange={this.preAddTask}
-          className={styles.right__inputGroup_item}
+          className={styles.tasks__inputGroup_item}
         />
         <Button
           color="danger"
-            className={styles.right__inputGroup_item}
+            className={styles.tasks__inputGroup_item}
           onClick={this.addTask}
         >Add task</Button>
       </FormGroup>
