@@ -45,7 +45,8 @@ export default class FinalEstimate extends Component {
           <div className={styles.finalEstimate__result}>
             <div className={styles.finalEstimate__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
-          <Button onClick={this.saveAsPdf}>Generate PDF</Button>
+          <Button color="danger"
+                  onClick={this.saveAsPdf}>Generate PDF</Button>
         </CardBlock>
       </Card>
     );
