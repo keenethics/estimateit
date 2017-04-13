@@ -126,6 +126,7 @@ export default class CalculationPage extends Component {
           <FinalEstimate
             hours={this.hours}
             rate={this.state.rate}
+            data={this.props.someProp}
           />
         </Col>
         <Col xs="12">

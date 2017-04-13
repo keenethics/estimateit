@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Button, Card, CardBlock } from 'reactstrap';
 import domtoimage from 'dom-to-image';
 import styles from './styles.scss';
 
@@ -45,22 +45,7 @@ export default class FinalEstimate extends Component {
           <div className={styles.finalEstimate__result}>
             <div className={styles.finalEstimate__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
-          <ButtonDropdown
-            className={styles.finalEstimate__result}
-            isOpen={this.state.dropdownOpen}
-            toggle={this.toggle}
-          >
-            <DropdownToggle
-              color="danger"
-              caret
-            >
-              Generate Report
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
-              <DropdownItem>Generate CSV</DropdownItem>
-            </DropdownMenu>
-          </ButtonDropdown>
+          <Button onClick={this.saveAsPdf}>Generate PDF</Button>
         </CardBlock>
       </Card>
     );

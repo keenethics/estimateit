@@ -102,59 +102,62 @@ export default class Header extends Component {
   }
 
   renderTasks(tasks, iterator) {
-    const { parentTaskId } = this.state;
-    console.log(`${parentTaskId ? '30px' : '20px'}`);
     return tasks.map((task, i) =>
-    <div>
-      <FormGroup
-        className={styles.subTasks}
-        key={task.id}
-      >
-        <Input
-          data-id={task.id}
-          className={styles.subTasks__item}
-          name="taskName"
-          placeholder="subtask"
-          value={task.taskName}
-          onChange={this.onEditTask}
-        />
-        <Input
-          data-id={task.id}
-          className={styles.subTasks__item}
-          type="number"
-          value={task.minimumHours}
-          name="minimumHours"
-          placeholder="min"
-          onChange={this.onEditTask}
-        />
-        <Input
-          data-id={task.id}
-          className={styles.subTasks__item}
-          type="number"
-          value={task.maximumHours}
-          name="maximumHours"
-          placeholder="max"
-          onChange={this.onEditTask}
-        />
-        {(iterator < 2) ?
+      <div>
+        <FormGroup
+          className={styles.subTasks}
+          key={task.id}
+          style={{ marginLeft: '20px' }}
+        >
+          <Input
+            data-id={task.id}
+            className={styles.subTasks__item}
+            name="taskName"
+            placeholder="subtask"
+            value={task.taskName}
+            onChange={this.onEditTask}
+          />
+          <Input
+            data-id={task.id}
+            className={styles.subTasks__item}
+            type="number"
+            value={task.minimumHours}
+            name="minimumHours"
+            placeholder="min"
+            onChange={this.onEditTask}
+          />
+          <Input
+            data-id={task.id}
+            className={styles.subTasks__item}
+            type="number"
+            value={task.maximumHours}
+            name="maximumHours"
+            placeholder="max"
+            onChange={this.onEditTask}
+          />
+          {(iterator < 2) ?
+            <Button
+              color="danger"
+              className={styles.subTasks__item}
+              data-id={task.id}
+              onClick={this.setParentId}
+            >Add subtask</Button> :
+            ''}
           <Button
             color="danger"
             className={styles.subTasks__item}
             data-id={task.id}
-            onClick={this.setParentId}
-          >Add subtask</Button> :
-          ''}
-        <Button
-          color="danger"
-          className={styles.subTasks__item}
-          data-id={task.id} onClick={this.deleteTask}
-        >Delete</Button>
-      </FormGroup>
-      <FormGroup>
-        {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
-        {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
-      </FormGroup>
-    </div>,
+            onClick={this.deleteTask}
+          >Delete</Button>
+        </FormGroup>
+        <div
+          className={styles.item__wrapper}
+          style={{ marginLeft: '20px' }}
+        >
+          {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
+          {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
+        </div>
+      </div>,
     );
   }
 
@@ -208,7 +211,7 @@ export default class Header extends Component {
         />
         <Button
           color="danger"
-            className={styles.tasks__inputGroup_item}
+          className={styles.tasks__inputGroup_item}
           onClick={this.addTask}
         >Add task</Button>
       </FormGroup>

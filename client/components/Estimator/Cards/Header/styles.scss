@@ -40,9 +40,17 @@
   &__inputGroup {
     @extend .grid;
     grid-template-columns: 3fr 1fr 1fr 1fr;
+    @media screen and (max-width: 800px) {
+      margin-left: 0 !important;
+
+    }
   }
 }
 .subTasks {
   @extend .grid;
   grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+  @media screen and (max-width: 800px) {
+    margin-left: 0 !important;
+
+  }
 }
