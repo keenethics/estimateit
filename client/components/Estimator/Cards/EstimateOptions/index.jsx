@@ -21,7 +21,7 @@ export default class EstimateOptions extends Component {
   }
 
   onFieldChange(e) {
-    this.estimateFields[e.target.name] = +e.target.value;
+    this.estimateFields[e.target.name] = parseInt(e.target.value);
     this.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.estimateFields[e.target.name] / 100);
     this.props.onDataChange(this.estimateFields);
   }
@@ -45,8 +45,8 @@ export default class EstimateOptions extends Component {
 
   render() {
     return (
-      <div className={styles.estimateOptions}>
-        <InputGroup className={styles.estimateOptions__item}>
+      <div className={styles.range}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>Rate USD</InputGroupAddon>
           <Input
             className="radarChartPart estimate"
@@ -58,7 +58,7 @@ export default class EstimateOptions extends Component {
             defaultValue="25"
           />
         </InputGroup>
-        <InputGroup className={styles.estimateOptions__item}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>QA</InputGroupAddon>
           <Input
             className="radarChartPart"
@@ -73,7 +73,7 @@ export default class EstimateOptions extends Component {
           />
           <InputGroupAddon>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</InputGroupAddon>
         </InputGroup>
-        <InputGroup className={styles.estimateOptions__item}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>PM </InputGroupAddon>
           <Input
             className="radarChartPart"
@@ -87,7 +87,7 @@ export default class EstimateOptions extends Component {
           />
           <InputGroupAddon>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</InputGroupAddon>
         </InputGroup>
-        <InputGroup className={styles.estimateOptions__item}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>Bug Fixes</InputGroupAddon>
           <Input
             className="radarChartPart"
@@ -101,7 +101,7 @@ export default class EstimateOptions extends Component {
           />
           <InputGroupAddon>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
         </InputGroup>
-        <InputGroup className={styles.estimateOptions__item}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>Risks</InputGroupAddon>
           <Input
             className="radarChartPart"
@@ -115,7 +115,7 @@ export default class EstimateOptions extends Component {
           />
           <InputGroupAddon>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</InputGroupAddon>
         </InputGroup>
-        <InputGroup className={styles.estimateOptions__item}>
+        <InputGroup className={styles.range__item}>
           <InputGroupAddon>Probability </InputGroupAddon>
           <Input
             className="radarChartPart"

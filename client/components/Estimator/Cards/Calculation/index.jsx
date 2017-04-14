@@ -25,7 +25,7 @@ export default class Calculation extends Component {
         <CardBlock className={styles.calculation__wrapper}>
           <Col
             xs="12" lg="4"
-            className={styles.calculation__pieChart}
+            className={styles.calculation__piechart}
           >
             <PieChart data={this.props.data} />
           </Col>

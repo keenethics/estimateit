@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Container, Col, Card } from 'reactstrap';
 import Header from './Cards/Header';
-import CalculationPage from './Cards/CalculationPage';
+import Main from './Cards/Main';
 import styles from './styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
@@ -36,7 +36,7 @@ export default class App extends Component {
               className={styles.estimator__header}
               onChangeState={this.changeState}
             />
-            <CalculationPage
+            <Main
               className={styles.estimator__body}
               someProp={this.state.tasksData}
             />

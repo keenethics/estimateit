@@ -1,6 +1,6 @@
 @import "../../../ui";
 
-.finalEstimate {
+.final {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -14,7 +14,6 @@
   }
   &__result {
     display: grid !important;
-
     &_info {
       display: inline-block;
       font-weight: normal;

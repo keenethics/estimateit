@@ -37,7 +37,7 @@
 }
 
 .tasks {
-  &__inputGroup {
+  &__group {
     @extend .grid;
     grid-template-columns: 3fr 1fr 1fr 1fr;
     @media screen and (max-width: 800px) {
@@ -46,7 +46,7 @@
     }
   }
 }
-.subTasks {
+.subtasks {
   @extend .grid;
   grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
   @media screen and (max-width: 800px) {

@@ -105,13 +105,13 @@ export default class Header extends Component {
     return tasks.map((task, i) =>
       <div>
         <FormGroup
-          className={styles.subTasks}
+          className={styles.subtasks}
           key={task.id}
           style={{ marginLeft: '20px' }}
         >
           <Input
             data-id={task.id}
-            className={styles.subTasks__item}
+            className={styles.subtasks__item}
             name="taskName"
             placeholder="subtask"
             value={task.taskName}
@@ -119,33 +119,35 @@ export default class Header extends Component {
           />
           <Input
             data-id={task.id}
-            className={styles.subTasks__item}
+            className={styles.subtasks__item}
             type="number"
             value={task.minimumHours}
             name="minimumHours"
             placeholder="min"
+            min="0"
             onChange={this.onEditTask}
           />
           <Input
             data-id={task.id}
-            className={styles.subTasks__item}
+            className={styles.subtasks__item}
             type="number"
             value={task.maximumHours}
             name="maximumHours"
             placeholder="max"
+            min={task.minimumHours}
             onChange={this.onEditTask}
           />
           {(iterator < 2) ?
             <Button
               color="danger"
-              className={styles.subTasks__item}
+              className={styles.subtasks__item}
               data-id={task.id}
               onClick={this.setParentId}
             >Add subtask</Button> :
             ''}
           <Button
             color="danger"
-            className={styles.subTasks__item}
+            className={styles.subtasks__item}
             data-id={task.id}
             onClick={this.deleteTask}
           >Delete</Button>
@@ -182,24 +184,25 @@ export default class Header extends Component {
     return (
       <FormGroup
         id="screenShot"
-        className={styles.tasks__inputGroup}
+        className={styles.tasks__group}
         data-parentId={parentTaskId}
       >
         <Input
           data-parentId={parentTaskId}
           type="text"
-          placeholder="task"
+          placeholder="Task"
           name="taskName"
           onChange={this.preAddTask}
-          className={styles.tasks__inputGroup_item}
+          className={styles.tasks__group_item}
         />
         <Input
           data-parentId={parentTaskId}
           type="number"
           placeholder="min"
           name="minimumHours"
+          min="0"
           onChange={this.preAddTask}
-          className={styles.tasks__inputGroup_item}
+          className={styles.tasks__group_item}
         />
         <Input
           data-parentId={parentTaskId}
@@ -207,11 +210,11 @@ export default class Header extends Component {
           placeholder="max"
           name="maximumHours"
           onChange={this.preAddTask}
-          className={styles.tasks__inputGroup_item}
+          className={styles.tasks__group_item}
         />
         <Button
           color="danger"
-          className={styles.tasks__inputGroup_item}
+          className={styles.tasks__group_item}
           onClick={this.addTask}
         >Add task</Button>
       </FormGroup>
@@ -306,7 +309,7 @@ export default class Header extends Component {
           >
             <Form className={styles.right}>
               <CardTitle>ESTIMATE</CardTitle>
-              <FormGroup className={styles.right__inputGroup}>
+              <FormGroup className={styles.right__group}>
                 <DateField
                   htmlFor="datePicker"
                   dateFormat="YYYY-MM-DD"
@@ -315,38 +318,38 @@ export default class Header extends Component {
                   }}
                   onChange={this.onDateChange}
                   placeholder="Date:"
-                  className={styles.right__inputGroup_item}
+                  className={styles.right__group_item}
                 />
               </FormGroup>
-              <FormGroup className={styles.right__inputGroup}>
+              <FormGroup className={styles.right__group}>
                 <Input
                   name="clientName"
                   value={this.state.clientName}
                   type="text"
                   id="clientName"
-                  className={styles.right__inputGroup_item}
+                  className={styles.right__group_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Client name:"
                 />
               </FormGroup>
-              <FormGroup className={styles.right__inputGroup}>
+              <FormGroup className={styles.right__group}>
                 <Input
                   type="text"
                   id="projectName"
                   name="projectName"
                   value={this.state.projectName}
-                  className={styles.right__inputGroup_item}
+                  className={styles.right__group_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Project name:"
                 />
               </FormGroup>
-              <FormGroup className={styles.right__inputGroup}>
+              <FormGroup className={styles.right__group}>
                 <Input
                   type="number"
                   id="sprintNumber"
                   name="sprintNumber"
                   value={this.state.sprintNumber}
-                  className={styles.right__inputGroup_item}
+                  className={styles.right__group_item}
                   onChange={this.headerInfoCollector}
                   placeholder="Sprint:"
                 />
@@ -354,7 +357,7 @@ export default class Header extends Component {
             </Form>
           </Col>
         </Row>
-        <FormGroup className={styles.right__inputGroup}>
+        <FormGroup className={styles.right__group}>
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
@@ -365,7 +368,7 @@ export default class Header extends Component {
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         {this.renderAddTaskForm()}
-        <FormGroup className={styles.right__inputGroup}>
+        <FormGroup className={styles.right__group}>
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}

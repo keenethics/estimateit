@@ -37,13 +37,13 @@ export default class FinalEstimate extends Component {
 
   render() {
     return (
-      <Card className={styles.finalEstimate}>
-        <CardBlock className={styles.finalEstimate__wrapper}>
-          <div className={styles.finalEstimate__result}>
-            <div className={styles.finalEstimate__result_info}>Total hours: {this.props.hours}</div>
+      <Card className={styles.final}>
+        <CardBlock className={styles.final__wrapper}>
+          <div className={styles.final__result}>
+            <div className={styles.final__result_info}>Total hours: {this.props.hours}</div>
           </div>
-          <div className={styles.finalEstimate__result}>
-            <div className={styles.finalEstimate__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
+          <div className={styles.final__result}>
+            <div className={styles.final__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
           <Button color="danger"
                   onClick={this.saveAsPdf}>Generate PDF</Button>

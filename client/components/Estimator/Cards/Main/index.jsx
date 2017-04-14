@@ -7,7 +7,7 @@ import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import styles from './styles.scss';
 
-export default class CalculationPage extends Component {
+export default class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -106,7 +106,7 @@ export default class CalculationPage extends Component {
   render() {
     this.transformToVector();
     return (
-      <Row className={styles.calculationPage}>
+      <Row className={styles.main}>
         <Col xs="12">
           <LineChart
             labels={this.labels}
