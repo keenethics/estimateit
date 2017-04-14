@@ -1,0 +1,10 @@
+@import "../../../ui";
+
+.contacts {
+  width: 100%;
+  margin: 0;
+  &__input {
+    margin-bottom: $margin-input;
+    font-size: 14px !important;
+  }
+}

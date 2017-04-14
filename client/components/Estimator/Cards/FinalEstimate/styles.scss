@@ -1,0 +1,31 @@
+@import "../../../ui";
+
+.final {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  &__wrapper {
+    @extend .grid-media;
+    justify-content: space-around;
+    grid-template-columns: repeat(3, 140px);
+    @media screen and (max-width: 800px){
+      grid-template-columns: 1fr;
+    }
+  }
+  &__result {
+    display: grid !important;
+    &_info {
+      display: inline-block;
+      font-weight: normal;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      border: 1px solid transparent;
+      padding: .5rem 1rem;
+      font-size: 1rem;
+      border-radius: .25rem;
+      background: #ddd;
+    }
+  }
+}
