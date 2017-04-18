@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
+import csv from './lib/csv';
 import styles from './styles.scss';
 
 export default class FinalEstimate extends Component {
@@ -10,6 +11,7 @@ export default class FinalEstimate extends Component {
       dropdownOpen: false,
     };
     this.saveAsPdf = this.saveAsPdf.bind(this);
+    this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggle = this.toggle.bind(this);
   }
   toggle() {
@@ -34,7 +36,27 @@ export default class FinalEstimate extends Component {
         doc.save('a4.pdf');
       });
   }
+  saveAsCSV() {
+    const columns = [{
+      id: 'taskName',
+      displayName: 'Task',
+    }, {
+      id: 'minimumHours',
+      displayName: 'Minimum hours',
+    }, {
+      id: 'maximumHours',
+      displayName: 'Maximum hours',
+    }, {
+      id: 'tasks',
+      displayName: '',
+    }];
 
+    const data = [{ taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 2', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '1. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 2', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '2. Task', parentTaskId: null, minimumHours: '55', maximumHours: '555', id: 1492185321557, tasks: [{ taskName: 'Make site more responsive', parentTaskId: null, minimumHours: '1', maximumHours: '4', id: 1492185337429 }] }];
+    console.group('CSV - generate');
+    console.info('Origin object- \t', this.props.data);
+    console.info('Excel data- \t', csv(columns, data));
+    console.groupEnd();
+  }
   render() {
     return (
       <Card className={styles.final}>
@@ -59,7 +81,7 @@ export default class FinalEstimate extends Component {
             <DropdownMenu>
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
-              <DropdownItem>Generate CSV</DropdownItem>
+              <DropdownItem onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
