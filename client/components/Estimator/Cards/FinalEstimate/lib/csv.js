@@ -2,7 +2,7 @@
  * Created by nikolay on 14.04.17.
  */
 const newLine = '\r\n';
-const tab = '\t';
+// const tab = '\t';
 
 export default function csv(columns, datas, separator = ',', noHeader = false) {
   console.clear();
@@ -38,12 +38,18 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
       }
     }
   }
-  // TODO: change return items order
+  function getData(data) {
+    data.map((a) => {
+      if (Array.isArray(a)) {
+        a.map(v => addColumn(v));
+      }
+    });
+  }
   function addColumn(data) {
+    console.log('a');
     if (Array.isArray(data)) {
       data.map((v) => {
         if (Array.isArray(v)) {
-          console.info('v', v);
           return v;
         }
         return columnOrder.map((k) => {
@@ -55,6 +61,12 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
       }).forEach((v) => {
         console.log(v);
         content.push(v.join(separator));
+        v.map((a) => {
+          if (Array.isArray(a)) {
+            console.log('a', a);
+            a.map(c => addColumn(c));
+          }
+        });
       });
     }
   }
