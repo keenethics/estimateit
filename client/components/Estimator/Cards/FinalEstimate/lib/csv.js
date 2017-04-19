@@ -2,7 +2,6 @@
  * Created by nikolay on 14.04.17.
  */
 const newLine = '\r\n';
-// const tab = '\t';
 
 export default function csv(columns, datas, separator = ',', noHeader = false) {
   console.clear();
@@ -37,7 +36,6 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
       }
     }
   }
-
   function addColumn(data) {
     let local = [];
     data.map((v) => {
@@ -48,6 +46,7 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
           content.push(local);
           local = [];
           if (typeof v[k] !== 'undefined') {
+            v[k][0].taskName = `${v[k][0].taskName}`;
             addColumn(v[k]);
           }
         }

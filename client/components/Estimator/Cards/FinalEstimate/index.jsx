@@ -4,16 +4,31 @@ import domtoimage from 'dom-to-image';
 import csv from './lib/csv';
 import styles from './styles.scss';
 
+const columns = [{
+  id: 'taskName',
+  displayName: 'Task',
+}, {
+  id: 'minimumHours',
+  displayName: 'Minimum hours',
+}, {
+  id: 'maximumHours',
+  displayName: 'Maximum hours',
+}, {
+  id: 'tasks',
+  displayName: '',
+}];
 export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dropdownOpen: false,
+      csv: csv(columns, this.props.data),
     };
     this.saveAsPdf = this.saveAsPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggle = this.toggle.bind(this);
   }
+
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
@@ -52,11 +67,35 @@ export default class FinalEstimate extends Component {
       displayName: '',
     }];
 
-    const data = [{ taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 0', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 1', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '1. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 2', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 3', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '2. Task', parentTaskId: null, minimumHours: '55', maximumHours: '555', id: 1492185321557, tasks: [{ taskName: 'Make site more responsive', parentTaskId: null, minimumHours: '1', maximumHours: '4', id: 1492185337429 }] }];
-    console.group('CSV - generate');
-    console.info('Origin object- \t', this.props.data);
-    console.info('Excel data- \t', csv(columns, data));
-    console.groupEnd();
+
+    const data = [{ taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 0', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 1', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 0', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 1', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '1. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 2', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 3', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '2. Task', parentTaskId: null, minimumHours: '55', maximumHours: '555', id: 1492185321557, tasks: [{ taskName: 'Make site more responsive', parentTaskId: null, minimumHours: '1', maximumHours: '4', id: 1492185337429 }] }];
+    this.setState({
+      csv: csv(columns, this.props.data),
+    }, () => {
+      const a = document.createElement('a');
+      a.textContent = 'download';
+      a.download = filename;
+      a.href = `data:text/csv;charset=utf-8,${bomCode}${encodeURIComponent(this.state.csv)}`;
+      a.click();
+    });
+    const
+      prefix = true,
+      bom = true;
+    let bomCode = '';
+    let filename = 'estimate';
+    if (filename.indexOf('.csv') === -1) {
+      filename += '.csv';
+    }
+    if (bom) {
+      bomCode = '%EF%BB%BF';
+    }
+    if (prefix) {
+      if (typeof prefix === 'string' || typeof prefix === 'number') {
+        filename = `${prefix}_${filename}`;
+      } else {
+        filename = `${(new Date()).getTime()}_${filename}`;
+      }
+    }
   }
   render() {
     return (
