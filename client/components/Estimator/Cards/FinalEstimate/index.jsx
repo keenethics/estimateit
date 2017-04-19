@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
 import csv from './lib/csv';
-import downloadCsv from './lib/old';
 import styles from './styles.scss';
 
 export default class FinalEstimate extends Component {

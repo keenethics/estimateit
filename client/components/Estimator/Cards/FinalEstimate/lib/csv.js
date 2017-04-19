@@ -39,35 +39,37 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
     }
   }
   function getData(data) {
-    data.map((a) => {
-      if (Array.isArray(a)) {
-        a.map(v => addColumn(v));
+    console.log('Sub - ', data);
+    return columnOrder.map((k) => {
+      if (Array.isArray(data[k])) {
+        return data[k].map((a) => {
+          getData(a);
+        });
       }
+      return data[k];
     });
   }
   function addColumn(data) {
-    console.log('a');
     if (Array.isArray(data)) {
       data.map((v) => {
         if (Array.isArray(v)) {
+          console.info('Is array', v);
           return v;
         }
+        console.log('New table - ', v);
         return columnOrder.map((k) => {
-          if (typeof v[k] !== 'undefined') {
-            return v[k];
+          if (Array.isArray(v[k])) {
+            return v[k].map((a) => {
+              getData(a);
+            });
           }
-          return '';
+          return v[k];
         });
-      }).forEach((v) => {
-        console.log(v);
-        content.push(v.join(separator));
-        v.map((a) => {
-          if (Array.isArray(a)) {
-            console.log('a', a);
-            a.map(c => addColumn(c));
-          }
+      })
+        .forEach((v) => {
+          console.log(v);
+          content.push(v.join(separator));
         });
-      });
     }
   }
   addColumn(datas);
