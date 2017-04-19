@@ -9,7 +9,6 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
   let columnOrder;
   const content = [];
   const column = [];
-
   if (columns) {
     columnOrder = columns.map((v) => {
       if (typeof v === 'string') {
@@ -38,39 +37,22 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
       }
     }
   }
-  function getData(data) {
-    console.log('Sub - ', data);
-    return columnOrder.map((k) => {
-      if (Array.isArray(data[k])) {
-        return data[k].map((a) => {
-          getData(a);
-        });
-      }
-      return data[k];
-    });
-  }
+
   function addColumn(data) {
-    if (Array.isArray(data)) {
-      data.map((v) => {
-        if (Array.isArray(v)) {
-          console.info('Is array', v);
-          return v;
-        }
-        console.log('New table - ', v);
-        return columnOrder.map((k) => {
-          if (Array.isArray(v[k])) {
-            return v[k].map((a) => {
-              getData(a);
-            });
+    let local = [];
+    data.map((v) => {
+      columnOrder.map((k) => {
+        if (!Array.isArray(v[k]) && typeof v[k] !== 'undefined') {
+          local.push(v[k]);
+        } else {
+          content.push(local);
+          local = [];
+          if (typeof v[k] !== 'undefined') {
+            addColumn(v[k]);
           }
-          return v[k];
-        });
-      })
-        .forEach((v) => {
-          console.log(v);
-          content.push(v.join(separator));
-        });
-    }
+        }
+      });
+    });
   }
   addColumn(datas);
   return content.join(newLine);
