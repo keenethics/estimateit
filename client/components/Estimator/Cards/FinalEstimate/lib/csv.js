@@ -5,6 +5,9 @@ const newLine = '\r\n';
 
 export default function csv(columns, datas, separator = ',', noHeader = false) {
   console.clear();
+  const tasks = [{ taskName: 'task', minimumHours: '1', maximumHours: '2', id: 'H1wt2vURx', depth: 0, tasks: [{ taskName: 'subtask ', parentTaskId: 'H1wt2vURx', minimumHours: '1', maximumHours: '2', id: 'Skrq3vIRg', depth: null, tasks: [{ taskName: 'subsubtask', parentTaskId: 'Skrq3vIRg', minimumHours: '3', maximumHours: '44', id: 'SJT5nP8Ag', depth: null }] }] }, { taskName: ' task ', minimumHours: '3', maximumHours: '3', id: 'Byjn3wLRl', depth: 0, tasks: [{ taskName: ' dsf', parentTaskId: 'Byjn3wLRl', minimumHours: '1', maximumHours: '3', id: 'Hkt1pwLAg', depth: null, tasks: [{ taskName: ' tsad', parentTaskId: 'Hkt1pwLAg', minimumHours: '3', maximumHours: '3', id: 'HkpgpPL0e', depth: null }] }] }];
+
+  //
   let columnOrder;
   const content = [];
   const column = [];
@@ -36,23 +39,15 @@ export default function csv(columns, datas, separator = ',', noHeader = false) {
       }
     }
   }
-  function addColumn(data) {
-    let local = [];
-    data.map((v) => {
-      columnOrder.map((k) => {
-        if (!Array.isArray(v[k]) && typeof v[k] !== 'undefined') {
-          local.push(v[k]);
-        } else {
-          content.push(local);
-          local = [];
-          if (typeof v[k] !== 'undefined') {
-            v[k][0].taskName = `${v[k][0].taskName}`;
-            addColumn(v[k]);
-          }
-        }
-      });
-    });
-  }
-  addColumn(datas);
-  return content.join(newLine);
+
+  const taskToRow = (task, No) => [No, task.taskName, task.minimumHours, task.maximumHours].join(',');
+  const assembleNo = (parentNo, No) => parentNo ? `${parentNo}.${No}` : No;
+
+  const tasksToRows = (tasks, parentNo) => [].concat(
+    ...tasks.map((task, i) => {
+      const No = assembleNo(parentNo, i + 1);
+      return [taskToRow(task, No), ...tasksToRows(task.tasks || [], No)];
+    }),
+  );
+  return content.concat(tasksToRows(tasks)).join(newLine);
 }

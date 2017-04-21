@@ -17,7 +17,8 @@
     "react-date-picker": "^5.3.28",
     "react-dom": "^15.5.3",
     "react-highcharts": "^11.5.0",
-    "reactstrap": "^4.5.0"
+    "reactstrap": "^4.5.0",
+    "shortid": "^2.2.8"
   },
   "devDependencies": {
     "babel-core": "^6.24.0",

@@ -54,6 +54,9 @@ export default class FinalEstimate extends Component {
 
   saveAsCSV() {
     const columns = [{
+      id: 'number',
+      displayName: '#',
+    }, {
       id: 'taskName',
       displayName: 'Task',
     }, {
@@ -72,6 +75,7 @@ export default class FinalEstimate extends Component {
     this.setState({
       csv: csv(columns, this.props.data),
     }, () => {
+      console.log('state', this.state.csv);
       const a = document.createElement('a');
       a.textContent = 'download';
       a.download = filename;

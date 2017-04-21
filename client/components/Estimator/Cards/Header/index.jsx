@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import shortid from 'shortid'
 import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import 'react-date-picker/index.css';
@@ -50,10 +51,10 @@ export default class Header extends Component {
 
 
   componentDidMount() {
-    if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';
+    if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
     const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
     this.setState(Object.assign({}, state), () => {
-      console.log(this.state);
+      console.log('componentDidMount', this.state);
     });
   }
 
@@ -166,11 +167,11 @@ export default class Header extends Component {
   preAddTask(e) {
     const newTask = this.state.newTask || {};
     newTask[e.currentTarget.name] = e.currentTarget.value;
-    newTask.parentTaskId = e.currentTarget.dataset.parentId || null;
+    newTask.parentTaskId = e.currentTarget.dataset.parentid;
     this.setState({
       newTask,
     }, () => {
-      console.log(this.state);
+      console.log('preAddTask', this.state);
     });
   }
 
@@ -250,9 +251,8 @@ export default class Header extends Component {
 
   addTask(e) {
     const parent = e.currentTarget.parentNode.dataset.parentid;
-    console.log(parent);
     const newTask = this.state.newTask;
-    newTask.id = new Date().getTime();
+    newTask.id = shortid.generate();
     const tasks = this.state.tasks.slice();
     let newTasks = [];
     if (!parent) {
