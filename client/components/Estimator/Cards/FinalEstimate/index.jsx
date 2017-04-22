@@ -1,28 +1,16 @@
 import React, { Component } from 'react';
-import { Button, Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
+import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
 import csv from './lib/csv';
 import styles from './styles.scss';
 
-const columns = [{
-  id: 'taskName',
-  displayName: 'Task',
-}, {
-  id: 'minimumHours',
-  displayName: 'Minimum hours',
-}, {
-  id: 'maximumHours',
-  displayName: 'Maximum hours',
-}, {
-  id: 'tasks',
-  displayName: '',
-}];
+
 export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       dropdownOpen: false,
-      csv: csv(columns, this.props.data),
+      csv: '',
     };
     this.saveAsPdf = this.saveAsPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);

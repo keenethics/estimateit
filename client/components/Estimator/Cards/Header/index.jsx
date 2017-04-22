@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import shortid from 'shortid'
 import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
 import { DateField } from 'react-date-picker';
+import shortid from 'shortid';
+import update from 'react-addons-update';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
@@ -103,6 +104,7 @@ export default class Header extends Component {
   }
 
   renderTasks(tasks, iterator) {
+    console.log('abc', tasks);
     return tasks.map((task, i) =>
       <div>
         <FormGroup
@@ -122,7 +124,7 @@ export default class Header extends Component {
             data-id={task.id}
             className={styles.subtasks__item}
             type="number"
-            value={task.minimumHours}
+            value={task.sumMin ? task.sumMin : task.minimumHours}
             name="minimumHours"
             placeholder="min"
             min="0"
@@ -132,12 +134,13 @@ export default class Header extends Component {
             data-id={task.id}
             className={styles.subtasks__item}
             type="number"
-            value={task.maximumHours}
+            value={task.sumMin ? task.sumMax : task.maximumHours}
             name="maximumHours"
             placeholder="max"
             min={task.minimumHours}
             onChange={this.onEditTask}
           />
+
           {(iterator < 2) ?
             <Button
               color="danger"
@@ -163,6 +166,30 @@ export default class Header extends Component {
       </div>,
     );
   }
+  calculateHours() {
+    const { newTask, tasks } = this.state;
+    const { parentTaskId, minimumHours, maximumHours } = newTask;
+    if (parentTaskId && minimumHours && maximumHours) {
+      const sumMin = parseInt(minimumHours);
+      const sumMax = parseInt(maximumHours);
+      const abc = (items) => {
+        let item;
+        for (const i in items) { item = items[i]; }
+        if (item.id === parentTaskId) {
+          if (!sumMin) {
+            item.sumMin = 0;
+            item.sumMax = 0;
+          }
+          item.sumMin += sumMin;
+          item.sumMax += sumMax;
+        }
+        if (item.tasks) {
+          abc(item.tasks);
+        }
+      };
+      abc(tasks);
+    }
+  }
 
   preAddTask(e) {
     const newTask = this.state.newTask || {};
@@ -171,7 +198,8 @@ export default class Header extends Component {
     this.setState({
       newTask,
     }, () => {
-      console.log('preAddTask', this.state);
+      console.log('state', this.state);
+      this.calculateHours();
     });
   }
 

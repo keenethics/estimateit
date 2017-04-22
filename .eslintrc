@@ -15,6 +15,7 @@
     "func-names": "off",
     "no-param-reassign": "off",
     "no-unused-expressions": "off",
+    "no-confusing-arrow": "off",
     "eqeqeq": [
       2,
       "allow-null"
