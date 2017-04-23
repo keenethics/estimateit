@@ -1,0 +1,5 @@
+/**
+ * Created by delphit on 4/23/17.
+ */
+
+http://localhost:8080/?{%22tasks%22:[{%22taskName%22:%22sadasd%22,%22minimumHours%22:%2212%22,%22maximumHours%22:%2233%22,%22id%22:%22HJ_rrwcAg%22,%22sumMin%22:10,%22sumMax%22:10,%22tasks%22:[{%22taskName%22:%22asd%22,%22parentTaskId%22:%22HJ_rrwcAg%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22HyLtIvqRg%22},{%22taskName%22:%22asd%22,%22parentTaskId%22:%22HJ_rrwcAg%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22SJ3PvvcCx%22},{%22taskName%22:%22sd%22,%22parentTaskId%22:%22HJ_rrwcAg%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22HkmODD5Rl%22}]},{%22taskName%22:%22asdasd%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22HJjOvw50e%22,%22sumMin%22:null,%22sumMax%22:null,%22tasks%22:[{%22taskName%22:%22asd%22,%22parentTaskId%22:%22HJjOvw50e%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22rJ7tPv50x%22},{%22taskName%22:%22asd%22,%22parentTaskId%22:%22HJjOvw50e%22,%22minimumHours%22:%223%22,%22maximumHours%22:%223%22,%22id%22:%22BJcFPD90g%22}]}],%22parentTaskId%22:%22%22,%22newTask%22:null}

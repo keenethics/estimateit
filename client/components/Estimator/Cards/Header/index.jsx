@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import shortid from 'shortid';
-import update from 'react-addons-update';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
@@ -54,9 +53,7 @@ export default class Header extends Component {
   componentDidMount() {
     if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
     const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-    this.setState(Object.assign({}, state), () => {
-      console.log('componentDidMount', this.state);
-    });
+    this.setState(Object.assign({}, state));
   }
 
   findTaskAndModify(tasks, id, name, value) {
@@ -104,7 +101,6 @@ export default class Header extends Component {
   }
 
   renderTasks(tasks, iterator) {
-    console.log('abc', tasks);
     return tasks.map((task, i) =>
       <div>
         <FormGroup
@@ -175,8 +171,8 @@ export default class Header extends Component {
       const abc = (items) => {
         let item;
         for (const i in items) { item = items[i]; }
-        if (item.id === parentTaskId) {
-          if (!sumMin) {
+        if (typeof item !== 'undefined' && item.id === parentTaskId) {
+          if (!item.sumMin || !item.sumMax) {
             item.sumMin = 0;
             item.sumMax = 0;
           }
@@ -221,7 +217,7 @@ export default class Header extends Component {
           type="text"
           placeholder="Task"
           name="taskName"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Input
@@ -230,7 +226,7 @@ export default class Header extends Component {
           placeholder="min"
           name="minimumHours"
           min="0"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Input
@@ -238,7 +234,7 @@ export default class Header extends Component {
           type="number"
           placeholder="max"
           name="maximumHours"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Button
