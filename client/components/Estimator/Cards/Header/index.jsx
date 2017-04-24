@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
-import { DateField } from 'react-date-picker';
-import shortid from 'shortid';
-import 'react-date-picker/index.css';
-import styles from './styles.scss';
+import React, { Component } from "react";
+import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from "reactstrap";
+import { DateField } from "react-date-picker";
+import shortid from "shortid";
+import "react-date-picker/index.css";
+import styles from "./styles.scss";
 
 export default class Header extends Component {
   constructor(props) {
@@ -102,10 +102,9 @@ export default class Header extends Component {
 
   renderTasks(tasks, iterator) {
     return tasks.map((task, i) =>
-      <div>
+      <div key={task.id}>
         <FormGroup
           className={styles.subtasks}
-          key={task.id}
           style={{ marginLeft: '20px' }}
         >
           <Input
@@ -163,28 +162,44 @@ export default class Header extends Component {
     );
   }
   calculateHours() {
-    const { newTask, tasks } = this.state;
+    const newTask = this.state.newTask;
     const { parentTaskId, minimumHours, maximumHours } = newTask;
-    if (parentTaskId && minimumHours && maximumHours) {
-      const sumMin = parseInt(minimumHours);
-      const sumMax = parseInt(maximumHours);
-      const abc = (items) => {
-        let item;
-        for (const i in items) { item = items[i]; }
-        if (typeof item !== 'undefined' && item.id === parentTaskId) {
-          if (!item.sumMin || !item.sumMax) {
-            item.sumMin = 0;
-            item.sumMax = 0;
-          }
-          item.sumMin += sumMin;
-          item.sumMax += sumMax;
+    const tasks = [...this.state.tasks];
+    const updateWithIndex = (tree, id, update) => tree.map((node) => {
+      if (node.id === id) node = update(node);
+      else if (node.tasks) updateWithIndex(node.tasks, id, update);
+      return node;
+    });
+    const findNodeWithIndex = (tree, id) => tree.find((node) => {
+      if (node.id === id) return node;
+      else if (node.tasks) return findNodeWithIndex(node.tasks, id);
+      return undefined;
+    });
+    const findHighest = (tree, id) => {
+      const node = findNodeWithIndex(tree, id);
+      if (node && !node.parentTaskId) return node;
+      else if (node && node.parentTaskId) return findHighest(tree, id);
+      return undefined;
+    };
+    const sumMin = (node) => {
+      if (typeof node !== 'undefined') {
+        let calcMin = +node.minimumHours;
+        let calcMax = +node.maximumHours;
+        if (node.tasks && node.tasks.length > 0) {
+          calcMin = 0;
+          calcMax = 0;
+          node.tasks.forEach(sumMin);
+          node.tasks.forEach((task) => {
+            calcMin += +task.minimumHours;
+            calcMax += +task.maximumHours;
+          });
         }
-        if (item.tasks) {
-          abc(item.tasks);
-        }
-      };
-      abc(tasks);
-    }
+        node.minimumHours = calcMin;
+        node.maximumHours = calcMax;
+      }
+    };
+    const par = findHighest(tasks, parentTaskId);
+    sumMin(par);
   }
 
   preAddTask(e) {
@@ -193,9 +208,6 @@ export default class Header extends Component {
     newTask.parentTaskId = e.currentTarget.dataset.parentid;
     this.setState({
       newTask,
-    }, () => {
-      console.log('state', this.state);
-      this.calculateHours();
     });
   }
 
@@ -292,6 +304,7 @@ export default class Header extends Component {
     }
     this.props.onChangeState(newTasks);
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
+    this.calculateHours();
   }
 
   textAreaAdjust(e) {

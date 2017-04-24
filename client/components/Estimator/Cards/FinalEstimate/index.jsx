@@ -89,6 +89,7 @@ export default class FinalEstimate extends Component {
       }
     }
   }
+
   render() {
     return (
       <Card className={styles.final}>
