@@ -329,22 +329,22 @@ export default class Header extends Component {
     return (
       <div>
         <Row className={styles.header}>
+          <Col xs="12">
+              <img
+                src={require('../../../../pictures/logo_black.jpg')}
+                height={30}
+              />
+              <CardTitle>ESTIMATE</CardTitle>
+          </Col>
           <Col
             xs="12" md="5"
             className={`${styles.header__left} ${styles.left}`}
           >
-            <img
-              src={require('../../../../pictures/logo.png')}
-              height={50}
-              width={50}
-            />
-            <span className={styles.left__company}>
-            Keenethics </span>
             <div className={styles.left__contacts}>
-              <span>3, Lytvynenka street, Lviv</span>
-              <span>Keenethics Phone: [+38 096 814 72 66]</span>
-              <span>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></span>
-              <span><a href="https://keenethics.com/">keenethics.com</a></span>
+              <p>3, Lytvynenka street, Lviv</p>
+              <p>Keenethics Phone: [+38 096 814 72 66]</p>
+              <p>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></p>
+              <p><a href="https://keenethics.com/">keenethics.com</a></p>
             </div>
           </Col>
           <Col
@@ -352,7 +352,6 @@ export default class Header extends Component {
             className={styles.header__right}
           >
             <Form className={styles.right}>
-              <CardTitle>ESTIMATE</CardTitle>
               <FormGroup className={styles.right__group}>
                 <DateField
                   htmlFor="datePicker"

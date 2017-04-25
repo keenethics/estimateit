@@ -16,9 +16,10 @@ module.exports = {
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader:  ['babel-loader', 'eslint-loader'], exclude: /node_modules/ },
+      { test: /\.js$/, loader: ['babel-loader', 'eslint-loader'], exclude: /node_modules/ },
       { test: /\.jsx$/, loader: 'babel-loader', exclude: /node_modules/ },
-      { test: /\.(png|jpg)$/, loader: 'url-loader' },
+      { test: /\.jpg$/, use: ['file-loader'] },
+      { test: /\.png$/, use: ['url-loader?mimetype=image/png'] },
       {
         test: /\.scss$/,
         loader: 'style-loader!css-loader?modules=true&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]!sass-loader',
