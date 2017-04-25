@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
-import csv from './lib/csv';
+import csvGenerate from './lib/csvGenerate';
+import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
 
 
@@ -58,36 +59,16 @@ export default class FinalEstimate extends Component {
       displayName: '',
     }];
 
-
-    const data = [{ taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 0', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 1', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '0. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 0', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 1', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '1. Task', parentTaskId: null, minimumHours: '123', maximumHours: '1', id: 1492178108311, tasks: [{ taskName: 'subtask - 2', parentTaskId: null, minimumHours: '1', maximumHours: '3', id: 1492178118506, tasks: [{ taskName: 'subtask  - 3', parentTaskId: null, minimumHours: '1', maximumHours: '9', id: 1492178154397 }] }] }, { taskName: '2. Task', parentTaskId: null, minimumHours: '55', maximumHours: '555', id: 1492185321557, tasks: [{ taskName: 'Make site more responsive', parentTaskId: null, minimumHours: '1', maximumHours: '4', id: 1492185337429 }] }];
     this.setState({
-      csv: csv(columns, this.props.data),
+      csv: csvGenerate(columns, this.props.data),
     }, () => {
       console.log('state', this.state.csv);
       const a = document.createElement('a');
       a.textContent = 'download';
-      a.download = filename;
-      a.href = `data:text/csv;charset=utf-8,${bomCode}${encodeURIComponent(this.state.csv)}`;
+      a.download = csvFilename();
+      a.href = `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(this.state.csv)}`;
       a.click();
     });
-    const
-      prefix = true,
-      bom = true;
-    let bomCode = '';
-    let filename = 'estimate';
-    if (filename.indexOf('.csv') === -1) {
-      filename += '.csv';
-    }
-    if (bom) {
-      bomCode = '%EF%BB%BF';
-    }
-    if (prefix) {
-      if (typeof prefix === 'string' || typeof prefix === 'number') {
-        filename = `${prefix}_${filename}`;
-      } else {
-        filename = `${(new Date()).getTime()}_${filename}`;
-      }
-    }
   }
 
   render() {
@@ -121,4 +102,4 @@ export default class FinalEstimate extends Component {
       </Card>
     );
   }
-  }
+}
