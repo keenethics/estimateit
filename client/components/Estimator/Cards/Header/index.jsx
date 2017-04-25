@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from "reactstrap";
-import { DateField } from "react-date-picker";
-import shortid from "shortid";
-import "react-date-picker/index.css";
-import styles from "./styles.scss";
+import React, { Component } from 'react';
+import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
+import { DateField } from 'react-date-picker';
+import shortid from 'shortid';
+import 'react-date-picker/index.css';
+import styles from './styles.scss';
 
 export default class Header extends Component {
   constructor(props) {
@@ -63,24 +63,71 @@ export default class Header extends Component {
         break;
       }
       if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if (tasks[i].tasks && tasks[i].tasks.length) {
-        this.findTaskAndModify(tasks[i].tasks, id, name, value);
-      }
+      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
     }
     return tasks;
   }
 
   findTaskAndDelete(id, tasks) {
+    let parentTaskId;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
+        parentTaskId = tasks[i].parentTaskId;
         tasks.splice(i, 1);
+        this.calculateHours(parentTaskId);
         break;
       }
       if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndDelete(id, tasks[i].tasks);
+      if (tasks[i].tasks && tasks[i].tasks.length) {
+        this.findTaskAndDelete(id, tasks[i].tasks);
+      }
     }
     return tasks;
   }
+
+  calculateHours(parentTaskId) {
+    const newTask = this.state.newTask;
+    if (newTask !== null) {
+      parentTaskId = newTask.parentTaskId;
+    }
+    const tasks = [...this.state.tasks];
+    const updateWithIndex = (tree, id, update) => tree.map((node) => {
+      if (node.id === id) node = update(node);
+      else if (node.tasks) updateWithIndex(node.tasks, id, update);
+      return node;
+    });
+    const findNodeWithIndex = (tree, id) => tree.find((node) => {
+      if (node.id === id) return node;
+      else if (node.tasks) return findNodeWithIndex(node.tasks, id);
+      return undefined;
+    });
+    const findHighest = (tree, id) => {
+      const node = findNodeWithIndex(tree, id);
+      if (node && !node.parentTaskId) return node;
+      else if (node && node.parentTaskId) return findHighest(tree, id);
+      return undefined;
+    };
+    const sumMin = (node) => {
+      if (typeof node !== 'undefined') {
+        let calcMin = +node.minimumHours;
+        let calcMax = +node.maximumHours;
+        if (node.tasks && node.tasks.length > 0) {
+          calcMin = 0;
+          calcMax = 0;
+          node.tasks.forEach(sumMin);
+          node.tasks.forEach((task) => {
+            calcMin += +task.minimumHours;
+            calcMax += +task.maximumHours;
+          });
+        }
+        node.minimumHours = calcMin;
+        node.maximumHours = calcMax;
+      }
+    };
+    const par = findHighest(tasks, parentTaskId);
+    sumMin(par);
+  }
+
 
   onEditTask(e) {
     const id = e.currentTarget.dataset.id;
@@ -160,46 +207,6 @@ export default class Header extends Component {
         </div>
       </div>,
     );
-  }
-  calculateHours() {
-    const newTask = this.state.newTask;
-    const { parentTaskId, minimumHours, maximumHours } = newTask;
-    const tasks = [...this.state.tasks];
-    const updateWithIndex = (tree, id, update) => tree.map((node) => {
-      if (node.id === id) node = update(node);
-      else if (node.tasks) updateWithIndex(node.tasks, id, update);
-      return node;
-    });
-    const findNodeWithIndex = (tree, id) => tree.find((node) => {
-      if (node.id === id) return node;
-      else if (node.tasks) return findNodeWithIndex(node.tasks, id);
-      return undefined;
-    });
-    const findHighest = (tree, id) => {
-      const node = findNodeWithIndex(tree, id);
-      if (node && !node.parentTaskId) return node;
-      else if (node && node.parentTaskId) return findHighest(tree, id);
-      return undefined;
-    };
-    const sumMin = (node) => {
-      if (typeof node !== 'undefined') {
-        let calcMin = +node.minimumHours;
-        let calcMax = +node.maximumHours;
-        if (node.tasks && node.tasks.length > 0) {
-          calcMin = 0;
-          calcMax = 0;
-          node.tasks.forEach(sumMin);
-          node.tasks.forEach((task) => {
-            calcMin += +task.minimumHours;
-            calcMax += +task.maximumHours;
-          });
-        }
-        node.minimumHours = calcMin;
-        node.maximumHours = calcMax;
-      }
-    };
-    const par = findHighest(tasks, parentTaskId);
-    sumMin(par);
   }
 
   preAddTask(e) {
