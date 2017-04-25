@@ -57,9 +57,12 @@ export default class Header extends Component {
   }
 
   findTaskAndModify(tasks, id, name, value) {
+    let parentTaskId;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
         tasks[i][name] = value;
+        parentTaskId = tasks[i].parentTaskId;
+        this.calculateHours(parentTaskId);
         break;
       }
       if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
