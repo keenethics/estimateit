@@ -8,7 +8,7 @@ export default class Contacts extends Component {
     this.state = {
 
     };
-    // this.onContactsChange = this.onContactsChange.bind(this);
+    this.onContactsChange = this.onContactsChange.bind(this);
   }
 
   onContactsChange(e) {
@@ -31,7 +31,7 @@ export default class Contacts extends Component {
             placeholder="PM's name"
             name="pm"
             value={this.state.pm}
-            onChange={this.onContactsChange.bind(this)}
+            onBlur={this.onContactsChange}
           />
           <Input
             className={styles.contacts__input}
@@ -39,7 +39,7 @@ export default class Contacts extends Component {
             placeholder="Position"
             name="position"
             value={this.state.position}
-            onChange={this.onContactsChange.bind(this)}
+            onBlur={this.onContactsChange}
           />
           <Input
             className={styles.contacts__input}
@@ -47,7 +47,7 @@ export default class Contacts extends Component {
             placeholder="Email"
             name="email"
             value={this.state.email}
-            onChange={this.onContactsChange.bind(this)}
+            onBlur={this.onContactsChange}
           />
           <Input
             className={styles.contacts__input}
@@ -55,7 +55,7 @@ export default class Contacts extends Component {
             placeholder="Skype"
             name="skype"
             value={this.state.skype}
-            onChange={this.onContactsChange.bind(this)}
+            onBlur={this.onContactsChange}
           />
         </CardBlock>
       </Card>

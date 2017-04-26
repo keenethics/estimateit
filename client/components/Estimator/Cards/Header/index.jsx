@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
 import { DateField } from 'react-date-picker';
+import shortid from 'shortid';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
@@ -50,38 +51,88 @@ export default class Header extends Component {
 
 
   componentDidMount() {
-    if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';
+    if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
     const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-    this.setState(Object.assign({}, state), () => {
-      console.log(this.state);
-    });
+    this.setState(Object.assign({}, state));
   }
 
   findTaskAndModify(tasks, id, name, value) {
+    let parentTaskId;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
         tasks[i][name] = value;
+        parentTaskId = tasks[i].parentTaskId;
+        this.calculateHours(parentTaskId);
         break;
       }
       if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if (tasks[i].tasks && tasks[i].tasks.length) {
-        this.findTaskAndModify(tasks[i].tasks, id, name, value);
-      }
+      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
     }
     return tasks;
   }
 
   findTaskAndDelete(id, tasks) {
+    let parentTaskId;
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
+        parentTaskId = tasks[i].parentTaskId;
         tasks.splice(i, 1);
+        this.calculateHours(parentTaskId);
         break;
       }
       if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndDelete(id, tasks[i].tasks);
+      if (tasks[i].tasks && tasks[i].tasks.length) {
+        this.findTaskAndDelete(id, tasks[i].tasks);
+      }
     }
     return tasks;
   }
+
+  calculateHours(parentTaskId) {
+    const newTask = this.state.newTask;
+    if (newTask !== null) {
+      parentTaskId = newTask.parentTaskId;
+    }
+    const tasks = [...this.state.tasks];
+    const updateWithIndex = (tree, id, update) => tree.map((node) => {
+      if (node.id === id) node = update(node);
+      else if (node.tasks) updateWithIndex(node.tasks, id, update);
+      return node;
+    });
+    const findNodeWithIndex = (tree, id) => tree.find((node) => {
+      if (node.id === id) {
+        return node;
+      } else if (node.tasks) {
+        return findNodeWithIndex(node.tasks, id);
+      }
+      return undefined;
+    });
+    const findHighest = (tree, id) => {
+      const node = findNodeWithIndex(tree, id);
+      if (node && !node.parentTaskId) {
+        return node;
+      } else if (node && node.parentTaskId) {
+        return findHighest(tree, id);
+      }
+      return undefined;
+    };
+    const sumMin = (node) => {
+      if (typeof node !== 'undefined') {
+        if (node.tasks && node.tasks.length > 0) {
+          node.tasks.forEach(sumMin);
+          const abc = node.tasks.reduce((acc, value) => ({
+            calcMin: acc.calcMin += +value.minimumHours,
+            calcMax: acc.calcMax += +value.maximumHours,
+          }), { calcMin: 0, calcMax: 0 });
+          node.minimumHours = abc.calcMin;
+          node.maximumHours = abc.calcMax;
+        }
+      }
+    };
+    const par = findHighest(tasks, parentTaskId);
+    sumMin(par);
+  }
+
 
   onEditTask(e) {
     const id = e.currentTarget.dataset.id;
@@ -103,10 +154,9 @@ export default class Header extends Component {
 
   renderTasks(tasks, iterator) {
     return tasks.map((task, i) =>
-      <div>
+      <div key={task.id}>
         <FormGroup
           className={styles.subtasks}
-          key={task.id}
           style={{ marginLeft: '20px' }}
         >
           <Input
@@ -121,7 +171,7 @@ export default class Header extends Component {
             data-id={task.id}
             className={styles.subtasks__item}
             type="number"
-            value={task.minimumHours}
+            value={task.sumMin ? task.sumMin : task.minimumHours}
             name="minimumHours"
             placeholder="min"
             min="0"
@@ -131,12 +181,13 @@ export default class Header extends Component {
             data-id={task.id}
             className={styles.subtasks__item}
             type="number"
-            value={task.maximumHours}
+            value={task.sumMin ? task.sumMax : task.maximumHours}
             name="maximumHours"
             placeholder="max"
             min={task.minimumHours}
             onChange={this.onEditTask}
           />
+
           {(iterator < 2) ?
             <Button
               color="danger"
@@ -166,11 +217,9 @@ export default class Header extends Component {
   preAddTask(e) {
     const newTask = this.state.newTask || {};
     newTask[e.currentTarget.name] = e.currentTarget.value;
-    newTask.parentTaskId = e.currentTarget.dataset.parentId || null;
+    newTask.parentTaskId = e.currentTarget.dataset.parentid;
     this.setState({
       newTask,
-    }, () => {
-      console.log(this.state);
     });
   }
 
@@ -192,7 +241,7 @@ export default class Header extends Component {
           type="text"
           placeholder="Task"
           name="taskName"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Input
@@ -201,7 +250,7 @@ export default class Header extends Component {
           placeholder="min"
           name="minimumHours"
           min="0"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Input
@@ -209,7 +258,7 @@ export default class Header extends Component {
           type="number"
           placeholder="max"
           name="maximumHours"
-          onChange={this.preAddTask}
+          onBlur={this.preAddTask}
           className={styles.tasks__group_item}
         />
         <Button
@@ -250,9 +299,8 @@ export default class Header extends Component {
 
   addTask(e) {
     const parent = e.currentTarget.parentNode.dataset.parentid;
-    console.log(parent);
     const newTask = this.state.newTask;
-    newTask.id = new Date().getTime();
+    newTask.id = shortid.generate();
     const tasks = this.state.tasks.slice();
     let newTasks = [];
     if (!parent) {
@@ -268,6 +316,7 @@ export default class Header extends Component {
     }
     this.props.onChangeState(newTasks);
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
+    this.calculateHours();
   }
 
   textAreaAdjust(e) {
@@ -285,22 +334,22 @@ export default class Header extends Component {
     return (
       <div>
         <Row className={styles.header}>
+          <Col xs="12">
+            <img
+              src={require('../../../../pictures/logo_black.jpg')}
+              height={30}
+            />
+            <CardTitle>ESTIMATE</CardTitle>
+          </Col>
           <Col
             xs="12" md="5"
             className={`${styles.header__left} ${styles.left}`}
           >
-            <img
-              src={require('../../../../pictures/logo.png')}
-              height={50}
-              width={50}
-            />
-            <span className={styles.left__company}>
-            Keenethics </span>
             <div className={styles.left__contacts}>
-              <span>3, Lytvynenka street, Lviv</span>
-              <span>Keenethics Phone: [+38 096 814 72 66]</span>
-              <span>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></span>
-              <span><a href="https://keenethics.com/">keenethics.com</a></span>
+              <p>3, Lytvynenka street, Lviv</p>
+              <p>Keenethics Phone: [+38 096 814 72 66]</p>
+              <p>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></p>
+              <p><a href="https://keenethics.com/">keenethics.com</a></p>
             </div>
           </Col>
           <Col
@@ -308,7 +357,6 @@ export default class Header extends Component {
             className={styles.header__right}
           >
             <Form className={styles.right}>
-              <CardTitle>ESTIMATE</CardTitle>
               <FormGroup className={styles.right__group}>
                 <DateField
                   htmlFor="datePicker"

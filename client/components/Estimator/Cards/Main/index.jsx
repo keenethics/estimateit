@@ -53,7 +53,6 @@ export default class Main extends Component {
           value2.push([Number(item2.minimumHours), Number(item2.maximumHours)]);
           return value2;
         }, []);
-        console.log(itemArr, 'arrrrr');
       }
       itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
       return value.concat(itemArr);
