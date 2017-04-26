@@ -33,8 +33,8 @@ export default function csv(columns, data, separator = ',', noHeader = false) {
       }
     }
   }
-
-  const taskToRow = (task, No) => [No, task.taskName, task.minimumHours, task.maximumHours].join(',');
+  const regex = new RegExp(',', 'g');
+  const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), task.minimumHours, task.maximumHours].join(separator);
   const assembleNo = (parentNo, No) => parentNo ? `${parentNo}.${No}` : No;
 
   const tasksToRows = (tasks, parentNo) => [].concat(
