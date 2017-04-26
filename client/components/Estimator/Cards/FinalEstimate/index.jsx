@@ -62,7 +62,6 @@ export default class FinalEstimate extends Component {
     this.setState({
       csv: csvGenerate(columns, this.props.data),
     }, () => {
-      console.log('state', this.state.csv);
       const a = document.createElement('a');
       a.textContent = 'download';
       a.download = csvFilename();

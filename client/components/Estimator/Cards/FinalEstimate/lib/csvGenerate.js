@@ -1,38 +1,23 @@
 const newLine = '\r\n';
 
-export default function csv(columns, data, separator = ',', noHeader = false) {
-  console.clear();
+export default function csv(columns, data, separator = ',') {
   let columnOrder;
   const content = [];
-  const column = [];
+  let column = [];
   if (columns) {
-    columnOrder = columns.map((v) => {
-      if (typeof v === 'string') {
-        return v;
-      }
-      if (!noHeader) {
-        column.push((typeof v.displayName !== 'undefined') ? v.displayName : v.id);
-      }
-      return v.id;
-    });
-    if (column.length > 0) {
+    columnOrder = columns.map(v => (v.id));
+    column = columns.map(v => (typeof v.displayName !== 'undefined') ? v.displayName : v.id);
+    if (column.length) {
       content.push(column.join(separator));
     }
   } else {
-    columnOrder = [];
-    data.forEach((v) => {
-      if (!Array.isArray(v)) {
-        columnOrder = columnOrder.concat(Object.keys(v));
-      }
-    });
-    if (columnOrder.length > 0) {
+    columnOrder = data.map(v => (!Array.isArray(v)));
+    if (columnOrder.length) {
       columnOrder = columnOrder.filter((value, index, self) => self.indexOf(value) === index);
-
-      if (!noHeader) {
-        content.push(columnOrder.join(separator));
-      }
+      content.push(columnOrder.join(separator));
     }
   }
+
   const regex = new RegExp(',', 'g');
   const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), task.minimumHours, task.maximumHours].join(separator);
   const assembleNo = (parentNo, No) => parentNo ? `${parentNo}.${No}` : No;

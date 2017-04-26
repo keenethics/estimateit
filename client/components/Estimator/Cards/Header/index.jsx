@@ -100,31 +100,33 @@ export default class Header extends Component {
       return node;
     });
     const findNodeWithIndex = (tree, id) => tree.find((node) => {
-      if (node.id === id) return node;
-      else if (node.tasks) return findNodeWithIndex(node.tasks, id);
+      if (node.id === id) {
+        return node;
+      } else if (node.tasks) {
+        return findNodeWithIndex(node.tasks, id);
+      }
       return undefined;
     });
     const findHighest = (tree, id) => {
       const node = findNodeWithIndex(tree, id);
-      if (node && !node.parentTaskId) return node;
-      else if (node && node.parentTaskId) return findHighest(tree, id);
+      if (node && !node.parentTaskId) {
+        return node;
+      } else if (node && node.parentTaskId) {
+        return findHighest(tree, id);
+      }
       return undefined;
     };
     const sumMin = (node) => {
       if (typeof node !== 'undefined') {
-        let calcMin = +node.minimumHours;
-        let calcMax = +node.maximumHours;
         if (node.tasks && node.tasks.length > 0) {
-          calcMin = 0;
-          calcMax = 0;
           node.tasks.forEach(sumMin);
-          node.tasks.forEach((task) => {
-            calcMin += +task.minimumHours;
-            calcMax += +task.maximumHours;
-          });
+          const abc = node.tasks.reduce((acc, value) => ({
+            calcMin: acc.calcMin += +value.minimumHours,
+            calcMax: acc.calcMax += +value.maximumHours,
+          }), { calcMin: 0, calcMax: 0 });
+          node.minimumHours = abc.calcMin;
+          node.maximumHours = abc.calcMax;
         }
-        node.minimumHours = calcMin;
-        node.maximumHours = calcMax;
       }
     };
     const par = findHighest(tasks, parentTaskId);
@@ -333,11 +335,11 @@ export default class Header extends Component {
       <div>
         <Row className={styles.header}>
           <Col xs="12">
-              <img
-                src={require('../../../../pictures/logo_black.jpg')}
-                height={30}
-              />
-              <CardTitle>ESTIMATE</CardTitle>
+            <img
+              src={require('../../../../pictures/logo_black.jpg')}
+              height={30}
+            />
+            <CardTitle>ESTIMATE</CardTitle>
           </Col>
           <Col
             xs="12" md="5"
