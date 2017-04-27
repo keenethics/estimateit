@@ -44,7 +44,7 @@ export default class Main extends Component {
 
   parseUrlData(data) {
     const arr = data.reduce((value, item) => {
-      let itemArr = [];
+      const itemArr = [];
       itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
       return value.concat(itemArr);
     }, []);
@@ -58,7 +58,9 @@ export default class Main extends Component {
   transformToVector() {
     const tasksHours = this.parseUrlData(this.props.someProp);
     const vector = new DiscreteVector(tasksHours);
-    this.T = Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b);
+    this.T = vector.combinations < 1000 ?
+      Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b) :
+      Array(1000).fill().map((prev, item) => this.embodiment(tasksHours, vector.randomize())).sort((a, b) => a - b);
     this.labels = this.T.map(item => Math.round(item));
     this.data = this.T.map((item, i) => Math.round(100 * i / (this.T.length - 1)));
     this.calcDeveloperHours(tasksHours);
