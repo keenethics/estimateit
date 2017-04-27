@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import ReactHighcharts from 'react-highcharts';
 
+
 export default class LineChart extends Component {
   constructor(props) {
     super(props);
@@ -12,16 +13,16 @@ export default class LineChart extends Component {
 
   getChart(chartComponent) {
     if (chartComponent) {
-      console.log(chartComponent.getChart());
+      chartComponent.getChart();
     }
   }
 
   generateData() {
     const data = this.props.labels.sort((a, b) => a - b)
       .map((item, i) => [item, Math.round((100 * i / (this.props.labels.length - 1)) * 100) / 100]);
-
     this.config = {
       chart: {
+        inverted: false,
         type: 'spline',
         inverted: false,
       },

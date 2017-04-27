@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col } from 'reactstrap';
+import { Card, CardBlock, Row, Col } from 'reactstrap';
 import DiscreteVector from 'discrete-vector';
 import Calculation from '../Calculation';
 import FinalEstimate from '../FinalEstimate';
@@ -60,7 +60,6 @@ export default class Main extends Component {
 
     return arr;
   }
-
   embodiment(a, b) {
     return a.reduce((prev, item, i) => prev + item[b[i]], 0);
   }
@@ -71,7 +70,14 @@ export default class Main extends Component {
     this.T = Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b);
     this.labels = this.T.map(item => Math.round(item));
     this.data = this.T.map((item, i) => Math.round(100 * i / (this.T.length - 1)));
+    this.calcDeveloperHours(tasksHours);
     this.calculateAmountOfHours();
+  }
+  calcDeveloperHours(data) {
+    this.devHours = data.reduce((acc, value) => ({
+      minHours: acc.minHours += +value[0],
+      maxHours: acc.maxHours += +value[1],
+    }), { minHours: 0, maxHours: 0 });
   }
 
   calculateAmountOfHours() {
@@ -83,7 +89,6 @@ export default class Main extends Component {
       highestIndex = this.data.length - 1;
     }
     const hours = this.labels[highestIndex];
-
     const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
       this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
 
@@ -111,6 +116,18 @@ export default class Main extends Component {
             labels={this.labels}
             data={this.data}
           />
+        </Col>
+        <Col xs="12">
+          <Card className={styles.final}>
+            <CardBlock className={styles.final__wrapper}>
+              <div className={styles.final__result}>
+                <div className={styles.final__result_info}>Total developer min hours: {this.devHours.maxHours}</div>
+              </div>
+              <div className={styles.final__result}>
+                <div className={styles.final__result_info}>Total developer max hours: {this.devHours.minHours}</div>
+              </div>
+            </CardBlock>
+          </Card>
         </Col>
         <Col xs="12">
           <Calculation

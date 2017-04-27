@@ -157,7 +157,6 @@ export default class Header extends Component {
       <div key={task.id}>
         <FormGroup
           className={styles.subtasks}
-          style={{ marginLeft: '20px' }}
         >
           <Input
             data-id={task.id}
