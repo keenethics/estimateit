@@ -45,15 +45,6 @@ export default class Main extends Component {
   parseUrlData(data) {
     const arr = data.reduce((value, item) => {
       let itemArr = [];
-      if (item.tasks) {
-        itemArr = item.tasks.reduce((value2, item2) => {
-          if (item2.tasks) {
-            value2 = value2.concat(item2.tasks.map(task => [Number(task.minimumHours), Number(task.maximumHours)]));
-          }
-          value2.push([Number(item2.minimumHours), Number(item2.maximumHours)]);
-          return value2;
-        }, []);
-      }
       itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
       return value.concat(itemArr);
     }, []);
