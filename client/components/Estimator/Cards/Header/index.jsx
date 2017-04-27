@@ -37,14 +37,14 @@ export default class Header extends Component {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
     if (dateString) {
       this.setState({ date: dateString }, () => {
-        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       });
     }
   }
@@ -142,7 +142,7 @@ export default class Header extends Component {
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
     this.setState({ tasks: newTasks }, () => {
-      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       this.props.onChangeState(newTasks);
     });
   }
@@ -274,7 +274,7 @@ export default class Header extends Component {
     const tasks = this.state.tasks.slice();
     const newTasks = this.findTaskAndDelete(id, tasks);
     this.setState({ tasks: newTasks }, () => {
-      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
     this.props.onChangeState(newTasks);
   }
@@ -305,12 +305,12 @@ export default class Header extends Component {
     if (!parent) {
       newTasks = [...this.state.tasks, newTask];
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       });
     } else {
       newTasks = this.insertTask(tasks, parent, newTask);
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       });
     }
     this.props.onChangeState(newTasks);
@@ -324,7 +324,7 @@ export default class Header extends Component {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.replaceState({}, '', `/?${JSON.stringify(this.state)}`);
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
   }
 

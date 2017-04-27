@@ -6616,7 +6616,7 @@ module.exports = {
     };
 
     classData.initializeChart = function(nextProps) {
-      var Chart = __webpack_require__(260);
+      var Chart = __webpack_require__(261);
       var el = ReactDOM.findDOMNode(this);
       var ctx = el.getContext("2d");
       var chart = new Chart(ctx)[chartType](nextProps.data, nextProps.options || {});
@@ -31852,7 +31852,7 @@ module.exports = ReactHostComponent;
 
 var ReactDOMSelection = __webpack_require__(339);
 
-var containsNode = __webpack_require__(275);
+var containsNode = __webpack_require__(276);
 var focusNode = __webpack_require__(83);
 var getActiveElement = __webpack_require__(84);
 
@@ -34348,7 +34348,7 @@ var Contacts = function (_Component) {
       var _this2 = this;
 
       this.setState(_defineProperty({}, e.currentTarget.name, e.currentTarget.value), function () {
-        history.replaceState({}, '', '/?' + JSON.stringify(Object.assign({}, _this2.state)));
+        history.pushState('', '', location.pathname + '?' + JSON.stringify(Object.assign({}, _this2.state)));
       });
     }
   }, {
@@ -34678,7 +34678,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactstrap = __webpack_require__(22);
 
-var _domToImage = __webpack_require__(271);
+var _domToImage = __webpack_require__(272);
 
 var _domToImage2 = _interopRequireDefault(_domToImage);
 
@@ -34771,7 +34771,6 @@ var FinalEstimate = function (_Component) {
       this.setState({
         csv: (0, _csvGenerate2.default)(columns, this.props.data)
       }, function () {
-        console.log('state', _this2.state.csv);
         var a = document.createElement('a');
         a.textContent = 'download';
         a.download = (0, _csvFilename2.default)();
@@ -34938,7 +34937,7 @@ var Header = function (_Component) {
       var _this2 = this;
 
       this.setState(_defineProperty({}, e.currentTarget.name, e.currentTarget.value), function () {
-        history.replaceState({}, '', '/?' + JSON.stringify(_this2.state));
+        history.pushState('', '', location.pathname + '?' + JSON.stringify(_this2.state));
       });
     }
   }, {
@@ -34951,7 +34950,7 @@ var Header = function (_Component) {
 
       if (dateString) {
         this.setState({ date: dateString }, function () {
-          history.replaceState({}, '', '/?' + JSON.stringify(_this3.state));
+          history.pushState('', '', location.pathname + '?' + JSON.stringify(_this3.state));
         });
       }
     }
@@ -35012,30 +35011,36 @@ var Header = function (_Component) {
       };
       var findNodeWithIndex = function findNodeWithIndex(tree, id) {
         return tree.find(function (node) {
-          if (node.id === id) return node;else if (node.tasks) return findNodeWithIndex(node.tasks, id);
+          if (node.id === id) {
+            return node;
+          } else if (node.tasks) {
+            return findNodeWithIndex(node.tasks, id);
+          }
           return undefined;
         });
       };
       var findHighest = function findHighest(tree, id) {
         var node = findNodeWithIndex(tree, id);
-        if (node && !node.parentTaskId) return node;else if (node && node.parentTaskId) return findHighest(tree, id);
+        if (node && !node.parentTaskId) {
+          return node;
+        } else if (node && node.parentTaskId) {
+          return findHighest(tree, id);
+        }
         return undefined;
       };
       var sumMin = function sumMin(node) {
         if (typeof node !== 'undefined') {
-          var calcMin = +node.minimumHours;
-          var calcMax = +node.maximumHours;
           if (node.tasks && node.tasks.length > 0) {
-            calcMin = 0;
-            calcMax = 0;
             node.tasks.forEach(sumMin);
-            node.tasks.forEach(function (task) {
-              calcMin += +task.minimumHours;
-              calcMax += +task.maximumHours;
-            });
+            var abc = node.tasks.reduce(function (acc, value) {
+              return {
+                calcMin: acc.calcMin += +value.minimumHours,
+                calcMax: acc.calcMax += +value.maximumHours
+              };
+            }, { calcMin: 0, calcMax: 0 });
+            node.minimumHours = abc.calcMin;
+            node.maximumHours = abc.calcMax;
           }
-          node.minimumHours = calcMin;
-          node.maximumHours = calcMax;
         }
       };
       var par = findHighest(tasks, parentTaskId);
@@ -35053,7 +35058,7 @@ var Header = function (_Component) {
       var newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
       this.setState({ tasks: newTasks }, function () {
-        history.replaceState({}, '', '/?' + JSON.stringify(_this4.state));
+        history.pushState('', '', location.pathname + '?' + JSON.stringify(_this4.state));
         _this4.props.onChangeState(newTasks);
       });
     }
@@ -35075,8 +35080,7 @@ var Header = function (_Component) {
           _react2.default.createElement(
             _reactstrap.FormGroup,
             {
-              className: _styles2.default.subtasks,
-              style: { marginLeft: '20px' }
+              className: _styles2.default.subtasks
             },
             _react2.default.createElement(_reactstrap.Input, {
               'data-id': task.id,
@@ -35213,7 +35217,7 @@ var Header = function (_Component) {
       var tasks = this.state.tasks.slice();
       var newTasks = this.findTaskAndDelete(id, tasks);
       this.setState({ tasks: newTasks }, function () {
-        history.replaceState({}, '', '/?' + JSON.stringify(_this7.state));
+        history.pushState('', '', location.pathname + '?' + JSON.stringify(_this7.state));
       });
       this.props.onChangeState(newTasks);
     }
@@ -35248,12 +35252,12 @@ var Header = function (_Component) {
       if (!parent) {
         newTasks = [].concat(_toConsumableArray(this.state.tasks), [newTask]);
         this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, function () {
-          history.replaceState({}, '', '/?' + JSON.stringify(_this8.state));
+          history.pushState('', '', location.pathname + '?' + JSON.stringify(_this8.state));
         });
       } else {
         newTasks = this.insertTask(tasks, parent, newTask);
         this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, function () {
-          history.replaceState({}, '', '/?' + JSON.stringify(_this8.state));
+          history.pushState('', '', location.pathname + '?' + JSON.stringify(_this8.state));
         });
       }
       this.props.onChangeState(newTasks);
@@ -35270,7 +35274,7 @@ var Header = function (_Component) {
       e.target.style.height = '1px';
       e.target.style.height = 10 + e.target.scrollHeight + 'px';
       this.setState(_defineProperty({}, e.currentTarget.name, e.currentTarget.value), function () {
-        history.replaceState({}, '', '/?' + JSON.stringify(_this9.state));
+        history.pushState('', '', location.pathname + '?' + JSON.stringify(_this9.state));
       });
     }
   }, {
@@ -35289,7 +35293,7 @@ var Header = function (_Component) {
             _reactstrap.Col,
             { xs: '12' },
             _react2.default.createElement('img', {
-              src: __webpack_require__(285),
+              src: __webpack_require__(286),
               height: 30
             }),
             _react2.default.createElement(
@@ -35465,6 +35469,8 @@ var _reactHighcharts2 = _interopRequireDefault(_reactHighcharts);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -35488,7 +35494,7 @@ var LineChart = function (_Component) {
     key: 'getChart',
     value: function getChart(chartComponent) {
       if (chartComponent) {
-        console.log(chartComponent.getChart());
+        chartComponent.getChart();
       }
     }
   }, {
@@ -35501,12 +35507,11 @@ var LineChart = function (_Component) {
       }).map(function (item, i) {
         return [item, Math.round(100 * i / (_this2.props.labels.length - 1) * 100) / 100];
       });
-
       this.config = {
-        chart: {
-          type: 'spline',
-          inverted: false
-        },
+        chart: _defineProperty({
+          inverted: false,
+          type: 'spline'
+        }, 'inverted', false),
         title: {
           text: 'Probability of project completing'
         },
@@ -35602,7 +35607,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactstrap = __webpack_require__(22);
 
-var _discreteVector = __webpack_require__(270);
+var _discreteVector = __webpack_require__(271);
 
 var _discreteVector2 = _interopRequireDefault(_discreteVector);
 
@@ -35683,17 +35688,6 @@ var Main = function (_Component) {
     value: function parseUrlData(data) {
       var arr = data.reduce(function (value, item) {
         var itemArr = [];
-        if (item.tasks) {
-          itemArr = item.tasks.reduce(function (value2, item2) {
-            if (item2.tasks) {
-              value2 = value2.concat(item2.tasks.map(function (task) {
-                return [Number(task.minimumHours), Number(task.maximumHours)];
-              }));
-            }
-            value2.push([Number(item2.minimumHours), Number(item2.maximumHours)]);
-            return value2;
-          }, []);
-        }
         itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
         return value.concat(itemArr);
       }, []);
@@ -35714,8 +35708,12 @@ var Main = function (_Component) {
 
       var tasksHours = this.parseUrlData(this.props.someProp);
       var vector = new _discreteVector2.default(tasksHours);
-      this.T = Array(vector.combinations).fill().map(function (prev, item) {
+      this.T = vector.combinations < 1000 ? Array(vector.combinations).fill().map(function (prev, item) {
         return _this3.embodiment(tasksHours, vector.next());
+      }).sort(function (a, b) {
+        return a - b;
+      }) : Array(1000).fill().map(function (prev, item) {
+        return _this3.embodiment(tasksHours, vector.randomize());
       }).sort(function (a, b) {
         return a - b;
       });
@@ -35725,7 +35723,18 @@ var Main = function (_Component) {
       this.data = this.T.map(function (item, i) {
         return Math.round(100 * i / (_this3.T.length - 1));
       });
+      this.calcDeveloperHours(tasksHours);
       this.calculateAmountOfHours();
+    }
+  }, {
+    key: 'calcDeveloperHours',
+    value: function calcDeveloperHours(data) {
+      this.devHours = data.reduce(function (acc, value) {
+        return {
+          minHours: acc.minHours += +value[1],
+          maxHours: acc.maxHours += +value[0]
+        };
+      }, { minHours: 0, maxHours: 0 });
     }
   }, {
     key: 'calculateAmountOfHours',
@@ -35740,7 +35749,6 @@ var Main = function (_Component) {
         highestIndex = this.data.length - 1;
       }
       var hours = this.labels[highestIndex];
-
       var additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa + this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
 
       var totalHours = Math.round(hours + additionalHourse);
@@ -35773,6 +35781,38 @@ var Main = function (_Component) {
             labels: this.labels,
             data: this.data
           })
+        ),
+        _react2.default.createElement(
+          _reactstrap.Col,
+          { xs: '12' },
+          _react2.default.createElement(
+            _reactstrap.Card,
+            { className: _styles2.default.final },
+            _react2.default.createElement(
+              _reactstrap.CardBlock,
+              { className: _styles2.default.final__wrapper },
+              _react2.default.createElement(
+                'div',
+                { className: _styles2.default.final__result },
+                _react2.default.createElement(
+                  'div',
+                  { className: _styles2.default.final__result_info },
+                  'Total developer min hours: ',
+                  this.devHours.maxHours
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: _styles2.default.final__result },
+                _react2.default.createElement(
+                  'div',
+                  { className: _styles2.default.final__result_info },
+                  'Total developer max hours: ',
+                  this.devHours.minHours
+                )
+              )
+            )
+          )
         ),
         _react2.default.createElement(
           _reactstrap.Col,
@@ -35974,42 +36014,32 @@ var newLine = '\r\n';
 
 function csv(columns, data) {
   var separator = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : ',';
-  var noHeader = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-  console.clear();
   var columnOrder = void 0;
   var content = [];
   var column = [];
   if (columns) {
     columnOrder = columns.map(function (v) {
-      if (typeof v === 'string') {
-        return v;
-      }
-      if (!noHeader) {
-        column.push(typeof v.displayName !== 'undefined' ? v.displayName : v.id);
-      }
       return v.id;
     });
-    if (column.length > 0) {
+    column = columns.map(function (v) {
+      return typeof v.displayName !== 'undefined' ? v.displayName : v.id;
+    });
+    if (column.length) {
       content.push(column.join(separator));
     }
   } else {
-    columnOrder = [];
-    data.forEach(function (v) {
-      if (!Array.isArray(v)) {
-        columnOrder = columnOrder.concat(Object.keys(v));
-      }
+    columnOrder = data.map(function (v) {
+      return !Array.isArray(v);
     });
-    if (columnOrder.length > 0) {
+    if (columnOrder.length) {
       columnOrder = columnOrder.filter(function (value, index, self) {
         return self.indexOf(value) === index;
       });
-
-      if (!noHeader) {
-        content.push(columnOrder.join(separator));
-      }
+      content.push(columnOrder.join(separator));
     }
   }
+
   var regex = new RegExp(',', 'g');
   var taskToRow = function taskToRow(task, No) {
     return [No, task.taskName.replace(regex, ''), task.minimumHours, task.maximumHours].join(separator);
@@ -36166,8 +36196,8 @@ function fromByteArray (uint8) {
 
 
 var base64 = __webpack_require__(258)
-var ieee754 = __webpack_require__(287)
-var isArray = __webpack_require__(288)
+var ieee754 = __webpack_require__(288)
+var isArray = __webpack_require__(260)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -37949,6 +37979,17 @@ function isnan (val) {
 
 /***/ }),
 /* 260 */
+/***/ (function(module, exports) {
+
+var toString = {}.toString;
+
+module.exports = Array.isArray || function (arr) {
+  return toString.call(arr) == '[object Array]';
+};
+
+
+/***/ }),
+/* 261 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -41691,7 +41732,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41705,7 +41746,7 @@ exports.push([module.i, "/*!\n * Bootstrap v4.0.0-alpha.6 (https://getbootstrap.
 
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41719,7 +41760,7 @@ exports.push([module.i, ".react-date-field{position:relative;overflow:visible;ve
 
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41737,7 +41778,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41756,7 +41797,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41773,7 +41814,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41794,7 +41835,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41817,7 +41858,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41825,17 +41866,21 @@ exports = module.exports = __webpack_require__(17)(undefined);
 
 
 // module
-exports.push([module.i, ".styles__grid___f-1RR{display:grid;grid-column-gap:1rem;grid-row-gap:1rem}@media screen and (max-width:800px){.styles__grid___f-1RR{grid-template-columns:1fr!important}}.styles__grid-media___2OtyB{display:grid;grid-column-gap:1rem;grid-row-gap:1rem}.styles__main___2joI7>div:not(:last-child){margin-bottom:1rem}", ""]);
+exports.push([module.i, ".styles__grid___f-1RR{display:grid;grid-column-gap:1rem;grid-row-gap:1rem}@media screen and (max-width:800px){.styles__grid___f-1RR{grid-template-columns:1fr!important}}.styles__final__wrapper___DAGj0,.styles__grid-media___2OtyB{display:grid;grid-column-gap:1rem;grid-row-gap:1rem}.styles__main___2joI7>div:not(:last-child){margin-bottom:1rem}.styles__final___xLqcz{width:100%;display:flex;justify-content:center}.styles__final__wrapper___DAGj0{justify-content:space-around;grid-template-columns:repeat(2,240px)}@media screen and (max-width:800px){.styles__final__wrapper___DAGj0{grid-template-columns:1fr}}.styles__final__result___2swjG{display:grid!important}.styles__final__result_info___38CnZ{display:inline-block;font-weight:400;line-height:1.25;text-align:center;white-space:nowrap;vertical-align:middle;border:1px solid transparent;padding:.5rem 1rem;font-size:1rem;border-radius:.25rem;background:#ddd;width:100%}", ""]);
 
 // exports
 exports.locals = {
 	"grid": "styles__grid___f-1RR",
 	"grid-media": "styles__grid-media___2OtyB",
-	"main": "styles__main___2joI7"
+	"final__wrapper": "styles__final__wrapper___DAGj0",
+	"main": "styles__main___2joI7",
+	"final": "styles__final___xLqcz",
+	"final__result": "styles__final__result___2swjG",
+	"final__result_info": "styles__final__result_info___38CnZ"
 };
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports = module.exports = __webpack_require__(17)(undefined);
@@ -41853,7 +41898,7 @@ exports.locals = {
 };
 
 /***/ }),
-/* 270 */
+/* 271 */
 /***/ (function(module, exports) {
 
 /**
@@ -41973,7 +42018,7 @@ module.exports = DiscreteVector;
 
 
 /***/ }),
-/* 271 */
+/* 272 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function (global) {
@@ -42699,7 +42744,7 @@ module.exports = DiscreteVector;
 
 
 /***/ }),
-/* 272 */
+/* 273 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42826,7 +42871,7 @@ var CSSCore = {
 module.exports = CSSCore;
 
 /***/ }),
-/* 273 */
+/* 274 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42863,7 +42908,7 @@ function camelize(string) {
 module.exports = camelize;
 
 /***/ }),
-/* 274 */
+/* 275 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42880,7 +42925,7 @@ module.exports = camelize;
 
 
 
-var camelize = __webpack_require__(273);
+var camelize = __webpack_require__(274);
 
 var msPattern = /^-ms-/;
 
@@ -42908,7 +42953,7 @@ function camelizeStyleName(string) {
 module.exports = camelizeStyleName;
 
 /***/ }),
-/* 275 */
+/* 276 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42925,7 +42970,7 @@ module.exports = camelizeStyleName;
  * 
  */
 
-var isTextNode = __webpack_require__(283);
+var isTextNode = __webpack_require__(284);
 
 /*eslint-disable no-bitwise */
 
@@ -42953,7 +42998,7 @@ function containsNode(outerNode, innerNode) {
 module.exports = containsNode;
 
 /***/ }),
-/* 276 */
+/* 277 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43085,7 +43130,7 @@ function createArrayFromMixed(obj) {
 module.exports = createArrayFromMixed;
 
 /***/ }),
-/* 277 */
+/* 278 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43106,8 +43151,8 @@ module.exports = createArrayFromMixed;
 
 var ExecutionEnvironment = __webpack_require__(11);
 
-var createArrayFromMixed = __webpack_require__(276);
-var getMarkupWrap = __webpack_require__(278);
+var createArrayFromMixed = __webpack_require__(277);
+var getMarkupWrap = __webpack_require__(279);
 var invariant = __webpack_require__(1);
 
 /**
@@ -43174,7 +43219,7 @@ function createNodesFromMarkup(markup, handleScript) {
 module.exports = createNodesFromMarkup;
 
 /***/ }),
-/* 278 */
+/* 279 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43274,7 +43319,7 @@ function getMarkupWrap(nodeName) {
 module.exports = getMarkupWrap;
 
 /***/ }),
-/* 279 */
+/* 280 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43318,7 +43363,7 @@ function getUnboundedScrollPosition(scrollable) {
 module.exports = getUnboundedScrollPosition;
 
 /***/ }),
-/* 280 */
+/* 281 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43356,7 +43401,7 @@ function hyphenate(string) {
 module.exports = hyphenate;
 
 /***/ }),
-/* 281 */
+/* 282 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43373,7 +43418,7 @@ module.exports = hyphenate;
 
 
 
-var hyphenate = __webpack_require__(280);
+var hyphenate = __webpack_require__(281);
 
 var msPattern = /^ms-/;
 
@@ -43400,7 +43445,7 @@ function hyphenateStyleName(string) {
 module.exports = hyphenateStyleName;
 
 /***/ }),
-/* 282 */
+/* 283 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43430,7 +43475,7 @@ function isNode(object) {
 module.exports = isNode;
 
 /***/ }),
-/* 283 */
+/* 284 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43447,7 +43492,7 @@ module.exports = isNode;
  * @typechecks
  */
 
-var isNode = __webpack_require__(282);
+var isNode = __webpack_require__(283);
 
 /**
  * @param {*} object The object to check.
@@ -43460,7 +43505,7 @@ function isTextNode(object) {
 module.exports = isTextNode;
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -43495,13 +43540,13 @@ function memoizeStringOnly(callback) {
 module.exports = memoizeStringOnly;
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "4ee4900675b531c9796bc235012f33a0.jpg";
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, exports) {
 
 /*
@@ -43900,7 +43945,7 @@ k.push(a._id)};B.prototype.currentOptions=function(a){function f(a,c,k,q){var b,
 
 
 /***/ }),
-/* 287 */
+/* 288 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -43987,17 +44032,6 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
   buffer[offset + i - d] |= s * 128
 }
-
-
-/***/ }),
-/* 288 */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = Array.isArray || function (arr) {
-  return toString.call(arr) == '[object Array]';
-};
 
 
 /***/ }),
@@ -44514,7 +44548,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
   function createChainableTypeChecker(validate) {
     if (false) {
       var manualPropTypeCallCache = {};
-      var manualPropTypeWarningCount = 0;
     }
     function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
       componentName = componentName || ANONYMOUS;
@@ -44532,11 +44565,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
         } else if (false) {
           // Old behavior for people using React.PropTypes
           var cacheKey = componentName + ':' + propName;
-          if (
-            !manualPropTypeCallCache[cacheKey] &&
-            // Avoid spamming the console because they are often not actionable except for lib authors
-            manualPropTypeWarningCount < 3
-          ) {
+          if (!manualPropTypeCallCache[cacheKey]) {
             warning(
               false,
               'You are manually calling a React.PropTypes validation ' +
@@ -44548,7 +44577,6 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
               componentName
             );
             manualPropTypeCallCache[cacheKey] = true;
-            manualPropTypeWarningCount++;
           }
         }
       }
@@ -49523,10 +49551,10 @@ var CSSProperty = __webpack_require__(213);
 var ExecutionEnvironment = __webpack_require__(11);
 var ReactInstrumentation = __webpack_require__(15);
 
-var camelizeStyleName = __webpack_require__(274);
+var camelizeStyleName = __webpack_require__(275);
 var dangerousStyleValue = __webpack_require__(372);
-var hyphenateStyleName = __webpack_require__(281);
-var memoizeStringOnly = __webpack_require__(284);
+var hyphenateStyleName = __webpack_require__(282);
+var memoizeStringOnly = __webpack_require__(285);
 var warning = __webpack_require__(3);
 
 var processStyleName = memoizeStringOnly(function (styleName) {
@@ -50089,7 +50117,7 @@ var _prodInvariant = __webpack_require__(5);
 var DOMLazyTree = __webpack_require__(28);
 var ExecutionEnvironment = __webpack_require__(11);
 
-var createNodesFromMarkup = __webpack_require__(277);
+var createNodesFromMarkup = __webpack_require__(278);
 var emptyFunction = __webpack_require__(14);
 var invariant = __webpack_require__(1);
 
@@ -54234,7 +54262,7 @@ var ReactDOMComponentTree = __webpack_require__(8);
 var ReactUpdates = __webpack_require__(16);
 
 var getEventTarget = __webpack_require__(71);
-var getUnboundedScrollPosition = __webpack_require__(279);
+var getUnboundedScrollPosition = __webpack_require__(280);
 
 /**
  * Find the deepest React component completely containing the root of the
@@ -57669,7 +57697,7 @@ exports.default = function (props) {
 /* 385 */
 /***/ (function(module, exports, __webpack_require__) {
 
-!function(t,r){ true?module.exports=r(__webpack_require__(2),__webpack_require__(286)):"function"==typeof define&&define.amd?define(["react","highcharts"],r):"object"==typeof exports?exports.ReactHighcharts=r(require("react"),require("highcharts")):t.ReactHighcharts=r(t.React,t.Highcharts)}(this,function(t,r){return function(t){function r(o){if(e[o])return e[o].exports;var n=e[o]={exports:{},id:o,loaded:!1};return t[o].call(n.exports,n,n.exports,r),n.loaded=!0,n.exports}var e={};return r.m=t,r.c=e,r.p="",r(0)}([function(t,r,e){t.exports=e(3)},function(r,e){r.exports=t},function(t,r,e){(function(r){"use strict";var o=Object.assign||function(t){for(var r=1;r<arguments.length;r++){var e=arguments[r];for(var o in e)Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o])}return t},n=e(1),i="undefined"==typeof r?window:r;t.exports=function(r,e){var c="Highcharts"+r,s=n.createClass({displayName:c,propTypes:{config:n.PropTypes.object.isRequired,isPureConfig:n.PropTypes.bool,neverReflow:n.PropTypes.bool,callback:n.PropTypes.func,domProps:n.PropTypes.object},defaultProps:{callback:function(){},domProps:{}},renderChart:function(t){var n=this;if(!t)throw new Error("Config must be specified for the "+c+" component");var s=t.chart;this.chart=new e[r](o({},t,{chart:o({},s,{renderTo:this.refs.chart})}),this.props.callback),this.props.neverReflow||i&&i.requestAnimationFrame&&requestAnimationFrame(function(){n.chart&&n.chart.options&&n.chart.reflow()})},shouldComponentUpdate:function(t){return!!(t.neverReflow||t.isPureConfig&&this.props.config===t.config)||(this.renderChart(t.config),!1)},getChart:function(){if(!this.chart)throw new Error("getChart() should not be called before the component is mounted");return this.chart},componentDidMount:function(){this.renderChart(this.props.config)},componentWillUnmount:function(){this.chart.destroy()},render:function(){return n.createElement("div",o({ref:"chart"},this.props.domProps))}});return s.Highcharts=e,s.withHighcharts=function(e){return t.exports(r,e)},s}}).call(r,function(){return this}())},function(t,r,e){"use strict";t.exports=e(2)("Chart",e(4))},function(t,e){t.exports=r}])});
+!function(t,r){ true?module.exports=r(__webpack_require__(2),__webpack_require__(287)):"function"==typeof define&&define.amd?define(["react","highcharts"],r):"object"==typeof exports?exports.ReactHighcharts=r(require("react"),require("highcharts")):t.ReactHighcharts=r(t.React,t.Highcharts)}(this,function(t,r){return function(t){function r(o){if(e[o])return e[o].exports;var n=e[o]={exports:{},id:o,loaded:!1};return t[o].call(n.exports,n,n.exports,r),n.loaded=!0,n.exports}var e={};return r.m=t,r.c=e,r.p="",r(0)}([function(t,r,e){t.exports=e(3)},function(r,e){r.exports=t},function(t,r,e){(function(r){"use strict";var o=Object.assign||function(t){for(var r=1;r<arguments.length;r++){var e=arguments[r];for(var o in e)Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o])}return t},n=e(1),i="undefined"==typeof r?window:r;t.exports=function(r,e){var c="Highcharts"+r,s=n.createClass({displayName:c,propTypes:{config:n.PropTypes.object.isRequired,isPureConfig:n.PropTypes.bool,neverReflow:n.PropTypes.bool,callback:n.PropTypes.func,domProps:n.PropTypes.object},defaultProps:{callback:function(){},domProps:{}},renderChart:function(t){var n=this;if(!t)throw new Error("Config must be specified for the "+c+" component");var s=t.chart;this.chart=new e[r](o({},t,{chart:o({},s,{renderTo:this.refs.chart})}),this.props.callback),this.props.neverReflow||i&&i.requestAnimationFrame&&requestAnimationFrame(function(){n.chart&&n.chart.options&&n.chart.reflow()})},shouldComponentUpdate:function(t){return!!(t.neverReflow||t.isPureConfig&&this.props.config===t.config)||(this.renderChart(t.config),!1)},getChart:function(){if(!this.chart)throw new Error("getChart() should not be called before the component is mounted");return this.chart},componentDidMount:function(){this.renderChart(this.props.config)},componentWillUnmount:function(){this.chart.destroy()},render:function(){return n.createElement("div",o({ref:"chart"},this.props.domProps))}});return s.Highcharts=e,s.withHighcharts=function(e){return t.exports(r,e)},s}}).call(r,function(){return this}())},function(t,r,e){"use strict";t.exports=e(2)("Chart",e(4))},function(t,e){t.exports=r}])});
 
 /***/ }),
 /* 386 */
@@ -58535,7 +58563,7 @@ var ReactAddonsDOMDependencies = __webpack_require__(395);
 var propTypesFactory = __webpack_require__(34);
 var PropTypes = propTypesFactory(React.isValidElement);
 
-var CSSCore = __webpack_require__(272);
+var CSSCore = __webpack_require__(273);
 var ReactTransitionEvents = __webpack_require__(405);
 
 var onlyChild = __webpack_require__(243);
@@ -60580,7 +60608,7 @@ module.exports = function (css) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(261);
+var content = __webpack_require__(262);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60606,7 +60634,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(262);
+var content = __webpack_require__(263);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60632,7 +60660,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(263);
+var content = __webpack_require__(264);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60658,7 +60686,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(264);
+var content = __webpack_require__(265);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60684,7 +60712,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(265);
+var content = __webpack_require__(266);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60710,7 +60738,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(266);
+var content = __webpack_require__(267);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60736,7 +60764,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(267);
+var content = __webpack_require__(268);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60762,7 +60790,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(268);
+var content = __webpack_require__(269);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});
@@ -60788,7 +60816,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(269);
+var content = __webpack_require__(270);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
 var update = __webpack_require__(21)(content, {});

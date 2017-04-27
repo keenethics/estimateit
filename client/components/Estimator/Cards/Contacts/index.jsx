@@ -15,7 +15,7 @@ export default class Contacts extends Component {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.replaceState({}, '', `/?${JSON.stringify(Object.assign({}, this.state))}`);
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(Object.assign({}, this.state))}`);
     });
   }
 
