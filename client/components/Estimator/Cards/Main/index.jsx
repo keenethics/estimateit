@@ -66,8 +66,8 @@ export default class Main extends Component {
   }
   calcDeveloperHours(data) {
     this.devHours = data.reduce((acc, value) => ({
-      minHours: acc.minHours += +value[0],
-      maxHours: acc.maxHours += +value[1],
+      minHours: acc.minHours += +value[1],
+      maxHours: acc.maxHours += +value[0],
     }), { minHours: 0, maxHours: 0 });
   }
 
