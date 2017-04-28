@@ -28,6 +28,7 @@ export default class FinalEstimate extends Component {
     && node.id !== 'screenShot' && node.className !== 'radarChartPart');
   }
   saveAsPdf() {
+    console.log('state - in FinalEstimate', this.props.calculationData);
     const root = document.getElementById('screen');
     domtoimage.toPng(root, { filter: this.filter })
       .then((dataUrl) => {
@@ -42,7 +43,7 @@ export default class FinalEstimate extends Component {
   }
 
   saveAsCSV() {
-    const columns = [{
+    const columns = [[{
       id: 'number',
       displayName: '#',
     }, {
@@ -57,11 +58,27 @@ export default class FinalEstimate extends Component {
     }, {
       id: 'tasks',
       displayName: '',
-    }];
+    }], [{
+      id: 'qa',
+      displayName: 'QA',
+    }, {
+      id: 'pm',
+      displayName: 'PM',
+    }, {
+      id: 'bugFixes',
+      displayName: 'Bug Fixes',
+    }, {
+      id: 'risks',
+      displayName: 'Risks',
+    }, {
+      id: 'completing',
+      displayName: 'Completing',
+    }]];
 
     this.setState({
-      csv: csvGenerate(columns, this.props.data),
+      csv: csvGenerate(columns, this.props.data, this.props.calculationData),
     }, () => {
+      console.log('csv', this.state.csv);
       const a = document.createElement('a');
       a.textContent = 'download';
       a.download = csvFilename();
@@ -89,8 +106,8 @@ export default class FinalEstimate extends Component {
               caret
               color="danger"
             >
-                Report
-              </DropdownToggle>
+              Report
+            </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>

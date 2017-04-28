@@ -91,7 +91,9 @@ export default class Main extends Component {
   }
 
   onCalculationChange(calculationData) {
+    console.log('onCalculationChange', calculationData);
     this.setState({ calculationData });
+    console.info('state', this.state);
     this.calculateAmountOfHours();
   }
 
@@ -135,6 +137,7 @@ export default class Main extends Component {
           <FinalEstimate
             hours={this.hours}
             rate={this.state.rate}
+            calculationData={this.state.calculationData}
             data={this.props.someProp}
           />
         </Col>
