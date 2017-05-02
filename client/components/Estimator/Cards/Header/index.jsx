@@ -80,8 +80,7 @@ export default class Header extends Component {
         this.calculateHours(parentTaskId);
         break;
       }
-      if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
-      if (tasks[i].tasks && tasks[i].tasks.length) {
+      if (tasks[i].tasks && tasks[i].tasks.length > 0) {
         this.findTaskAndDelete(id, tasks[i].tasks);
       }
     }
