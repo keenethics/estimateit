@@ -12,7 +12,6 @@ export default class Calculation extends Component {
   }
 
   onDataChange(data) {
-    console.log('data', data);
     this.props.onCalculationChange(data);
   }
 

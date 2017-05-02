@@ -214,7 +214,7 @@ export default class Header extends Component {
 
   preAddTask(e) {
     const newTask = this.state.newTask || {};
-    newTask[e.currentTarget.name] = e.currentTarget.value;
+    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
     newTask.parentTaskId = e.currentTarget.dataset.parentid;
     this.setState({
       newTask,

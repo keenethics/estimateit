@@ -91,9 +91,7 @@ export default class Main extends Component {
   }
 
   onCalculationChange(calculationData) {
-    console.log('onCalculationChange', calculationData);
     this.setState({ calculationData });
-    console.info('state', this.state);
     this.calculateAmountOfHours();
   }
 
