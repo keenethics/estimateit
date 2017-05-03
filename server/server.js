@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import morgan from 'morgan';
 
 const app = express();
 const router = express.Router();
@@ -11,8 +12,7 @@ const port = process.env.API_PORT || 3001;
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
-
-
+app.use(morgan("common"));
 router.get('/', (req, res) => {
   res.json({ message: 'API Initialized!' });
 });
