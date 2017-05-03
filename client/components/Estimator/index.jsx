@@ -16,9 +16,11 @@ export default class App extends Component {
     this.changeState = this.changeState.bind(this);
   }
   componentDidMount() {
-    if (!location.search) location.search = '{"tasks":[],"parentTaskId":"","newTask":null}';
-    const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-    this.setState({ tasksData: state.tasks });
+    if (!location.search) { location.search = '{"tasks":[],"parentTaskId":"","newTask":null}'; }
+    if (location.search.length > 0) {
+      const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
+      this.setState({ tasksData: state.tasks });
+    }
   }
   changeState(data) {
     this.setState({ tasksData: data });
@@ -28,10 +30,7 @@ export default class App extends Component {
     return (
       <Container>
         <Card id="screen">
-          <Col
-            xs="12" md="12" lg="10"
-            className={styles.estimator}
-          >
+          <Col xs="12" md="12" lg="10" className={styles.estimator}>
             <Header
               className={styles.estimator__header}
               onChangeState={this.changeState}

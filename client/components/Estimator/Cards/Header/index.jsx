@@ -52,8 +52,10 @@ export default class Header extends Component {
 
   componentDidMount() {
     if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
-    const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-    this.setState(Object.assign({}, state));
+    if (location.search.length > 0) {
+      const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
+      this.setState(Object.assign({}, state));    
+    }
   }
 
   findTaskAndModify(tasks, id, name, value) {
