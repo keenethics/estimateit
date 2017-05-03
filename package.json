@@ -53,8 +53,8 @@
   },
   "scripts": {
     "start": "webpack-dev-server",
-    "build": "webpack -p",
-    "start-node": "nodemon server/server.js --exec babel-node",
+    "start-dev": "nf start -p 3000",
+    "build-front": "webpack -p",
     "build-server": "babel server -d dist",
     "serve": "node dist/index.js"
   },
