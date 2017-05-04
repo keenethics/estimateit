@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
+import dotend from 'dotenv';
 
+const config = dotend.config();
 const app = express();
 const router = express.Router();
 
@@ -14,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('common'));
 
-const mongoDB = 'mongodb://127.0.0.1/my_database';
+const mongoDB = process.env.DB_HOST;
 mongoose.connect(mongoDB);
 const db = mongoose.connection;
 
