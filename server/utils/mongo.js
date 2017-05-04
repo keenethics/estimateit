@@ -13,7 +13,7 @@ export function isDuplicate(url) {
   return UrlEntry
     .find({ original: url })
     .limit(1)
-    .then(doc => doc ? doc.shortCode : false);
+    .then(doc => doc[0] ? doc[0].shortCode : false);
 }
 
 export function insertNew(url) {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
+import axios from 'axios';
 import DiscreteVector from 'discrete-vector';
 import Calculation from '../Calculation';
 import FinalEstimate from '../FinalEstimate';
@@ -12,6 +13,7 @@ export default class Main extends Component {
     super(props);
     this.state = {
       labels: [],
+      axios: [],
       calculationData: {
         qa: 10,
         pm: 10,
@@ -37,6 +39,7 @@ export default class Main extends Component {
     const loc = decodeURIComponent(location.href);
     const state = JSON.parse(loc.split('?').pop());
     const tasks = this.parseUrlData(state.tasks);
+    this.createShortUrl(loc);
     this.setState({ tasks }, () => {
       this.calculateAmountOfHours();
     });
@@ -99,7 +102,20 @@ export default class Main extends Component {
     this.setState({ rate });
     this.calculateAmountOfHours();
   }
-
+  createShortUrl(location) {
+    axios.post('http://localhost:3000/new/', {
+      url: location,
+    })
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          axios: response,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
   render() {
     this.transformToVector();
     return (

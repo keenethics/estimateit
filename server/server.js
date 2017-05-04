@@ -6,8 +6,8 @@ import morgan from 'morgan';
 import dotend from 'dotenv';
 
 import UrlEntry from './models/schema';
-import { createFullUrl, isValidUrl } from './utils/url-utils';
-import { getShortCode, isDuplicate, insertNew } from './utils/mongo-utils';
+import { createFullUrl, isValidUrl } from './utils/url';
+import { isDuplicate, insertNew } from './utils/mongo';
 
 const config = dotend.config();
 const app = express();
@@ -15,8 +15,8 @@ const router = express.Router();
 
 const port = process.env.API_PORT || 3000;
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); //
 app.use(cors());
 app.use(morgan('common'));
 
@@ -45,18 +45,19 @@ app.get('/:shortCode', (req, res) => {
   }
 });
 
-app.get('/new/*', (req, res) => {
-  const url = req.params[0];
+app.post('/new', (req, res) => {
+  const url = req.body.url;
   if (isValidUrl(url)) {
-    isDuplicate(url).then((exists) => {
-      if (exists) {
-        res.status(500).json({ error: 'URL already exists in the database.', shortCode: exists });
-      } else {
-        insertNew(url).then((inserted) => {
-          res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode) });
-        });
-      }
-    });
+    isDuplicate(url)
+      .then((exists) => {
+        if (exists) {
+          res.status(500).json({ error: 'URL already exists in the database.', url: createFullUrl(req, exists) });
+        } else {
+          insertNew(url).then((inserted) => {
+            res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin});
+          });
+        }
+      });
   } else {
     res.status(500).json({ error: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
   }
