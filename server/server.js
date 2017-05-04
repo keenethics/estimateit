@@ -51,7 +51,7 @@ app.post('/new', (req, res) => {
     isDuplicate(url)
       .then((exists) => {
         if (exists) {
-          res.status(500).json({ error: 'URL already exists in the database.', url: createFullUrl(req, exists) });
+          res.status(200).json({ error: 'URL already exists in the database.', url: createFullUrl(req, exists) });
         } else {
           insertNew(url).then((inserted) => {
             res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin});
@@ -59,7 +59,7 @@ app.post('/new', (req, res) => {
         }
       });
   } else {
-    res.status(500).json({ error: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
+    res.status(200).json({ error: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
   }
 });
 

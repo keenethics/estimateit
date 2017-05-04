@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
+import axios from 'axios';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
@@ -10,9 +11,11 @@ export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      axios: [],
       dropdownOpen: false,
       csv: '',
     };
+    this.saveAsShortUrl = this.saveAsShortUrl.bind(this);
     this.saveAsPdf = this.saveAsPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggle = this.toggle.bind(this);
@@ -26,6 +29,20 @@ export default class FinalEstimate extends Component {
   filter(node) {
     return (node.tagName !== 'BUTTON'
     && node.id !== 'screenShot' && node.className !== 'radarChartPart');
+  }
+  saveAsShortUrl() {
+    axios.post('http://localhost:3000/new/', {
+      url: decodeURIComponent(location.href),
+    })
+      .then((response) => {
+        console.log(response.data);
+        this.setState({
+          axios: response.data,
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   }
   saveAsPdf() {
     console.log('state - in FinalEstimate', this.props.calculationData);
@@ -112,6 +129,7 @@ export default class FinalEstimate extends Component {
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
               <DropdownItem onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
+              <DropdownItem onClick={this.saveAsShortUrl}>Generate URL</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
