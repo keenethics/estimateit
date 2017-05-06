@@ -16,7 +16,7 @@ const router = express.Router();
 const port = process.env.API_PORT || 3000;
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); //
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 app.use(morgan('common'));
 
@@ -33,7 +33,7 @@ db.once('open', () => {
 app.get('/:shortCode', (req, res) => {
   const shortCode = parseInt(req.params.shortCode);
   if (isNaN(shortCode)) {
-    res.status(200).json({ error: 'Invalid URL shortCode. It must be a number.' });
+    res.status(500).json({ error: 'Invalid URL shortCode. It must be a number.' });
   } else {
     UrlEntry.findOne({ shortCode }).then((doc) => {
       if (!doc) {
@@ -51,7 +51,7 @@ app.post('/new', (req, res) => {
     isDuplicate(url)
       .then((exists) => {
         if (exists) {
-          res.status(200).json({ error: 'URL already exists in the database.', url: createFullUrl(req, exists) });
+          res.status(500).json({ message: 'URL already exists in the database.', url: createFullUrl(req, exists) });
         } else {
           insertNew(url).then((inserted) => {
             res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin});
@@ -59,7 +59,7 @@ app.post('/new', (req, res) => {
         }
       });
   } else {
-    res.status(200).json({ error: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
+    res.status(500).json({ message: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
   }
 });
 

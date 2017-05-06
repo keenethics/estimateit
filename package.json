@@ -26,6 +26,7 @@
     "react-date-picker": "^5.3.28",
     "react-dom": "^15.5.3",
     "react-highcharts": "^11.5.0",
+    "react-notification-system": "^0.2.14",
     "reactstrap": "^4.5.0",
     "shortid": "^2.2.8"
   },

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import domtoimage from 'dom-to-image';
 import axios from 'axios';
+import Notification from 'react-notification-system';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
@@ -35,13 +36,29 @@ export default class FinalEstimate extends Component {
       url: decodeURIComponent(location.href),
     })
       .then((response) => {
-        console.log(response.data);
+        const { data } = response.data;
+        this.refs.notificationSystem.addNotification({
+          title: 'Success',
+          position: 'br',
+          message: `
+          ${data.message}
+          And copy to clipboard`,
+          level: 'success' });
         this.setState({
           axios: response.data,
         });
       })
       .catch((error) => {
-        console.error(error);
+        const { data } = error.response;
+        this.refs.notificationSystem.addNotification({
+          title: 'Error',
+          message: `
+          ${data.message}
+          ${data.url}`,
+          level: 'error',
+          autoDismiss: 6,
+          position: 'br',
+        });
       });
   }
   saveAsPdf() {
@@ -132,6 +149,7 @@ export default class FinalEstimate extends Component {
               <DropdownItem onClick={this.saveAsShortUrl}>Generate URL</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
+          <Notification ref="notificationSystem" />
         </CardBlock>
       </Card>
     );
