@@ -4,11 +4,13 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
 import dotend from 'dotenv';
+import Nightmare from 'nightmare';
 
 import UrlEntry from './models/schema';
 import { createFullUrl, isValidUrl } from './utils/url';
 import { isDuplicate, insertNew } from './utils/mongo';
 
+const nightmare = Nightmare({ show: false });
 const config = dotend.config();
 const app = express();
 const router = express.Router();
@@ -44,6 +46,30 @@ app.get('/:shortCode', (req, res) => {
     });
   }
 });
+app.post('/api/pdf', (req, res) => {
+  const { url } = req.body;
+  nightmare
+    .goto(url)
+    .inject('css', './server/utils/pdf.css')
+    .evaluate(() => {
+      const body = document.querySelector('body');
+      return {
+        height: body.scrollHeight,
+        width: body.scrollWidth,
+      };
+    })
+    .pdf({
+      printBackground: true,
+      marginsType: 0,
+      pageSize: 'A4',
+      landscape: false,
+    })
+    .run((pdfBuffer) => {
+      res.set('Content-Type', 'application/pdf');
+      res.set('Content-Disposition: attachment; filename=report.pdf');
+      res.send(new Buffer(pdfBuffer, 'binary'));
+    });
+});
 
 app.post('/new', (req, res) => {
   const url = req.body.url;
@@ -54,7 +80,7 @@ app.post('/new', (req, res) => {
           res.status(500).json({ message: 'URL already exists in the database.', url: createFullUrl(req, exists) });
         } else {
           insertNew(url).then((inserted) => {
-            res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin});
+            res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin });
           });
         }
       });

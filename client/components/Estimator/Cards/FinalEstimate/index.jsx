@@ -132,6 +132,7 @@ export default class FinalEstimate extends Component {
             <div className={styles.final__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
           </div>
           <ButtonDropdown
+            id="screenShot"
             isOpen={this.state.dropdownOpen}
             toggle={this.toggle}
           >
