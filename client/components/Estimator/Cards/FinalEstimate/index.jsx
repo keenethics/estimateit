@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import domtoimage from 'dom-to-image';
 import axios from 'axios';
 import Notification from 'react-notification-system';
 import csvGenerate from './lib/csvGenerate';
@@ -27,16 +26,12 @@ export default class FinalEstimate extends Component {
       dropdownOpen: !this.state.dropdownOpen,
     });
   }
-  filter(node) {
-    return (node.tagName !== 'BUTTON'
-    && node.id !== 'screenShot' && node.className !== 'radarChartPart');
-  }
   saveAsShortUrl() {
     axios.post('http://localhost:3000/new/', {
       url: decodeURIComponent(location.href),
     })
       .then((response) => {
-        const { data } = response.data;
+        const { data } = response;
         this.refs.notificationSystem.addNotification({
           title: 'Success',
           position: 'br',
@@ -45,7 +40,7 @@ export default class FinalEstimate extends Component {
           And copy to clipboard`,
           level: 'success' });
         this.setState({
-          axios: response.data,
+          axios: data,
         });
       })
       .catch((error) => {
@@ -62,17 +57,22 @@ export default class FinalEstimate extends Component {
       });
   }
   saveAsPdf() {
-    console.log('state - in FinalEstimate', this.props.calculationData);
-    const root = document.getElementById('screen');
-    domtoimage.toPng(root, { filter: this.filter })
-      .then((dataUrl) => {
-        const img = new Image();
-        img.src = dataUrl;
-
-        const doc = new jsPDF('p', 'mm', [(root.clientHeight * 25.4) / 90, 300]);
-
-        doc.addImage(img, 'PNG', 2, 2);
-        doc.save('a4.pdf');
+    axios.post('http://localhost:3000/api/pdf', {
+      url: decodeURIComponent(location.href),
+    }, { responseType: 'arraybuffer' })
+      .then((response) => {
+        const file = new Blob([response.data], { type: 'application/pdf' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(file);
+        link.download = 'keenethics_report.pdf';
+        link.click();
+        this.refs.notificationSystem.addNotification({
+          title: 'Success',
+          message: 'generation of the PDF was successful!',
+          level: 'success',
+          autoDismiss: 6,
+          position: 'br',
+        });
       });
   }
 

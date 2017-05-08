@@ -50,6 +50,7 @@ app.post('/api/pdf', (req, res) => {
   const { url } = req.body;
   nightmare
     .goto(url)
+    .wait(2000)
     .inject('css', './server/utils/pdf.css')
     .evaluate(() => {
       const body = document.querySelector('body');
@@ -64,9 +65,9 @@ app.post('/api/pdf', (req, res) => {
       pageSize: 'A4',
       landscape: false,
     })
-    .run((pdfBuffer) => {
+    .run((error, pdfBuffer) => {
       res.set('Content-Type', 'application/pdf');
-      res.set('Content-Disposition: attachment; filename=report.pdf');
+      res.set('Content-Disposition: attachment; filename=filename.pdf');
       res.send(new Buffer(pdfBuffer, 'binary'));
     });
 });
