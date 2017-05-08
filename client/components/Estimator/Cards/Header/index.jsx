@@ -54,7 +54,7 @@ export default class Header extends Component {
     if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
     if (location.search.length > 0) {
       const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-      this.setState(Object.assign({}, state));    
+      this.setState(Object.assign({}, state));
     }
   }
 
@@ -67,7 +67,6 @@ export default class Header extends Component {
         this.calculateHours(parentTaskId);
         break;
       }
-      if (tasks[i].tasks && tasks[i].tasks.length == 0) return;
       if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
     }
     return tasks;
@@ -301,6 +300,8 @@ export default class Header extends Component {
     const parent = e.currentTarget.parentNode.dataset.parentid;
     const newTask = this.state.newTask;
     newTask.id = shortid.generate();
+    newTask.minimumHours = newTask.minimumHours || 0;
+    newTask.maximumHours = newTask.maximumHours || 0;
     const tasks = this.state.tasks.slice();
     let newTasks = [];
     if (!parent) {
