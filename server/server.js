@@ -56,7 +56,6 @@ app.post('/api/pdf', (req, res) => {
       const body = document.querySelector('body');
       return {
         height: body.scrollHeight,
-        width: body.scrollWidth,
       };
     })
     .pdf({

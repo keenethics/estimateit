@@ -17,7 +17,14 @@ export default class Main extends Component {
         pm: 10,
         bugFixes: 10,
         risks: 10,
-        completing: 90,
+        completing: 100,
+      },
+      estimateFieldsAmount: {
+        qa: 0,
+        pm: 0,
+        bugFixes: 0,
+        risks: 0,
+        completing: 0,
       },
       rate: 25,
       hours: 0,
@@ -36,24 +43,13 @@ export default class Main extends Component {
     if (location.href === `${location.origin}/`) return;
     const loc = decodeURIComponent(location.href);
     const state = JSON.parse(loc.split('?').pop());
-    const tasks = this.parseUrlData(state.tasks);
-    this.setState({ tasks }, () => {
+    const hoursArr = this.parseUrlData(state.tasks);
+    this.setState({ hoursArr }, () => {
       this.calculateAmountOfHours();
     });
   }
 
-  parseUrlData(data) {
-    const arr = data.reduce((value, item) => {
-      const itemArr = [];
-      itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
-      return value.concat(itemArr);
-    }, []);
 
-    return arr;
-  }
-  embodiment(a, b) {
-    return a.reduce((prev, item, i) => prev + item[b[i]], 0);
-  }
 
   transformToVector() {
     const tasksHours = this.parseUrlData(this.props.someProp);
@@ -74,30 +70,40 @@ export default class Main extends Component {
   }
 
   calculateAmountOfHours() {
-    const percent = this.state.calculationData.completing;
-
-    let highestIndex = this.data.findIndex(item => item > percent);
-
-    if (highestIndex === -1) {
-      highestIndex = this.data.length - 1;
-    }
-    const hours = this.labels[highestIndex];
-    const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
-      this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
-
-    const totalHours = Math.round(hours + additionalHourse);
-
-    this.hours = totalHours;
+      const percent = this.state.calculationData.completing;
+      let highestIndex = this.data.findIndex(item => item > percent);
+      if (highestIndex === -1) {
+        highestIndex = this.data.length - 1;
+      }
+      const hours = this.labels[highestIndex];
+      const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
+        this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
+      const totalHours = Math.round(hours + additionalHourse);
+      this.state.hours = totalHours;
   }
 
-  onCalculationChange(calculationData) {
-    this.setState({ calculationData });
+  onCalculationChange(calculationData, estimateFieldsAmount) {
+    this.setState({ calculationData, estimateFieldsAmount });
     this.calculateAmountOfHours();
+    this.props.onChangeState(this.state);
   }
 
   onRateChange(rate) {
     this.setState({ rate });
     this.calculateAmountOfHours();
+  }
+
+  parseUrlData(data) {
+    const arr = data.reduce((value, item) => {
+      const itemArr = [];
+      itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
+      return value.concat(itemArr);
+    }, []);
+
+    return arr;
+  }
+  embodiment(a, b) {
+    return a.reduce((prev, item, i) => prev + item[b[i]], 0);
   }
   render() {
     this.transformToVector();
@@ -123,7 +129,7 @@ export default class Main extends Component {
         </Col>
         <Col xs="12">
           <Calculation
-            hours={this.hours}
+            hours={this.state.hours}
             data={this.state.calculationData}
             rate={this.state.rate}
             onRateChange={this.onRateChange}
@@ -132,7 +138,7 @@ export default class Main extends Component {
         </Col>
         <Col xs="12">
           <FinalEstimate
-            hours={this.hours}
+            hours={this.state.hours}
             rate={this.state.rate}
             calculationData={this.state.calculationData}
             data={this.props.someProp}

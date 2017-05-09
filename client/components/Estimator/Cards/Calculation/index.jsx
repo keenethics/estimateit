@@ -11,8 +11,8 @@ export default class Calculation extends Component {
     this.onRateChange = this.onRateChange.bind(this);
   }
 
-  onDataChange(data) {
-    this.props.onCalculationChange(data);
+  onDataChange(calculationData, estimateFieldsAmount) {
+    this.props.onCalculationChange(calculationData, estimateFieldsAmount);
   }
 
   onRateChange(rate) {

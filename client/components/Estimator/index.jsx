@@ -9,35 +9,48 @@ export default class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tasksData: [],
+      tasks: [],
       parentTaskId: '',
       newTask: null,
     };
-    this.changeState = this.changeState.bind(this);
+    this.changeStateHeader = this.changeStateHeader.bind(this);
+    this.changeStateMain = this.changeStateMain.bind(this);
+
   }
   componentDidMount() {
-    if (!location.search) { location.search = '{"tasks":[],"parentTaskId":"","newTask":null}'; }
     if (location.search.length > 0) {
       const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-      this.setState({ tasksData: state.tasks });
+      this.setState({ tasks: state.tasks });
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     }
   }
-  changeState(data) {
-    this.setState({ tasksData: data });
+
+  changeStateHeader(e) {
+    this.setState({ tasks: e }, () => {
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+    });
+  }
+  changeStateMain(data) {
+    this.setState({ options: data }, () => {
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+    });
   }
 
   render() {
+    console.log('Estimator, ', this.state);
     return (
       <Container>
         <Card id="screen">
           <Col xs="12" md="12" lg="10" className={styles.estimator}>
             <Header
               className={styles.estimator__header}
-              onChangeState={this.changeState}
+              data={this.state.tasks}
+              onChangeState={this.changeStateHeader}
             />
             <Main
               className={styles.estimator__body}
-              someProp={this.state.tasksData}
+              onChangeState={this.changeStateMain}
+              someProp={this.state.tasks}
             />
           </Col>
         </Card>

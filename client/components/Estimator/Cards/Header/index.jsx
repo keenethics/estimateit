@@ -37,24 +37,27 @@ export default class Header extends Component {
     this.setState({
       [e.currentTarget.name]: e.currentTarget.value,
     }, () => {
-      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+      // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
   }
 
   onDateChange(dateString, { dateMoment, timestamp }) {
     if (dateString) {
       this.setState({ date: dateString }, () => {
-        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       });
     }
   }
 
 
   componentDidMount() {
-    if (!location.search) location.search = '{"tasks":[],"parentTaskId":null,"newTask":null}';
     if (location.search.length > 0) {
       const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
       this.setState(Object.assign({}, state));
+      this.state = {
+        tasks: this.props.data,
+      }
+      this.props.onChangeState(this.state.tasks);
     }
   }
 
@@ -142,7 +145,6 @@ export default class Header extends Component {
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
     this.setState({ tasks: newTasks }, () => {
-      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       this.props.onChangeState(newTasks);
     });
   }
@@ -220,12 +222,12 @@ export default class Header extends Component {
     this.setState({
       newTask,
     });
+    this.props.onChangeState(this.state.tasks);
   }
 
   deleteParentId(e) {
-    this.setState({ parentTaskId: null }, () => {
-      console.log(this.state.parentTaskId);
-    });
+    this.setState({ parentTaskId: null });
+    this.props.onChangeState(this.state.newTask);
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -273,9 +275,7 @@ export default class Header extends Component {
     const id = e.currentTarget.dataset.id;
     const tasks = this.state.tasks.slice();
     const newTasks = this.findTaskAndDelete(id, tasks);
-    this.setState({ tasks: newTasks }, () => {
-      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-    });
+    this.setState({ tasks: newTasks });
     this.props.onChangeState(newTasks);
   }
 
@@ -307,12 +307,15 @@ export default class Header extends Component {
     if (!parent) {
       newTasks = [...this.state.tasks, newTask];
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+        this.props.onChangeState(this.state.tasks);
+
       });
     } else {
       newTasks = this.insertTask(tasks, parent, newTask);
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+        this.props.onChangeState(this.state.tasks);
       });
     }
     this.props.onChangeState(newTasks);

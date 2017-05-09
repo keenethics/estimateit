@@ -5,42 +5,53 @@ import styles from './styles.scss';
 export default class EstimateOptions extends Component {
   constructor(props) {
     super(props);
-    this.estimateFields = {
-      qa: 10,
-      pm: 10,
-      bugFixes: 10,
-      risks: 10,
-      completing: 90,
-    };
-
-    this.estimateFieldsAmount = {};
-
-    this.rate = 25;
+    this.state = {
+      calculationData: {
+        qa: 10,
+        pm: 10,
+        bugFixes: 10,
+        risks: 10,
+        completing: 100,
+      },
+      estimateFieldsAmount: {
+        qa: 0,
+        pm: 0,
+        bugFixes: 0,
+        risks: 0,
+        completing: 0,
+      },
+      rate: 25,
+  };
     this.onRateChange = this.onRateChange.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
   }
 
+  componentDidMount() {
+    this.props.onDataChange(this.state.calculationData);
+    if (location.search.length > 0) {
+      const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
+      this.setState(Object.assign({}, state));
+    }
+  }
+
   onFieldChange(e) {
-    this.estimateFields[e.target.name] = parseInt(e.target.value);
-    this.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.estimateFields[e.target.name] / 100);
-    this.props.onDataChange(this.estimateFields);
+    this.state.calculationData[e.target.name] = parseInt(e.target.value);
+    this.state.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.state.calculationData[e.target.name] / 100);
+    this.props.onDataChange(this.state.calculationData, this.state.estimateFieldsAmount);
   }
 
   onRateChange(e) {
-    this.rate = e.target.value;
-    this.props.onRateChange(this.rate);
+    this.state.rate = e.target.value;
+    this.props.onRateChange(this.state.rate);
   }
 
-  componentDidMount() {
-    this.props.onDataChange(this.estimateFields);
-  }
   componentWillReceiveProps(nextProps) {
     if (this.props.hours === nextProps.hours) return;
-    this.estimateFieldsAmount.qa = Math.round(nextProps.hours * this.estimateFields.qa / 100);
-    this.estimateFieldsAmount.pm = Math.round(nextProps.hours * this.estimateFields.pm / 100);
-    this.estimateFieldsAmount.bugFixes = Math.round(nextProps.hours * this.estimateFields.bugFixes / 100);
-    this.estimateFieldsAmount.risks = Math.round(nextProps.hours * this.estimateFields.risks / 100);
-    this.estimateFieldsAmount.completing = Math.round(nextProps.hours * this.estimateFields.completing / 100);
+    this.state.estimateFieldsAmount.qa = Math.round(nextProps.hours * this.state.calculationData.qa / 100);
+    this.state.estimateFieldsAmount.pm = Math.round(nextProps.hours * this.state.calculationData.pm / 100);
+    this.state.estimateFieldsAmount.bugFixes = Math.round(nextProps.hours * this.state.calculationData.bugFixes / 100);
+    this.state.estimateFieldsAmount.risks = Math.round(nextProps.hours * this.state.calculationData.risks / 100);
+    this.state.estimateFieldsAmount.completing = Math.round(nextProps.hours * this.state.calculationData.completing / 100);
   }
 
   render() {
@@ -71,7 +82,7 @@ export default class EstimateOptions extends Component {
             onChange={this.onFieldChange}
             defaultValue="10"
           />
-          <InputGroupAddon>{this.estimateFields.qa}%, {this.estimateFieldsAmount.qa} h</InputGroupAddon>
+          <InputGroupAddon>{this.state.calculationData.qa}%, {this.state.estimateFieldsAmount.qa} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>PM </InputGroupAddon>
@@ -85,7 +96,7 @@ export default class EstimateOptions extends Component {
             onChange={this.onFieldChange}
             defaultValue="10"
           />
-          <InputGroupAddon>{this.estimateFields.pm}%, {this.estimateFieldsAmount.pm} h</InputGroupAddon>
+          <InputGroupAddon>{this.state.calculationData.pm}%, {this.state.estimateFieldsAmount.pm} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>Bug Fixes</InputGroupAddon>
@@ -99,7 +110,7 @@ export default class EstimateOptions extends Component {
             onChange={this.onFieldChange}
             defaultValue="10"
           />
-          <InputGroupAddon>{this.estimateFields.bugFixes}%, {this.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
+          <InputGroupAddon>{this.state.calculationData.bugFixes}%, {this.state.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>Risks</InputGroupAddon>
@@ -113,7 +124,7 @@ export default class EstimateOptions extends Component {
             onChange={this.onFieldChange}
             defaultValue="10"
           />
-          <InputGroupAddon>{this.estimateFields.risks}%, {this.estimateFieldsAmount.risks} h</InputGroupAddon>
+          <InputGroupAddon>{this.state.calculationData.risks}%, {this.state.estimateFieldsAmount.risks} h</InputGroupAddon>
         </InputGroup>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>Probability </InputGroupAddon>
@@ -127,7 +138,7 @@ export default class EstimateOptions extends Component {
             onChange={this.onFieldChange}
             defaultValue="90"
           />
-          <InputGroupAddon>{this.estimateFields.completing}%, {this.estimateFieldsAmount.completing} h</InputGroupAddon>
+          <InputGroupAddon>{this.state.calculationData.completing}%, {this.state.estimateFieldsAmount.completing} h</InputGroupAddon>
         </InputGroup>
       </div>
     );
