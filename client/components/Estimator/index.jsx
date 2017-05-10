@@ -10,30 +10,38 @@ export default class App extends Component {
     super(props);
     this.state = {
       tasks: [],
-      parentTaskId: '',
-      newTask: null,
+
     };
-    this.changeStateHeader = this.changeStateHeader.bind(this);
+    this.changeStateHeaderTasks = this.changeStateHeaderTasks.bind(this);
+    this.changeStateHeaderOptions = this.changeStateHeaderOptions.bind(this);
     this.changeStateMain = this.changeStateMain.bind(this);
 
   }
   componentDidMount() {
     if (location.search.length > 0) {
       const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-      this.setState({ tasks: state.tasks });
-      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+      this.setState( state, () => {
+        history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+      });
     }
   }
 
-  changeStateHeader(e) {
+  changeStateHeaderTasks(e) {
     this.setState({ tasks: e }, () => {
       history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
   }
+  changeStateHeaderOptions(e) {
+    this.setState({ infoCollector: e }, () => {
+      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
+    });
+  }
+
   changeStateMain(data) {
     this.setState({ options: data }, () => {
       history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
     });
+
   }
 
   render() {
@@ -45,7 +53,9 @@ export default class App extends Component {
             <Header
               className={styles.estimator__header}
               data={this.state.tasks}
-              onChangeState={this.changeStateHeader}
+              additional={this.state.infoCollector}
+              onChangeStateOptions={this.changeStateHeaderOptions}
+              onChangeStateTasks={this.changeStateHeaderTasks}
             />
             <Main
               className={styles.estimator__body}

@@ -49,8 +49,6 @@ export default class Main extends Component {
     });
   }
 
-
-
   transformToVector() {
     const tasksHours = this.parseUrlData(this.props.someProp);
     const vector = new DiscreteVector(tasksHours);
@@ -62,6 +60,7 @@ export default class Main extends Component {
     this.calcDeveloperHours(tasksHours);
     this.calculateAmountOfHours();
   }
+
   calcDeveloperHours(data) {
     this.devHours = data.reduce((acc, value) => ({
       minHours: acc.minHours += +value[1],
@@ -89,8 +88,10 @@ export default class Main extends Component {
   }
 
   onRateChange(rate) {
-    this.setState({ rate });
-    this.calculateAmountOfHours();
+    this.setState({ rate }, () => {
+      this.calculateAmountOfHours();
+      this.props.onChangeState(this.state);
+    });
   }
 
   parseUrlData(data) {
@@ -102,9 +103,11 @@ export default class Main extends Component {
 
     return arr;
   }
+
   embodiment(a, b) {
     return a.reduce((prev, item, i) => prev + item[b[i]], 0);
   }
+
   render() {
     this.transformToVector();
     return (

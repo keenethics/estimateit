@@ -11,7 +11,13 @@ export default class Header extends Component {
     this.state = {
       tasks: [],
       parentTaskId: '',
+      infoCollector: {
+        clientName: '',
+        projectName: '',
+        sprintNumber: '',
+      },
     };
+
     this.onDateChange = this.onDateChange.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
     this.addTask = this.addTask.bind(this);
@@ -27,37 +33,39 @@ export default class Header extends Component {
     this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
 
+  componentDidMount() {
+    // if (location.search.length > 0) {
+      // if (location.href === `${location.origin}/`) return;
+      // const loc = decodeURIComponent(location.href);
+      // const state = JSON.parse(loc.split('?').pop());
+      // this.setState(Object.assign({}, state));
+      // this.state = {
+      //   tasks: this.props.data,
+      //   infoCollector: this.props.additional,
+      // };
+      // this.props.onChangeStateTasks(this.state.tasks);
+    // }
+    this.setState({
+      tasks: this.props.data,
+      infoCollector: this.props.additional,
+    });
+  }
+
   componentWillUpdate(nextProps, nextState) {
     if (nextState.date !== this.state.date) {
       this.datefield.setValue(nextState.date);
     }
+    this.state = {
+      tasks: this.props.data,
+      infoCollector: this.props.additional,
+    };
   }
 
-  headerInfoCollector(e) {
-    this.setState({
-      [e.currentTarget.name]: e.currentTarget.value,
-    }, () => {
-      // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-    });
-  }
-
-  onDateChange(dateString, { dateMoment, timestamp }) {
+  onDateChange(dateString) {
     if (dateString) {
       this.setState({ date: dateString }, () => {
         // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
       });
-    }
-  }
-
-
-  componentDidMount() {
-    if (location.search.length > 0) {
-      const state = JSON.parse(decodeURIComponent(location.search.slice(1)));
-      this.setState(Object.assign({}, state));
-      this.state = {
-        tasks: this.props.data,
-      }
-      this.props.onChangeState(this.state.tasks);
     }
   }
 
@@ -145,13 +153,21 @@ export default class Header extends Component {
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
     this.setState({ tasks: newTasks }, () => {
-      this.props.onChangeState(newTasks);
+      this.props.onChangeStateTasks(newTasks);
     });
   }
 
   setParentId(e) {
     const id = e.currentTarget.dataset.id;
     this.setState({ parentTaskId: id });
+  }
+
+  headerInfoCollector(e) {
+    const infoCollector = this.state.infoCollector || {};
+    infoCollector[e.currentTarget.name] = e.currentTarget.value;
+    this.setState({ infoCollector }, () => {
+      this.props.onChangeStateOptions(this.state.infoCollector);
+    });
   }
 
   renderTasks(tasks, iterator) {
@@ -222,12 +238,12 @@ export default class Header extends Component {
     this.setState({
       newTask,
     });
-    this.props.onChangeState(this.state.tasks);
+    this.props.onChangeStateTasks(this.state.tasks);
   }
 
   deleteParentId(e) {
     this.setState({ parentTaskId: null });
-    this.props.onChangeState(this.state.newTask);
+    this.props.onChangeStateTasks(this.state.newTask);
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -276,7 +292,7 @@ export default class Header extends Component {
     const tasks = this.state.tasks.slice();
     const newTasks = this.findTaskAndDelete(id, tasks);
     this.setState({ tasks: newTasks });
-    this.props.onChangeState(newTasks);
+    this.props.onChangeStateTasks(newTasks);
   }
 
   insertTask(tasks, id, newTask) {
@@ -307,18 +323,15 @@ export default class Header extends Component {
     if (!parent) {
       newTasks = [...this.state.tasks, newTask];
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-        this.props.onChangeState(this.state.tasks);
-
+        this.props.onChangeStateTasks(this.state.tasks);
       });
     } else {
       newTasks = this.insertTask(tasks, parent, newTask);
       this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-        this.props.onChangeState(this.state.tasks);
+        this.props.onChangeStateTasks(this.state.tasks);
       });
     }
-    this.props.onChangeState(newTasks);
+    this.props.onChangeStateTasks(newTasks);
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
     this.calculateHours();
   }
@@ -368,7 +381,7 @@ export default class Header extends Component {
                   ref={(dateField) => {
                     this.datefield = dateField;
                   }}
-                  onChange={this.onDateChange}
+                  onChange={this.headerInfoCollector}
                   placeholder="Date:"
                   className={styles.right__group_item}
                 />
@@ -376,11 +389,11 @@ export default class Header extends Component {
               <FormGroup className={styles.right__group}>
                 <Input
                   name="clientName"
-                  value={this.state.clientName}
+                  // value={this.state.infoCollector.clientName}
                   type="text"
                   id="clientName"
                   className={styles.right__group_item}
-                  onChange={this.headerInfoCollector}
+                  onBlur={this.headerInfoCollector}
                   placeholder="Client name:"
                 />
               </FormGroup>
@@ -389,9 +402,9 @@ export default class Header extends Component {
                   type="text"
                   id="projectName"
                   name="projectName"
-                  value={this.state.projectName}
+                  // value={this.state.infoCollector.projectName}
                   className={styles.right__group_item}
-                  onChange={this.headerInfoCollector}
+                  onBlur={this.headerInfoCollector}
                   placeholder="Project name:"
                 />
               </FormGroup>
@@ -400,9 +413,9 @@ export default class Header extends Component {
                   type="number"
                   id="sprintNumber"
                   name="sprintNumber"
-                  value={this.state.sprintNumber}
+                  // value={this.state.infoCollector.sprintNumber}
                   className={styles.right__group_item}
-                  onChange={this.headerInfoCollector}
+                  onBlur={this.headerInfoCollector}
                   placeholder="Sprint:"
                 />
               </FormGroup>
