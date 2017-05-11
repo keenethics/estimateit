@@ -5,7 +5,7 @@ import Main from './Cards/Main';
 import styles from './styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
-export default class App extends Component {
+export default class Root extends Component {
   constructor(props) {
     super(props);
     this.state = {
