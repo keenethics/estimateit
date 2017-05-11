@@ -39,18 +39,18 @@ export default class Main extends Component {
     this.parseUrlData = this.parseUrlData.bind(this);
   }
 
-  componentDidMount() {
-    if (location.href === `${location.origin}/`) return;
-    const loc = decodeURIComponent(location.href);
-    const state = JSON.parse(loc.split('?').pop());
-    const hoursArr = this.parseUrlData(state.tasks);
-    this.setState({ hoursArr }, () => {
-      this.calculateAmountOfHours();
-    });
-  }
+  // componentDidMount() {
+  //   if (location.href === `${location.origin}/`) return;
+  //   const loc = decodeURIComponent(location.href);
+  //   const state = JSON.parse(loc.split('?').pop());
+  //   const hoursArr = this.parseUrlData(state.tasks);
+  //   this.setState({ hoursArr }, () => {
+  //     this.calculateAmountOfHours();
+  //   });
+  // }
 
   transformToVector() {
-    const tasksHours = this.parseUrlData(this.props.someProp);
+    const tasksHours = this.parseUrlData();
     const vector = new DiscreteVector(tasksHours);
     this.T = vector.combinations < 1000 ?
       Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b) :
@@ -69,16 +69,16 @@ export default class Main extends Component {
   }
 
   calculateAmountOfHours() {
-      const percent = this.state.calculationData.completing;
-      let highestIndex = this.data.findIndex(item => item > percent);
-      if (highestIndex === -1) {
-        highestIndex = this.data.length - 1;
-      }
-      const hours = this.labels[highestIndex];
-      const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
+    const percent = this.state.calculationData.completing;
+    let highestIndex = this.data.findIndex(item => item > percent);
+    if (highestIndex === -1) {
+      highestIndex = this.data.length - 1;
+    }
+    const hours = this.labels[highestIndex];
+    const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
         this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
-      const totalHours = Math.round(hours + additionalHourse);
-      this.state.hours = totalHours;
+    const totalHours = Math.round(hours + additionalHourse);
+    this.state.hours = totalHours;
   }
 
   onCalculationChange(calculationData, estimateFieldsAmount) {
@@ -95,6 +95,8 @@ export default class Main extends Component {
   }
 
   parseUrlData(data) {
+    // TODO: remove hardcode data;
+    data = [{ minimumHours: 123, maximumHours: 1233 }];
     const arr = data.reduce((value, item) => {
       const itemArr = [];
       itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);

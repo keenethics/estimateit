@@ -1,15 +1,15 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createBrowserHistory } from 'history';
+import { browserHistory } from 'react-router';
 import { AppContainer } from 'react-hot-loader';
-import Root from './components/Estimator';
+import Root from './components/Estimator/Root';
 
 import configureStore from './store/index';
 require('./favicon.ico');
 import { syncHistoryWithStore } from 'react-router-redux';
 
 const store = configureStore();
-const history = syncHistoryWithStore(createBrowserHistory(), store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 render(
   <AppContainer>
@@ -19,8 +19,8 @@ render(
 );
 
 if (module.hot) {
-  module.hot.accept('./components/Estimator', () => {
-    const NewRoot = require('./components/Estimator').default;
+  module.hot.accept('./components/Estimator/Root', () => {
+    const NewRoot = require('./components/Estimator/Root').default;
     render(
       <AppContainer>
         <NewRoot store={store} history={history} />

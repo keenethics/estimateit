@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import fuelSavings from './tasks';
+import estimator from './tasks';
 
 const rootReducer = combineReducers({
-  fuelSavings,
+  estimator,
   routing: routerReducer,
 });
 

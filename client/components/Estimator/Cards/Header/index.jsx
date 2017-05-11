@@ -33,33 +33,33 @@ export default class Header extends Component {
     this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
 
-  componentDidMount() {
-    // if (location.search.length > 0) {
-      // if (location.href === `${location.origin}/`) return;
-      // const loc = decodeURIComponent(location.href);
-      // const state = JSON.parse(loc.split('?').pop());
-      // this.setState(Object.assign({}, state));
-      // this.state = {
-      //   tasks: this.props.data,
-      //   infoCollector: this.props.additional,
-      // };
-      // this.props.onChangeStateTasks(this.state.tasks);
-    // }
-    this.setState({
-      tasks: this.props.data,
-      infoCollector: this.props.additional,
-    });
-  }
-
-  componentWillUpdate(nextProps, nextState) {
-    if (nextState.date !== this.state.date) {
-      this.datefield.setValue(nextState.date);
-    }
-    this.state = {
-      tasks: this.props.data,
-      infoCollector: this.props.additional,
-    };
-  }
+  // componentDidMount() {
+  //   // if (location.search.length > 0) {
+  //     // if (location.href === `${location.origin}/`) return;
+  //     // const loc = decodeURIComponent(location.href);
+  //     // const state = JSON.parse(loc.split('?').pop());
+  //     // this.setState(Object.assign({}, state));
+  //     // this.state = {
+  //     //   tasks: this.props.data,
+  //     //   infoCollector: this.props.additional,
+  //     // };
+  //     // this.props.onChangeStateTasks(this.state.tasks);
+  //   // }
+  //   this.setState({
+  //     tasks: this.props.data,
+  //     infoCollector: this.props.additional,
+  //   });
+  // }
+  //
+  // componentWillUpdate(nextProps, nextState) {
+  //   if (nextState.date !== this.state.date) {
+  //     this.datefield.setValue(nextState.date);
+  //   }
+  //   this.state = {
+  //     tasks: this.props.data,
+  //     infoCollector: this.props.additional,
+  //   };
+  // }
 
   onDateChange(dateString) {
     if (dateString) {

@@ -3,7 +3,7 @@ import {SAVE_FUEL_SAVINGS, CALCULATE_FUEL_SAVINGS} from '../constants/actionType
 import objectAssign from 'object-assign';
 import initialState from './initialState';
 
-export default function fuelSavingsReducer(state = initialState.fuelSavings, action) {
+export default function fuelSavingsReducer(state = initialState.estimator, action) {
   let newState;
 
   switch (action.type) {
