@@ -15,11 +15,20 @@ export function addNewSubTask(parent, subtask) {
   return {
     type: types.ADD_NEW_SUBTASK,
     payload: {
-      parent: parent,
+      parent,
       id: subtask.id,
       taskName: subtask.taskName,
       minimumHours: subtask.minimumHours,
       maximumHours: subtask.maximumHours,
+    },
+  };
+}
+
+export function removeTask(id) {
+  return {
+    type: types.REMOVE_TASK,
+    payload: {
+      id,
     },
   };
 }

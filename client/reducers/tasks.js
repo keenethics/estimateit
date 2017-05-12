@@ -1,4 +1,4 @@
-import { ADD_NEW_TASK, ADD_NEW_SUBTASK } from '../constants/actionTypes';
+import { ADD_NEW_TASK, ADD_NEW_SUBTASK, REMOVE_TASK } from '../constants/actionTypes';
 import initialState from './initialState';
 
 function insertSubTask(tasks, id, newTask) {
@@ -11,7 +11,22 @@ function insertSubTask(tasks, id, newTask) {
     }
     element.tasks = insertSubTask(element.tasks, id, newTask);
     return element;
-  }).filter(t => t);
+  });
+}
+
+function findTaskAndDelete(state, id) {
+  return state.filter((element) => {
+    if (element.id === id) {
+      return false;
+    }
+    if (element.tasks && element.tasks.length > 0) {
+      element.tasks = findTaskAndDelete(element.tasks, id);
+      if (!element.tasks.length) {
+        delete element.tasks;
+      }
+      return true;
+    }
+  });
 }
 
 export default function fuelSavingsReducer(state = initialState.estimator, action) {
@@ -21,8 +36,13 @@ export default function fuelSavingsReducer(state = initialState.estimator, actio
         ...state,
         action.payload,
       ];
+
     case ADD_NEW_SUBTASK:
       return insertSubTask(state, action.payload.parent, action.payload);
+
+    case REMOVE_TASK:
+      return findTaskAndDelete(state, action.payload.id);
+
     default:
       return state;
   }

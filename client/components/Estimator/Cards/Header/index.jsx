@@ -28,7 +28,7 @@ export default class Header extends Component {
     this.findTaskAndModify = this.findTaskAndModify.bind(this);
     this.findTaskAndDelete = this.findTaskAndDelete.bind(this);
     this.deleteParentId = this.deleteParentId.bind(this);
-    this.insertTask = this.insertTask.bind(this);
+    // this.insertTask = this.insertTask.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
@@ -274,12 +274,13 @@ export default class Header extends Component {
 
   deleteTask(e) {
     const id = e.currentTarget.dataset.id;
-    const tasks = this.state.tasks.slice();
-    const newTasks = this.findTaskAndDelete(id, tasks);
-    this.setState({ tasks: newTasks });
+    this.props.removeTask(id);
+    // const tasks = this.state.tasks.slice();
+    // const newTasks = this.findTaskAndDelete(id, tasks);
+    // this.setState({ tasks: newTasks });
   }
 
-/*  insertTask(tasks, id, newTask) {
+/* insertTask(tasks, id, newTask) {
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
         if (tasks[i].tasks && tasks[i].tasks.length) {

@@ -1,8 +1,6 @@
 export default {
   estimator: [
-  ],
-};
-
+]}
 // {
 //   tasks: [],
 //     parentTaskId: '',
