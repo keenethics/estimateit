@@ -8,7 +8,7 @@ function configureStoreProd(initialState) {
 
 function configureStoreDev(initialState) {
   const middlewares = [
-    reduxImmutableStateInvariant(),
+    // reduxImmutableStateInvariant(),
   ];
   const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
   const store = createStore(rootReducer, initialState, composeEnhancers(

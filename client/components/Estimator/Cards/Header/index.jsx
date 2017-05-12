@@ -279,7 +279,7 @@ export default class Header extends Component {
     this.setState({ tasks: newTasks });
   }
 
-  insertTask(tasks, id, newTask) {
+/*  insertTask(tasks, id, newTask) {
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i].id == id) {
         if (tasks[i].tasks && tasks[i].tasks.length) {
@@ -294,7 +294,7 @@ export default class Header extends Component {
       if (tasks[i].tasks && tasks[i].tasks.length) this.insertTask(tasks[i].tasks, id, newTask);
     }
     return tasks;
-  }
+  }*/
 
   preAddTask(e) {
     const newTask = this.state.newTask || {};
@@ -318,9 +318,9 @@ export default class Header extends Component {
       this.props.addNewTask(newTask);
       // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
     } else {
-      newTasks = this.insertTask(tasks, parent, newTask);
-      // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
-      this.props.addNewTask(newTasks);
+      // newTasks = this.insertTask(tasks, parent, newTask);
+      // // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
+      this.props.addNewSubTask(parent, newTask);
     }
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
     this.calculateHours();
