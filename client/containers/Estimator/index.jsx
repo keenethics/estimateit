@@ -12,7 +12,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 export const App = (props) => {
   const { estimator } = props;
-  const { addNewTask, addNewSubTask, removeTask } = props.actions;
+  const {
+    addNewTask,
+    addNewSubTask,
+    removeTask,
+    findTaskAndModify,
+  } = props.actions;
   return (
     <Container>
       <Card id="screen">
@@ -22,6 +27,7 @@ export const App = (props) => {
             addNewTask={addNewTask}
             addNewSubTask={addNewSubTask}
             removeTask={removeTask}
+            findTaskAndModify={findTaskAndModify}
             tasks={estimator}
           />
           <Main

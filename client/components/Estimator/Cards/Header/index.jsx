@@ -5,6 +5,8 @@ import shortid from 'shortid';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
+// TODO: Add props validation
+// TODO: change local state on redux in 158 line
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -17,7 +19,6 @@ export default class Header extends Component {
         sprintNumber: '',
       },
     };
-
     this.onDateChange = this.onDateChange.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
     this.addTask = this.addTask.bind(this);
@@ -25,41 +26,10 @@ export default class Header extends Component {
     this.onEditTask = this.onEditTask.bind(this);
     this.setParentId = this.setParentId.bind(this);
     this.preAddTask = this.preAddTask.bind(this);
-    this.findTaskAndModify = this.findTaskAndModify.bind(this);
-    this.findTaskAndDelete = this.findTaskAndDelete.bind(this);
     this.deleteParentId = this.deleteParentId.bind(this);
-    // this.insertTask = this.insertTask.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
-
-  // componentDidMount() {
-  //   // if (location.search.length > 0) {
-  //     // if (location.href === `${location.origin}/`) return;
-  //     // const loc = decodeURIComponent(location.href);
-  //     // const state = JSON.parse(loc.split('?').pop());
-  //     // this.setState(Object.assign({}, state));
-  //     // this.state = {
-  //     //   tasks: this.props.data,
-  //     //   infoCollector: this.props.additional,
-  //     // };
-  //     // this.props.onChangeStateTasks(this.state.tasks);
-  //   // }
-  //   this.setState({
-  //     tasks: this.props.data,
-  //     infoCollector: this.props.additional,
-  //   });
-  // }
-  //
-  // componentWillUpdate(nextProps, nextState) {
-  //   if (nextState.date !== this.state.date) {
-  //     this.datefield.setValue(nextState.date);
-  //   }
-  //   this.state = {
-  //     tasks: this.props.data,
-  //     infoCollector: this.props.additional,
-  //   };
-  // }
 
   onDateChange(dateString) {
     if (dateString) {
@@ -67,34 +37,16 @@ export default class Header extends Component {
     }
   }
 
-  findTaskAndModify(tasks, id, name, value) {
-    let parentTaskId;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].id == id) {
-        tasks[i][name] = value;
-        parentTaskId = tasks[i].parentTaskId;
-        this.calculateHours(parentTaskId);
-        break;
-      }
-      if (tasks[i].tasks && tasks[i].tasks.length) this.findTaskAndModify(tasks[i].tasks, id, name, value);
-    }
-    return tasks;
+  onEditTask(e) {
+    const id = e.currentTarget.dataset.id;
+    const name = e.currentTarget.name;
+    const value = e.currentTarget.value;
+    this.props.findTaskAndModify(id, name, value);
   }
 
-  findTaskAndDelete(id, tasks) {
-    let parentTaskId;
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].id == id) {
-        parentTaskId = tasks[i].parentTaskId;
-        tasks.splice(i, 1);
-        this.calculateHours(parentTaskId);
-        break;
-      }
-      if (tasks[i].tasks && tasks[i].tasks.length > 0) {
-        this.findTaskAndDelete(id, tasks[i].tasks);
-      }
-    }
-    return tasks;
+  setParentId(e) {
+    const id = e.currentTarget.dataset.id;
+    this.setState({ parentTaskId: id });
   }
 
   calculateHours(parentTaskId) {
@@ -140,22 +92,6 @@ export default class Header extends Component {
     };
     const par = findHighest(tasks, parentTaskId);
     sumMin(par);
-  }
-
-
-  onEditTask(e) {
-    const id = e.currentTarget.dataset.id;
-    const name = e.currentTarget.name;
-    const value = e.currentTarget.value;
-
-    const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
-
-    this.setState({ tasks: newTasks });
-  }
-
-  setParentId(e) {
-    const id = e.currentTarget.dataset.id;
-    this.setState({ parentTaskId: id });
   }
 
   headerInfoCollector(e) {
@@ -225,10 +161,8 @@ export default class Header extends Component {
     );
   }
 
-
   deleteParentId(e) {
     this.setState({ parentTaskId: null });
-    // this.props.onChangeStateTasks(this.state.newTask);
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -275,27 +209,7 @@ export default class Header extends Component {
   deleteTask(e) {
     const id = e.currentTarget.dataset.id;
     this.props.removeTask(id);
-    // const tasks = this.state.tasks.slice();
-    // const newTasks = this.findTaskAndDelete(id, tasks);
-    // this.setState({ tasks: newTasks });
   }
-
-/* insertTask(tasks, id, newTask) {
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasks[i].id == id) {
-        if (tasks[i].tasks && tasks[i].tasks.length) {
-          tasks[i].tasks.push(newTask);
-          break;
-        } else {
-          tasks[i].tasks = [];
-          tasks[i].tasks.push(newTask);
-          break;
-        }
-      }
-      if (tasks[i].tasks && tasks[i].tasks.length) this.insertTask(tasks[i].tasks, id, newTask);
-    }
-    return tasks;
-  }*/
 
   preAddTask(e) {
     const newTask = this.state.newTask || {};
@@ -306,21 +220,15 @@ export default class Header extends Component {
     });
   }
 
-
   addTask(e) {
     const parent = e.currentTarget.parentNode.dataset.parentid;
     const newTask = this.state.newTask;
     newTask.id = shortid.generate();
     newTask.minimumHours = newTask.minimumHours || 0;
     newTask.maximumHours = newTask.maximumHours || 0;
-    const tasks = this.props.tasks.slice();
-    let newTasks = [];
     if (!parent) {
       this.props.addNewTask(newTask);
-      // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
     } else {
-      // newTasks = this.insertTask(tasks, parent, newTask);
-      // // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
       this.props.addNewSubTask(parent, newTask);
     }
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');

@@ -33,3 +33,15 @@ export function removeTask(id) {
   };
 }
 
+export function findTaskAndModify(id, name, value) {
+  return {
+    type: types.MODIFY_TASK,
+    payload: {
+      id,
+      name,
+      value,
+    },
+  };
+}
+
+

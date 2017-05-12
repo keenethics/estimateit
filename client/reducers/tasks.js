@@ -1,4 +1,4 @@
-import { ADD_NEW_TASK, ADD_NEW_SUBTASK, REMOVE_TASK } from '../constants/actionTypes';
+import { ADD_NEW_TASK, ADD_NEW_SUBTASK, REMOVE_TASK, MODIFY_TASK } from '../constants/actionTypes';
 import initialState from './initialState';
 
 function insertSubTask(tasks, id, newTask) {
@@ -19,7 +19,7 @@ function findTaskAndDelete(state, id) {
     if (element.id === id) {
       return false;
     }
-    if (element.tasks && element.tasks.length > 0) {
+    if (element.tasks && element.tasks.length) {
       element.tasks = findTaskAndDelete(element.tasks, id);
       if (!element.tasks.length) {
         delete element.tasks;
@@ -27,6 +27,15 @@ function findTaskAndDelete(state, id) {
       return true;
     }
     return true;
+  });
+}
+
+function findTaskAndModify(tasks, id, name, value) {
+  return tasks.map((element) => {
+    if (element.id === id) {
+      return { ...element, [name]: value };
+    }
+    insertSubTask(element.tasks, id, name, value);
   });
 }
 
@@ -43,6 +52,10 @@ export default function estimatorTasks(state = initialState.estimator, action) {
 
     case REMOVE_TASK:
       return findTaskAndDelete(state, action.payload.id);
+
+    case MODIFY_TASK:
+      const { id, name, value } = action.payload;
+      return findTaskAndModify(state, id, name, value);
 
     default:
       return state;
