@@ -1,10 +1,13 @@
 import * as types from '../constants/actionTypes';
 
-export function saveFuelSavings(settings) {
-  return function (dispatch) {
-    return dispatch({
-      type: types.SAVE_FUEL_SAVINGS,
-      settings,
-    });
+export function addNewTask(task) {
+  return {
+    type: types.ADD_NEW_TASK,
+    payload: {
+      id: task.id,
+      taskName: task.taskName,
+      minimumHours: task.minimumHours,
+      maximumHours: task.maximumHours,
+    },
   };
 }

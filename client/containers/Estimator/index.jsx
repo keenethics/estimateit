@@ -11,12 +11,16 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 export const App = (props) => {
+  const { estimator } = props;
+  const { addNewTask } = props.actions;
   return (
     <Container>
       <Card id="screen">
         <Col xs="12" md="12" lg="10" className={styles.estimator}>
           <Header
             className={styles.estimator__header}
+            addNewTask={addNewTask}
+            tasks={estimator}
           />
           <Main
             className={styles.estimator__body}

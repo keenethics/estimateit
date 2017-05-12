@@ -34,6 +34,7 @@
     "react-router-redux": "4.0.7",
     "reactstrap": "^4.5.0",
     "redux": "^3.6.0",
+    "redux-immutable-state-invariant": "^2.0.0",
     "shortid": "^2.2.8"
   },
   "devDependencies": {

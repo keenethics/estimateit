@@ -63,9 +63,7 @@ export default class Header extends Component {
 
   onDateChange(dateString) {
     if (dateString) {
-      this.setState({ date: dateString }, () => {
-        // history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-      });
+      this.setState({ date: dateString });
     }
   }
 
@@ -152,9 +150,7 @@ export default class Header extends Component {
 
     const newTasks = this.findTaskAndModify(this.state.tasks.slice(), id, name, value);
 
-    this.setState({ tasks: newTasks }, () => {
-      this.props.onChangeStateTasks(newTasks);
-    });
+    this.setState({ tasks: newTasks });
   }
 
   setParentId(e) {
@@ -165,9 +161,7 @@ export default class Header extends Component {
   headerInfoCollector(e) {
     const infoCollector = this.state.infoCollector || {};
     infoCollector[e.currentTarget.name] = e.currentTarget.value;
-    this.setState({ infoCollector }, () => {
-      this.props.onChangeStateOptions(this.state.infoCollector);
-    });
+    this.setState({ infoCollector });
   }
 
   renderTasks(tasks, iterator) {
@@ -231,19 +225,10 @@ export default class Header extends Component {
     );
   }
 
-  preAddTask(e) {
-    const newTask = this.state.newTask || {};
-    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
-    newTask.parentTaskId = e.currentTarget.dataset.parentid;
-    this.setState({
-      newTask,
-    });
-    this.props.onChangeStateTasks(this.state.tasks);
-  }
 
   deleteParentId(e) {
     this.setState({ parentTaskId: null });
-    this.props.onChangeStateTasks(this.state.newTask);
+    // this.props.onChangeStateTasks(this.state.newTask);
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -292,7 +277,6 @@ export default class Header extends Component {
     const tasks = this.state.tasks.slice();
     const newTasks = this.findTaskAndDelete(id, tasks);
     this.setState({ tasks: newTasks });
-    this.props.onChangeStateTasks(newTasks);
   }
 
   insertTask(tasks, id, newTask) {
@@ -312,26 +296,32 @@ export default class Header extends Component {
     return tasks;
   }
 
+  preAddTask(e) {
+    const newTask = this.state.newTask || {};
+    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
+    newTask.parentTaskId = e.currentTarget.dataset.parentid;
+    this.setState({
+      newTask,
+    });
+  }
+
+
   addTask(e) {
     const parent = e.currentTarget.parentNode.dataset.parentid;
     const newTask = this.state.newTask;
     newTask.id = shortid.generate();
     newTask.minimumHours = newTask.minimumHours || 0;
     newTask.maximumHours = newTask.maximumHours || 0;
-    const tasks = this.state.tasks.slice();
+    const tasks = this.props.tasks.slice();
     let newTasks = [];
     if (!parent) {
-      newTasks = [...this.state.tasks, newTask];
-      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        this.props.onChangeStateTasks(this.state.tasks);
-      });
+      this.props.addNewTask(newTask);
+      // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
     } else {
       newTasks = this.insertTask(tasks, parent, newTask);
-      this.setState({ tasks: newTasks, parentTaskId: '', newTask: null }, () => {
-        this.props.onChangeStateTasks(this.state.tasks);
-      });
+      // this.setState({ tasks: newTasks, parentTaskId: '', newTask: null });
+      this.props.addNewTask(newTasks);
     }
-    this.props.onChangeStateTasks(newTasks);
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
     this.calculateHours();
   }
@@ -347,7 +337,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const tasks = this.state.tasks;
+    const tasks = this.props.tasks;
     return (
       <div>
         <Row className={styles.header}>

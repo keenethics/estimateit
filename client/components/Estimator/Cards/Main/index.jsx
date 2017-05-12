@@ -84,13 +84,11 @@ export default class Main extends Component {
   onCalculationChange(calculationData, estimateFieldsAmount) {
     this.setState({ calculationData, estimateFieldsAmount });
     this.calculateAmountOfHours();
-    this.props.onChangeState(this.state);
   }
 
   onRateChange(rate) {
     this.setState({ rate }, () => {
       this.calculateAmountOfHours();
-      this.props.onChangeState(this.state);
     });
   }
 

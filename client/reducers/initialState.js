@@ -1,11 +1,13 @@
 export default {
-  estimator: {
-    tasks: [],
-    parentTaskId: '',
-    infoCollector: {
-      clientName: '',
-      projectName: '',
-      sprintNumber: '',
-    },
-  },
+  estimator: [],
 };
+
+// {
+//   tasks: [],
+//     parentTaskId: '',
+//   infoCollector: {
+//   clientName: '',
+//     projectName: '',
+//     sprintNumber: '',
+// },
+// },
