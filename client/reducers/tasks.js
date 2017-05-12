@@ -9,7 +9,7 @@ function insertSubTask(tasks, id, newTask) {
       }
       return { ...element, tasks: [newTask] };
     }
-    element.tasks = insertSubTask(element.tasks, id, newTask);
+    insertSubTask(element.tasks, id, newTask);
     return element;
   });
 }
@@ -26,10 +26,11 @@ function findTaskAndDelete(state, id) {
       }
       return true;
     }
+    return true;
   });
 }
 
-export default function fuelSavingsReducer(state = initialState.estimator, action) {
+export default function estimatorTasks(state = initialState.estimator, action) {
   switch (action.type) {
     case ADD_NEW_TASK:
       return [
