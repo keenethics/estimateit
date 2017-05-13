@@ -4,15 +4,15 @@ import { bindActionCreators } from 'redux';
 import { Container, Col, Card } from 'reactstrap';
 import * as tasks from '../../actions/tasks';
 import * as additionalHeader from '../../actions/headerAdditional';
+import * as parentTaskId from '../../actions/parentTaskId';
 
 import Header from '../../components/Estimator/Cards/Header';
 import Main from '../../components/Estimator/Cards/Main';
 import styles from '../../components/Estimator/styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
 export const App = (props) => {
-  const { estimator } = props;
+  const { estimator, parentId } = props;
   const {
     addNewClientData,
   } = props.additionalHeader;
@@ -22,6 +22,10 @@ export const App = (props) => {
     removeTask,
     findTaskAndModify,
   } = props.tasks;
+  const {
+    setParentTaskId,
+    removeParentTaskId,
+  } = props.parentTaskId;
   return (
     <Container>
       <Card id="screen">
@@ -31,9 +35,12 @@ export const App = (props) => {
             addNewClientData={addNewClientData}
             addNewTask={addNewTask}
             addNewSubTask={addNewSubTask}
+            setParentTaskId={setParentTaskId}
+            removeParentTaskId={removeParentTaskId}
             removeTask={removeTask}
             findTaskAndModify={findTaskAndModify}
             tasks={estimator}
+            parentId={parentId}
           />
           <Main
             className={styles.estimator__body}
@@ -47,6 +54,7 @@ export const App = (props) => {
 function mapStateToProps(state) {
   return {
     estimator: state.tasks,
+    parentId: state.parentTaskId,
   };
 }
 
@@ -54,6 +62,7 @@ function mapDispatchToProps(dispatch) {
   return {
     additionalHeader: bindActionCreators(additionalHeader, dispatch),
     tasks: bindActionCreators(tasks, dispatch),
+    parentTaskId: bindActionCreators(parentTaskId, dispatch),
   };
 }
 

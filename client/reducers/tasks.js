@@ -1,4 +1,10 @@
-import { ADD_NEW_TASK, ADD_NEW_SUBTASK, REMOVE_TASK, MODIFY_TASK } from '../constants/actionTypes';
+import {
+  ADD_NEW_TASK,
+  ADD_NEW_SUBTASK,
+  SET_PARENT_TASK_ID,
+  MODIFY_TASK,
+  REMOVE_TASK,
+} from '../constants/actionTypes';
 import initialState from './initialState';
 
 function insertSubTask(tasks, id, newTask) {

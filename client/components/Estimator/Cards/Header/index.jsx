@@ -27,7 +27,6 @@ export default class Header extends Component {
     this.onEditTask = this.onEditTask.bind(this);
     this.setParentId = this.setParentId.bind(this);
     this.preAddTask = this.preAddTask.bind(this);
-    this.deleteParentId = this.deleteParentId.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.headerInfoCollector = this.headerInfoCollector.bind(this);
   }
@@ -47,7 +46,7 @@ export default class Header extends Component {
 
   setParentId(e) {
     const id = e.currentTarget.dataset.id;
-    this.setState({ parentTaskId: id });
+    this.props.setParentTaskId(id);
   }
 
   calculateHours(parentTaskId) {
@@ -150,14 +149,10 @@ export default class Header extends Component {
           style={{ marginLeft: '20px' }}
         >
           {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
-          {this.state.parentTaskId == task.id && this.renderAddTaskForm(this.state.parentTaskId)}
+          {this.props.parentId.id == task.id && this.renderAddTaskForm(this.props.parentId.id)}
         </div>
       </div>,
     );
-  }
-
-  deleteParentId(e) {
-    this.setState({ parentTaskId: null });
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -223,8 +218,10 @@ export default class Header extends Component {
     newTask.maximumHours = newTask.maximumHours || 0;
     if (!parent) {
       this.props.addNewTask(newTask);
+      this.props.removeParentTaskId();
     } else {
       this.props.addNewSubTask(parent, newTask);
+      this.props.removeParentTaskId();
     }
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
     this.calculateHours();
