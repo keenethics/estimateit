@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import estimator from './tasks';
+import tasks from './tasks';
+import headerAdditional from './headerAdditional';
 
 const rootReducer = combineReducers({
-  estimator,
+  headerAdditional,
+  tasks,
   routing: routerReducer,
 });
 

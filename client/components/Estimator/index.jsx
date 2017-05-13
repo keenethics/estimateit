@@ -49,7 +49,7 @@ export default class Root extends Component {
     return (
       <Container>
         <Card id="screen">
-          <Col xs="12" md="12" lg="10" className={styles.estimator}>
+          <Col xs="12" md="12" lg="10" className={styles.tasks}>
             <Header
               className={styles.estimator__header}
               data={this.state.tasks}

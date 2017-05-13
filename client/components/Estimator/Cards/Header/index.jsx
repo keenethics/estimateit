@@ -7,6 +7,7 @@ import styles from './styles.scss';
 
 // TODO: Add props validation
 // TODO: change local state on redux in 158 line
+// TODO: fix excess inputs
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -92,12 +93,6 @@ export default class Header extends Component {
     };
     const par = findHighest(tasks, parentTaskId);
     sumMin(par);
-  }
-
-  headerInfoCollector(e) {
-    const infoCollector = this.state.infoCollector || {};
-    infoCollector[e.currentTarget.name] = e.currentTarget.value;
-    this.setState({ infoCollector });
   }
 
   renderTasks(tasks, iterator) {
@@ -234,15 +229,15 @@ export default class Header extends Component {
     e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
     this.calculateHours();
   }
+  headerInfoCollector(e) {
+    const name = e.currentTarget.name;
+    const value = e.currentTarget.value;
+    this.props.addNewClientData(name, value);
+  }
 
   textAreaAdjust(e) {
     e.target.style.height = '1px';
     e.target.style.height = `${10 + e.target.scrollHeight}px`;
-    this.setState({
-      [e.currentTarget.name]: e.currentTarget.value,
-    }, () => {
-      history.pushState('', '', `${location.pathname}?${JSON.stringify(this.state)}`);
-    });
   }
 
   render() {
@@ -325,6 +320,7 @@ export default class Header extends Component {
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
+            onBlur={this.headerInfoCollector}
             placeholder="Technologies, libraries, APIs"
             value={this.state.technologies}
             name="technologies"
@@ -336,6 +332,7 @@ export default class Header extends Component {
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
+            onBlur={this.headerInfoCollector}
             value={this.state.comments}
             placeholder="Comments"
             name="comments"

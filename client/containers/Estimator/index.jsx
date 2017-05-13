@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Col, Card } from 'reactstrap';
-import * as actions from '../../actions/tasks';
+import * as tasks from '../../actions/tasks';
+import * as additionalHeader from '../../actions/headerAdditional';
 
 import Header from '../../components/Estimator/Cards/Header';
 import Main from '../../components/Estimator/Cards/Main';
@@ -13,17 +14,21 @@ import 'bootstrap/dist/css/bootstrap.css';
 export const App = (props) => {
   const { estimator } = props;
   const {
+    addNewClientData,
+  } = props.additionalHeader;
+  const {
     addNewTask,
     addNewSubTask,
     removeTask,
     findTaskAndModify,
-  } = props.actions;
+  } = props.tasks;
   return (
     <Container>
       <Card id="screen">
         <Col xs="12" md="12" lg="10" className={styles.estimator}>
           <Header
             className={styles.estimator__header}
+            addNewClientData={addNewClientData}
             addNewTask={addNewTask}
             addNewSubTask={addNewSubTask}
             removeTask={removeTask}
@@ -41,13 +46,14 @@ export const App = (props) => {
 
 function mapStateToProps(state) {
   return {
-    estimator: state.estimator,
+    estimator: state.tasks,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(actions, dispatch),
+    additionalHeader: bindActionCreators(additionalHeader, dispatch),
+    tasks: bindActionCreators(tasks, dispatch),
   };
 }
 
