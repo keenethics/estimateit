@@ -13,19 +13,14 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 export const App = (props) => {
   const { estimator, parentId } = props;
-  const {
-    addNewClientData,
-  } = props.additionalHeader;
+  const { addNewClientData } = props.additionalHeader;
   const {
     addNewTask,
     addNewSubTask,
     removeTask,
     findTaskAndModify,
   } = props.tasks;
-  const {
-    setParentTaskId,
-    removeParentTaskId,
-  } = props.parentTaskId;
+  const { setParentTaskId, removeParentTaskId } = props.parentTaskId;
   return (
     <Container>
       <Card id="screen">
@@ -44,6 +39,7 @@ export const App = (props) => {
           />
           <Main
             className={styles.estimator__body}
+            tasks={estimator}
           />
         </Col>
       </Card>
@@ -66,7 +62,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);

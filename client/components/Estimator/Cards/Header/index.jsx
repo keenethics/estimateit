@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
-import { Button, CardTitle, Col, Form, FormGroup, Input, Row } from 'reactstrap';
+import {
+  Button,
+  CardTitle,
+  Col,
+  Form,
+  FormGroup,
+  Input,
+  Row,
+} from 'reactstrap';
 import { DateField } from 'react-date-picker';
 import shortid from 'shortid';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
 // TODO: Add props validation
-// TODO: change local state on redux in 158 line
-// TODO: fix excess inputs
+// TODO: Add feature to recalc data after changing task data
+// TODO: fix change data
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -55,19 +63,21 @@ export default class Header extends Component {
       parentTaskId = newTask.parentTaskId;
     }
     const tasks = [...this.state.tasks];
-    const updateWithIndex = (tree, id, update) => tree.map((node) => {
-      if (node.id === id) node = update(node);
-      else if (node.tasks) updateWithIndex(node.tasks, id, update);
-      return node;
-    });
-    const findNodeWithIndex = (tree, id) => tree.find((node) => {
-      if (node.id === id) {
+    const updateWithIndex = (tree, id, update) =>
+      tree.map((node) => {
+        if (node.id === id) node = update(node);
+        else if (node.tasks) updateWithIndex(node.tasks, id, update);
         return node;
-      } else if (node.tasks) {
-        return findNodeWithIndex(node.tasks, id);
-      }
-      return undefined;
-    });
+      });
+    const findNodeWithIndex = (tree, id) =>
+      tree.find((node) => {
+        if (node.id === id) {
+          return node;
+        } else if (node.tasks) {
+          return findNodeWithIndex(node.tasks, id);
+        }
+        return undefined;
+      });
     const findHighest = (tree, id) => {
       const node = findNodeWithIndex(tree, id);
       if (node && !node.parentTaskId) {
@@ -81,10 +91,13 @@ export default class Header extends Component {
       if (typeof node !== 'undefined') {
         if (node.tasks && node.tasks.length > 0) {
           node.tasks.forEach(sumMin);
-          const abc = node.tasks.reduce((acc, value) => ({
-            calcMin: acc.calcMin += +value.minimumHours,
-            calcMax: acc.calcMax += +value.maximumHours,
-          }), { calcMin: 0, calcMax: 0 });
+          const abc = node.tasks.reduce(
+            (acc, value) => ({
+              calcMin: (acc.calcMin += +value.minimumHours),
+              calcMax: (acc.calcMax += +value.maximumHours),
+            }),
+            { calcMin: 0, calcMax: 0 },
+          );
           node.minimumHours = abc.calcMin;
           node.maximumHours = abc.calcMax;
         }
@@ -95,11 +108,9 @@ export default class Header extends Component {
   }
 
   renderTasks(tasks, iterator) {
-    return tasks.map((task, i) =>
+    return tasks.map((task, i) => (
       <div key={task.id}>
-        <FormGroup
-          className={styles.subtasks}
-        >
+        <FormGroup className={styles.subtasks}>
           <Input
             data-id={task.id}
             className={styles.subtasks__item}
@@ -129,30 +140,32 @@ export default class Header extends Component {
             onChange={this.onEditTask}
           />
 
-          {(iterator < 2) ?
-            <Button
+          {iterator < 2
+            ? <Button
               color="danger"
               className={styles.subtasks__item}
               data-id={task.id}
               onClick={this.setParentId}
-            >Add subtask</Button> :
-            ''}
+            >
+                Add subtask
+              </Button>
+            : ''}
           <Button
             color="danger"
             className={styles.subtasks__item}
             data-id={task.id}
             onClick={this.deleteTask}
-          >Delete</Button>
+          >
+            Delete
+          </Button>
         </FormGroup>
-        <div
-          className={styles.item__wrapper}
-          style={{ marginLeft: '20px' }}
-        >
+        <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
           {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
-          {this.props.parentId.id == task.id && this.renderAddTaskForm(this.props.parentId.id)}
+          {this.props.parentId.id === task.id &&
+            this.renderAddTaskForm(this.props.parentId.id)}
         </div>
-      </div>,
-    );
+      </div>
+    ));
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -191,7 +204,9 @@ export default class Header extends Component {
           color="danger"
           className={styles.tasks__group_item}
           onClick={this.addTask}
-        >Add task</Button>
+        >
+          Add task
+        </Button>
       </FormGroup>
     );
   }
@@ -223,9 +238,12 @@ export default class Header extends Component {
       this.props.addNewSubTask(parent, newTask);
       this.props.removeParentTaskId();
     }
-    e.currentTarget.parentElement.childNodes.forEach(i => i.nodeName == 'INPUT' ? i.value = '' : '');
+    e.currentTarget.parentElement.childNodes.forEach(
+      i => (i.nodeName == 'INPUT' ? (i.value = '') : ''),
+    );
     this.calculateHours();
   }
+
   headerInfoCollector(e) {
     const name = e.currentTarget.name;
     const value = e.currentTarget.value;
@@ -250,20 +268,24 @@ export default class Header extends Component {
             <CardTitle>ESTIMATE</CardTitle>
           </Col>
           <Col
-            xs="12" md="5"
+            xs="12"
+            md="5"
             className={`${styles.header__left} ${styles.left}`}
           >
             <div className={styles.left__contacts}>
               <p>3, Lytvynenka street, Lviv</p>
               <p>Keenethics Phone: [+38 096 814 72 66]</p>
-              <p>e-mail: <a href="mailto:founders@keenethics.com">founders@keenethics.com</a></p>
+              <p>
+                e-mail:
+                {' '}
+                <a href="mailto:founders@keenethics.com">
+                  founders@keenethics.com
+                </a>
+              </p>
               <p><a href="https://keenethics.com/">keenethics.com</a></p>
             </div>
           </Col>
-          <Col
-            xs="12" md="7"
-            className={styles.header__right}
-          >
+          <Col xs="12" md="7" className={styles.header__right}>
             <Form className={styles.right}>
               <FormGroup className={styles.right__group}>
                 <DateField
@@ -319,7 +341,7 @@ export default class Header extends Component {
             onChange={this.textAreaAdjust}
             onBlur={this.headerInfoCollector}
             placeholder="Technologies, libraries, APIs"
-            value={this.state.technologies}
+            // value={this.state.technologies}
             name="technologies"
           />
         </FormGroup>
@@ -330,7 +352,7 @@ export default class Header extends Component {
             type="textarea"
             onChange={this.textAreaAdjust}
             onBlur={this.headerInfoCollector}
-            value={this.state.comments}
+            // value={this.state.comments}
             placeholder="Comments"
             name="comments"
           />

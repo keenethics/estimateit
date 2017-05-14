@@ -50,22 +50,33 @@ export default class Main extends Component {
   // }
 
   transformToVector() {
-    const tasksHours = this.parseUrlData();
+    const tasksHours = this.parseUrlData(this.props.tasks);
     const vector = new DiscreteVector(tasksHours);
-    this.T = vector.combinations < 1000 ?
-      Array(vector.combinations).fill().map((prev, item) => this.embodiment(tasksHours, vector.next())).sort((a, b) => a - b) :
-      Array(1000).fill().map((prev, item) => this.embodiment(tasksHours, vector.randomize())).sort((a, b) => a - b);
+    this.T = vector.combinations < 1000
+      ? Array(vector.combinations)
+          .fill()
+          .map((prev, item) => this.embodiment(tasksHours, vector.next()))
+          .sort((a, b) => a - b)
+      : Array(1000)
+          .fill()
+          .map((prev, item) => this.embodiment(tasksHours, vector.randomize()))
+          .sort((a, b) => a - b);
     this.labels = this.T.map(item => Math.round(item));
-    this.data = this.T.map((item, i) => Math.round(100 * i / (this.T.length - 1)));
+    this.data = this.T.map((item, i) =>
+      Math.round(100 * i / (this.T.length - 1)),
+    );
     this.calcDeveloperHours(tasksHours);
     this.calculateAmountOfHours();
   }
 
   calcDeveloperHours(data) {
-    this.devHours = data.reduce((acc, value) => ({
-      minHours: acc.minHours += +value[1],
-      maxHours: acc.maxHours += +value[0],
-    }), { minHours: 0, maxHours: 0 });
+    this.devHours = data.reduce(
+      (acc, value) => ({
+        minHours: (acc.minHours += +value[1]),
+        maxHours: (acc.maxHours += +value[0]),
+      }),
+      { minHours: 0, maxHours: 0 },
+    );
   }
 
   calculateAmountOfHours() {
@@ -75,8 +86,12 @@ export default class Main extends Component {
       highestIndex = this.data.length - 1;
     }
     const hours = this.labels[highestIndex];
-    const additionalHourse = hours * (this.state.calculationData.pm + this.state.calculationData.qa +
-        this.state.calculationData.bugFixes + this.state.calculationData.risks) / 100;
+    const additionalHourse =
+      hours *
+      (this.state.calculationData.pm +
+        this.state.calculationData.qa +
+        this.state.calculationData.bugFixes +
+        this.state.calculationData.risks) / 100;
     const totalHours = Math.round(hours + additionalHourse);
     this.state.hours = totalHours;
   }
@@ -93,14 +108,11 @@ export default class Main extends Component {
   }
 
   parseUrlData(data) {
-    // TODO: remove hardcode data;
-    data = [{ minimumHours: 123, maximumHours: 1233 }];
     const arr = data.reduce((value, item) => {
       const itemArr = [];
       itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
       return value.concat(itemArr);
     }, []);
-
     return arr;
   }
 
@@ -113,19 +125,20 @@ export default class Main extends Component {
     return (
       <Row className={styles.main}>
         <Col xs="12">
-          <LineChart
-            labels={this.labels}
-            data={this.data}
-          />
+          <LineChart labels={this.labels} data={this.data} />
         </Col>
         <Col xs="12">
           <Card className={styles.final}>
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
-                <div className={styles.final__result_info}>Total developer min hours: {this.devHours.maxHours}</div>
+                <div className={styles.final__result_info}>
+                  Total developer min hours: {this.devHours.maxHours}
+                </div>
               </div>
               <div className={styles.final__result}>
-                <div className={styles.final__result_info}>Total developer max hours: {this.devHours.minHours}</div>
+                <div className={styles.final__result_info}>
+                  Total developer max hours: {this.devHours.minHours}
+                </div>
               </div>
             </CardBlock>
           </Card>

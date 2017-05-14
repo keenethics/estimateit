@@ -1,6 +1,6 @@
 import {
   SET_PARENT_TASK_ID,
-  REMOVE_PARENT_TASK_ID
+  REMOVE_PARENT_TASK_ID,
 } from '../constants/actionTypes';
 import initialState from './initialState';
 
