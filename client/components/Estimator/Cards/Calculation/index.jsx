@@ -7,12 +7,7 @@ import styles from './styles.scss';
 export default class Calculation extends Component {
   constructor(props) {
     super(props);
-    this.onDataChange = this.onDataChange.bind(this);
     this.onRateChange = this.onRateChange.bind(this);
-  }
-
-  onDataChange(calculationData, estimateFieldsAmount) {
-    this.props.onCalculationChange(calculationData, estimateFieldsAmount);
   }
 
   onRateChange(rate) {
