@@ -50,7 +50,7 @@ export default class EstimateOptions extends Component {
     this.state.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.state.calculationData[e.target.name] / 100);
     this.props.onDataChange(this.state.calculationData, this.state.estimateFieldsAmount);
   }
-  
+
   calcOptionsData(nextProps) {
     const { estimateFieldsAmount, calculationData } = this.state;
     const round = key => Math.round(nextProps.hours * calculationData[key] / 100);

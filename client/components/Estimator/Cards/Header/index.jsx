@@ -14,8 +14,6 @@ import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
 // TODO: Add props validation
-// TODO: Add feature to recalc data after changing task data
-// TODO: fix change data
 export default class Header extends Component {
   constructor(props) {
     super(props);
@@ -30,13 +28,9 @@ export default class Header extends Component {
     };
     this.onDateChange = this.onDateChange.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
-    this.addTask = this.addTask.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
-    this.onEditTask = this.onEditTask.bind(this);
-    this.setParentId = this.setParentId.bind(this);
     this.preAddTask = this.preAddTask.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
-    this.headerInfoCollector = this.headerInfoCollector.bind(this);
+    this.createTaskAction = this.createTaskAction.bind(this);
   }
 
   onDateChange(dateString) {
@@ -45,16 +39,51 @@ export default class Header extends Component {
     }
   }
 
-  onEditTask(e) {
+  createTaskAction(e, type) {
+    const newTask = this.state.newTask;
+    const parent = e.currentTarget.parentNode.dataset.parentid;
     const id = e.currentTarget.dataset.id;
-    const name = e.currentTarget.name;
-    const value = e.currentTarget.value;
-    this.props.findTaskAndModify(id, name, value);
-  }
+    const { name, value } = e.currentTarget;
 
-  setParentId(e) {
-    const id = e.currentTarget.dataset.id;
-    this.props.setParentTaskId(id);
+    switch (type) {
+      case 'ADD_TASK':
+        newTask.id = shortid.generate();
+        newTask.minimumHours = newTask.minimumHours || 0;
+        newTask.maximumHours = newTask.maximumHours || 0;
+        if (!parent) {
+          this.props.addNewTask(newTask);
+          this.props.removeParentTaskId();
+        } else {
+          this.props.addNewSubTask(parent, newTask);
+          this.props.removeParentTaskId();
+        }
+        e.currentTarget.parentElement.childNodes.forEach(
+          i => (i.nodeName === 'INPUT' ? (i.value = '') : ''),
+        );
+        this.calculateHours();
+        break;
+
+      case 'EDIT_TASK':
+        this.props.findTaskAndModify(id, name, value);
+        this.calculateHours(parent);
+        break;
+
+      case 'DELETE_TASK':
+        this.props.removeTask(id);
+        this.calculateHours(parent);
+        break;
+
+      case 'SET_PARENT_TASK_ID':
+        this.props.setParentTaskId(id);
+        break;
+
+      case 'ADD_NEW_CLIENT_DATA':
+        this.props.addNewClientData(name, value);
+        break;
+
+      default:
+        return '';
+    }
   }
 
   calculateHours(parentTaskId) {
@@ -62,7 +91,7 @@ export default class Header extends Component {
     if (newTask !== null) {
       parentTaskId = newTask.parentTaskId;
     }
-    const tasks = [...this.state.tasks];
+    const tasks = [...this.props.tasks];
     const updateWithIndex = (tree, id, update) =>
       tree.map((node) => {
         if (node.id === id) node = update(node);
@@ -107,6 +136,19 @@ export default class Header extends Component {
     sumMin(par);
   }
 
+  preAddTask(e) {
+    const newTask = this.state.newTask || {};
+    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
+    newTask.parentTaskId = e.currentTarget.dataset.parentid;
+    this.setState({
+      newTask,
+    });
+  }
+
+  textAreaAdjust(e) {
+    e.target.style.height = '1px';
+    e.target.style.height = `${10 + e.target.scrollHeight}px`;
+  }
   renderTasks(tasks, iterator) {
     return tasks.map((task, i) => (
       <div key={task.id}>
@@ -117,7 +159,9 @@ export default class Header extends Component {
             name="taskName"
             placeholder="subtask"
             value={task.taskName}
-            onChange={this.onEditTask}
+            onChange={(e) => {
+              this.createTaskAction(e, 'EDIT_TASK');
+            }}
           />
           <Input
             data-id={task.id}
@@ -127,7 +171,9 @@ export default class Header extends Component {
             name="minimumHours"
             placeholder="min"
             min="0"
-            onChange={this.onEditTask}
+            onChange={(e) => {
+              this.createTaskAction(e, 'EDIT_TASK');
+            }}
           />
           <Input
             data-id={task.id}
@@ -137,7 +183,9 @@ export default class Header extends Component {
             name="maximumHours"
             placeholder="max"
             min={task.minimumHours}
-            onChange={this.onEditTask}
+            onChange={(e) => {
+              this.createTaskAction(e, 'EDIT_TASK');
+            }}
           />
 
           {iterator < 2
@@ -145,7 +193,9 @@ export default class Header extends Component {
               color="danger"
               className={styles.subtasks__item}
               data-id={task.id}
-              onClick={this.setParentId}
+              onClick={(e) => {
+                this.createTaskAction(e, 'SET_PARENT_TASK_ID');
+              }}
             >
                 Add subtask
               </Button>
@@ -154,7 +204,9 @@ export default class Header extends Component {
             color="danger"
             className={styles.subtasks__item}
             data-id={task.id}
-            onClick={this.deleteTask}
+            onClick={(e) => {
+              this.createTaskAction(e, 'DELETE_TASK');
+            }}
           >
             Delete
           </Button>
@@ -203,56 +255,14 @@ export default class Header extends Component {
         <Button
           color="danger"
           className={styles.tasks__group_item}
-          onClick={this.addTask}
+          onClick={(e) => {
+            this.createTaskAction(e, 'ADD_TASK');
+          }}
         >
           Add task
         </Button>
       </FormGroup>
     );
-  }
-
-  deleteTask(e) {
-    const id = e.currentTarget.dataset.id;
-    this.props.removeTask(id);
-  }
-
-  preAddTask(e) {
-    const newTask = this.state.newTask || {};
-    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
-    newTask.parentTaskId = e.currentTarget.dataset.parentid;
-    this.setState({
-      newTask,
-    });
-  }
-
-  addTask(e) {
-    const parent = e.currentTarget.parentNode.dataset.parentid;
-    const newTask = this.state.newTask;
-    newTask.id = shortid.generate();
-    newTask.minimumHours = newTask.minimumHours || 0;
-    newTask.maximumHours = newTask.maximumHours || 0;
-    if (!parent) {
-      this.props.addNewTask(newTask);
-      this.props.removeParentTaskId();
-    } else {
-      this.props.addNewSubTask(parent, newTask);
-      this.props.removeParentTaskId();
-    }
-    e.currentTarget.parentElement.childNodes.forEach(
-      i => (i.nodeName == 'INPUT' ? (i.value = '') : ''),
-    );
-    this.calculateHours();
-  }
-
-  headerInfoCollector(e) {
-    const name = e.currentTarget.name;
-    const value = e.currentTarget.value;
-    this.props.addNewClientData(name, value);
-  }
-
-  textAreaAdjust(e) {
-    e.target.style.height = '1px';
-    e.target.style.height = `${10 + e.target.scrollHeight}px`;
   }
 
   render() {
@@ -294,7 +304,9 @@ export default class Header extends Component {
                   ref={(dateField) => {
                     this.datefield = dateField;
                   }}
-                  onChange={this.headerInfoCollector}
+                  onChange={(e) => {
+                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+                  }}
                   placeholder="Date:"
                   className={styles.right__group_item}
                 />
@@ -306,7 +318,9 @@ export default class Header extends Component {
                   type="text"
                   id="clientName"
                   className={styles.right__group_item}
-                  onBlur={this.headerInfoCollector}
+                  onBlur={(e) => {
+                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+                  }}
                   placeholder="Client name:"
                 />
               </FormGroup>
@@ -317,7 +331,9 @@ export default class Header extends Component {
                   name="projectName"
                   // value={this.state.infoCollector.projectName}
                   className={styles.right__group_item}
-                  onBlur={this.headerInfoCollector}
+                  onBlur={(e) => {
+                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+                  }}
                   placeholder="Project name:"
                 />
               </FormGroup>
@@ -328,7 +344,9 @@ export default class Header extends Component {
                   name="sprintNumber"
                   // value={this.state.infoCollector.sprintNumber}
                   className={styles.right__group_item}
-                  onBlur={this.headerInfoCollector}
+                  onBlur={(e) => {
+                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+                  }}
                   placeholder="Sprint:"
                 />
               </FormGroup>
@@ -339,7 +357,9 @@ export default class Header extends Component {
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
-            onBlur={this.headerInfoCollector}
+            onBlur={(e) => {
+              this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+            }}
             placeholder="Technologies, libraries, APIs"
             // value={this.state.technologies}
             name="technologies"
@@ -351,7 +371,9 @@ export default class Header extends Component {
           <Input
             type="textarea"
             onChange={this.textAreaAdjust}
-            onBlur={this.headerInfoCollector}
+            onBlur={(e) => {
+              this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+            }}
             // value={this.state.comments}
             placeholder="Comments"
             name="comments"

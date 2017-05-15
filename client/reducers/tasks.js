@@ -42,6 +42,7 @@ function findTaskAndDelete(state, id) {
 function findTaskAndModify(tasks, id, name, value) {
   return tasks.map((element) => {
     if (element.id === id) {
+
       return { ...element, [name]: value };
     }
     if (element.tasks && element.tasks.length) {

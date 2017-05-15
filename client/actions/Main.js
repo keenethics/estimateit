@@ -18,3 +18,11 @@ export function calcDevHours(value) {
   };
 }
 
+export function addEstimateOptions(value) {
+  return {
+    type: types.ADD_ESTIMATE_OPTIONS,
+    payload: {
+      value,
+    },
+  };
+}
