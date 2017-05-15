@@ -6,6 +6,9 @@ import * as tasks from '../../actions/tasks';
 import * as additionalHeader from '../../actions/headerAdditional';
 import * as parentTaskId from '../../actions/parentTaskId';
 
+import * as mainActions from '../../actions/Main';
+
+
 import Header from '../../components/Estimator/Cards/Header';
 import Main from '../../components/Estimator/Cards/Main';
 import styles from '../../components/Estimator/styles.scss';
@@ -20,7 +23,16 @@ export const App = (props) => {
     removeTask,
     findTaskAndModify,
   } = props.tasks;
+
   const { setParentTaskId, removeParentTaskId } = props.parentTaskId;
+
+  const {
+    devHours,
+  } = props.mainState;
+  const {
+    changeMoneyRate,
+    calcDevHours,
+  } = props.mainActions;
   return (
     <Container>
       <Card id="screen">
@@ -39,6 +51,9 @@ export const App = (props) => {
           />
           <Main
             className={styles.estimator__body}
+            changeMoneyRate={changeMoneyRate}
+            calcDevHours={calcDevHours}
+            devHours={devHours}
             tasks={estimator}
           />
         </Col>
@@ -51,6 +66,8 @@ function mapStateToProps(state) {
   return {
     estimator: state.tasks,
     parentId: state.parentTaskId,
+
+    mainState: state.Main,
   };
 }
 
@@ -59,6 +76,8 @@ function mapDispatchToProps(dispatch) {
     additionalHeader: bindActionCreators(additionalHeader, dispatch),
     tasks: bindActionCreators(tasks, dispatch),
     parentTaskId: bindActionCreators(parentTaskId, dispatch),
+
+    mainActions: bindActionCreators(mainActions, dispatch),
   };
 }
 

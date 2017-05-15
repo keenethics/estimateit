@@ -11,7 +11,6 @@ export default class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      labels: [],
       calculationData: {
         qa: 10,
         pm: 10,
@@ -36,47 +35,58 @@ export default class Main extends Component {
     this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
     this.onCalculationChange = this.onCalculationChange.bind(this);
     this.onRateChange = this.onRateChange.bind(this);
-    this.parseUrlData = this.parseUrlData.bind(this);
+    this.parseTaskHours = this.parseTaskHours.bind(this);
   }
 
-  // componentDidMount() {
-  //   if (location.href === `${location.origin}/`) return;
-  //   const loc = decodeURIComponent(location.href);
-  //   const state = JSON.parse(loc.split('?').pop());
-  //   const hoursArr = this.parseUrlData(state.tasks);
-  //   this.setState({ hoursArr }, () => {
-  //     this.calculateAmountOfHours();
-  //   });
-  // }
+  componentDidMount() {
+    this.transformToVector();
+    this.calcDeveloperHours(this.parseTaskHours(this.props.tasks));
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // TODO: Make it more beautiful
+    if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
+      this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
+    }
+  }
 
   transformToVector() {
-    const tasksHours = this.parseUrlData(this.props.tasks);
+    const tasksHours = this.parseTaskHours(this.props.tasks);
     const vector = new DiscreteVector(tasksHours);
     this.T = vector.combinations < 1000
       ? Array(vector.combinations)
-          .fill()
-          .map((prev, item) => this.embodiment(tasksHours, vector.next()))
-          .sort((a, b) => a - b)
+        .fill()
+        .map((prev, item) => this.embodiment(tasksHours, vector.next()))
+        .sort((a, b) => a - b)
       : Array(1000)
-          .fill()
-          .map((prev, item) => this.embodiment(tasksHours, vector.randomize()))
-          .sort((a, b) => a - b);
+        .fill()
+        .map((prev, item) => this.embodiment(tasksHours, vector.randomize()))
+        .sort((a, b) => a - b);
     this.labels = this.T.map(item => Math.round(item));
     this.data = this.T.map((item, i) =>
       Math.round(100 * i / (this.T.length - 1)),
     );
-    this.calcDeveloperHours(tasksHours);
     this.calculateAmountOfHours();
   }
 
+  embodiment(a, b) {
+    return a.reduce((prev, item, i) => prev + item[b[i]], 0);
+  }
+
   calcDeveloperHours(data) {
-    this.devHours = data.reduce(
+    console.log('data', data);
+    const sum = data.reduce(
       (acc, value) => ({
         minHours: (acc.minHours += +value[1]),
         maxHours: (acc.maxHours += +value[0]),
       }),
       { minHours: 0, maxHours: 0 },
     );
+    this.props.calcDevHours(sum);
+  }
+
+  parseTaskHours(data) {
+    return data.map(item => [item.minimumHours, item.maximumHours]);
   }
 
   calculateAmountOfHours() {
@@ -89,9 +99,9 @@ export default class Main extends Component {
     const additionalHourse =
       hours *
       (this.state.calculationData.pm +
-        this.state.calculationData.qa +
-        this.state.calculationData.bugFixes +
-        this.state.calculationData.risks) / 100;
+      this.state.calculationData.qa +
+      this.state.calculationData.bugFixes +
+      this.state.calculationData.risks) / 100;
     const totalHours = Math.round(hours + additionalHourse);
     this.state.hours = totalHours;
   }
@@ -102,26 +112,10 @@ export default class Main extends Component {
   }
 
   onRateChange(rate) {
-    this.setState({ rate }, () => {
-      this.calculateAmountOfHours();
-    });
-  }
-
-  parseUrlData(data) {
-    const arr = data.reduce((value, item) => {
-      const itemArr = [];
-      itemArr.push([Number(item.minimumHours), Number(item.maximumHours)]);
-      return value.concat(itemArr);
-    }, []);
-    return arr;
-  }
-
-  embodiment(a, b) {
-    return a.reduce((prev, item, i) => prev + item[b[i]], 0);
+    this.props.changeMoneyRate(rate);
   }
 
   render() {
-    this.transformToVector();
     return (
       <Row className={styles.main}>
         <Col xs="12">
@@ -132,12 +126,12 @@ export default class Main extends Component {
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
                 <div className={styles.final__result_info}>
-                  Total developer min hours: {this.devHours.maxHours}
+                  Total developer min hours: {this.props.devHours.maxHours}
                 </div>
               </div>
               <div className={styles.final__result}>
-                <div className={styles.final__result_info}>
-                  Total developer max hours: {this.devHours.minHours}
+                <div className={styles.final__result_info} onClick={this.calcDeveloperHours}>
+                  Total developer max hours: {this.props.devHours.minHours}
                 </div>
               </div>
             </CardBlock>
