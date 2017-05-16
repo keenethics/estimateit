@@ -23,7 +23,7 @@ export const App = (props) => {
     setParentTaskId,
     removeParentTaskId,
   } = headerActions;
-  const { devHours, calculationData, moneyRate } = mainState;
+  const { devHours, calculationData, moneyRate, estimateOptions } = mainState;
   const { addEstimateOptions, calcDevHours, changeMoneyRate, addClientData } = mainActions;
   return (
     <Container>
@@ -50,6 +50,7 @@ export const App = (props) => {
             addClientData={addClientData}
             devHours={devHours}
             options={calculationData}
+            estimateOptions={estimateOptions}
             moneyRate={moneyRate}
             tasks={tasks}
           />

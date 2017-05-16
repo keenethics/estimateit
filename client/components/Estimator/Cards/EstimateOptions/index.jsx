@@ -27,7 +27,7 @@ export default class EstimateOptions extends Component {
   }
 
   componentDidMount() {
-    this.props.addEstimateOptions(this.state.calculationData);
+    this.props.addEstimateOptions(this.state.calculationData, this.state.estimateFieldsAmount);
   }
 
   componentWillReceiveProps(nextProps) {

@@ -13,7 +13,7 @@ export default class Calculation extends Component {
             xs="12" lg="4"
             className={styles.calculation__piechart}
           >
-            <PieChart data={this.props.data} />
+            <PieChart data={this.props.estimateOptions} />
           </Col>
           <Col
             xs="12" lg="8"

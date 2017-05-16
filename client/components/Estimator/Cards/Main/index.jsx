@@ -31,10 +31,10 @@ export default class Main extends Component {
     };
 
     this.T = [];
+    this.labels = [];
     this.embodiment = this.embodiment.bind(this);
     this.transformToVector = this.transformToVector.bind(this);
     this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
-    this.onCalculationChange = this.onCalculationChange.bind(this);
     this.parseTaskHours = this.parseTaskHours.bind(this);
   }
 
@@ -47,6 +47,7 @@ export default class Main extends Component {
     // TODO: Make it more beautiful
     if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
       this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
+      this.calculateAmountOfHours();
     }
   }
 
@@ -66,7 +67,6 @@ export default class Main extends Component {
     this.data = this.T.map((item, i) =>
       Math.round(100 * i / (this.T.length - 1)),
     );
-    this.calculateAmountOfHours();
   }
 
   embodiment(a, b) {
@@ -100,13 +100,9 @@ export default class Main extends Component {
     this.state.hours = totalHours;
   }
 
-  onCalculationChange(calculationData, estimateFieldsAmount) {
-    this.setState({ calculationData, estimateFieldsAmount });
-    this.calculateAmountOfHours();
-  }
-
   render() {
     const { minHours, maxHours } = this.props.devHours;
+    this.transformToVector();
     return (
       <Row className={styles.main}>
         <Col xs="12">
@@ -134,8 +130,8 @@ export default class Main extends Component {
         <Col xs="12">
           <Calculation
             hours={this.state.hours}
-            data={this.state.calculationData}
             rate={this.state.rate}
+            estimateOptions={this.props.estimateOptions}
             onRateChange={this.props.changeMoneyRate}
             addEstimateOptions={this.props.addEstimateOptions}
             addClientData={this.props.addClientData}
