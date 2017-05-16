@@ -7,6 +7,7 @@ import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import styles from './styles.scss';
 
+// TODO: ADD initial state in redux state for specific reducer
 export default class Main extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,6 @@ export default class Main extends Component {
     this.transformToVector = this.transformToVector.bind(this);
     this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
     this.onCalculationChange = this.onCalculationChange.bind(this);
-    this.onRateChange = this.onRateChange.bind(this);
     this.parseTaskHours = this.parseTaskHours.bind(this);
   }
 
@@ -74,11 +74,10 @@ export default class Main extends Component {
   }
 
   calcDeveloperHours(data) {
-    console.log('data', data);
     const sum = data.reduce(
       (acc, value) => ({
-        minHours: (acc.minHours += +value[1]),
-        maxHours: (acc.maxHours += +value[0]),
+        minHours: (acc.minHours += +value[0]),
+        maxHours: (acc.maxHours += +value[1]),
       }),
       { minHours: 0, maxHours: 0 },
     );
@@ -90,7 +89,7 @@ export default class Main extends Component {
   }
 
   calculateAmountOfHours() {
-    const { pm, qa, bugFixes, risks, completing } = this.state.calculationData;
+    const { pm, qa, bugFixes, risks, completing } = this.props.options;
     let highestIndex = this.data.findIndex(item => item > completing);
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
@@ -106,11 +105,8 @@ export default class Main extends Component {
     this.calculateAmountOfHours();
   }
 
-  onRateChange(rate) {
-    this.props.changeMoneyRate(rate);
-  }
-
   render() {
+    const { minHours, maxHours} = this.props.devHours;
     return (
       <Row className={styles.main}>
         <Col xs="12">
@@ -121,7 +117,7 @@ export default class Main extends Component {
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
                 <div className={styles.final__result_info}>
-                  Total developer min hours: {this.props.devHours.maxHours}
+                  Total developer min hours: {minHours}
                 </div>
               </div>
               <div className={styles.final__result}>
@@ -129,7 +125,7 @@ export default class Main extends Component {
                   className={styles.final__result_info}
                   onClick={this.calcDeveloperHours}
                 >
-                  Total developer max hours: {this.props.devHours.minHours}
+                  Total developer max hours: {maxHours}
                 </div>
               </div>
             </CardBlock>
@@ -140,8 +136,8 @@ export default class Main extends Component {
             hours={this.state.hours}
             data={this.state.calculationData}
             rate={this.state.rate}
-            onRateChange={this.onRateChange}
-            onCalculationChange={this.onCalculationChange}
+            onRateChange={this.props.changeMoneyRate}
+            addEstimateOptions={this.props.addEstimateOptions}
           />
         </Col>
         <Col xs="12">

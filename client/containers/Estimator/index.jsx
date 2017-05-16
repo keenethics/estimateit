@@ -2,12 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Col, Card } from 'reactstrap';
-import * as tasks from '../../actions/tasks';
-import * as additionalHeader from '../../actions/headerAdditional';
-import * as parentTaskId from '../../actions/parentTaskId';
-
-import * as mainActions from '../../actions/Main';
-
+import * as actionsHeader from '../../actions/Header';
+import * as actionsMain from '../../actions/Main';
 
 import Header from '../../components/Estimator/Cards/Header';
 import Main from '../../components/Estimator/Cards/Main';
@@ -15,24 +11,19 @@ import styles from '../../components/Estimator/styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
 export const App = (props) => {
-  const { estimator, parentId } = props;
-  const { addNewClientData } = props.additionalHeader;
+  const { headerActions, mainActions, headerState, mainState } = props;
+  const { headerAdditional, tasks, parentTaskId } = headerState;
   const {
     addNewTask,
     addNewSubTask,
     removeTask,
     findTaskAndModify,
-  } = props.tasks;
-
-  const { setParentTaskId, removeParentTaskId } = props.parentTaskId;
-
-  const {
-    devHours,
-  } = props.mainState;
-  const {
-    changeMoneyRate,
-    calcDevHours,
-  } = props.mainActions;
+    addNewClientData,
+    setParentTaskId,
+    removeParentTaskId,
+  } = headerActions;
+  const { devHours, calculationData, moneyRate } = mainState;
+  const { addEstimateOptions, calcDevHours, changeMoneyRate } = mainActions;
   return (
     <Container>
       <Card id="screen">
@@ -46,15 +37,19 @@ export const App = (props) => {
             removeParentTaskId={removeParentTaskId}
             removeTask={removeTask}
             findTaskAndModify={findTaskAndModify}
-            tasks={estimator}
-            parentId={parentId}
+            headerAdditional={headerAdditional}
+            tasks={tasks}
+            parentId={parentTaskId}
           />
           <Main
             className={styles.estimator__body}
             changeMoneyRate={changeMoneyRate}
             calcDevHours={calcDevHours}
+            addEstimateOptions={addEstimateOptions}
             devHours={devHours}
-            tasks={estimator}
+            options={calculationData}
+            moneyRate={moneyRate}
+            tasks={tasks}
           />
         </Col>
       </Card>
@@ -64,20 +59,23 @@ export const App = (props) => {
 
 function mapStateToProps(state) {
   return {
-    estimator: state.tasks,
-    parentId: state.parentTaskId,
-
-    mainState: state.Main,
+    headerState: {
+      ...state.Header,
+    },
+    mainState: {
+      ...state.Main,
+    },
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    additionalHeader: bindActionCreators(additionalHeader, dispatch),
-    tasks: bindActionCreators(tasks, dispatch),
-    parentTaskId: bindActionCreators(parentTaskId, dispatch),
-
-    mainActions: bindActionCreators(mainActions, dispatch),
+    headerActions: {
+      ...bindActionCreators(actionsHeader, dispatch),
+    },
+    mainActions: {
+      ...bindActionCreators(actionsMain, dispatch),
+    },
   };
 }
 

@@ -3,8 +3,8 @@ import {
   ADD_NEW_SUBTASK,
   MODIFY_TASK,
   REMOVE_TASK,
-} from '../constants/actionTypes';
-import initialState from './initialState';
+} from '../../constants/actionTypes';
+import initialState from '../initialState';
 
 function insertSubTask(tasks, payload) {
   return tasks.map((element) => {
@@ -53,7 +53,7 @@ function findTaskAndModify(tasks, id, name, value) {
   });
 }
 
-export default function estimatorTasks(state = initialState.estimator, action) {
+export default function estimatorTasks(state = initialState.header.tasks, action) {
   switch (action.type) {
     case ADD_NEW_TASK:
       return [...state, action.payload];

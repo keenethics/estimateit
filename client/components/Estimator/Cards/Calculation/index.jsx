@@ -5,15 +5,6 @@ import PieChart from '../PieChart';
 import styles from './styles.scss';
 
 export default class Calculation extends Component {
-  constructor(props) {
-    super(props);
-    this.onRateChange = this.onRateChange.bind(this);
-  }
-
-  onRateChange(rate) {
-    this.props.onRateChange(rate);
-  }
-
   render() {
     return (
       <Card className={styles.calculation}>
@@ -30,8 +21,8 @@ export default class Calculation extends Component {
           >
             <EstimateOptions
               hours={this.props.hours}
-              onRateChange={this.onRateChange}
-              onDataChange={this.onDataChange}
+              onRateChange={this.props.onRateChange}
+              addEstimateOptions={this.props.addEstimateOptions}
             />
           </Col>
         </CardBlock>
