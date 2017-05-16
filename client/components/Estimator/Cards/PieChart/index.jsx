@@ -48,11 +48,11 @@ export default class PieChart extends Component {
   }
 
   generateData() {
-    this.data[0].value = this.props.data.bugFixes;
-    this.data[1].value = this.props.data.pm;
-    this.data[2].value = this.props.data.qa;
-    this.data[3].value = this.props.data.risks;
-    this.data[4].value = this.props.data.completing;
+    if (typeof this.props.data !== 'undefined') {
+      Object.keys(this.props.data).forEach((key, i) => {
+        this.data[i].value = this.props.data[key];
+      });
+    }
   }
 
   render() {
