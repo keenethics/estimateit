@@ -33,11 +33,6 @@ export default class EstimateOptions extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.hours === nextProps.hours) return;
     this.calcOptionsData(nextProps);
-    // this.state.estimateFieldsAmount.qa = Math.round(nextProps.hours * this.state.calculationData.qa / 100);
-    // this.state.estimateFieldsAmount.pm = Math.round(nextProps.hours * this.state.calculationData.pm / 100);
-    // this.state.estimateFieldsAmount.bugFixes = Math.round(nextProps.hours * this.state.calculationData.bugFixes / 100);
-    // this.state.estimateFieldsAmount.risks = Math.round(nextProps.hours * this.state.calculationData.risks / 100);
-    // this.state.estimateFieldsAmount.completing = Math.round(nextProps.hours * this.state.calculationData.completing / 100);
   }
 
   onRateChange(e) {

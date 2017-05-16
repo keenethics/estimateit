@@ -41,15 +41,19 @@ export default class Main extends Component {
   componentDidMount() {
     this.transformToVector();
     this.calcDeveloperHours(this.parseTaskHours(this.props.tasks));
+    this.calculateAmountOfHours();
   }
 
   componentWillReceiveProps(nextProps) {
     // TODO: Make it more beautiful
     if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
-      console.log('hey');
       this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
-      this.calculateAmountOfHours();
+
     }
+  }
+  componentDidUpdate() {
+    this.transformToVector();
+    this.calculateAmountOfHours();
   }
 
   transformToVector() {

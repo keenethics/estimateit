@@ -37,7 +37,7 @@ export default class Header extends Component {
       this.datefield.setValue(nextState.date);
     }
   }
-  
+
   createTaskAction(e, type) {
     const newTask = this.state.newTask;
     const parent = e.currentTarget.parentNode.dataset.parentid;

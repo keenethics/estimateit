@@ -11,7 +11,6 @@ import styles from '../../components/Estimator/styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
 export const App = (props) => {
-  console.log('props', props);
   const { headerActions, mainActions, headerState, mainState } = props;
   const { headerAdditional, tasks, parentTaskId } = headerState;
   const {
