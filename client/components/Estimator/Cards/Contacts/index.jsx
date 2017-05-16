@@ -12,9 +12,8 @@ export default class Contacts extends Component {
   }
 
   onContactsChange(e) {
-    this.setState({
-      [e.currentTarget.name]: e.currentTarget.value,
-    })
+    const { name, value } = e.currentTarget;
+    this.props.addClientData(name, value);
   }
 
   render() {

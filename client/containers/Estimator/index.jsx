@@ -11,6 +11,7 @@ import styles from '../../components/Estimator/styles.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 
 export const App = (props) => {
+  console.log('props', props);
   const { headerActions, mainActions, headerState, mainState } = props;
   const { headerAdditional, tasks, parentTaskId } = headerState;
   const {
@@ -23,7 +24,7 @@ export const App = (props) => {
     removeParentTaskId,
   } = headerActions;
   const { devHours, calculationData, moneyRate } = mainState;
-  const { addEstimateOptions, calcDevHours, changeMoneyRate } = mainActions;
+  const { addEstimateOptions, calcDevHours, changeMoneyRate, addClientData } = mainActions;
   return (
     <Container>
       <Card id="screen">
@@ -46,6 +47,7 @@ export const App = (props) => {
             changeMoneyRate={changeMoneyRate}
             calcDevHours={calcDevHours}
             addEstimateOptions={addEstimateOptions}
+            addClientData={addClientData}
             devHours={devHours}
             options={calculationData}
             moneyRate={moneyRate}

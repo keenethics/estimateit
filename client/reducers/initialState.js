@@ -12,10 +12,16 @@ export default {
       risks: 10,
       completing: 100,
     },
-    moneyRate: '',
+    moneyRate: 25,
     devHours: {
       minHours: 0,
       maxHours: 0,
+    },
+    contacts: {
+      email: '',
+      pm: '',
+      position: '',
+      skype: '',
     },
   },
 };

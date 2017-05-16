@@ -106,7 +106,7 @@ export default class Main extends Component {
   }
 
   render() {
-    const { minHours, maxHours} = this.props.devHours;
+    const { minHours, maxHours } = this.props.devHours;
     return (
       <Row className={styles.main}>
         <Col xs="12">
@@ -138,6 +138,7 @@ export default class Main extends Component {
             rate={this.state.rate}
             onRateChange={this.props.changeMoneyRate}
             addEstimateOptions={this.props.addEstimateOptions}
+            addClientData={this.props.addClientData}
           />
         </Col>
         <Col xs="12">
@@ -149,7 +150,7 @@ export default class Main extends Component {
           />
         </Col>
         <Col xs="12">
-          <Contacts />
+          <Contacts addClientData={this.props.addClientData} />
         </Col>
       </Row>
     );

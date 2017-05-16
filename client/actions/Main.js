@@ -27,4 +27,13 @@ export function addEstimateOptions(value) {
   };
 }
 
+export function addClientData(name, value) {
+  return {
+    type: types.ADD_CLIENT_CONTACT_DATA,
+    payload: {
+      name,
+      value,
+    },
+  };
+}
 
