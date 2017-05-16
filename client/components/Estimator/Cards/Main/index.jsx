@@ -46,6 +46,7 @@ export default class Main extends Component {
   componentWillReceiveProps(nextProps) {
     // TODO: Make it more beautiful
     if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
+      console.log('hey');
       this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
       this.calculateAmountOfHours();
     }

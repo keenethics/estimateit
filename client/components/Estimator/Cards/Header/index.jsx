@@ -32,13 +32,12 @@ export default class Header extends Component {
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.createTaskAction = this.createTaskAction.bind(this);
   }
-
-  onDateChange(dateString) {
-    if (dateString) {
-      this.setState({ date: dateString });
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.date !== this.state.date) {
+      this.datefield.setValue(nextState.date);
     }
   }
-
+  
   createTaskAction(e, type) {
     const newTask = this.state.newTask;
     const parent = e.currentTarget.parentNode.dataset.parentid;
@@ -85,7 +84,12 @@ export default class Header extends Component {
         return '';
     }
   }
-
+  onDateChange(dateString) {
+    if (dateString) {
+      this.setState({ date: dateString });
+      this.props.addNewClientData('data', dateString);
+    }
+  }
   calculateHours(parentTaskId) {
     const newTask = this.state.newTask;
     if (newTask !== null) {
@@ -305,7 +309,7 @@ export default class Header extends Component {
                     this.datefield = dateField;
                   }}
                   onChange={(e) => {
-                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
+                    this.onDateChange(e);
                   }}
                   placeholder="Date:"
                   className={styles.right__group_item}
