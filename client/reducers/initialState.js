@@ -24,4 +24,9 @@ export default {
       skype: '',
     },
   },
+  loading: {
+    items: [],
+    isFetching: false,
+    error: undefined,
+  },
 };
