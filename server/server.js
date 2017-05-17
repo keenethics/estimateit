@@ -35,13 +35,18 @@ db.once('open', () => {
 app.get('/:shortCode', (req, res) => {
   const shortCode = parseInt(req.params.shortCode);
   if (isNaN(shortCode)) {
-    res.status(500).json({ error: 'Invalid URL shortCode. It must be a number.' });
+    res.status(500).json({ error: 'Invalid URL shortCode.' });
   } else {
-    UrlEntry.findOne({ shortCode }).then((doc) => {
+    UrlEntry.findOne({ shortCode }).then(doc => {
       if (!doc) {
         res.status(404).json({ error: 'Page not found' });
       } else {
-        res.redirect(doc.original);
+        res.status(200).json({
+          data: {
+            header: doc.Header,
+            main: doc.Main,
+          },
+        });
       }
     });
   }
@@ -55,14 +60,14 @@ app.post('/api/pdf', (req, res) => {
     .evaluate(() => {
       const body = document.querySelector('body');
       return {
-        height: body.scrollHeight,
+        height: body.scrollHeight
       };
     })
     .pdf({
       printBackground: true,
       marginsType: 0,
       pageSize: 'A4',
-      landscape: false,
+      landscape: false
     })
     .run((error, pdfBuffer) => {
       res.set('Content-Type', 'application/pdf');
@@ -72,21 +77,24 @@ app.post('/api/pdf', (req, res) => {
 });
 
 app.post('/new', (req, res) => {
-  const url = req.body.url;
-  if (isValidUrl(url)) {
-    isDuplicate(url)
-      .then((exists) => {
-        if (exists) {
-          res.status(500).json({ message: 'URL already exists in the database.', url: createFullUrl(req, exists) });
-        } else {
-          insertNew(url).then((inserted) => {
-            res.status(200).json({ message: 'Url successfully shortened', url: createFullUrl(req, inserted.shortCode), origin: inserted.origin });
-          });
-        }
+  const { url, data } = req.body;
+  console.log('data', data);
+  isDuplicate(url).then(exists => {
+    if (exists) {
+      res.status(500).json({
+        message: 'URL already exists in the database.',
+        url: createFullUrl(req, exists)
       });
-  } else {
-    res.status(500).json({ message: 'Invalid URL format. Input URL must comply to the following: http(s)://(www.)domain.ext(/)(path)' });
-  }
+    } else {
+      insertNew(url, data).then(inserted => {
+        res.status(200).json({
+          message: 'Url successfully shortened',
+          url: createFullUrl(req, inserted.shortCode),
+          origin: inserted.origin
+        });
+      });
+    }
+  });
 });
 
 app.listen(port, () => {

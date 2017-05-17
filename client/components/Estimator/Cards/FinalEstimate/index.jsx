@@ -29,6 +29,10 @@ export default class FinalEstimate extends Component {
   saveAsShortUrl() {
     axios.post('http://localhost:3000/new/', {
       url: decodeURIComponent(location.href),
+      data: {
+        header: this.props.headerState,
+        main: this.props.mainState,
+      },
     })
       .then((response) => {
         const { data } = response;

@@ -7,7 +7,6 @@ import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import styles from './styles.scss';
 
-// TODO: ADD initial state in redux state for specific reducer
 export default class Main extends Component {
   constructor(props) {
     super(props);
@@ -148,6 +147,8 @@ export default class Main extends Component {
             rate={this.state.rate}
             calculationData={this.state.calculationData}
             data={this.props.someProp}
+            headerState={this.props.headerState}
+            mainState={this.props.mainState}
           />
         </Col>
         <Col xs="12">

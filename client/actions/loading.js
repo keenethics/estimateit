@@ -17,7 +17,7 @@ export function fetchTodos(path) {
         console.log('data', data);
         dispatch({
           type: FETCH_TODOS_SUCCESS,
-          todos: data,
+          data,
         });
       })
       .catch((error) => {

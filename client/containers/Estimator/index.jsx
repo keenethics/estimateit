@@ -60,6 +60,8 @@ export class App extends Component {
               estimateOptions={estimateOptions}
               moneyRate={moneyRate}
               tasks={tasks}
+              headerState={headerState}
+              mainState={mainState}
             />
           </Col>
         </Card>
