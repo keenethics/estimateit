@@ -14,7 +14,6 @@ export function loading(state = initialState.loading, action) {
     case FETCH_TODOS_SUCCESS:
       return Object.assign({}, state, {
         isFetching: false,
-        data: action.data.data,
       });
     case FETCH_TODOS_FAILURE:
       return Object.assign({}, state, {

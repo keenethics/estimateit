@@ -153,8 +153,8 @@ export default class Header extends Component {
     e.target.style.height = '1px';
     e.target.style.height = `${10 + e.target.scrollHeight}px`;
   }
-  renderTasks(tasks, iterator) {
-    return tasks.map((task, i) => (
+  renderTasks(tasks = [], iterator) {
+    return tasks.map(task => (
       <div key={task.id}>
         <FormGroup className={styles.subtasks}>
           <Input
