@@ -36,4 +36,3 @@ export function addClientData(name, value) {
     },
   };
 }
-

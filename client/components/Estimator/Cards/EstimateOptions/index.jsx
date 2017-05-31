@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import Slider from './slider';
 import styles from './styles.scss';
 
 export default class EstimateOptions extends Component {
@@ -22,7 +23,6 @@ export default class EstimateOptions extends Component {
       },
       rate: 25,
     };
-    this.onRateChange = this.onRateChange.bind(this);
     this.onFieldChange = this.onFieldChange.bind(this);
   }
 
@@ -35,15 +35,11 @@ export default class EstimateOptions extends Component {
     this.calcOptionsData(nextProps);
   }
 
-  onRateChange(e) {
-    this.state.rate = e.target.value;
-    this.props.onRateChange(this.state.rate);
-  }
+  onFieldChange({ target: { name, value } }) {
+    const { estimateOptions } = this.props;
+    const newestimateOptions = { ...estimateOptions, [name]: parseInt(value, 10) };
 
-  onFieldChange(e) {
-    this.state.calculationData[e.target.name] = parseInt(e.target.value);
-    this.state.estimateFieldsAmount[e.target.name] = Math.round(this.props.hours * this.state.calculationData[e.target.name] / 100);
-    this.props.addEstimateOptions(this.state.calculationData, this.state.estimateFieldsAmount);
+    this.props.addEstimateOptions(newestimateOptions);
   }
 
   calcOptionsData(nextProps) {
@@ -53,91 +49,68 @@ export default class EstimateOptions extends Component {
   }
 
   render() {
+    const {
+      rate,
+      hours,
+      onRateChange,
+      estimateOptions: {
+        qa,
+        pm,
+        risks,
+        bugFixes,
+        completing
+      },
+    } = this.props;
+
     return (
       <div className={styles.range}>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>Rate USD</InputGroupAddon>
           <Input
-            className="radarChartPart estimate"
-            name="qa"
+            min="0"
+            step="1"
+            name="rate"
+            value={rate}
             type="number"
-            min="0"
-            step="1"
-            onChange={this.onRateChange}
-            defaultValue="25"
+            className="radarChartPart estimate"
+            onChange={({ target: value }) => onRateChange(value)}
           />
         </InputGroup>
-        <InputGroup className={styles.range__item}>
-          <InputGroupAddon>QA</InputGroupAddon>
-          <Input
-            className="radarChartPart"
-            id="radarChartPart"
-            name="qa"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            onChange={this.onFieldChange}
-            defaultValue="10"
-          />
-          <InputGroupAddon>{this.state.calculationData.qa}%, {this.state.estimateFieldsAmount.qa} h</InputGroupAddon>
-        </InputGroup>
-        <InputGroup className={styles.range__item}>
-          <InputGroupAddon>PM </InputGroupAddon>
-          <Input
-            className="radarChartPart"
-            name="pm"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            onChange={this.onFieldChange}
-            defaultValue="10"
-          />
-          <InputGroupAddon>{this.state.calculationData.pm}%, {this.state.estimateFieldsAmount.pm} h</InputGroupAddon>
-        </InputGroup>
-        <InputGroup className={styles.range__item}>
-          <InputGroupAddon>Bug Fixes</InputGroupAddon>
-          <Input
-            className="radarChartPart"
-            name="bugFixes"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            onChange={this.onFieldChange}
-            defaultValue="10"
-          />
-          <InputGroupAddon>{this.state.calculationData.bugFixes}%, {this.state.estimateFieldsAmount.bugFixes} h</InputGroupAddon>
-        </InputGroup>
-        <InputGroup className={styles.range__item}>
-          <InputGroupAddon>Risks</InputGroupAddon>
-          <Input
-            className="radarChartPart"
-            name="risks"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            onChange={this.onFieldChange}
-            defaultValue="10"
-          />
-          <InputGroupAddon>{this.state.calculationData.risks}%, {this.state.estimateFieldsAmount.risks} h</InputGroupAddon>
-        </InputGroup>
-        <InputGroup className={styles.range__item}>
-          <InputGroupAddon>Probability </InputGroupAddon>
-          <Input
-            className="radarChartPart"
-            name="completing"
-            type="range"
-            min="0"
-            max="100"
-            step="1"
-            onChange={this.onFieldChange}
-            defaultValue="90"
-          />
-          <InputGroupAddon>{this.state.calculationData.completing}%, {this.state.estimateFieldsAmount.completing} h</InputGroupAddon>
-        </InputGroup>
+        <Slider
+          name="qa"
+          title="QA"
+          value={qa}
+          totalHours={hours}
+          handleChange={this.onFieldChange}
+        />
+        <Slider
+          name="pm"
+          title="PM"
+          value={pm}
+          totalHours={hours}
+          handleChange={this.onFieldChange}
+        />
+        <Slider
+          name="bugFixes"
+          title="Bug Fixes"
+          value={bugFixes}
+          totalHours={hours}
+          handleChange={this.onFieldChange}
+        />
+        <Slider
+          name="risks"
+          title="Risks"
+          value={risks}
+          totalHours={hours}
+          handleChange={this.onFieldChange}
+        />
+        <Slider
+          name="completing"
+          title="Probability"
+          value={completing}
+          totalHours={hours}
+          handleChange={this.onFieldChange}
+        />
       </div>
     );
   }

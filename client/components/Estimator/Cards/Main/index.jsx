@@ -19,13 +19,6 @@ export default class Main extends Component {
         risks: 10,
         completing: 100,
       },
-      estimateFieldsAmount: {
-        qa: 0,
-        pm: 0,
-        bugFixes: 0,
-        risks: 0,
-        completing: 0,
-      },
       rate: 25,
       hours: 0,
     };
@@ -48,9 +41,9 @@ export default class Main extends Component {
     // TODO: Make it more beautiful
     if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
       this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
-
     }
   }
+
   componentDidUpdate() {
     this.transformToVector();
     this.calculateAmountOfHours();
@@ -135,10 +128,11 @@ export default class Main extends Component {
         <Col xs="12">
           <Calculation
             hours={this.state.hours}
-            rate={this.state.rate}
-            estimateOptions={this.props.estimateOptions}
             onRateChange={this.props.changeMoneyRate}
+            estimateOptions={this.props.mainState.estimateOptions}
             addEstimateOptions={this.props.addEstimateOptions}
+
+            rate={this.props.mainState.moneyRate}
             addClientData={this.props.addClientData}
           />
         </Col>

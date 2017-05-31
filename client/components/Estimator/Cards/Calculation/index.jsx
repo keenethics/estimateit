@@ -20,8 +20,10 @@ export default class Calculation extends Component {
             className={styles.calculation__options}
           >
             <EstimateOptions
+              rate={this.props.rate}
               hours={this.props.hours}
               onRateChange={this.props.onRateChange}
+              estimateOptions={this.props.estimateOptions}
               addEstimateOptions={this.props.addEstimateOptions}
             />
           </Col>
