@@ -17,6 +17,8 @@ import styles from './styles.scss';
 export default class Header extends Component {
   constructor(props) {
     super(props);
+    console.log('constructor');
+    console.log(props);
     this.state = {
       tasks: [],
       parentTaskId: '',
@@ -26,12 +28,15 @@ export default class Header extends Component {
         sprintNumber: '',
       },
     };
-    this.onDateChange = this.onDateChange.bind(this);
-    this.renderTasks = this.renderTasks.bind(this);
+
     this.preAddTask = this.preAddTask.bind(this);
+    this.renderTasks = this.renderTasks.bind(this);
+    this.renderHeader = this.renderHeader.bind(this);
+    this.onDateChange = this.onDateChange.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.createTaskAction = this.createTaskAction.bind(this);
   }
+
   componentWillUpdate(nextProps, nextState) {
     if (nextState.date !== this.state.date) {
       this.datefield.setValue(nextState.date);
@@ -77,6 +82,9 @@ export default class Header extends Component {
         break;
 
       case 'ADD_NEW_CLIENT_DATA':
+        console.log('createtaskAction');
+        console.log(value);
+        console.log(name);
         this.props.addNewClientData(name, value);
         break;
 
@@ -84,12 +92,14 @@ export default class Header extends Component {
         return '';
     }
   }
+
   onDateChange(dateString) {
     if (dateString) {
       this.setState({ date: dateString });
       this.props.addNewClientData('data', dateString);
     }
   }
+
   calculateHours(parentTaskId) {
     const newTask = this.state.newTask;
     if (newTask !== null) {
@@ -153,6 +163,7 @@ export default class Header extends Component {
     e.target.style.height = '1px';
     e.target.style.height = `${10 + e.target.scrollHeight}px`;
   }
+
   renderTasks(tasks = [], iterator) {
     return tasks.map(task => (
       <div key={task.id}>
@@ -269,8 +280,73 @@ export default class Header extends Component {
     );
   }
 
+  renderHeader() {
+    const {
+      data,
+      clientName,
+      projectName,
+      sprintNumber,
+    } = this.props.headerAdditional
+
+    return (
+      <Form className={styles.right}>
+        <FormGroup className={styles.right__group}>
+          <DateField
+            value={data}
+            placeholder="Date:"
+            htmlFor="datePicker"
+            dateFormat="YYYY-MM-DD"
+            className={styles.right__group_item}
+            onChange={e => this.onDateChange(e)}
+            ref={(dateField) => { this.datefield = dateField; }}
+          />
+        </FormGroup>
+        <FormGroup className={styles.right__group}>
+          <Input
+            type="text"
+            id="clientName"
+            name="clientName"
+            value={clientName}
+            placeholder="Client name:"
+            className={styles.right__group_item}
+            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
+          />
+        </FormGroup>
+        <FormGroup className={styles.right__group}>
+          <Input
+            type="text"
+            id="projectName"
+            name="projectName"
+            value={projectName}
+            placeholder="Project name:"
+            className={styles.right__group_item}
+            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
+          />
+        </FormGroup>
+        <FormGroup className={styles.right__group}>
+          <Input
+            type="number"
+            id="sprintNumber"
+            name="sprintNumber"
+            value={sprintNumber}
+            placeholder="Sprint:"
+            className={styles.right__group_item}
+            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
+          />
+        </FormGroup>
+      </Form>
+    );
+  }
+
   render() {
-    const tasks = this.props.tasks;
+    const {
+      tasks,
+      headerAdditional: {
+        comments,
+        technologies,
+      }
+    } = this.props;
+
     return (
       <div>
         <Row className={styles.header}>
@@ -300,73 +376,17 @@ export default class Header extends Component {
             </div>
           </Col>
           <Col xs="12" md="7" className={styles.header__right}>
-            <Form className={styles.right}>
-              <FormGroup className={styles.right__group}>
-                <DateField
-                  htmlFor="datePicker"
-                  dateFormat="YYYY-MM-DD"
-                  ref={(dateField) => {
-                    this.datefield = dateField;
-                  }}
-                  onChange={(e) => {
-                    this.onDateChange(e);
-                  }}
-                  placeholder="Date:"
-                  className={styles.right__group_item}
-                />
-              </FormGroup>
-              <FormGroup className={styles.right__group}>
-                <Input
-                  name="clientName"
-                  // value={this.state.infoCollector.clientName}
-                  type="text"
-                  id="clientName"
-                  className={styles.right__group_item}
-                  onBlur={(e) => {
-                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
-                  }}
-                  placeholder="Client name:"
-                />
-              </FormGroup>
-              <FormGroup className={styles.right__group}>
-                <Input
-                  type="text"
-                  id="projectName"
-                  name="projectName"
-                  // value={this.state.infoCollector.projectName}
-                  className={styles.right__group_item}
-                  onBlur={(e) => {
-                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
-                  }}
-                  placeholder="Project name:"
-                />
-              </FormGroup>
-              <FormGroup className={styles.right__group}>
-                <Input
-                  type="number"
-                  id="sprintNumber"
-                  name="sprintNumber"
-                  // value={this.state.infoCollector.sprintNumber}
-                  className={styles.right__group_item}
-                  onBlur={(e) => {
-                    this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
-                  }}
-                  placeholder="Sprint:"
-                />
-              </FormGroup>
-            </Form>
+            {this.renderHeader()}
           </Col>
         </Row>
         <FormGroup className={styles.right__group}>
           <Input
             type="textarea"
-            onChange={this.textAreaAdjust}
-            onBlur={(e) => {
-              this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
-            }}
-            placeholder="Technologies, libraries, APIs"
-            // value={this.state.technologies}
             name="technologies"
+            value={technologies}
+            onChange={this.textAreaAdjust}
+            placeholder="Technologies, libraries, APIs"
+            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
@@ -374,13 +394,11 @@ export default class Header extends Component {
         <FormGroup className={styles.right__group}>
           <Input
             type="textarea"
-            onChange={this.textAreaAdjust}
-            onBlur={(e) => {
-              this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA');
-            }}
-            // value={this.state.comments}
-            placeholder="Comments"
             name="comments"
+            value={comments}
+            placeholder="Comments"
+            onChange={this.textAreaAdjust}
+            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
           />
         </FormGroup>
       </div>
