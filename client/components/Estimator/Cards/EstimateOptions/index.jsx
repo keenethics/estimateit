@@ -7,33 +7,8 @@ import styles from './styles.scss';
 export default class EstimateOptions extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      calculationData: {
-        qa: 10,
-        pm: 10,
-        bugFixes: 10,
-        risks: 10,
-        completing: 100,
-      },
-      estimateFieldsAmount: {
-        qa: 0,
-        pm: 0,
-        bugFixes: 0,
-        risks: 0,
-        completing: 0,
-      },
-      rate: 25,
-    };
+
     this.onFieldChange = this.onFieldChange.bind(this);
-  }
-
-  componentDidMount() {
-    this.props.addEstimateOptions(this.state.calculationData, this.state.estimateFieldsAmount);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.hours === nextProps.hours) return;
-    this.calcOptionsData(nextProps);
   }
 
   onFieldChange({ target: { name, value } }) {
@@ -41,12 +16,6 @@ export default class EstimateOptions extends Component {
     const newestimateOptions = { ...estimateOptions, [name]: parseInt(value, 10) };
 
     addEstimateOptions(newestimateOptions);
-  }
-
-  calcOptionsData(nextProps) {
-    const { estimateFieldsAmount, calculationData } = this.state;
-    const round = key => Math.round(nextProps.hours * calculationData[key] / 100);
-    Object.keys(estimateFieldsAmount).forEach(key => estimateFieldsAmount[key] = round(key));
   }
 
   render() {

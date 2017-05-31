@@ -136,11 +136,11 @@ export default class Main extends Component {
         </Col>
         <Col xs="12">
           <FinalEstimate
-            rate={this.state.rate}
             hours={this.state.hours}
             data={this.props.someProp}
             mainState={this.props.mainState}
             headerState={this.props.headerState}
+            rate={this.props.mainState.moneyRate}
             calculationData={this.state.calculationData}
           />
         </Col>
