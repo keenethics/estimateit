@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import Slider from './slider';
 import styles from './styles.scss';
@@ -36,10 +37,10 @@ export default class EstimateOptions extends Component {
   }
 
   onFieldChange({ target: { name, value } }) {
-    const { estimateOptions } = this.props;
+    const { estimateOptions, addEstimateOptions } = this.props;
     const newestimateOptions = { ...estimateOptions, [name]: parseInt(value, 10) };
 
-    this.props.addEstimateOptions(newestimateOptions);
+    addEstimateOptions(newestimateOptions);
   }
 
   calcOptionsData(nextProps) {
@@ -58,7 +59,7 @@ export default class EstimateOptions extends Component {
         pm,
         risks,
         bugFixes,
-        completing
+        completing,
       },
     } = this.props;
 
@@ -73,7 +74,7 @@ export default class EstimateOptions extends Component {
             value={rate}
             type="number"
             className="radarChartPart estimate"
-            onChange={({ target: value }) => onRateChange(value)}
+            onChange={({ target: { value } }) => onRateChange(parseInt(value, 10))}
           />
         </InputGroup>
         <Slider
@@ -115,3 +116,12 @@ export default class EstimateOptions extends Component {
     );
   }
 }
+
+
+EstimateOptions.propTypes = {
+  rate: PropTypes.number.isRequired,
+  hours: PropTypes.number.isRequired,
+  onRateChange: PropTypes.func.isRequired,
+  estimateOptions: PropTypes.object.isRequired,
+  addEstimateOptions: PropTypes.func.isRequired,
+};
