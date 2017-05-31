@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   CardTitle,
@@ -13,12 +14,10 @@ import shortid from 'shortid';
 import 'react-date-picker/index.css';
 import styles from './styles.scss';
 
-// TODO: Add props validation
 export default class Header extends Component {
   constructor(props) {
     super(props);
-    console.log('constructor');
-    console.log(props);
+
     this.state = {
       tasks: [],
       parentTaskId: '',
@@ -405,3 +404,16 @@ export default class Header extends Component {
     );
   }
 }
+
+Header.propTypes = {
+  tasks: PropTypes.array.isRequired,
+  parentId: PropTypes.object.isRequired,
+  addNewTask: PropTypes.func.isRequired,
+  removeTask: PropTypes.func.isRequired,
+  addNewSubTask: PropTypes.func.isRequired,
+  setParentTaskId: PropTypes.func.isRequired,
+  addNewClientData: PropTypes.func.isRequired,
+  findTaskAndModify: PropTypes.func.isRequired,
+  headerAdditional: PropTypes.object.isRequired,
+  removeParentTaskId: PropTypes.func.isRequired,
+};
