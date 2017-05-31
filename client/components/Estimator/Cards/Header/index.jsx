@@ -407,7 +407,7 @@ export default class Header extends Component {
 
 Header.propTypes = {
   tasks: PropTypes.array.isRequired,
-  parentId: PropTypes.object.isRequired,
+  parentId: PropTypes.string.isRequired,
   addNewTask: PropTypes.func.isRequired,
   removeTask: PropTypes.func.isRequired,
   addNewSubTask: PropTypes.func.isRequired,
