@@ -1,58 +1,61 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBlock, CardHeader, Input } from 'reactstrap';
 import styles from './styles.scss';
 
 export default class Contacts extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
     this.onContactsChange = this.onContactsChange.bind(this);
   }
 
-  onContactsChange(e) {
-    const { name, value } = e.currentTarget;
+  onContactsChange({ currentTarget: { name, value } }) {
     this.props.addClientData(name, value);
   }
 
   render() {
-    return (
+    const {
+      pm,
+      email,
+      skype,
+      position,
+    } = this.props.contacts;
 
+    return (
       <Card className={styles.contacts}>
         <CardHeader>If you have any questions about this estimate, please contact</CardHeader>
         <CardBlock>
           <Input
-            className={styles.contacts__input}
+            name="pm"
+            value={pm}
             type="text"
             placeholder="PM's name"
-            name="pm"
-            value={this.state.pm}
             onBlur={this.onContactsChange}
+            className={styles.contacts__input}
           />
           <Input
-            className={styles.contacts__input}
             type="text"
-            placeholder="Position"
             name="position"
-            value={this.state.position}
+            value={position}
+            placeholder="Position"
             onBlur={this.onContactsChange}
+            className={styles.contacts__input}
           />
           <Input
-            className={styles.contacts__input}
             type="email"
-            placeholder="Email"
             name="email"
-            value={this.state.email}
+            value={email}
+            placeholder="Email"
             onBlur={this.onContactsChange}
+            className={styles.contacts__input}
           />
           <Input
-            className={styles.contacts__input}
             type="text"
-            placeholder="Skype"
             name="skype"
-            value={this.state.skype}
+            value={skype}
+            placeholder="Skype"
             onBlur={this.onContactsChange}
+            className={styles.contacts__input}
           />
         </CardBlock>
       </Card>
@@ -60,3 +63,8 @@ export default class Contacts extends Component {
   }
 
 }
+
+Contacts.propTypes = {
+  contacts: PropTypes.object.isRequired,
+  addClientData: PropTypes.func.isRequired,
+};

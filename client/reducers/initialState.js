@@ -5,6 +5,7 @@ export default {
     infoCollector: {},
   },
   main: {
+    // TODO remove calculationData
     calculationData: {
       qa: 10,
       pm: 10,

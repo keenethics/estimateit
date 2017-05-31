@@ -128,26 +128,27 @@ export default class Main extends Component {
         <Col xs="12">
           <Calculation
             hours={this.state.hours}
-            onRateChange={this.props.changeMoneyRate}
-            estimateOptions={this.props.mainState.estimateOptions}
-            addEstimateOptions={this.props.addEstimateOptions}
-
             rate={this.props.mainState.moneyRate}
-            addClientData={this.props.addClientData}
+            onRateChange={this.props.changeMoneyRate}
+            addEstimateOptions={this.props.addEstimateOptions}
+            estimateOptions={this.props.mainState.estimateOptions}
           />
         </Col>
         <Col xs="12">
           <FinalEstimate
-            hours={this.state.hours}
             rate={this.state.rate}
-            calculationData={this.state.calculationData}
+            hours={this.state.hours}
             data={this.props.someProp}
-            headerState={this.props.headerState}
             mainState={this.props.mainState}
+            headerState={this.props.headerState}
+            calculationData={this.state.calculationData}
           />
         </Col>
         <Col xs="12">
-          <Contacts addClientData={this.props.addClientData} />
+          <Contacts
+            contacts={this.props.mainState.contacts}
+            addClientData={this.props.addClientData}
+          />
         </Col>
       </Row>
     );

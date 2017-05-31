@@ -81,9 +81,6 @@ export default class Header extends Component {
         break;
 
       case 'ADD_NEW_CLIENT_DATA':
-        console.log('createtaskAction');
-        console.log(value);
-        console.log(name);
         this.props.addNewClientData(name, value);
         break;
 
