@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Container, Col, Card } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 import * as actionsHeader from '../../actions/Header';
 import * as actionsMain from '../../actions/Main';
 import * as actionsLoading from '../../actions/loading';
 
-
 import Header from '../../components/Estimator/Cards/Header';
 import Main from '../../components/Estimator/Cards/Main';
 import styles from '../../components/Estimator/styles.scss';
-import 'bootstrap/dist/css/bootstrap.css';
+
 
 export class App extends Component {
 
@@ -18,50 +19,49 @@ export class App extends Component {
     this.props.loadingActions.fetchTodos(location.pathname);
   }
   render() {
-    const { props } = this;
-    const { headerActions, mainActions, headerState, mainState } = props;
-    const { headerAdditional, tasks, parentTaskId } = headerState;
     const {
-      addNewTask,
-      addNewSubTask,
-      removeTask,
-      findTaskAndModify,
-      addNewClientData,
-      setParentTaskId,
-      removeParentTaskId,
-    } = headerActions;
-    const { devHours, calculationData, moneyRate, estimateOptions } = mainState;
-    const { addEstimateOptions, calcDevHours, changeMoneyRate, addClientData } = mainActions;
+      mainState,
+      headerState,
+      mainActions: {
+        calcDevHours,
+        addClientData,
+        changeMoneyRate,
+        addEstimateOptions,
+      },
+      headerActions: {
+        addNewTask,
+        removeTask,
+        addNewSubTask,
+        setParentTaskId,
+        addNewClientData,
+        findTaskAndModify,
+        removeParentTaskId,
+      },
+    } = this.props;
+
     return (
       <Container>
         <Card id="screen">
           <Col xs="12" md="12" lg="10" className={styles.estimator}>
             <Header
-              className={styles.estimator__header}
-              addNewClientData={addNewClientData}
+              removeTask={removeTask}
               addNewTask={addNewTask}
+              headerState={headerState}
               addNewSubTask={addNewSubTask}
               setParentTaskId={setParentTaskId}
-              removeParentTaskId={removeParentTaskId}
-              removeTask={removeTask}
+              addNewClientData={addNewClientData}
+              className={styles.estimator__header}
               findTaskAndModify={findTaskAndModify}
-              headerAdditional={headerAdditional}
-              tasks={tasks}
-              parentId={parentTaskId}
+              removeParentTaskId={removeParentTaskId}
             />
             <Main
-              className={styles.estimator__body}
-              changeMoneyRate={changeMoneyRate}
-              calcDevHours={calcDevHours}
-              addEstimateOptions={addEstimateOptions}
-              addClientData={addClientData}
-              devHours={devHours}
-              options={calculationData}
-              estimateOptions={estimateOptions}
-              moneyRate={moneyRate}
-              tasks={tasks}
-              headerState={headerState}
               mainState={mainState}
+              headerState={this.props.headerState}
+              calcDevHours={calcDevHours}
+              addClientData={addClientData}
+              changeMoneyRate={changeMoneyRate}
+              className={styles.estimator__body}
+              addEstimateOptions={addEstimateOptions}
             />
           </Col>
         </Card>
@@ -69,6 +69,15 @@ export class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  mainState: PropTypes.object.isRequired,
+  headerState: PropTypes.object.isRequired,
+  mainActions: PropTypes.object.isRequired,
+  headerActions: PropTypes.object.isRequired,
+  loadingActions: PropTypes.object.isRequired,
+};
+
 
 function mapStateToProps(state) {
   return {

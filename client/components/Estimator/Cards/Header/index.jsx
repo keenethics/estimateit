@@ -18,15 +18,7 @@ export default class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      tasks: [],
-      parentTaskId: '',
-      infoCollector: {
-        clientName: '',
-        projectName: '',
-        sprintNumber: '',
-      },
-    };
+    this.state = { };
 
     this.preAddTask = this.preAddTask.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
@@ -91,7 +83,6 @@ export default class Header extends Component {
 
   onDateChange(dateString) {
     if (dateString) {
-      this.setState({ date: dateString });
       this.props.addNewClientData('data', dateString);
     }
   }
@@ -101,7 +92,7 @@ export default class Header extends Component {
     if (newTask !== null) {
       parentTaskId = newTask.parentTaskId;
     }
-    const tasks = [...this.props.tasks];
+    const tasks = [...this.props.headerState.tasks];
     const updateWithIndex = (tree, id, update) =>
       tree.map((node) => {
         if (node.id === id) node = update(node);
@@ -146,10 +137,10 @@ export default class Header extends Component {
     sumMin(par);
   }
 
-  preAddTask(e) {
-    const newTask = this.state.newTask || {};
-    newTask[e.currentTarget.name] = e.currentTarget.value || 0;
-    newTask.parentTaskId = e.currentTarget.dataset.parentid;
+  preAddTask({ currentTarget: { name, value, dataset: { parentid } } }) {
+    const { newTask = {} } = this.state;
+    newTask[name] = value || 0;
+    newTask.parentTaskId = parentid;
     this.setState({
       newTask,
     });
@@ -161,74 +152,86 @@ export default class Header extends Component {
   }
 
   renderTasks(tasks = [], iterator) {
-    return tasks.map(task => (
-      <div key={task.id}>
-        <FormGroup className={styles.subtasks}>
-          <Input
-            data-id={task.id}
-            className={styles.subtasks__item}
-            name="taskName"
-            placeholder="subtask"
-            value={task.taskName}
-            onChange={(e) => {
-              this.createTaskAction(e, 'EDIT_TASK');
-            }}
-          />
-          <Input
-            data-id={task.id}
-            className={styles.subtasks__item}
-            type="number"
-            value={task.sumMin ? task.sumMin : task.minimumHours}
-            name="minimumHours"
-            placeholder="min"
-            min="0"
-            onChange={(e) => {
-              this.createTaskAction(e, 'EDIT_TASK');
-            }}
-          />
-          <Input
-            data-id={task.id}
-            className={styles.subtasks__item}
-            type="number"
-            value={task.sumMin ? task.sumMax : task.maximumHours}
-            name="maximumHours"
-            placeholder="max"
-            min={task.minimumHours}
-            onChange={(e) => {
-              this.createTaskAction(e, 'EDIT_TASK');
-            }}
-          />
+    return tasks.map((task) => {
+      const {
+        minimumHours,
+        maximumHours,
+        parent,
+        sumMin,
+        taskName,
+        sumMax,
+        id: taskId
+      } = task;
+      const { parentTaskId } = this.props.headerState;
+      return (
+        <div key={taskId}>
+          <FormGroup className={styles.subtasks}>
+            <Input
+              data-id={taskId}
+              className={styles.subtasks__item}
+              name="taskName"
+              placeholder="subtask"
+              value={taskName}
+              onChange={(e) => {
+                this.createTaskAction(e, 'EDIT_TASK');
+              }}
+            />
+            <Input
+              data-id={taskId}
+              className={styles.subtasks__item}
+              type="number"
+              value={sumMin ? sumMin : minimumHours}
+              name="minimumHours"
+              placeholder="min"
+              min="0"
+              onChange={(e) => {
+                this.createTaskAction(e, 'EDIT_TASK');
+              }}
+            />
+            <Input
+              data-id={taskId}
+              className={styles.subtasks__item}
+              type="number"
+              value={sumMax ? sumMax : maximumHours}
+              name="maximumHours"
+              placeholder="max"
+              min={minimumHours}
+              onChange={(e) => {
+                this.createTaskAction(e, 'EDIT_TASK');
+              }}
+            />
 
-          {iterator < 2
-            ? <Button
+            {iterator < 2
+              ? <Button
+                color="danger"
+                className={styles.subtasks__item}
+                data-id={taskId}
+                onClick={(e) => {
+                  this.createTaskAction(e, 'SET_PARENT_TASK_ID');
+                }}
+              >
+                  Add subtask
+                </Button>
+              : ''}
+            <Button
               color="danger"
               className={styles.subtasks__item}
-              data-id={task.id}
+              data-id={taskId}
               onClick={(e) => {
-                this.createTaskAction(e, 'SET_PARENT_TASK_ID');
+                this.createTaskAction(e, 'DELETE_TASK');
               }}
             >
-                Add subtask
-              </Button>
-            : ''}
-          <Button
-            color="danger"
-            className={styles.subtasks__item}
-            data-id={task.id}
-            onClick={(e) => {
-              this.createTaskAction(e, 'DELETE_TASK');
-            }}
-          >
-            Delete
-          </Button>
-        </FormGroup>
-        <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
-          {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
-          {this.props.parentId.id === task.id &&
-            this.renderAddTaskForm(this.props.parentId.id)}
+              Delete
+            </Button>
+          </FormGroup>
+          <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
+            {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
+            {parentTaskId === taskId &&
+              this.renderAddTaskForm(parentTaskId)}
+          </div>
         </div>
-      </div>
-    ));
+      )
+    });
   }
 
   renderAddTaskForm(parentTaskId) {
@@ -282,7 +285,7 @@ export default class Header extends Component {
       clientName,
       projectName,
       sprintNumber,
-    } = this.props.headerAdditional
+    } = this.props.headerState.headerAdditional;
 
     return (
       <Form className={styles.right}>
@@ -340,8 +343,8 @@ export default class Header extends Component {
       headerAdditional: {
         comments,
         technologies,
-      }
-    } = this.props;
+      },
+    } = this.props.headerState;
 
     return (
       <div>
@@ -403,14 +406,12 @@ export default class Header extends Component {
 }
 
 Header.propTypes = {
-  tasks: PropTypes.array.isRequired,
-  parentId: PropTypes.string.isRequired,
   addNewTask: PropTypes.func.isRequired,
   removeTask: PropTypes.func.isRequired,
+  headerState: PropTypes.object.isRequired,
   addNewSubTask: PropTypes.func.isRequired,
   setParentTaskId: PropTypes.func.isRequired,
   addNewClientData: PropTypes.func.isRequired,
   findTaskAndModify: PropTypes.func.isRequired,
-  headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
 };

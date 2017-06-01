@@ -5,19 +5,11 @@ export default {
     infoCollector: {},
   },
   main: {
-    // TODO remove calculationData
-    calculationData: {
-      qa: 10,
-      pm: 10,
-      bugFixes: 10,
-      risks: 10,
-      completing: 100,
-    },
     estimateOptions: {
       qa: 10,
       pm: 10,
-      bugFixes: 10,
       risks: 10,
+      bugFixes: 10,
       completing: 100,
     },
     moneyRate: 25,
@@ -26,15 +18,15 @@ export default {
       maxHours: 0,
     },
     contacts: {
-      email: '',
       pm: '',
-      position: '',
       skype: '',
+      email: '',
+      position: '',
     },
   },
   loading: {
     items: [],
-    isFetching: false,
     error: undefined,
+    isFetching: false,
   },
 };

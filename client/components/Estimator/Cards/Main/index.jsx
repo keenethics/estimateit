@@ -24,15 +24,18 @@ export default class Main extends Component {
   }
 
   componentDidMount() {
+    const { tasks } = this.props.headerState;
+
     this.transformToVector();
-    this.calcDeveloperHours(this.parseTaskHours(this.props.tasks));
+    this.calcDeveloperHours(this.parseTaskHours(tasks));
     this.calculateAmountOfHours();
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps({ headerState: { tasks: newTasks } }) {
     // TODO: Make it more beautiful
-    if (JSON.stringify(this.props.tasks) !== JSON.stringify(nextProps.tasks)) {
-      this.calcDeveloperHours(this.parseTaskHours(nextProps.tasks));
+    const { tasks } = this.props.headerState;
+    if (JSON.stringify(tasks) !== JSON.stringify(newTasks)) {
+      this.calcDeveloperHours(this.parseTaskHours(newTasks));
     }
   }
 
@@ -42,9 +45,10 @@ export default class Main extends Component {
   }
 
   transformToVector() {
-    const { tasks } = this.props;
+    const { tasks } = this.props.headerState;
     const tasksHours = this.parseTaskHours(tasks);
     const vector = new DiscreteVector(tasksHours);
+
     this.T = vector.combinations < 1000
       ? Array(vector.combinations)
           .fill()
@@ -80,7 +84,13 @@ export default class Main extends Component {
   }
 
   calculateAmountOfHours() {
-    const { pm, qa, bugFixes, risks, completing } = this.props.options;
+    const {
+      pm,
+      qa,
+      risks,
+      bugFixes,
+      completing
+    } = this.props.mainState.estimateOptions;
     let highestIndex = this.data.findIndex(item => item > completing);
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
@@ -95,11 +105,11 @@ export default class Main extends Component {
 
   render() {
     const {
-      devHours: {
-        minHours,
-        maxHours,
-      },
       mainState: {
+        devHours: {
+          minHours,
+          maxHours,
+        },
         contacts,
         moneyRate,
         estimateOptions,
@@ -162,12 +172,6 @@ export default class Main extends Component {
 }
 
 Main.propTypes = {
-  removeTask: PropTypes.func,
-  estimateOptions: PropTypes.object,
-  tasks: PropTypes.array.isRequired,
-  options: PropTypes.object.isRequired,
-  devHours: PropTypes.object.isRequired,
-  moneyRate: PropTypes.number.isRequired,
   mainState: PropTypes.object.isRequired,
   calcDevHours: PropTypes.func.isRequired,
   headerState: PropTypes.object.isRequired,
