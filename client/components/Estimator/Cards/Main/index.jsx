@@ -12,15 +12,7 @@ export default class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      calculationData: {
-        qa: 10,
-        pm: 10,
-        bugFixes: 10,
-        risks: 10,
-        completing: 100,
-      },
-      rate: 25,
-      hours: 0,
+      totalHours: 0,
     };
 
     this.T = [];
@@ -50,7 +42,8 @@ export default class Main extends Component {
   }
 
   transformToVector() {
-    const tasksHours = this.parseTaskHours(this.props.tasks);
+    const { tasks } = this.props;
+    const tasksHours = this.parseTaskHours(tasks);
     const vector = new DiscreteVector(tasksHours);
     this.T = vector.combinations < 1000
       ? Array(vector.combinations)
@@ -95,11 +88,27 @@ export default class Main extends Component {
     const hours = this.labels[highestIndex];
     const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
     const totalHours = Math.round(hours + additionalHourse);
-    this.state.hours = totalHours;
+    this.state.totalHours = totalHours;
+
+    // this.setState({ totalHours });
   }
 
   render() {
-    const { minHours, maxHours } = this.props.devHours;
+    const {
+      devHours: {
+        minHours,
+        maxHours,
+      },
+      mainState: {
+        contacts,
+        moneyRate,
+        estimateOptions,
+      },
+      addClientData,
+      changeMoneyRate,
+      addEstimateOptions,
+    } = this.props;
+
     this.transformToVector();
     return (
       <Row className={styles.main}>
@@ -127,27 +136,24 @@ export default class Main extends Component {
         </Col>
         <Col xs="12">
           <Calculation
-            hours={this.state.hours}
-            rate={this.props.mainState.moneyRate}
-            onRateChange={this.props.changeMoneyRate}
-            addEstimateOptions={this.props.addEstimateOptions}
-            estimateOptions={this.props.mainState.estimateOptions}
+            totalHours={this.state.totalHours}
+            rate={moneyRate}
+            onRateChange={changeMoneyRate}
+            estimateOptions={estimateOptions}
+            addEstimateOptions={addEstimateOptions}
           />
         </Col>
         <Col xs="12">
           <FinalEstimate
-            hours={this.state.hours}
-            data={this.props.someProp}
+            totalHours={this.state.totalHours}
             mainState={this.props.mainState}
             headerState={this.props.headerState}
-            rate={this.props.mainState.moneyRate}
-            calculationData={this.state.calculationData}
           />
         </Col>
         <Col xs="12">
           <Contacts
-            contacts={this.props.mainState.contacts}
-            addClientData={this.props.addClientData}
+            contacts={contacts}
+            addClientData={addClientData}
           />
         </Col>
       </Row>

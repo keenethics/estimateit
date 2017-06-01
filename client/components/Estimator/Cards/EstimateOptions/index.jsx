@@ -21,7 +21,7 @@ export default class EstimateOptions extends Component {
   render() {
     const {
       rate,
-      hours,
+      totalHours,
       onRateChange,
       estimateOptions: {
         qa,
@@ -50,35 +50,35 @@ export default class EstimateOptions extends Component {
           name="qa"
           title="QA"
           value={qa}
-          totalHours={hours}
+          totalHours={totalHours}
           handleChange={this.onFieldChange}
         />
         <Slider
           name="pm"
           title="PM"
           value={pm}
-          totalHours={hours}
+          totalHours={totalHours}
           handleChange={this.onFieldChange}
         />
         <Slider
           name="bugFixes"
           title="Bug Fixes"
           value={bugFixes}
-          totalHours={hours}
+          totalHours={totalHours}
           handleChange={this.onFieldChange}
         />
         <Slider
           name="risks"
           title="Risks"
           value={risks}
-          totalHours={hours}
+          totalHours={totalHours}
           handleChange={this.onFieldChange}
         />
         <Slider
           name="completing"
           title="Probability"
           value={completing}
-          totalHours={hours}
+          totalHours={totalHours}
           handleChange={this.onFieldChange}
         />
       </div>
@@ -89,7 +89,7 @@ export default class EstimateOptions extends Component {
 
 EstimateOptions.propTypes = {
   rate: PropTypes.number.isRequired,
-  hours: PropTypes.number.isRequired,
+  totalHours: PropTypes.number.isRequired,
   onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
   addEstimateOptions: PropTypes.func.isRequired,

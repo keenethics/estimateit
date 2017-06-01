@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import axios from 'axios';
 import Notification from 'react-notification-system';
@@ -11,6 +12,7 @@ export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      // TODO
       axios: [],
       dropdownOpen: false,
       csv: '',
@@ -22,9 +24,8 @@ export default class FinalEstimate extends Component {
   }
 
   toggle() {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen,
-    });
+    const { dropdownOpen } = this.state;
+    this.setState({ dropdownOpen: !dropdownOpen });
   }
 
   saveAsShortUrl() {
@@ -114,9 +115,13 @@ export default class FinalEstimate extends Component {
       id: 'completing',
       displayName: 'Completing',
     }]];
+    const {
+      headerState: { tasks },
+      mainState: { estimateOptions },
+    } = this.props;
 
     this.setState({
-      csv: csvGenerate(columns, this.props.data, this.props.calculationData),
+      csv: csvGenerate(columns, tasks, estimateOptions),
     }, () => {
       console.log('csv', this.state.csv);
       const a = document.createElement('a');
@@ -128,16 +133,17 @@ export default class FinalEstimate extends Component {
   }
 
   render() {
-    console.log(this.props);
+    const { mainState: { moneyRate }, totalHours } = this.props;
+    const totalSum = totalHours * moneyRate;
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
           <div className={styles.final__result}>
-            <div className={styles.final__result_info}>Total hours: {this.props.hours}</div>
+            <div className={styles.final__result_info}>Total hours: {totalHours}</div>
           </div>
           <div className={styles.final__result}>
             <div className={styles.final__result_info}>
-              Total sum: {this.props.hours * this.props.rate}$
+              Total sum: {totalSum}$
             </div>
           </div>
           <ButtonDropdown
@@ -165,3 +171,9 @@ export default class FinalEstimate extends Component {
     );
   }
 }
+
+FinalEstimate.propTypes = {
+  totalHours: PropTypes.number.isRequired,
+  mainState: PropTypes.object.isRequired,
+  headerState: PropTypes.object.isRequired,
+};

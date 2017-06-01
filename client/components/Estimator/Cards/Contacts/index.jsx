@@ -10,9 +10,6 @@ export default class Contacts extends Component {
   }
 
   onContactsChange({ currentTarget: { name, value } }) {
-    console.log('contacts');
-    console.log(name);
-    console.log(value);
     this.props.addClientData(name, value);
   }
 

@@ -7,7 +7,7 @@ import styles from './styles.scss';
 
 const Calculation = ({
   rate,
-  hours,
+  totalHours,
   onRateChange,
   estimateOptions,
   addEstimateOptions,
@@ -26,7 +26,7 @@ const Calculation = ({
       >
         <EstimateOptions
           rate={rate}
-          hours={hours}
+          totalHours={totalHours}
           onRateChange={onRateChange}
           estimateOptions={estimateOptions}
           addEstimateOptions={addEstimateOptions}
@@ -38,7 +38,7 @@ const Calculation = ({
 
 Calculation.propTypes = {
   rate: PropTypes.number.isRequired,
-  hours: PropTypes.number.isRequired,
+  totalHours: PropTypes.number.isRequired,
   onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
   addEstimateOptions: PropTypes.func.isRequired,
