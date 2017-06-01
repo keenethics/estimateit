@@ -8,7 +8,7 @@ import Nightmare from 'nightmare';
 
 import UrlEntry from './models/schema';
 import { createFullUrl, isValidUrl } from './utils/url';
-import { isDuplicate, insertNew } from './utils/mongo';
+import { insertNew } from './utils/mongo';
 
 const nightmare = Nightmare({ show: false });
 const config = dotend.config();
@@ -32,24 +32,20 @@ db.once('open', () => {
   console.log('we are connected!');
 });
 
-app.get('/:shortCode', (req, res) => {
-  const shortCode = parseInt(req.params.shortCode);
-  if (isNaN(shortCode)) {
-    res.status(500).json({ error: 'Invalid URL shortCode.' });
-  } else {
-    UrlEntry.findOne({ shortCode }).then(doc => {
-      if (!doc) {
-        res.status(404).json({ error: 'Page not found' });
-      } else {
-        res.status(200).json({
-          data: {
-            header: doc.Header,
-            main: doc.Main,
-          },
-        });
-      }
-    });
-  }
+app.get('/:id', (req, res) => {
+  const id = req.params.id;
+  UrlEntry.findOne({ _id: id }).then(doc => {
+    if (!doc) {
+      res.status(404).json({ error: 'Page not found' });
+    } else {
+      res.status(200).json({
+        data: {
+          header: doc.Header,
+          main: doc.Main,
+        },
+      });
+    }
+  });
 });
 app.post('/api/pdf', (req, res) => {
   const { url } = req.body;
@@ -79,21 +75,12 @@ app.post('/api/pdf', (req, res) => {
 app.post('/new', (req, res) => {
   const { url, data } = req.body;
   console.log('data', data);
-  isDuplicate(url).then(exists => {
-    if (exists) {
-      res.status(500).json({
-        message: 'URL already exists in the database.',
-        url: createFullUrl(req, exists)
-      });
-    } else {
-      insertNew(url, data).then(inserted => {
-        res.status(200).json({
-          message: 'Url successfully shortened',
-          url: createFullUrl(req, inserted.shortCode),
-          origin: inserted.origin
-        });
-      });
-    }
+  insertNew(url, data).then(inserted => {
+    res.status(200).json({
+      message: 'Url successfully generated.',
+      url: createFullUrl(req, inserted._id),
+      origin: inserted.origin
+    });
   });
 });
 

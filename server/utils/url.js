@@ -5,9 +5,5 @@ export function isValidUrl(url) {
 }
 /*eslint-enable */
 export function createFullUrl(req, url) {
-  return `${req.protocol}://${req.hostname}:${getPort()}/${url}`;
-}
-
-function getPort() {
-  return process.env.API_PORT || 3000;
+  return `${req.protocol}://${req.hostname}:${process.env.BROWSER_SYNC_PORT}/${url}`;
 }

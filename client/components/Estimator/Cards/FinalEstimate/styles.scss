@@ -30,3 +30,24 @@
     }
   }
 }
+
+.custom-notification-action-button {
+  background: #337ab7;
+  border-radius: 2px;
+  padding: 6px 20px;
+  margin: 5px 0px 0px;
+  font-weight: bold;
+  border: 0px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.custom-notification-input {
+  display: block;
+  margin: 5px 0px 0px;
+  padding: 3px 5px;
+  width: 100%;
+  border: 1px solid #337ab7;
+  border-radius: 2px;
+  color: #464a4c;
+}

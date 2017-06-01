@@ -6,27 +6,31 @@ import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
 
-
 export default class FinalEstimate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       axios: [],
-      dropdownOpen: false,
+      dropdownOpen: false, 
       csv: '',
     };
-    this.saveAsShortUrl = this.saveAsShortUrl.bind(this);
+    this.saveAsUrl = this.saveAsUrl.bind(this);
     this.saveAsPdf = this.saveAsPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggle = this.toggle.bind(this);
   }
 
+  copyUrlToClipboard(url) {
+    this.customNotificationInput.value = url.trim();
+    this.customNotificationInput.select();
+    document.execCommand('copy');
+  }
   toggle() {
     this.setState({
       dropdownOpen: !this.state.dropdownOpen,
     });
   }
-  saveAsShortUrl() {
+  saveAsUrl() {
     axios.post('http://localhost:3000/new/', {
       url: decodeURIComponent(location.href),
       data: {
@@ -39,10 +43,24 @@ export default class FinalEstimate extends Component {
         this.refs.notificationSystem.addNotification({
           title: 'Success',
           position: 'br',
-          message: `
-          ${data.message}
-          And copy to clipboard`,
-          level: 'success' });
+          message: `${data.message}`,
+          level: 'success',
+          children: (
+            <div>
+              <input
+                className={styles['custom-notification-input']}
+                type="text"
+                ref={node => (this.customNotificationInput = node)}
+                value={data.url} onClick={e => e.stopPropagation()}
+              />
+              <button
+                type="button"
+                className={styles['custom-notification-action-button']}
+                onClick={this.copyUrlToClipboard.bind(this, data.url)}
+              >Copy to clipboard</button>
+            </div>
+          ),
+        });
         this.setState({
           axios: data,
         });
@@ -151,7 +169,7 @@ export default class FinalEstimate extends Component {
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
               <DropdownItem onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
-              <DropdownItem onClick={this.saveAsShortUrl}>Generate URL</DropdownItem>
+              <DropdownItem onClick={this.saveAsUrl}>Generate URL</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
           <Notification ref="notificationSystem" />
