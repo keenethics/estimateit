@@ -13,6 +13,8 @@ const Slider = ({
   handleChange,
 }) => {
   const hours = Math.round(totalHours * value / 100);
+  console.log(totalHours);
+  console.log(value);
 
   return (
     <InputGroup className={styles.range__item}>

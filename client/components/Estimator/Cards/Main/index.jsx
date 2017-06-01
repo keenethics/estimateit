@@ -18,9 +18,9 @@ export default class Main extends Component {
     this.T = [];
     this.labels = [];
     this.embodiment = this.embodiment.bind(this);
+    this.parseTaskHours = this.parseTaskHours.bind(this);
     this.transformToVector = this.transformToVector.bind(this);
     this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
-    this.parseTaskHours = this.parseTaskHours.bind(this);
   }
 
   componentDidMount() {
@@ -52,7 +52,7 @@ export default class Main extends Component {
     this.T = vector.combinations < 1000
       ? Array(vector.combinations)
           .fill()
-          .map((prev, item) => this.embodiment(tasksHours, vector.next()))
+          .map(prev => this.embodiment(tasksHours, vector.next()))
           .sort((a, b) => a - b)
       : Array(1000)
           .fill()
@@ -65,7 +65,7 @@ export default class Main extends Component {
   }
 
   embodiment(a, b) {
-    return a.reduce((prev, item, i) => prev + item[b[i]], 0);
+    return a.reduce((prev, item, i) => prev + +item[b[i]], 0);
   }
 
   calcDeveloperHours(data) {
@@ -89,13 +89,16 @@ export default class Main extends Component {
       qa,
       risks,
       bugFixes,
-      completing
+      completing,
     } = this.props.mainState.estimateOptions;
+
     let highestIndex = this.data.findIndex(item => item > completing);
+
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
     }
-    const hours = this.labels[highestIndex];
+
+    const hours = this.T[highestIndex];
     const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
     const totalHours = Math.round(hours + additionalHourse);
     this.state.totalHours = totalHours;

@@ -13,8 +13,7 @@ export function fetchTodos(path) {
     return axios
       .get(`http://localhost:3000${path}`)
       .then((response) => {
-        const { data } = response;
-        console.log('data', data);
+        const { data } = response;  
         dispatch({
           type: FETCH_TODOS_SUCCESS,
           data,
@@ -22,7 +21,6 @@ export function fetchTodos(path) {
       })
       .catch((error) => {
         const { data } = error.response;
-        console.log('data', data);
         dispatch({
           type: FETCH_TODOS_FAILURE,
           error: data,
