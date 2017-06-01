@@ -154,13 +154,13 @@ export default class Header extends Component {
   renderTasks(tasks = [], iterator) {
     return tasks.map((task) => {
       const {
+        tasks,
+        sumMin,
+        sumMax,
+        taskName,
+        id: taskId,
         minimumHours,
         maximumHours,
-        parent,
-        sumMin,
-        taskName,
-        sumMax,
-        id: taskId
       } = task;
       const { parentTaskId } = this.props.headerState;
       return (
@@ -225,12 +225,12 @@ export default class Header extends Component {
             </Button>
           </FormGroup>
           <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
-            {task.tasks && this.renderTasks(task.tasks, iterator + 1)}
+            {tasks && this.renderTasks(tasks, iterator + 1)}
             {parentTaskId === taskId &&
               this.renderAddTaskForm(parentTaskId)}
           </div>
         </div>
-      )
+      );
     });
   }
 
