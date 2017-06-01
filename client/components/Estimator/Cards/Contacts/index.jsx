@@ -10,6 +10,9 @@ export default class Contacts extends Component {
   }
 
   onContactsChange({ currentTarget: { name, value } }) {
+    console.log('contacts');
+    console.log(name);
+    console.log(value);
     this.props.addClientData(name, value);
   }
 
@@ -30,7 +33,7 @@ export default class Contacts extends Component {
             value={pm}
             type="text"
             placeholder="PM's name"
-            onBlur={this.onContactsChange}
+            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Input
@@ -38,7 +41,7 @@ export default class Contacts extends Component {
             name="position"
             value={position}
             placeholder="Position"
-            onBlur={this.onContactsChange}
+            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Input
@@ -46,7 +49,7 @@ export default class Contacts extends Component {
             name="email"
             value={email}
             placeholder="Email"
-            onBlur={this.onContactsChange}
+            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Input
@@ -54,7 +57,7 @@ export default class Contacts extends Component {
             name="skype"
             value={skype}
             placeholder="Skype"
-            onBlur={this.onContactsChange}
+            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
         </CardBlock>

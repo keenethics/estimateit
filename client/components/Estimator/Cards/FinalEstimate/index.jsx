@@ -26,6 +26,7 @@ export default class FinalEstimate extends Component {
       dropdownOpen: !this.state.dropdownOpen,
     });
   }
+
   saveAsShortUrl() {
     axios.post('http://localhost:3000/new/', {
       url: decodeURIComponent(location.href),
@@ -60,6 +61,7 @@ export default class FinalEstimate extends Component {
         });
       });
   }
+
   saveAsPdf() {
     axios.post('http://localhost:3000/api/pdf', {
       url: decodeURIComponent(location.href),
@@ -126,6 +128,7 @@ export default class FinalEstimate extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -133,7 +136,9 @@ export default class FinalEstimate extends Component {
             <div className={styles.final__result_info}>Total hours: {this.props.hours}</div>
           </div>
           <div className={styles.final__result}>
-            <div className={styles.final__result_info}>Total sum: {this.props.hours * this.props.rate}$</div>
+            <div className={styles.final__result_info}>
+              Total sum: {this.props.hours * this.props.rate}$
+            </div>
           </div>
           <ButtonDropdown
             id="screenShot"
