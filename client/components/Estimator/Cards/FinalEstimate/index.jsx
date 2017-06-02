@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Card, CardBlock, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
-import axios from 'axios';
 import Notification from 'react-notification-system';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
+import axiosInstance from '../../../../axios';
 
 export default class FinalEstimate extends Component {
   constructor(props) {
@@ -33,7 +33,7 @@ export default class FinalEstimate extends Component {
   }
 
   saveAsUrl() {
-    axios.post('http://localhost:3000/new/', {
+    axiosInstance.post('/new/', {
       url: decodeURIComponent(location.href),
       data: {
         header: this.props.headerState,
@@ -82,7 +82,7 @@ export default class FinalEstimate extends Component {
   }
 
   saveAsPdf() {
-    axios.post('http://localhost:3000/api/pdf', {
+    axiosInstance.post('/api/pdf', {
       url: decodeURIComponent(location.href),
     }, { responseType: 'arraybuffer' })
       .then((response) => {
