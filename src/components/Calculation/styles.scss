@@ -1,0 +1,12 @@
+.calculation {
+  justify-content: space-around;
+  &__wrapper {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+  &__piechart {
+    display: flex;
+    justify-content: center;
+  }
+}

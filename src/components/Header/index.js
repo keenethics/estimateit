@@ -9,13 +9,14 @@ import {
   Input,
   Row,
 } from 'reactstrap';
-import { connect } from 'react-redux';
-import { DateField } from 'react-date-picker';
 import shortid from 'shortid';
-import 'react-date-picker/index.css';
-import styles from './styles.scss';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { DateField } from 'react-date-picker';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import 'react-date-picker/index.css';
+
+import styles from './styles.scss';
 import * as actionsHeader from '../../actions/Header';
 
 class Header extends Component {
@@ -431,6 +432,5 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return { ...bindActionCreators(actionsHeader, dispatch) }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));

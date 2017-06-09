@@ -1,0 +1,53 @@
+@import "../ui.scss";
+
+.final {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  &__wrapper {
+    @extend .grid-media;
+    justify-content: space-around;
+    grid-template-columns: repeat(3, 140px);
+    @media screen and (max-width: 800px){
+      grid-template-columns: 1fr;
+    }
+  }
+  &__result {
+    display: grid !important;
+    &_info {
+      display: inline-block;
+      font-weight: normal;
+      line-height: 1.25;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      border: 1px solid transparent;
+      padding: .5rem 1rem;
+      font-size: 1rem;
+      border-radius: .25rem;
+      background: #ddd;
+      width: 100%;
+    }
+  }
+}
+
+.custom-notification-action-button {
+  background: #337ab7;
+  border-radius: 2px;
+  padding: 6px 20px;
+  margin: 5px 0px 0px;
+  font-weight: bold;
+  border: 0px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.custom-notification-input {
+  display: block;
+  margin: 5px 0px 0px;
+  padding: 3px 5px;
+  width: 100%;
+  border: 1px solid #337ab7;
+  border-radius: 2px;
+  color: #464a4c;
+}
