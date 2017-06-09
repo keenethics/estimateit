@@ -174,13 +174,13 @@ class FinalEstimate extends Component {
           </div>
           <ButtonDropdown
             id="screenShot"
-            isOpen={this.state.dropdownOpen}
             toggle={this.toggle}
+            isOpen={this.state.dropdownOpen}
           >
             <DropdownToggle
-              className={styles.final__result_info}
               caret
               color="danger"
+              className={styles.final__result_info}
             >
               Report
             </DropdownToggle>
@@ -199,8 +199,8 @@ class FinalEstimate extends Component {
 }
 
 FinalEstimate.propTypes = {
-  totalHours: PropTypes.number.isRequired,
   mainState: PropTypes.object.isRequired,
+  totalHours: PropTypes.number.isRequired,
   headerState: PropTypes.object.isRequired,
 };
 

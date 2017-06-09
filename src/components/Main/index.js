@@ -181,21 +181,12 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-<<<<<<< Updated upstream
   mainState: PropTypes.object.isRequired,
   calcDevHours: PropTypes.func.isRequired,
   headerState: PropTypes.object.isRequired,
   addClientData: PropTypes.func.isRequired,
   changeMoneyRate: PropTypes.func.isRequired,
   addEstimateOptions: PropTypes.func.isRequired,
-=======
-  // mainState: PropTypes.object.isRequired,
-  // calcDevHours: PropTypes.func.isRequired,
-  // headerState: PropTypes.object.isRequired,
-  // addClientData: PropTypes.func.isRequired,
-  // changeMoneyRate: PropTypes.func.isRequired,
-  // addEstimateOptions: PropTypes.func.isRequired,
->>>>>>> Stashed changes
 };
 
 function mapStateToProps(state) {
