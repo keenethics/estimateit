@@ -78,7 +78,7 @@ const config = {
       },
       {
         // Internal Styles
-        test: /\.css$/,
+        test: /\.(css|scss)$/,
         include: [
           path.resolve(__dirname, '../src'),
         ],
@@ -332,7 +332,7 @@ const serverConfig = {
       __DEV__: isDebug,
     }),
 
-    // Do not create separate chunks of the server bundle
+    // Do not create separate chunks of the server ndle
     // https://webpack.github.io/docs/list-of-plugins.html#limitchunkcountplugin
     new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
 

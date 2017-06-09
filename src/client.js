@@ -117,6 +117,7 @@ async function onLocationChange(location, action) {
     // Traverses the list of routes in the order they are defined until
     // it finds the first route that matches provided URL path string
     // and whose action method returns anything other than `undefined`.
+    console.log(context);
     const route = await router.resolve({
       ...context,
       path: location.pathname,

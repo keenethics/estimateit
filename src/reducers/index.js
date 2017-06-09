@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux';
-import user from './user';
-import runtime from './runtime';
+
+import Main from './Main';
+import Header from './Header';
 
 export default combineReducers({
-  user,
-  runtime,
+  Main,
+  Header
 });
