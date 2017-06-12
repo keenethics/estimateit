@@ -1,8 +1,6 @@
-@import "../ui.scss";
-
 .main {
   & > div:not(:last-child) {
-    margin-bottom: $margin-card;
+    margin-bottom: 1rem
   }
 }
 
@@ -11,7 +9,9 @@
   display: flex;
   justify-content: center;
   &__wrapper {
-    @extend .grid-media;
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
     justify-content: space-around;
     grid-template-columns: repeat(2, 240px);
     @media screen and (max-width: 800px){

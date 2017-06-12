@@ -105,7 +105,7 @@ const config = {
             loader: 'postcss-loader',
             options: {
               config: {
-                path: './tools/postcss.config.js',
+                path: './postcss.config.js',
               },
             },
           },

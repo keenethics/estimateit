@@ -1,10 +1,8 @@
-@import "../ui.scss";
-
 .contacts {
   width: 100%;
   margin: 0;
   &__input {
-    margin-bottom: $margin-input;
+    margin-bottom: .5rem;
     font-size: 14px !important;
   }
 }
