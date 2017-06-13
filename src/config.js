@@ -26,7 +26,7 @@ module.exports = {
   },
 
   // Database
-  MONGO_URL: process.env.MONGO_URL || 'mongodb://localhost/estimates',
+  MONGO_URL: process.env.MONGO_URL || 'mongodb://localhost/estimateit',
 
   // Web analytics
   analytics: {

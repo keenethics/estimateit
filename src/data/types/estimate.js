@@ -36,7 +36,7 @@ const HeaderAddionalType = new GraphQLInputObjectType({
 
 const TaskType = new GraphQLInputObjectType({
   name: 'TaskType',
-  fields: {
+  fields: () => ({
     id: {
       type: StringType,
     },
@@ -49,7 +49,13 @@ const TaskType = new GraphQLInputObjectType({
     maximumHours: {
       type: StringType,
     },
-  }
+    parent: {
+      type: StringType,
+    },
+    tasks: {
+      type: new ListType(TaskType),
+    }
+  }),
 });
 
 const HeaderType  = new GraphQLInputObjectType({
