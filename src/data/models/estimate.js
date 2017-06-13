@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 
-const schema = mongoose.Schema({
-  Main: Object,
-  Header: Object,
-  original: String,
+const EstimateSchema = mongoose.Schema({
+  main: Object,
+  header: Object,
 });
 
-const Estimate = mongoose.model('estimateit', schema);
+const Estimate = mongoose.model('estimates', EstimateSchema);
 
 export default Estimate;

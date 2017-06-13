@@ -5,7 +5,6 @@ import {
 import Estimate from '../models';
 import EstimateType from '../types/estimate';
 import EstimateCreateType from '../types/estimateCreate';
-console.log(Estimate);
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -22,9 +21,14 @@ const Mutation = new ObjectType({
         console.log(header);
         console.log(main);
 
-        Estimate.save(function (err, estimate) {
+        const newEstimate = new Estimate({
+          main: main,
+          header: header,
+        });
+
+        newEstimate.save(function (err, estimate) {
           if (err) return console.error(err);
-          console.log(Estimate);
+          console.log(estimate);
         });
 
         return { url: 'asas' };

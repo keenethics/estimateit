@@ -10,8 +10,8 @@ import {
 //HEADER
 //
 
-const headerAddionalType = new GraphQLInputObjectType({
-  name: 'headerAddional',
+const HeaderAddionalType = new GraphQLInputObjectType({
+  name: 'HeaderAddionalType',
   fields: {
     clientName: {
         type: StringType,
@@ -34,8 +34,8 @@ const headerAddionalType = new GraphQLInputObjectType({
   }
 });
 
-const taskType = new GraphQLInputObjectType({
-  name: 'taskType',
+const TaskType = new GraphQLInputObjectType({
+  name: 'TaskType',
   fields: {
     id: {
       type: StringType,
@@ -53,16 +53,16 @@ const taskType = new GraphQLInputObjectType({
 });
 
 const HeaderType  = new GraphQLInputObjectType({
-  name: 'headerType',
+  name: 'HeaderType',
   fields: {
     headerAdditional: {
-      type: headerAddionalType,
+      type: HeaderAddionalType,
     },
     parentTaskId: {
       type: StringType
     },
     tasks: {
-      type: new ListType(taskType)
+      type: new ListType(TaskType)
     },
   }
 });
@@ -73,8 +73,8 @@ const HeaderType  = new GraphQLInputObjectType({
 //
 
 
-const estimateOptionsType = new GraphQLInputObjectType({
-  name: 'estimateOptionsType',
+const EstimateOptionsType = new GraphQLInputObjectType({
+  name: 'EstimateOptionsType',
   fields: {
     qa: {
       type: StringType
@@ -94,8 +94,8 @@ const estimateOptionsType = new GraphQLInputObjectType({
   }
 });
 
-const devHoursType = new GraphQLInputObjectType({
-  name: 'devHoursType',
+const DevHoursType = new GraphQLInputObjectType({
+  name: 'DevHoursType',
   fields: {
     minHours: {
       type: StringType
@@ -106,8 +106,8 @@ const devHoursType = new GraphQLInputObjectType({
   }
 });
 
-const contactsType = new GraphQLInputObjectType({
-  name: 'contactsType',
+const ContactsType = new GraphQLInputObjectType({
+  name: 'ContactsType',
   fields: {
     pm: {
       type: StringType,
@@ -125,19 +125,19 @@ const contactsType = new GraphQLInputObjectType({
 });
 
 const MainType = new GraphQLInputObjectType({
-  name: 'mainType',
+  name: 'MainType',
   fields: {
     moneyRate: {
       type: StringType,
     },
     estimateOptions: {
-      type: estimateOptionsType
+      type: EstimateOptionsType
     },
     devHours: {
-      type: devHoursType,
+      type: DevHoursType,
     },
     contacts: {
-      type: contactsType,
+      type: ContactsType,
     }
   }
 })
