@@ -1,4 +1,5 @@
 .header {
+  margin-bottom: 1rem;
   .left {
     &__company {
       color: #d9534f;
@@ -11,7 +12,7 @@
       padding: 15px;
       border: 2px solid #d9534f;
       border-radius: 5px;
-      margin-bottom: 1rem
+      margin-bottom: 1rem;
       p {
         margin-top: inherit !important;
       }
@@ -40,29 +41,33 @@
 
 .tasks {
   &__group {
-    display: grid;
-    grid-column-gap: 1rem;
-    grid-row-gap: 1rem;
-    @media screen and (max-width: 800px) {
-      grid-template-columns: 1fr !important;
+    display: flex;
+    flex-wrap: wrap;
+    &_item {
+      margin-bottom: .5rem;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
     }
-    grid-template-columns: 3fr 1fr 1fr 1fr;
     @media screen and (max-width: 800px) {
       margin-left: 0 !important;
-
+      margin-right: 0 !important;
     }
   }
 }
+
 .subtasks {
-  display: grid;
-  grid-column-gap: 1rem;
-  grid-row-gap: 1rem;
-  @media screen and (max-width: 800px) {
-    grid-template-columns: 1fr !important;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: .5rem !important;
+  &__item {
+    margin-bottom: .5rem;
+    &:not(:nth-child(5n+5)) {
+      margin-right: 10px;
+    }
   }
-  grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
   @media screen and (max-width: 800px) {
     margin-left: 0 !important;
-
+    margin-right: 0 !important;
   }
 }

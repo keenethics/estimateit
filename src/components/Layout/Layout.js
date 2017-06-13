@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import normalizeCss from 'normalize.css';
 import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './Layout.css';
+import s from './Layout.scss';
 
 class Layout extends React.Component {
   static propTypes = {
@@ -12,13 +12,13 @@ class Layout extends React.Component {
 
   render() {
     return   (
-      <Container>
+      <Container className={s.estimator}>
         <Card id="screen">
           <Col
             xs="12"
             md="12"
             lg="10"
-            className={s.estimator}
+            className={s.estimator__container}
           >
             {this.props.children}
           </Col>
