@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -41,52 +43,60 @@ class FinalEstimate extends Component {
   }
 
   saveAsUrl() {
-    axiosInstance.post('/new/', {
-      url: decodeURIComponent(location.href),
-      data: {
-        header: this.props.headerState,
-        main: this.props.mainState,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        this.refs.notificationSystem.addNotification({
-          title: 'Success',
-          position: 'br',
-          message: `${data.message}`,
-          level: 'success',
-          children: (
-            <div>
-              <input
-                className={styles['custom-notification-input']}
-                type="text"
-                ref={node => (this.customNotificationInput = node)}
-                value={data.url} onClick={e => e.stopPropagation()}
-              />
-              <button
-                type="button"
-                className={styles['custom-notification-action-button']}
-                onClick={this.copyUrlToClipboard.bind(this, data.url)}
-              >Copy to clipboard</button>
-            </div>
-          ),
-        });
-        this.setState({
-          axios: data,
-        });
-      })
-      .catch((error) => {
-        const { data } = error.response;
-        this.refs.notificationSystem.addNotification({
-          title: 'Error',
-          message: `
-          ${data.message}
-          ${data.url}`,
-          level: 'error',
-          autoDismiss: 6,
-          position: 'br',
-        });
-      });
+    const { mainState: main, headerState: header } = this.props;
+    console.log(header);
+    console.log(main);
+    this.props.mutate({
+      variables: { input: { header, main } },
+    }).then((clientName) => {
+      console.log(clientName);
+    });
+    // axiosInstance.post('/new/', {
+    //   url: decodeURIComponent(location.href),
+    //   data: {
+    //     header: this.props.headerState,
+    //     main: this.props.mainState,
+    //   },
+    // })
+    //   .then((response) => {
+    //     const { data } = response;
+    //     this.refs.notificationSystem.addNotification({
+    //       title: 'Success',
+    //       position: 'br',
+    //       message: `${data.message}`,
+    //       level: 'success',
+    //       children: (
+    //         <div>
+    //           <input
+    //             className={styles['custom-notification-input']}
+    //             type="text"
+    //             ref={node => (this.customNotificationInput = node)}
+    //             value={data.url} onClick={e => e.stopPropagation()}
+    //           />
+    //           <button
+    //             type="button"
+    //             className={styles['custom-notification-action-button']}
+    //             onClick={this.copyUrlToClipboard.bind(this, data.url)}
+    //           >Copy to clipboard</button>
+    //         </div>
+    //       ),
+    //     });
+    //     this.setState({
+    //       axios: data,
+    //     });
+      // })
+      // .catch((error) => {
+      //   const { data } = error.response;
+      //   this.refs.notificationSystem.addNotification({
+      //     title: 'Error',
+      //     message: `
+      //     ${data.message}
+      //     ${data.url}`,
+      //     level: 'error',
+      //     autoDismiss: 6,
+      //     position: 'br',
+      //   });
+      // });
   }
 
   saveAsPdf() {
@@ -161,6 +171,7 @@ class FinalEstimate extends Component {
   render() {
     const { mainState: { moneyRate }, totalHours } = this.props;
     const totalSum = totalHours * moneyRate;
+    // console.log(this);
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -204,4 +215,17 @@ FinalEstimate.propTypes = {
   headerState: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FinalEstimate);
+export default compose(
+  graphql(gql`
+    mutation EstimateMutation (
+      $input: EstimateType!
+    ) {
+      estimateCreate (
+        input: $input
+      ) {
+        url
+      }
+    }
+  `),
+  withStyles(styles),
+)(FinalEstimate);

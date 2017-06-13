@@ -11,6 +11,7 @@ import {
   GraphQLSchema as Schema,
   GraphQLObjectType as ObjectType,
 } from 'graphql';
+import Mutation from './mutations/createEstimate';
 
 import me from './queries/me';
 import news from './queries/news';
@@ -20,9 +21,9 @@ const schema = new Schema({
     name: 'Query',
     fields: {
       me,
-      news,
     },
   }),
+  mutation: Mutation,
 });
 
 export default schema;

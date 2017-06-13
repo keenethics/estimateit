@@ -19,6 +19,10 @@ import createFetch from './createFetch';
 import configureStore from './store/configureStore';
 import history from './history';
 import { updateMeta } from './DOMUtils';
+import createApolloClient from './core/createApolloClient/client';
+import { ApolloProvider } from 'react-apollo';
+
+const apolloClient = createApolloClient();
 
 /* eslint-disable global-require */
 
@@ -36,9 +40,11 @@ const context = {
   fetch: createFetch({
     baseUrl: window.App.apiUrl,
   }),
+  client: apolloClient,
   // Initialize a new Redux store
   // http://redux.js.org/docs/basics/UsageWithReact.html
-  store: configureStore(window.App.state, { history }),
+  store: configureStore(window.APP_STATE, { history, apolloClient }),
+  // store: configureStore(window.App.state, { history }),
   storeSubscription: null,
 };
 
@@ -135,7 +141,11 @@ async function onLocationChange(location, action) {
     }
 
     appInstance = ReactDOM.render(
-      <App context={context}>{route.component}</App>,
+      <ApolloProvider
+        client={apolloClient}
+      >
+        <App context={context}>{route.component}</App>
+      </ApolloProvider>,
       container,
       () => onRenderComplete(route, location),
     );

@@ -10,6 +10,7 @@ import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
+import createApolloClient from './core/createApolloClient/server';
 import createFetch from './createFetch';
 import router from './router';
 import schema from './data/schema';
@@ -65,6 +66,11 @@ app.get('*', async (req, res, next) => {
       user: req.user || null,
     };
 
+    const apolloClient = createApolloClient({
+      schema,
+      rootValue: { request: req },
+    });
+
     const store = configureStore(initialState, {
       fetch,
       // I should not use `history` on server.. but how I do redirection? follow universal-router
@@ -88,6 +94,7 @@ app.get('*', async (req, res, next) => {
       // You can access redux through react-redux connect
       store,
       storeSubscription: null,
+      client: apolloClient,
     };
 
     const route = await router.resolve({
