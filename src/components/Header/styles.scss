@@ -1,9 +1,8 @@
-@import "../ui.scss";
-
 .header {
+  margin-bottom: 1rem;
   .left {
     &__company {
-      color: $primary-color;
+      color: #d9534f;
       font-size: 24px;
       font-weight: 700;
 
@@ -11,9 +10,9 @@
     &__contacts {
       margin-top: 10px;
       padding: 15px;
-      border: 2px solid $primary-color;
+      border: 2px solid #d9534f;
       border-radius: 5px;
-      margin-bottom: $margin-card;
+      margin-bottom: 1rem;
       p {
         margin-top: inherit !important;
       }
@@ -23,7 +22,7 @@
         font-weight: 600;
         &:first-child {
           margin-top: 24px;
-          color: $primary-color;
+          color: #d9534f;
         }
       }
     }
@@ -42,19 +41,33 @@
 
 .tasks {
   &__group {
-    @extend .grid;
-    grid-template-columns: 3fr 1fr 1fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
+    &_item {
+      margin-bottom: .5rem;
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
     @media screen and (max-width: 800px) {
       margin-left: 0 !important;
-
+      margin-right: 0 !important;
     }
   }
 }
+
 .subtasks {
-  @extend .grid;
-  grid-template-columns: 3fr 1fr 1fr 1fr 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: .5rem !important;
+  &__item {
+    margin-bottom: .5rem;
+    &:not(:nth-child(5n+5)) {
+      margin-right: 10px;
+    }
+  }
   @media screen and (max-width: 800px) {
     margin-left: 0 !important;
-
+    margin-right: 0 !important;
   }
 }

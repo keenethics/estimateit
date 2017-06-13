@@ -14,7 +14,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DateField } from 'react-date-picker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import 'react-date-picker/index.css';
+import calendar from 'react-date-picker/index.css';
 
 import styles from './styles.scss';
 import * as actionsHeader from '../../actions/Header';
@@ -433,4 +433,4 @@ function mapDispatchToProps(dispatch) {
   return { ...bindActionCreators(actionsHeader, dispatch) }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(calendar, styles)(Header));

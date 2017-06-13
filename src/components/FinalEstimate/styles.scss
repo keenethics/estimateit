@@ -1,19 +1,24 @@
-@import "../ui.scss";
-
 .final {
   width: 100%;
   display: flex;
   justify-content: center;
   &__wrapper {
-    @extend .grid-media;
+    display: flex;
     justify-content: space-around;
-    grid-template-columns: repeat(3, 140px);
+    align-items: center;
+    flex-wrap: wrap;
+    flex-direction: row;
     @media screen and (max-width: 800px){
-      grid-template-columns: 1fr;
+      flex-direction: column;
     }
   }
   &__result {
-    display: grid !important;
+    display: inline-block;
+    min-width: 140px;
+    margin: .5rem 0;
+    @media screen and (max-width: 800px){
+      width: 100%;
+    }
     &_info {
       display: inline-block;
       font-weight: normal;

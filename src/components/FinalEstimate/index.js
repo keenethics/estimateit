@@ -186,6 +186,7 @@ class FinalEstimate extends Component {
           <ButtonDropdown
             id="screenShot"
             toggle={this.toggle}
+            className={styles.final__result}
             isOpen={this.state.dropdownOpen}
           >
             <DropdownToggle
@@ -202,8 +203,8 @@ class FinalEstimate extends Component {
               <DropdownItem onClick={this.saveAsUrl}>Generate URL</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
-          <Notification ref="notificationSystem" />
         </CardBlock>
+        <Notification ref="notificationSystem" />
       </Card>
     );
   }
