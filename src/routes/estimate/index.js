@@ -7,22 +7,78 @@ import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
 // import * as actionsHeader from '../../actions/Header';
-
+import { apply } from '../../actions/Main';
 export default {
 
   path: '/:id',
 
-  async action({ params: { id  } }) {
-    console.log('dasjdkajdaldjhkjdhakjdhakjshdkjahksjh');
+  async action({ params: { id }, fetch, store }) {
+
     const resp = await fetch('/graphql', {
       body: JSON.stringify({
-        query: '{estimate{filed}}',
+        query: `{estimate{
+          header{
+            tasks{
+              id,
+              taskName,
+              minimumHours,
+              maximumHours,
+              tasks{
+                id,
+                taskName,
+                minimumHours,
+                maximumHours,
+                tasks{
+                  id,
+                  taskName,
+                  minimumHours,
+                  maximumHours,
+                },
+              },
+            },
+            headerAdditional{
+              technologies,
+              sprintNumber,
+              data,
+              projectName,
+              clientName,
+              comments
+            }
+          },
+          main{
+            moneyRate,
+            estimateOptions{
+              qa,
+              pm,
+              risks,
+              bugFixes,
+              completing
+            }
+            devHours{
+              minHours,
+              maxHours
+            },
+            contacts{
+              pm,
+              skype,
+              email,
+              position
+            }
+          }
+        }
+      }`,
       }),
     });
 
-    const { data } = await resp.json();
 
-    console.log(data);
+    const data = await resp.json();
+    // console.log('route');
+    // console.log(data);
+    store.dispatch(apply(data));
+    //   {
+    //   type: "APPLY_STATE",
+    //   data,
+    // });
     // let estimateIsExist = false;
     // //
     // try {

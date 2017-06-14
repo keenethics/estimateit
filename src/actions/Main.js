@@ -18,6 +18,13 @@ export function calcDevHours(value) {
   };
 }
 
+export function apply(data) {
+  return {
+    type: types.APPLY_STATE,
+    data,
+  };
+}
+
 export function addEstimateOptions(value) {
   return {
     type: types.ADD_ESTIMATE_OPTIONS,

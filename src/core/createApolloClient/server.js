@@ -44,7 +44,7 @@ class ServerInterface {
 
 export default function createApolloClient(options) {
   return new ApolloClient({
-    reduxRootSelector: state => state.apollo,
+    // reduxRootSelector: state => state.apollo,
     networkInterface: new ServerInterface(options),
     queryDeduplication: true,
   });

@@ -154,7 +154,7 @@ class FinalEstimate extends Component {
   render() {
     const { mainState: { moneyRate }, totalHours } = this.props;
     const totalSum = totalHours * moneyRate;
-    // console.log(this);
+    // console.log(this.props);
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -187,7 +187,7 @@ class FinalEstimate extends Component {
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
-        <Notification id="notificationSystem" ref="notificationSystem" />
+        <Notification ref="notificationSystem"/>
       </Card>
     );
   }
@@ -198,7 +198,13 @@ FinalEstimate.propTypes = {
   totalHours: PropTypes.number.isRequired,
   headerState: PropTypes.object.isRequired,
 };
-
+// query fields {
+//   estimate {
+//     main {
+//       moneyRate
+//     },
+//   }
+// }
 export default compose(
   graphql(gql`
     mutation EstimateMutation (
@@ -209,7 +215,7 @@ export default compose(
       ) {
         url
       }
-    }
+    },
   `),
   withStyles(styles),
 )(FinalEstimate);

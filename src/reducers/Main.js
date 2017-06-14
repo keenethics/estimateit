@@ -1,9 +1,9 @@
 import {
-  CHANGE_MONEY_RATE,
+  APPLY_STATE,
   CALC_DEV_HOURS,
+  CHANGE_MONEY_RATE,
   ADD_ESTIMATE_OPTIONS,
   ADD_CLIENT_CONTACT_DATA,
-  FETCH_TODOS_SUCCESS,
 } from '../constants/actionTypes';
 
 import initialState from './initialState';
@@ -23,9 +23,9 @@ export function main(state = initialState.main, action) {
       const { name, value } = action.payload;
       return { ...state, contacts: { ...state.contacts, [name]: value } };
 
-    case FETCH_TODOS_SUCCESS:
-      const { main: Main } = action.data.data;
-      return { ...state, ...Main };
+    case APPLY_STATE:
+      const { main } = action.data.data.estimate;
+      return { ...state, ...main };
 
     default:
       return state;

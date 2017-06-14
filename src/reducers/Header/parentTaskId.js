@@ -13,10 +13,6 @@ export default function estimatorTasks(state = initialState.header.parentTaskId,
     case REMOVE_PARENT_TASK_ID:
       return '';
 
-    case FETCH_TODOS_SUCCESS:
-      const { parentTaskId } = action.data.data.header;
-      return parentTaskId;
-
     default:
       return state;
   }

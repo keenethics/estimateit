@@ -1,9 +1,9 @@
 import {
+  APPLY_STATE,
   MODIFY_TASK,
   REMOVE_TASK,
   ADD_NEW_TASK,
   ADD_NEW_SUBTASK,
-  FETCH_TODOS_SUCCESS,
 } from '../../constants/actionTypes';
 import initialState from '../initialState';
 
@@ -57,7 +57,6 @@ function findTaskAndModify(tasks, id, name, value) {
 export default function estimatorTasks(state = initialState.header.tasks, action) {
   switch (action.type) {
     case ADD_NEW_TASK:
-    console.log(action);
       return [...state, action.payload];
 
     case ADD_NEW_SUBTASK:
@@ -70,8 +69,8 @@ export default function estimatorTasks(state = initialState.header.tasks, action
       const { id, name, value } = action.payload;
       return findTaskAndModify(state, id, name, value);
 
-    case FETCH_TODOS_SUCCESS:
-      const { tasks } = action.data.data.header;
+    case APPLY_STATE:
+      const { tasks } = action.data.data.estimate.header;
       return [...state, ...tasks];
 
     default:
