@@ -13,14 +13,17 @@ import {
 } from 'graphql';
 import Mutation from './mutations/createEstimate';
 
-import me from './queries/me';
-import news from './queries/news';
+import {
+  me,
+  estimate,
+} from './queries';
 
 const schema = new Schema({
   query: new ObjectType({
     name: 'Query',
     fields: {
       me,
+      estimate,
     },
   }),
   mutation: Mutation,

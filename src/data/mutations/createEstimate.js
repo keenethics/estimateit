@@ -3,8 +3,12 @@ import {
 } from 'graphql';
 
 import Estimate from '../models';
-import EstimateType from '../types/estimate';
-import EstimateCreateType from '../types/estimateCreate';
+
+import {
+  EstimateInputType,
+  EstimateCreateType,
+} from '../types';
+
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -13,25 +17,21 @@ const Mutation = new ObjectType({
     estimateCreate: {
       type: EstimateCreateType,
       args: {
-        input : {
-          type: EstimateType
+        input: {
+          type: EstimateInputType,
         },
       },
-      resolve(source, {input: { header, main } }) {
-        console.log(header);
-        console.log(main);
+      async resolve({ request: { headers } }, { input: { header, main } }) {
+        let url;
+        const newEstimate = new Estimate({ main, header });
 
-        const newEstimate = new Estimate({
-          main: main,
-          header: header,
+        await newEstimate.save((err, estimate) => {
+          if (err) return null;
+          const { _id } = estimate;
+          url = `${headers.referer}${_id}`;
         });
 
-        newEstimate.save(function (err, estimate) {
-          if (err) return console.error(err);
-          console.log(estimate);
-        });
-
-        return { url: 'asas' };
+        return { url };
       },
     },
   }),

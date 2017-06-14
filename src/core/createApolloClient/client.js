@@ -12,24 +12,17 @@ const networkInterface = createNetworkInterface({
 
 // const logErrors = {
 //   applyAfterware({ response }, next) {
+
 //     response.clone().json().then(({ errors }) => {
 //       if (errors) {
-//         const tokenError = errors.find(({ name }) => name === INVALID_TOKEN);
-//
-//         if (tokenError) {
-//           const d = new Date();
-//           d.setTime(d.getTime() - 1);
-//           document.cookie = `token=""; expires=${d.toUTCString()}; path=/`;
-//
-//           history.push('/login');
-//         }
+
 //       } else {
 //         next();
 //       }
 //     });
 //   },
 // };
-//
+
 // networkInterface.useAfter([logErrors]);
 
 

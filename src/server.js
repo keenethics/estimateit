@@ -5,6 +5,7 @@ import bodyParser from 'body-parser';
 import expressGraphQL from 'express-graphql';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
@@ -18,6 +19,8 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
+
+mongoose.connect(config.MONGO_URL);
 
 const app = express();
 

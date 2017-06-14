@@ -37,6 +37,7 @@ class FinalEstimate extends Component {
     this.customNotificationInput.select();
     document.execCommand('copy');
   }
+
   toggle() {
     const { dropdownOpen } = this.state;
     this.setState({ dropdownOpen: !dropdownOpen });
@@ -44,59 +45,41 @@ class FinalEstimate extends Component {
 
   saveAsUrl() {
     const { mainState: main, headerState: header } = this.props;
-    console.log(header);
-    console.log(main);
+
     this.props.mutate({
       variables: { input: { header, main } },
-    }).then((clientName) => {
-      console.log(clientName);
+    }).then(({ data: { estimateCreate: { url } } }) => {
+      this.refs.notificationSystem.addNotification({
+        title: 'Success',
+        position: 'br',
+        // message: `${data.message}`,
+        level: 'success',
+        children: (
+          <div>
+            <input
+              className={styles['custom-notification-input']}
+              type="text"
+              ref={node => (this.customNotificationInput = node)}
+              value={url} onClick={e => e.stopPropagation()}
+            />
+            <button
+              type="button"
+              className={styles['custom-notification-action-button']}
+              onClick={this.copyUrlToClipboard.bind(this, url)}
+            >Copy to clipboard</button>
+          </div>
+        ),
+      });
+    }).catch(error => {
+      console.log(error);
+      this.refs.notificationSystem.addNotification({
+        title: 'Error',
+        level: 'error',
+        position: 'br',
+        autoDismiss: 6,
+        message: 'internal server error',
+      });
     });
-    // axiosInstance.post('/new/', {
-    //   url: decodeURIComponent(location.href),
-    //   data: {
-    //     header: this.props.headerState,
-    //     main: this.props.mainState,
-    //   },
-    // })
-    //   .then((response) => {
-    //     const { data } = response;
-    //     this.refs.notificationSystem.addNotification({
-    //       title: 'Success',
-    //       position: 'br',
-    //       message: `${data.message}`,
-    //       level: 'success',
-    //       children: (
-    //         <div>
-    //           <input
-    //             className={styles['custom-notification-input']}
-    //             type="text"
-    //             ref={node => (this.customNotificationInput = node)}
-    //             value={data.url} onClick={e => e.stopPropagation()}
-    //           />
-    //           <button
-    //             type="button"
-    //             className={styles['custom-notification-action-button']}
-    //             onClick={this.copyUrlToClipboard.bind(this, data.url)}
-    //           >Copy to clipboard</button>
-    //         </div>
-    //       ),
-    //     });
-    //     this.setState({
-    //       axios: data,
-    //     });
-      // })
-      // .catch((error) => {
-      //   const { data } = error.response;
-      //   this.refs.notificationSystem.addNotification({
-      //     title: 'Error',
-      //     message: `
-      //     ${data.message}
-      //     ${data.url}`,
-      //     level: 'error',
-      //     autoDismiss: 6,
-      //     position: 'br',
-      //   });
-      // });
   }
 
   saveAsPdf() {
@@ -204,7 +187,7 @@ class FinalEstimate extends Component {
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
-        <Notification ref="notificationSystem" />
+        <Notification id="notificationSystem" ref="notificationSystem" />
       </Card>
     );
   }
@@ -219,7 +202,7 @@ FinalEstimate.propTypes = {
 export default compose(
   graphql(gql`
     mutation EstimateMutation (
-      $input: EstimateType!
+      $input: EstimateInputType!
     ) {
       estimateCreate (
         input: $input

@@ -2,11 +2,9 @@ export default {
 
   path: '/',
 
-  // Keep in mind, routes are evaluated in order
   children: [
     require('./home').default,
-
-    // Wildcard routes, e.g. { path: '*', ... } (must go last)
+    require('./estimate').default,
     require('./notFound').default,
   ],
 

@@ -1,8 +1,14 @@
 import mongoose from 'mongoose';
 
 const EstimateSchema = mongoose.Schema({
-  main: Object,
-  header: Object,
+  main: {
+    type: Object,
+    required: true,
+  },
+  header: {
+    type: Object,
+    required: true,
+  },
 });
 
 const Estimate = mongoose.model('estimates', EstimateSchema);
