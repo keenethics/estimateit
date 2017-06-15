@@ -96,15 +96,18 @@ class Main extends Component {
       bugFixes,
       completing,
     } = this.props.mainState.estimateOptions;
-
+    console.log(this.props);
     let highestIndex = this.data.findIndex(item => item > completing);
 
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
     }
-
+    console.log(this.T);
     const hours = this.T[highestIndex];
+    // console.log();
     const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
+    console.log(additionalHourse);
+    console.log(hours);
     const totalHours = Math.round(hours + additionalHourse);
     this.state.totalHours = totalHours;
 

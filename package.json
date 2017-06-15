@@ -28,6 +28,7 @@
     "express-graphql": "^0.6.4",
     "fastclick": "^1.0.6",
     "graphql": "^0.9.3",
+    "graphql-input-number": "0.0.9",
     "graphql-tag": "^2.2.2",
     "history": "^4.6.1",
     "isomorphic-fetch": "^2.2.1",

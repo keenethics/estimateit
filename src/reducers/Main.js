@@ -25,6 +25,7 @@ export function main(state = initialState.main, action) {
 
     case APPLY_STATE:
       const { main } = action.data.data.estimate;
+      main.moneyRate = + main.moneyRate;
       return { ...state, ...main };
 
     default:

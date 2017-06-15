@@ -1,9 +1,16 @@
 import {
   GraphQLList as ListType,
   GraphQLString as StringType,
+  GraphQLScalarType as ScalarType,
   GraphQLInputObjectType as InputObjectType,
+  FloatGraphType,
+  GraphQLFloat,
 } from 'graphql';
-
+import {
+  GraphQLInputInt,
+  GraphQLInputFloat
+  // FloatGraphType
+} from 'graphql-input-number';
 //
 // HEADER
 //
@@ -21,7 +28,7 @@ const HeaderAddionalInputType = new InputObjectType({
       type: StringType,
     },
     sprintNumber: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     technologies: {
       type: StringType,
@@ -42,10 +49,10 @@ const TaskInputType = new InputObjectType({
       type: StringType,
     },
     minimumHours: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     maximumHours: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     parent: {
       type: StringType,
@@ -79,19 +86,19 @@ const EstimateOptionsInputType = new InputObjectType({
   name: 'EstimateOptionsInputType',
   fields: {
     qa: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     pm: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     risks: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     bugFixes: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     completing: {
-      type: StringType,
+      type: GraphQLFloat,
     },
   },
 });
@@ -130,7 +137,7 @@ const MainInputType = new InputObjectType({
   name: 'MainInputType',
   fields: {
     moneyRate: {
-      type: StringType,
+      type: GraphQLFloat,
     },
     estimateOptions: {
       type: EstimateOptionsInputType,
