@@ -1,27 +1,32 @@
 import {
+  GraphQLString as StringType,
+} from 'graphql';
+
+import {
   EstimateOutputType,
 } from '../types';
 import Estimate from '../../data/models/estimate';
-import {
-  GraphQLList as ListType,
-  GraphQLString as StringType,
-  GraphQLObjectType as ObjectType,
-} from 'graphql';
+
 
 const estimate = {
   type: EstimateOutputType,
-  async resolve({ request }) {
-    // console.log('dalsdasdjalkdjalkdjsaldjl');
-    // console.log(request);
-    // console.log();
-    let estiamte;
-    await Estimate.findOne({}, (err, res) => {
-      // console.log('res');
-      // console.log(res);
-      estiamte = res;
-    })
+  args: {
+    id: {
+      type: StringType,
+    },
+  },
+  async resolve(root, { id: _id }) {
+    try {
+      const currentEstimate = await Estimate.findOne({ _id }, (err, res) => {
+        if (!err) console.error(err);
 
-    return estiamte;
+        return res;
+      });
+
+      return currentEstimate;
+    } catch (err) {
+      return console.error(err);
+    }
   },
 };
 

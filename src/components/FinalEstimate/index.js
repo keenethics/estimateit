@@ -199,13 +199,7 @@ FinalEstimate.propTypes = {
   totalHours: PropTypes.number.isRequired,
   headerState: PropTypes.object.isRequired,
 };
-// query fields {
-//   estimate {
-//     main {
-//       moneyRate
-//     },
-//   }
-// }
+
 export default compose(
   graphql(gql`
     mutation EstimateMutation (

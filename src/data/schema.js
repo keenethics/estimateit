@@ -10,9 +10,14 @@
 import {
   GraphQLSchema as Schema,
   GraphQLObjectType as ObjectType,
+  // GraphQLString
 } from 'graphql';
 import Mutation from './mutations/createEstimate';
 
+// import {
+//   EstimateOutputType,
+// } from './types';
+//
 import {
   me,
   estimate,
