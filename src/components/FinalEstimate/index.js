@@ -154,8 +154,8 @@ class FinalEstimate extends Component {
   render() {
     const { mainState: { moneyRate }, totalHours } = this.props;
     const totalSum = totalHours * moneyRate;
-    console.log(totalSum);
-    console.log(totalHours)
+    // console.log(totalSum);
+    // console.log(totalHours)
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>

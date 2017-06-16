@@ -32,7 +32,8 @@ class Main extends Component {
     const { tasks } = this.props.headerState;
 
     this.transformToVector();
-    this.calcDeveloperHours(this.parseTaskHours(tasks));
+    this.calcDeveloperHours(tasks);
+    // this.calcDeveloperHours(this.parseTaskHours(tasks));
     this.calculateAmountOfHours();
   }
 
@@ -40,7 +41,8 @@ class Main extends Component {
     // TODO: Make it more beautiful
     const { tasks } = this.props.headerState;
     if (JSON.stringify(tasks) !== JSON.stringify(newTasks)) {
-      this.calcDeveloperHours(this.parseTaskHours(newTasks));
+       this.calcDeveloperHours(newTasks);
+      // this.calcDeveloperHours(this.parseTaskHours(newTasks));
     }
   }
 
@@ -50,7 +52,25 @@ class Main extends Component {
   }
 
   transformToVector() {
-    const { tasks } = this.props.headerState;
+    // const { tasks } = this.props.headerState;
+
+    let { tasks } = this.props.headerState;
+    let arrayOfSubtasksAndTasks = [];
+
+    function getAllSubtasksFrom(arrayOfTasks) {
+    arrayOfTasks.forEach((task) => {
+      if (task.tasks && task.tasks.length > 0) {
+        arrayOfSubtasksAndTasks = arrayOfSubtasksAndTasks.concat(task.tasks);
+        getAllSubtasksFrom(task.tasks);
+      }
+    });
+    }
+
+    getAllSubtasksFrom(tasks);
+    tasks = tasks.concat(arrayOfSubtasksAndTasks);
+    tasks = tasks.filter(task => task.isChecked);
+
+
     const tasksHours = this.parseTaskHours(tasks);
     const vector = new DiscreteVector(tasksHours);
 
@@ -74,18 +94,35 @@ class Main extends Component {
   }
 
   calcDeveloperHours(data) {
-    const sum = data.reduce(
-      (acc, value) => ({
-        minHours: (acc.minHours += +value[0]),
-        maxHours: (acc.maxHours += +value[1]),
-      }),
-      { minHours: 0, maxHours: 0 },
-    );
-    this.props.calcDevHours(sum);
+    const res = { minHours: 0, maxHours: 0 };
+
+    function calculateMinAndMaxHours(arrayOfTasks) {
+      arrayOfTasks.forEach((task) => {
+        if (task.isChecked) {
+          res.minHours += +task.minimumHours;
+          res.maxHours += +task.maximumHours;
+        }
+        // subtasks do not depend on task
+        if (task.tasks && task.tasks.length > 0) {
+          calculateMinAndMaxHours(task.tasks);
+        }
+      });
+    }
+
+    calculateMinAndMaxHours(data);
+    this.props.calcDevHours(res);
+    // const sum = data.reduce(
+    //   (acc, value) => ({
+    //     minHours: (acc.minHours += +value[0]),
+    //     maxHours: (acc.maxHours += +value[1]),
+    //   }),
+    //   { minHours: 0, maxHours: 0 },
+    // );
+    // this.props.calcDevHours(sum);
   }
 
   parseTaskHours(data) {
-    return data.map(item => [item.minimumHours, item.maximumHours]);
+    return data.map(item => [item.minimumHours, item.maximumHours, item.isCheckedS]);
   }
 
   calculateAmountOfHours() {
@@ -96,18 +133,18 @@ class Main extends Component {
       bugFixes,
       completing,
     } = this.props.mainState.estimateOptions;
-    console.log(this.props);
+    // console.log(this.props);
     let highestIndex = this.data.findIndex(item => item > completing);
 
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
     }
-    console.log(this.T);
+    // console.log(this.T);
     const hours = this.T[highestIndex];
     // console.log();
     const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
-    console.log(additionalHourse);
-    console.log(hours);
+    // console.log(additionalHourse);
+    // console.log(hours);
     const totalHours = Math.round(hours + additionalHourse);
     this.state.totalHours = totalHours;
 

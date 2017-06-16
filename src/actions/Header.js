@@ -6,8 +6,10 @@ export function addNewTask(task) {
     payload: {
       id: task.id,
       taskName: task.taskName,
+      isChecked: task.isChecked,
       minimumHours: task.minimumHours,
       maximumHours: task.maximumHours,
+
     },
   };
 }
@@ -18,6 +20,7 @@ export function addNewSubTask(parent, subtask) {
       parent,
       id: subtask.id,
       taskName: subtask.taskName,
+      isChecked: subtask.isChecked,
       minimumHours: subtask.minimumHours,
       maximumHours: subtask.maximumHours,
     },
