@@ -66,7 +66,7 @@ export default class NewTaskForm extends React.Component {
   render() {
     const { taskName, minimumHours, maximumHours, isChecked } = this.state;
     const { parentTaskId, isSubtask } = this.props;
-    console.log(this);
+    // console.log(this);
     return (
       <Form
         id="screenShot"

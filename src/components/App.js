@@ -47,7 +47,7 @@ class App extends React.PureComponent {
   }
   componentWillMount() {
     const { insertCss } = this.props.context;
-    this.removeBootstrap = insertCss(bt,styles);
+    this.removeBootstrap = insertCss(bt, styles);
   }
   componentWillUnmount() {
     this.removeBootstrap();
@@ -56,7 +56,6 @@ class App extends React.PureComponent {
   render() {
     return React.Children.only(this.props.children);
   }
-
 }
 
 export default App;

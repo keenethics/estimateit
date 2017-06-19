@@ -9,6 +9,7 @@ import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
+import Nightmare from 'nightmare';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -23,17 +24,13 @@ import config from './config';
 mongoose.connect(config.MONGO_URL);
 
 const app = express();
+const nightmare = Nightmare({
+  show: false,
+});
 
-//
-// Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
-// user agent is not known.
-// -----------------------------------------------------------------------------
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
 
-//
-// Register Node.js middleware
-// -----------------------------------------------------------------------------
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -52,6 +49,42 @@ app.use('/graphql', expressGraphQL(req => ({
   rootValue: { request: req },
   pretty: __DEV__,
 })));
+
+app.post('/api/pdf', async (req, res) => {
+  const { headers } = req;
+
+  nightmare
+  .goto(
+    // 'http://localhost:3001/594438d90969b48a2bc6c5bc')
+    headers.referer)
+    .wait(2000)
+    .evaluate(() => {
+      const body = document.querySelector('body');
+      return {
+        height: body.scrollHeight,
+      };
+    })
+    .pdf({
+      printBackground: true,
+      marginsType: 0,
+      pageSize: 'A4',
+      landscape: false,
+    })
+    .then((pdfBuffer) => {
+      nightmare.end();
+
+      nightmare.proc.disconnect();
+      nightmare.proc.kill();
+      nightmare.ended = true;
+      res.set('Content-Type', 'application/pdf');
+      res.set('Content-Disposition: attachment; filename=filename.pdf');
+      res.send(new Buffer(pdfBuffer, 'binary'));
+      // nightmare = null;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
 
 //
 // Register server-side rendering middleware

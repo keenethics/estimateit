@@ -45,6 +45,7 @@ export default class Task extends React.Component {
       maximumHours: maximumHours || 0,
       isChecked,
     };
+
     this.props.calculateHours(parentid, newTask);
   }
 

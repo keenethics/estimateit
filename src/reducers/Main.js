@@ -24,7 +24,7 @@ export function main(state = initialState.main, action) {
       return { ...state, contacts: { ...state.contacts, [name]: value } };
 
     case APPLY_STATE:
-      const { main } = action.data.data.estimate;
+      const { main = {} } = action.data;
       main.moneyRate = + main.moneyRate;
       return { ...state, ...main };
 

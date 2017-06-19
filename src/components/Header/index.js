@@ -366,7 +366,7 @@ class Header extends Component {
             value={technologies}
             onChange={this.textAreaAdjust}
             placeholder="Technologies, libraries, APIs"
-            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
+            onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>

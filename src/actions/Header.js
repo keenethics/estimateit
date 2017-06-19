@@ -9,7 +9,6 @@ export function addNewTask(task) {
       isChecked: task.isChecked,
       minimumHours: task.minimumHours,
       maximumHours: task.maximumHours,
-
     },
   };
 }

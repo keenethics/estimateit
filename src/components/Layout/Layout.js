@@ -11,6 +11,7 @@ class Layout extends React.Component {
   };
 
   render() {
+    console.log(this);
     return   (
       <Container className={s.estimator}>
         <Card id="screen">
