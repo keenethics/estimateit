@@ -67,7 +67,7 @@ export default class Task extends React.Component {
     const { taskName, minimumHours, maximumHours, isChecked } = this.props;
 
     return (
-      <FormGroup className={styles.subtasks}>
+      <FormGroup className={styles.subtasks} style={{ marginLeft: '20px' }}>
         <Input
           data-id={taskId}
           className={styles.subtasks__item}

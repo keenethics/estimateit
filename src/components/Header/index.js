@@ -15,17 +15,21 @@ import { bindActionCreators } from 'redux';
 import { DateField } from 'react-date-picker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import calendar from 'react-date-picker/index.css';
+import * as actionsHeader from '../../actions/Header';
+
+import { Field } from 'redux-form';
+import { renderField, renderTextarea } from '../libs/helpers.js';
+import { required, number } from '../libs/validation.js';
 
 import Task from './Task';
 import NewTaskForm from './NewTaskForm';
 import styles from './styles.scss';
-import * as actionsHeader from '../../actions/Header';
 
 class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { };
+    this.state = {};
 
     // this.preAddTask = this.preAddTask.bind(this);
     this.renderTasks = this.renderTasks.bind(this);
@@ -207,8 +211,7 @@ class Header extends Component {
                 removeParentTaskId={this.props.removeParentTaskId}
                 addNewSubTask={this.props.addNewSubTask}
                 calculateHours={this.calculateHours}
-              />
-            }
+              />}
           </div>
         </div>
       );
@@ -269,7 +272,7 @@ class Header extends Component {
     } = this.props.headerAdditional;
 
     return (
-      <Form className={styles.right}>
+      <div className={styles.right}>
         <FormGroup className={styles.right__group}>
           <DateField
             value={data}
@@ -278,63 +281,61 @@ class Header extends Component {
             dateFormat="YYYY-MM-DD"
             className={styles.right__group_item}
             onChange={e => this.onDateChange(e)}
-            ref={(dateField) => { this.datefield = dateField; }}
+            ref={(dateField) => {
+              this.datefield = dateField;
+            }}
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
-          <Input
+          <Field
             type="text"
             id="clientName"
             name="clientName"
             value={clientName}
-            placeholder="Client name:"
+            label="Client name:"
+            validate={[required]}
+            component={renderField}
             className={styles.right__group_item}
             onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
-          <Input
+          <Field
             type="text"
             id="projectName"
             name="projectName"
             value={projectName}
-            placeholder="Project name:"
+            label="Project name:"
+            validate={[required]}
+            component={renderField}
             className={styles.right__group_item}
             onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
-          <Input
+          <Field
             type="number"
             id="sprintNumber"
             name="sprintNumber"
             value={sprintNumber}
-            placeholder="Sprint:"
+            label="Sprint:"
+            validate={[required, number]}
+            component={renderField}
             className={styles.right__group_item}
             onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
-      </Form>
+      </div>
     );
   }
 
   render() {
-    const {
-      tasks,
-      headerAdditional: {
-        comments,
-        technologies,
-      },
-    } = this.props;
-
+    const { tasks, headerAdditional: { comments, technologies } } = this.props;
     return (
       <div>
         <Row className={styles.header}>
           <Col xs="12">
-            <img
-              src={require('../../../public/logo_black.jpg')}
-              height={30}
-            />
+            <img src={require('../../../public/logo_black.jpg')} height={30} />
             <CardTitle>ESTIMATE</CardTitle>
           </Col>
           <Col
@@ -360,28 +361,32 @@ class Header extends Component {
           </Col>
         </Row>
         <FormGroup className={styles.right__group}>
-          <Input
+          <Field
             type="textarea"
             name="technologies"
             value={technologies}
+            validate={[required]}
+            component={renderField}
+            label="Technologies, libraries, APIs"
             onChange={this.textAreaAdjust}
-            placeholder="Technologies, libraries, APIs"
             onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         <NewTaskForm
-         addNewTask={this.props.addNewTask}
-         removeParentTaskId={this.props.removeParentTaskId}
-         addNewSubTask={this.props.addNewSubTask}
-         calculateHours={this.calculateHours}
-       />
+          addNewTask={this.props.addNewTask}
+          removeParentTaskId={this.props.removeParentTaskId}
+          addNewSubTask={this.props.addNewSubTask}
+          calculateHours={this.calculateHours}
+        />
         <FormGroup className={styles.right__group}>
-          <Input
+          <Field
             type="textarea"
             name="comments"
             value={comments}
-            placeholder="Comments"
+            validate={[required]}
+            component={renderField}
+            label="Comments"
             onChange={this.textAreaAdjust}
             onBlur={this.handleAddNewClientData}
           />
@@ -400,7 +405,7 @@ Header.propTypes = {
   setParentTaskId: PropTypes.func.isRequired,
   addNewClientData: PropTypes.func.isRequired,
   findTaskAndModify: PropTypes.func.isRequired,
-  headerAdditional:PropTypes.object.isRequired,
+  headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
 };
 
@@ -409,7 +414,9 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return { ...bindActionCreators(actionsHeader, dispatch) }
+  return { ...bindActionCreators(actionsHeader, dispatch) };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(calendar, styles)(Header));
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(calendar, styles)(Header),
+);

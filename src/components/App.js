@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider as ReduxProvider } from 'react-redux';
-import bt from 'bootstrap/dist/css/bootstrap.css?root=./node_modules/bootstrap/dist/';
+import bt from 'bootstrap/dist/css/bootstrap.css';
 import styles from '../routes/home/styles.scss';
 
 const ContextType = {

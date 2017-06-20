@@ -68,60 +68,55 @@ export default class NewTaskForm extends React.Component {
     const { parentTaskId, isSubtask } = this.props;
     console.log(this);
     return (
-      <Form
+      <FormGroup
         id="screenShot"
         data-parentId={parentTaskId}
-        onSubmit={this.addTask}
+        className={styles.tasks__group}
       >
-        <FormGroup
+        <Input
           data-parentId={parentTaskId}
-          className={styles.tasks__group}
+          className={styles.tasks__group_item}
+          type="checkbox"
+          name="isChecked"
+          checked={isChecked}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          data-parentId={parentTaskId}
+          className={styles.tasks__group_item}
+          type="text"
+          placeholder={isSubtask ? 'Subtask' : 'Task'}
+          name="taskName"
+          getRef={input => (this.taskNameInput = input)}
+          value={taskName}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          data-parentId={parentTaskId}
+          className={styles.tasks__group_item}
+          type="number"
+          placeholder="min"
+          name="minimumHours"
+          value={minimumHours}
+          onChange={this.handleInputChange}
+        />
+        <Input
+          data-parentId={parentTaskId}
+          className={styles.tasks__group_item}
+          type="number"
+          placeholder="max"
+          name="maximumHours"
+          value={maximumHours}
+          onChange={this.handleInputChange}
+        />
+        <Button
+          className={styles.tasks__group_item}
+          color="danger"
+          onClick={this.addTask}
         >
-          <Input
-            data-parentId={parentTaskId}
-            className={styles.tasks__group_item}
-            type="checkbox"
-            name="isChecked"
-            checked={isChecked}
-            onChange={this.handleInputChange}
-          />
-          <Input
-            data-parentId={parentTaskId}
-            className={styles.tasks__group_item}
-            type="text"
-            placeholder={isSubtask ? 'Subtask' : 'Task'}
-            name="taskName"
-            getRef={input => (this.taskNameInput = input)}
-            value={taskName}
-            onChange={this.handleInputChange}
-          />
-          <Input
-            data-parentId={parentTaskId}
-            className={styles.tasks__group_item}
-            type="number"
-            placeholder="min"
-            name="minimumHours"
-            value={minimumHours}
-            onChange={this.handleInputChange}
-          />
-          <Input
-            data-parentId={parentTaskId}
-            className={styles.tasks__group_item}
-            type="number"
-            placeholder="max"
-            name="maximumHours"
-            value={maximumHours}
-            onChange={this.handleInputChange}
-          />
-          <Button
-            className={styles.tasks__group_item}
-            type="submit"
-            color="danger"
-          >
-            {isSubtask ? 'Add subtask' : 'Add task'}
-          </Button>
-        </FormGroup>
-      </Form>
+          {isSubtask ? 'Add subtask' : 'Add task'}
+        </Button>
+      </FormGroup>
     );
   }
 }
