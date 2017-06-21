@@ -52,57 +52,57 @@ export default class Task extends React.Component {
     return (
       <FormGroup className={styles.subtasks}>
         <Input
-          data-id={taskId}
-          className={styles.subtasks__item}
           type="checkbox"
           name="isChecked"
+          data-id={taskId}
           checked={isChecked}
           onChange={this.editTask}
+          className={styles.subtasks__item}
         />
         <Input
-          data-id={taskId}
-          className={styles.subtasks__item}
           type="text"
           name="taskName"
-          placeholder={iterator === 0 ? 'Task' : 'Subtask'}
           value={taskName}
+          data-id={taskId}
           onChange={this.editTask}
+          className={styles.subtasks__item}
+          placeholder={iterator === 0 ? 'Task' : 'Subtask'}
         />
         <Input
-          data-id={taskId}
-          className={styles.subtasks__item}
           type="number"
-          value={sumMin || minimumHours}
-          name="minimumHours"
+          data-id={taskId}
           placeholder="min"
+          name="minimumHours"
           onChange={this.editTask}
+          value={sumMin || minimumHours}
+          className={styles.subtasks__item}
         />
         <Input
-          data-id={taskId}
-          className={styles.subtasks__item}
           type="number"
-          value={sumMax || maximumHours}
-          name="maximumHours"
+          data-id={taskId}
           placeholder="max"
           min={minimumHours}
+          name="maximumHours"
           onChange={this.editTask}
+          value={sumMax || maximumHours}
+          className={styles.subtasks__item}
         />
 
         {iterator < 2 ?
           <Button
-            data-id={taskId}
-            className={styles.subtasks__item}
             color="danger"
+            data-id={taskId}
             onClick={this.setParentTaskId}
+            className={styles.subtasks__item}
           >
             Add subtask
           </Button>
           : ''}
         <Button
-          data-id={taskId}
-          className={styles.subtasks__item}
           color="danger"
+          data-id={taskId}
           onClick={this.deleteTask}
+          className={styles.subtasks__item}
         >
           Delete
         </Button>

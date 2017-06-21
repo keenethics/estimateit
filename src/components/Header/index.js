@@ -128,6 +128,7 @@ class Header extends Component {
         minimumHours,
         maximumHours,
       } = task;
+
       const { parentTaskId } = this.props;
       return (
         <div key={taskId}>

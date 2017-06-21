@@ -21,16 +21,19 @@ export default {
               tasks{
                 id,
                 taskName,
+                isChecked,
                 minimumHours,
                 maximumHours,
                 tasks{
                   id,
                   taskName,
+                  isChecked,
                   minimumHours,
                   maximumHours,
                   tasks{
                     id,
                     taskName,
+                    isChecked,
                     minimumHours,
                     maximumHours,
                   },
