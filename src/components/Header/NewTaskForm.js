@@ -42,7 +42,6 @@ export default class NewTaskForm extends React.Component {
       this.props.removeParentTaskId();
     }
 
-    this.props.calculateHours(parentTaskId, newTask);
     this.setState({
       taskName: '',
       minimumHours: '',
@@ -51,6 +50,7 @@ export default class NewTaskForm extends React.Component {
       parentTaskId: undefined,
     });
     this.taskNameInput.focus();
+    this.props.saveTaskIntoState(parentTaskId, newTask);
   }
 
   handleInputChange(event) {
@@ -66,7 +66,6 @@ export default class NewTaskForm extends React.Component {
   render() {
     const { taskName, minimumHours, maximumHours, isChecked } = this.state;
     const { parentTaskId, isSubtask } = this.props;
-    console.log(this);
     return (
       <FormGroup
         id="screenShot"
@@ -133,5 +132,5 @@ NewTaskForm.propTypes = {
   addNewTask: PropTypes.func.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
   addNewSubTask: PropTypes.func.isRequired,
-  calculateHours: PropTypes.func.isRequired,
+  saveTaskIntoState: PropTypes.func.isRequired,
 };
