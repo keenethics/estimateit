@@ -3,25 +3,22 @@ import PropTypes from 'prop-types';
 import {
   CardTitle,
   Col,
-  Form,
   FormGroup,
   Row,
 } from 'reactstrap';
-
+import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DateField } from 'react-date-picker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import calendar from 'react-date-picker/index.css';
-import * as actionsHeader from '../../actions/Header';
-
-import { Field } from 'redux-form';
-import { renderField, renderTextarea } from '../libs/helpers.js';
-import { required, number } from '../libs/validation.js';
 
 import Task from './Task';
-import NewTaskForm from './NewTaskForm';
 import styles from './styles.scss';
+import NewTaskForm from './NewTaskForm';
+import { renderField } from '../libs/helpers';
+import * as actionsHeader from '../../actions/Header';
+import { required, number } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -166,12 +163,7 @@ class Header extends Component {
   }
 
   renderHeader() {
-    const {
-      data,
-      clientName,
-      projectName,
-      sprintNumber,
-    } = this.props.headerAdditional;
+    const { data } = this.props.headerAdditional;
 
     return (
       <div className={styles.right}>
@@ -193,7 +185,6 @@ class Header extends Component {
             type="text"
             id="clientName"
             name="clientName"
-            value={clientName}
             label="Client name:"
             validate={[required]}
             component={renderField}
@@ -206,7 +197,6 @@ class Header extends Component {
             type="text"
             id="projectName"
             name="projectName"
-            value={projectName}
             label="Project name:"
             validate={[required]}
             component={renderField}
@@ -219,7 +209,6 @@ class Header extends Component {
             type="number"
             id="sprintNumber"
             name="sprintNumber"
-            value={sprintNumber}
             label="Sprint:"
             validate={[required, number]}
             component={renderField}

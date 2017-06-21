@@ -33,7 +33,6 @@ class Main extends Component {
 
     this.transformToVector();
     this.calcDeveloperHours(tasks);
-    // this.calcDeveloperHours(this.parseTaskHours(tasks));
     this.calculateAmountOfHours();
   }
 
@@ -42,7 +41,6 @@ class Main extends Component {
     const { tasks } = this.props.headerState;
     if (JSON.stringify(tasks) !== JSON.stringify(newTasks)) {
        this.calcDeveloperHours(newTasks);
-      // this.calcDeveloperHours(this.parseTaskHours(newTasks));
     }
   }
 
@@ -52,8 +50,6 @@ class Main extends Component {
   }
 
   transformToVector() {
-    // const { tasks } = this.props.headerState;
-
     let { tasks } = this.props.headerState;
     let arrayOfSubtasksAndTasks = [];
 
@@ -111,14 +107,6 @@ class Main extends Component {
 
     calculateMinAndMaxHours(data);
     this.props.calcDevHours(res);
-    // const sum = data.reduce(
-    //   (acc, value) => ({
-    //     minHours: (acc.minHours += +value[0]),
-    //     maxHours: (acc.maxHours += +value[1]),
-    //   }),
-    //   { minHours: 0, maxHours: 0 },
-    // );
-    // this.props.calcDevHours(sum);
   }
 
   parseTaskHours(data) {
@@ -133,22 +121,18 @@ class Main extends Component {
       bugFixes,
       completing,
     } = this.props.mainState.estimateOptions;
-    // console.log(this.props);
+
     let highestIndex = this.data.findIndex(item => item > completing);
 
     if (highestIndex === -1) {
       highestIndex = this.data.length - 1;
     }
-    // console.log(this.T);
+
     const hours = this.T[highestIndex];
-    // console.log();
     const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
-    // console.log(additionalHourse);
-    // console.log(hours);
+
     const totalHours = Math.round(hours + additionalHourse);
     this.state.totalHours = totalHours;
-
-    // this.setState({ totalHours });
   }
 
   render() {

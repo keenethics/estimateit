@@ -21,20 +21,12 @@ class Contacts extends Component {
   }
 
   render() {
-    const {
-      pm,
-      email: address,
-      skype,
-      position,
-    } = this.props.contacts;
-
     return (
       <Card className={styles.contacts}>
         <CardHeader>If you have any questions about this estimate, please contact</CardHeader>
         <CardBlock>
           <Field
             name="pm"
-            value={pm}
             type="text"
             label="PM's name"
             validate={[required]}
@@ -45,7 +37,6 @@ class Contacts extends Component {
           <Field
             type="text"
             name="position"
-            value={position}
             label="Position"
             validate={[required]}
             component={renderField}
@@ -55,7 +46,6 @@ class Contacts extends Component {
           <Field
             type="email"
             name="email"
-            value={address}
             label="Email"
             validate={[required, email]}
             component={renderField}
@@ -65,7 +55,6 @@ class Contacts extends Component {
           <Field
             type="text"
             name="skype"
-            value={skype}
             label="Skype"
             validate={[required, alphaNumeric]}
             component={renderField}

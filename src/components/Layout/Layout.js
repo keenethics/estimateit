@@ -18,10 +18,6 @@ class Layout extends React.Component {
     return { handleSubmit };
   }
 
-  onSubmit(props) {
-    console.log('submit form --> clicked', props);
-  }
-
   render() {
     return (
       <Container className={s.estimator}>
@@ -47,8 +43,15 @@ Layout = reduxForm({
   form: 'contact',
 })(Layout);
 
-function mapStateToProps(state) {
-  return { ...state };
-}
+const initializeValues = (state) => {
+  const { Main: { moneyRate, contacts }, Header: { headerAdditional } } = state;
+  const initialValues = {
+    moneyRate,
+    ...contacts,
+    ...headerAdditional,
+  };
 
-export default connect(mapStateToProps)(withStyles(normalizeCss, s)(Layout));
+  return { initialValues };
+};
+
+export default connect(initializeValues)(withStyles(normalizeCss, s)(Layout));

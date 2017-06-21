@@ -43,9 +43,9 @@ class FinalEstimate extends Component {
     this.setState({ dropdownOpen: !dropdownOpen });
   }
 
-  saveAsUrl(props) {
+  saveAsUrl() {
     const { mainState: main, headerState: header, mutate } = this.props;
-    console.log(props);
+
     mutate({
       variables: { input: { header, main } },
     }).then(({ data: { estimateCreate: { url } } }) => {
