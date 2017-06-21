@@ -7,27 +7,10 @@ export default class Task extends React.Component {
   constructor(props) {
     super(props);
 
-    // this.state = {
-    //   taskName: '',
-    //   minimumHours: '',
-    //   maximumHours: '',
-    //   isChecked: true,
-    // };
-
     this.deleteTask = this.deleteTask.bind(this);
     this.editTask = this.editTask.bind(this);
     this.setParentTaskId = this.setParentTaskId.bind(this);
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   const { taskName, minimumHours, maximumHours, isChecked } = nextProps;
-  //   this.setState({
-  //     taskName,
-  //     minimumHours,
-  //     maximumHours,
-  //     isChecked,
-  //   });
-  // }
 
   setParentTaskId(event) {
     this.props.setParentTaskId(event.target.dataset.id);
@@ -45,7 +28,7 @@ export default class Task extends React.Component {
       maximumHours: maximumHours || 0,
       isChecked,
     };
-    this.props.calculateHours(parentid, newTask);
+    this.props.saveTaskIntoState(parentid, newTask);
   }
 
   deleteTask({ target: { dataset: { id, parentid } } }) {
@@ -59,7 +42,7 @@ export default class Task extends React.Component {
       maximumHours: maximumHours || 0,
       isChecked,
     };
-    this.props.calculateHours(parentid, newTask);
+    this.props.saveTaskIntoState(parentid, newTask);
   }
 
   render() {
@@ -140,5 +123,5 @@ Task.propTypes = {
   findTaskAndModify: PropTypes.func.isRequired,
   removeTask: PropTypes.func.isRequired,
   setParentTaskId: PropTypes.func.isRequired,
-  calculateHours: PropTypes.func.isRequired,
+  saveTaskIntoState: PropTypes.func.isRequired,
 };
