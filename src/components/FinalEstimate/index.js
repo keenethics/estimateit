@@ -43,16 +43,15 @@ class FinalEstimate extends Component {
     this.setState({ dropdownOpen: !dropdownOpen });
   }
 
-  saveAsUrl() {
-    const { mainState: main, headerState: header } = this.props;
-
-    this.props.mutate({
+  saveAsUrl(props) {
+    const { mainState: main, headerState: header, mutate } = this.props;
+    console.log(props);
+    mutate({
       variables: { input: { header, main } },
     }).then(({ data: { estimateCreate: { url } } }) => {
       this.refs.notificationSystem.addNotification({
         title: 'Success',
         position: 'br',
-        // message: `${data.message}`,
         level: 'success',
         children: (
           <div>
@@ -152,10 +151,10 @@ class FinalEstimate extends Component {
   }
 
   render() {
-    const { mainState: { moneyRate }, totalHours } = this.props;
+    const { handleSubmit } = this.context;
+    const { totalHours, mainState: { moneyRate } } = this.props;
     const totalSum = totalHours * moneyRate;
-    // console.log(totalSum);
-    // console.log(totalHours)
+
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -182,9 +181,24 @@ class FinalEstimate extends Component {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Type</DropdownItem>
-              <DropdownItem type="submit" onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
-              <DropdownItem type="submit" onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
-              <DropdownItem type="submit" onClick={this.saveAsUrl}>Generate URL</DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.saveAsPdf)}
+              >
+                Generate PDF
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.saveAsCSV)}
+              >
+                Generate CSV
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.saveAsUrl)}
+              >
+                Generate URL
+              </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
@@ -194,7 +208,12 @@ class FinalEstimate extends Component {
   }
 }
 
+FinalEstimate.contextTypes = {
+  handleSubmit: PropTypes.func,
+};
+
 FinalEstimate.propTypes = {
+  mutate: PropTypes.func.isRequired,
   mainState: PropTypes.object.isRequired,
   totalHours: PropTypes.number.isRequired,
   headerState: PropTypes.object.isRequired,

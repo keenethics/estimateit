@@ -1,5 +1,6 @@
 import {
   GraphQLList as ListType,
+  GraphQLBoolean as BoolType,
   GraphQLString as StringType,
   GraphQLObjectType as ObjectType,
 } from 'graphql';
@@ -49,6 +50,9 @@ const TaskOutputType = new ObjectType({
     },
     parent: {
       type: StringType,
+    },
+    isChecked: {
+      type: BoolType,
     },
     tasks: {
       type: new ListType(TaskOutputType),

@@ -10,16 +10,26 @@ import s from './Layout.scss';
 class Layout extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
+    handleSubmit: PropTypes.func.isRequired,
   };
-  onSubmit(props) {
-    console.log('submit form --> clicked', e);
+
+  getChildContext() {
+    const { handleSubmit } = this.props;
+    return { handleSubmit };
   }
+
+  onSubmit(props) {
+    console.log('submit form --> clicked', props);
+  }
+
   render() {
     return (
       <Container className={s.estimator}>
         <Card id="screen">
           <Col xs="12" md="12" lg="10" className={s.estimator__container}>
-            <Form form="contact" onSubmit={this.props.handleSubmit(e => this.onSubmit(e))}>
+            <Form
+              form="contact"
+            >
               {this.props.children}
             </Form>
           </Col>
@@ -28,6 +38,10 @@ class Layout extends React.Component {
     );
   }
 }
+
+Layout.childContextTypes = {
+  handleSubmit: PropTypes.func,
+};
 
 Layout = reduxForm({
   form: 'contact',

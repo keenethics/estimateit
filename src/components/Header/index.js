@@ -271,7 +271,6 @@ class Header extends Component {
             component={renderField}
             label="Technologies, libraries, APIs"
             onChange={this.textAreaAdjust}
-            onBlur={e => this.createTaskAction(e, 'ADD_NEW_CLIENT_DATA')}
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
