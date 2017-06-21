@@ -67,7 +67,7 @@ class Contacts extends Component {
             name="skype"
             value={skype}
             label="Skype"
-            validate={[required]}
+            validate={[required, alphaNumeric]}
             component={renderField}
             onChange={this.onContactsChange}
             className={styles.contacts__input}

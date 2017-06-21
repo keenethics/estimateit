@@ -21,7 +21,6 @@ class Layout extends React.Component {
           <Col xs="12" md="12" lg="10" className={s.estimator__container}>
             <Form form="contact" onSubmit={this.props.handleSubmit(e => this.onSubmit(e))}>
               {this.props.children}
-              <button type="submit">Submit</button>
             </Form>
           </Col>
         </Card>

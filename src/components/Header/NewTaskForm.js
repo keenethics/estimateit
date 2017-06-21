@@ -112,6 +112,7 @@ export default class NewTaskForm extends React.Component {
         <Button
           className={styles.tasks__group_item}
           color="danger"
+          data-parentId={parentTaskId}
           onClick={this.addTask}
         >
           {isSubtask ? 'Add subtask' : 'Add task'}

@@ -182,9 +182,9 @@ class FinalEstimate extends Component {
             </DropdownToggle>
             <DropdownMenu>
               <DropdownItem header>Type</DropdownItem>
-              <DropdownItem onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
-              <DropdownItem onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
-              <DropdownItem onClick={this.saveAsUrl}>Generate URL</DropdownItem>
+              <DropdownItem type="submit" onClick={this.saveAsPdf}>Generate PDF</DropdownItem>
+              <DropdownItem type="submit" onClick={this.saveAsCSV}>Generate CSV</DropdownItem>
+              <DropdownItem type="submit" onClick={this.saveAsUrl}>Generate URL</DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
