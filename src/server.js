@@ -55,6 +55,9 @@ app.post('/api/pdf', (req, res) => {
     show: false,
   });
 
+  console.log('url');
+  console.log(url);
+
   nightmare
   .goto(url)
     .wait(2000)
@@ -71,6 +74,7 @@ app.post('/api/pdf', (req, res) => {
       landscape: false,
     })
     .then((pdfBuffer) => {
+      console.log('hello');
       res.set('Content-Type', 'application/pdf');
       res.set('Content-Disposition: attachment; filename=filename.pdf');
       res.send(new Buffer(pdfBuffer, 'binary'));
