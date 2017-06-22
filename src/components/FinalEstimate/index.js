@@ -82,33 +82,13 @@ class FinalEstimate extends Component {
   }
 
   async saveAsPdf() {
-
-    // const apiURL = process.env.NODE_ENV === 'development'
-    //   ? 'http://localhost:3000'
-    //   : window.location.origin;
-    //
-    // const axiosInstance = axios.create({
-    //   baseURL: apiURL,
-    // });
-
-    console.log('helllo');
-    // fetch('/api/pdf', {
-    //   method: 'post',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ pathName: location.pathname }),
-    // }).then(res => {
-    //   console.log('das;ldkasldkjasdlk');
-    //   console.log(res);
-    // })
-
-    axios.post('http://localhost:3001/api/pdf', {
+    axios.post('/api/pdf', {
       url: decodeURIComponent(location.href),
     }, { responseType: 'arraybuffer' })
       .then((response) => {
-        console.log(response);
-        console.log(this);
         const file = new Blob([response.data], { type: 'application/pdf' });
         const link = document.createElement('a');
+
         link.href = window.URL.createObjectURL(file);
         link.download = 'keenethics_report.pdf';
         link.click();
@@ -120,27 +100,6 @@ class FinalEstimate extends Component {
           position: 'br',
         });
       });
-
-    // .then((response) => {
-      // console.log('response');
-      // console.log(response);
-      // console.log(response);
-      // const r = await response.json();
-      //  await resp.json();
-      // console.log(r);
-      // const file = new Blob([response.data], { type: 'application/pdf' });
-      // const link = document.createElement('a');
-      // link.href = window.URL.createObjectURL(file);
-      // link.download = 'keenethics_report.pdf';
-      // link.click();
-      // this.notificationSystem.addNotification({
-      //   title: 'Success',
-      //   message: 'generation of the PDF was successful!',
-      //   level: 'success',
-      //   autoDismiss: 6,
-      //   position: 'br',
-      // });
-    // });
   }
 
   saveAsCSV() {

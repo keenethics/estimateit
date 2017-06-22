@@ -48,43 +48,40 @@ app.use('/graphql', expressGraphQL(req => ({
   pretty: __DEV__,
 })));
 
-app.post('/api/pdf', async (req, res) => {
-  const { headers } = req;
-  console.log(headers);
-  // const nightmare = Nightmare({
-  //   show: false,
-  // });
-  // new Nightmare
-  // .goto(
-  //   // 'http://localhost:3001/594438d90969b48a2bc6c5bc')
-  //   headers.referer)
-  //   .wait(2000)
-  //   .evaluate(() => {
-  //     const body = document.querySelector('body');
-  //     return {
-  //       height: body.scrollHeight,
-  //     };
-  //   })
-  //   .pdf({
-  //     printBackground: true,
-  //     marginsType: 0,
-  //     pageSize: 'A4',
-  //     landscape: false,
-  //   })
-    // .then((pdfBuffer) => {
-    //   nightmare.end();
-    //
-    //   nightmare.proc.disconnect();
-    //   nightmare.proc.kill();
-    //   nightmare.ended = true;
-    //   res.set('Content-Type', 'application/pdf');
-    //   res.set('Content-Disposition: attachment; filename=filename.pdf');
-    //   res.send(new Buffer(pdfBuffer, 'binary'));
-    //   // nightmare = null;
-    // })
-    // .catch((err) => {
-    //   console.error(err);
-    // });
+app.post('/api/pdf', (req, res) => {
+  const { url } = req.body;
+
+  let nightmare = Nightmare({
+    show: true,
+  });
+
+  nightmare
+  .goto(url)
+    .wait(2000)
+    .evaluate(() => {
+      const body = document.querySelector('body');
+      return {
+        height: body.scrollHeight,
+      };
+    })
+    .pdf({
+      printBackground: true,
+      marginsType: 0,
+      pageSize: 'A4',
+      landscape: false,
+    })
+    .then((pdfBuffer) => {
+      res.set('Content-Type', 'application/pdf');
+      res.set('Content-Disposition: attachment; filename=filename.pdf');
+      res.send(new Buffer(pdfBuffer, 'binary'));
+
+      nightmare.end();
+      nightmare.ended = true;
+      nightmare = null;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 //
