@@ -15,23 +15,11 @@ export default class PieChart extends Component {
     };
   }
 
-  generateData() {
-    const { data } = this.props;
-    console.log(data);
-
-    initialData.datasets[0].data = initialData.labels.map(e => {
-      return data[e]
-    });
-    console.log(initialData);
-    // if (typeof data !== 'undefined') {
-    //   Object.keys(data).forEach((key, i) => {
-    //     // this.data[i].value = data[key];
-    //   });
-    // }
-  }
-
   render() {
-    this.generateData();
+    const { data } = this.props;
+
+    initialData.datasets[0].data = initialData.labels.map(e => data[e]);
+
     return (
       <div>
         <RC2
