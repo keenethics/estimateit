@@ -75,10 +75,12 @@ app.post('/api/pdf', (req, res) => {
     })
     .then((pdfBuffer) => {
       console.log('hello');
+      console.log(pdfBuffer);
+
       res.set('Content-Type', 'application/pdf');
       res.set('Content-Disposition: attachment; filename=filename.pdf');
       res.send(new Buffer(pdfBuffer, 'binary'));
-
+      console.log('sent');
       nightmare.end();
       nightmare.ended = true;
       nightmare = null;
