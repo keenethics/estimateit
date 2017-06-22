@@ -11,12 +11,15 @@ import {
   ButtonDropdown,
   DropdownToggle,
 } from 'reactstrap';
+import axios from 'axios';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
+import columns from '../../constants/csvCoulumns';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
-import axios from 'axios';
+
 
 class FinalEstimate extends Component {
   constructor(props) {
@@ -57,16 +60,19 @@ class FinalEstimate extends Component {
         children: (
           <div>
             <input
-              className={styles['custom-notification-input']}
               type="text"
+              value={url}
+              onClick={e => e.stopPropagation()}
+              className={styles['custom-notification-input']}
               ref={node => (this.customNotificationInput = node)}
-              value={url} onClick={e => e.stopPropagation()}
             />
             <button
               type="button"
-              className={styles['custom-notification-action-button']}
               onClick={this.copyUrlToClipboard.bind(this, url)}
-            >Copy to clipboard</button>
+              className={styles['custom-notification-action-button']}
+            >
+            Copy to clipboard
+          </button>
           </div>
         ),
       });
@@ -103,37 +109,6 @@ class FinalEstimate extends Component {
   }
 
   saveAsCSV() {
-    const columns = [[{
-      id: 'number',
-      displayName: '#',
-    }, {
-      id: 'taskName',
-      displayName: 'Task',
-    }, {
-      id: 'minimumHours',
-      displayName: 'Minimum hours',
-    }, {
-      id: 'maximumHours',
-      displayName: 'Maximum hours',
-    }, {
-      id: 'tasks',
-      displayName: '',
-    }], [{
-      id: 'qa',
-      displayName: 'QA',
-    }, {
-      id: 'pm',
-      displayName: 'PM',
-    }, {
-      id: 'bugFixes',
-      displayName: 'Bug Fixes',
-    }, {
-      id: 'risks',
-      displayName: 'Risks',
-    }, {
-      id: 'completing',
-      displayName: 'Completing',
-    }]];
     const {
       headerState: { tasks },
       mainState: { estimateOptions },
