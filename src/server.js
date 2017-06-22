@@ -52,7 +52,7 @@ app.post('/api/pdf', (req, res) => {
   const { url } = req.body;
 
   let nightmare = Nightmare({
-    show: true,
+    show: false,
   });
 
   nightmare
