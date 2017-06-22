@@ -222,7 +222,7 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks, headerAdditional: { comments, technologies } } = this.props;
+    const { tasks } = this.props;
     return (
       <div>
         <Row className={styles.header}>
@@ -256,11 +256,10 @@ class Header extends Component {
           <Field
             type="textarea"
             name="technologies"
-            value={technologies}
             validate={[required]}
             component={renderField}
             label="Technologies, libraries, APIs"
-            onChange={this.textAreaAdjust}
+            onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
@@ -274,7 +273,6 @@ class Header extends Component {
           <Field
             type="textarea"
             name="comments"
-            value={comments}
             validate={[required]}
             component={renderField}
             label="Comments"
