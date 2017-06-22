@@ -1,7 +1,0 @@
-@import "../../../ui";
-
-.main {
-  & > div:not(:last-child) {
-    margin-bottom: $margin-card;
-  }
-}

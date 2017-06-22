@@ -1,0 +1,100 @@
+.header {
+  margin-bottom: 1rem;
+  .left {
+    &__company {
+      color: #d9534f;
+      font-size: 24px;
+      font-weight: 700;
+
+    }
+    &__contacts {
+      margin-top: 10px;
+      padding: 15px;
+      border: 2px solid #d9534f;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+      p {
+        margin-top: inherit !important;
+      }
+      span {
+        display: block;
+        margin-bottom: 18px;
+        font-weight: 600;
+        &:first-child {
+          margin-top: 24px;
+          color: #d9534f;
+        }
+      }
+    }
+  }
+  &__right {
+    margin-top: 10px;
+    span {
+      display: block;
+      margin-bottom: 24px;
+      label {
+        padding-right: 12px;
+      }
+    }
+  }
+}
+
+.tasks {
+  &__group {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    &_item {
+      @media screen and (max-width: 1000px) {
+        margin-bottom: .5rem;
+        &:first-child {
+          top: calc(50% - 28px) !important;
+          margin-left: -15.5px !important;
+        }
+      }
+      &:first-child {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+    @media screen and (max-width: 1000px) {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+  }
+}
+
+.subtasks {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem !important;
+  position: relative;
+  &__item {
+    @media screen and (max-width: 1000px) {
+      margin-bottom: .5rem;
+      &:first-child {
+        top: calc(50% - 28px) !important;
+        margin-left: -15.5px !important;
+      }
+    }
+    &:first-child {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+    &:not(:nth-child(6n+6)) {
+      margin-right: 10px;
+    }
+  }
+  @media screen and (max-width: 1000px) {
+    margin: auto 0 !important;
+  }
+}
