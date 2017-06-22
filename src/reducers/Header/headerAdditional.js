@@ -15,7 +15,7 @@ export default function headerAdditionalData(state = initialState.header.infoCol
       return insertAdditionalData(state, action.payload);
 
     case APPLY_STATE:
-      const { headerAdditional } = action.data.data.estimate.header;
+      const { headerAdditional } = action.data.header;
       return { ...state, ...headerAdditional };
 
     default:

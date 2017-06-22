@@ -114,8 +114,8 @@ export default class Task extends React.Component {
 Task.propTypes = {
   taskId: PropTypes.string.isRequired,
   taskName: PropTypes.string.isRequired,
-  minimumHours: PropTypes.string.isRequired,
-  maximumHours: PropTypes.string.isRequired,
+  minimumHours: PropTypes.number.isRequired,
+  maximumHours: PropTypes.number.isRequired,
   isChecked: PropTypes.bool.isRequired,
   sumMin: PropTypes.number,
   sumMax: PropTypes.number,

@@ -70,7 +70,7 @@ export default function estimatorTasks(state = initialState.header.tasks, action
       return findTaskAndModify(state, id, name, value);
 
     case APPLY_STATE:
-      const { tasks } = action.data.data.estimate.header;
+      const { tasks } = action.data.header;
       return [...state, ...tasks];
 
     default:

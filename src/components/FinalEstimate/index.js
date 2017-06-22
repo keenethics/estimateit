@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
+import fetch from 'isomorphic-fetch';
 import {
   Card,
   CardBlock,
@@ -15,7 +16,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
-import axiosInstance from '../../constants/axios';
+import axios from 'axios';
 
 class FinalEstimate extends Component {
   constructor(props) {
@@ -49,7 +50,7 @@ class FinalEstimate extends Component {
     mutate({
       variables: { input: { header, main } },
     }).then(({ data: { estimateCreate: { url } } }) => {
-      this.refs.notificationSystem.addNotification({
+      this.notificationSystem.addNotification({
         title: 'Success',
         position: 'br',
         level: 'success',
@@ -70,8 +71,7 @@ class FinalEstimate extends Component {
         ),
       });
     }).catch(error => {
-      console.log(error);
-      this.refs.notificationSystem.addNotification({
+      this.notificationSystem.addNotification({
         title: 'Error',
         level: 'error',
         position: 'br',
@@ -81,17 +81,38 @@ class FinalEstimate extends Component {
     });
   }
 
-  saveAsPdf() {
-    axiosInstance.post('/api/pdf', {
+  async saveAsPdf() {
+
+    // const apiURL = process.env.NODE_ENV === 'development'
+    //   ? 'http://localhost:3000'
+    //   : window.location.origin;
+    //
+    // const axiosInstance = axios.create({
+    //   baseURL: apiURL,
+    // });
+
+    console.log('helllo');
+    // fetch('/api/pdf', {
+    //   method: 'post',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ pathName: location.pathname }),
+    // }).then(res => {
+    //   console.log('das;ldkasldkjasdlk');
+    //   console.log(res);
+    // })
+
+    axios.post('http://localhost:3001/api/pdf', {
       url: decodeURIComponent(location.href),
     }, { responseType: 'arraybuffer' })
       .then((response) => {
+        console.log(response);
+        console.log(this);
         const file = new Blob([response.data], { type: 'application/pdf' });
         const link = document.createElement('a');
         link.href = window.URL.createObjectURL(file);
         link.download = 'keenethics_report.pdf';
         link.click();
-        this.refs.notificationSystem.addNotification({
+        this.notificationSystem.addNotification({
           title: 'Success',
           message: 'generation of the PDF was successful!',
           level: 'success',
@@ -99,6 +120,27 @@ class FinalEstimate extends Component {
           position: 'br',
         });
       });
+
+    // .then((response) => {
+      // console.log('response');
+      // console.log(response);
+      // console.log(response);
+      // const r = await response.json();
+      //  await resp.json();
+      // console.log(r);
+      // const file = new Blob([response.data], { type: 'application/pdf' });
+      // const link = document.createElement('a');
+      // link.href = window.URL.createObjectURL(file);
+      // link.download = 'keenethics_report.pdf';
+      // link.click();
+      // this.notificationSystem.addNotification({
+      //   title: 'Success',
+      //   message: 'generation of the PDF was successful!',
+      //   level: 'success',
+      //   autoDismiss: 6,
+      //   position: 'br',
+      // });
+    // });
   }
 
   saveAsCSV() {
@@ -202,7 +244,7 @@ class FinalEstimate extends Component {
             </DropdownMenu>
           </ButtonDropdown>
         </CardBlock>
-        <Notification ref="notificationSystem"/>
+        <Notification ref={ref => this.notificationSystem = ref} />
       </Card>
     );
   }

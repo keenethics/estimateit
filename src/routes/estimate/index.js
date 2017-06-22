@@ -73,8 +73,9 @@ export default {
         }),
       });
 
-      const data = await resp.json();
-      store.dispatch(apply(data));
+      const { data: { estimate } } = await resp.json();
+
+      if (estimate) store.dispatch(apply(estimate));
 
       return {
         title: 'Estimator',
