@@ -2,7 +2,9 @@ export default {
   header: {
     tasks: [],
     parentTaskId: '',
-    infoCollector: {},
+    infoCollector: {
+      selectedTechnologies: [],
+    },
   },
   main: {
     estimateOptions: {

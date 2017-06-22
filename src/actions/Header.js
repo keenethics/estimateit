@@ -56,6 +56,15 @@ export function addNewClientData(name, value) {
   };
 }
 
+export function addSelectedData( value ) {
+  return {
+    type: types.ADD_HEADER_INFO_TECHNOLOGIES,
+    payload: {
+      value,
+    },
+  };
+}
+
 export function setParentTaskId(id) {
   return {
     type: types.SET_PARENT_TASK_ID,
