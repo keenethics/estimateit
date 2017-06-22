@@ -43,8 +43,8 @@ class FinalEstimate extends Component {
   }
 
   toggle() {
-    const { dropdownOpen } = this.state;
-    this.setState({ dropdownOpen: !dropdownOpen });
+    const dropdownOpen = !this.state.dropdownOpen;
+    this.setState({ dropdownOpen });
   }
 
   saveAsUrl() {
@@ -104,6 +104,16 @@ class FinalEstimate extends Component {
           level: 'success',
           autoDismiss: 6,
           position: 'br',
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.notificationSystem.addNotification({
+          title: 'Error',
+          level: 'error',
+          position: 'br',
+          autoDismiss: 6,
+          message: 'internal server error',
         });
       });
   }
