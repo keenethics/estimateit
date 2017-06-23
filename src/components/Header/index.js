@@ -159,7 +159,6 @@ class Header extends Component {
       );
     });
   }
-
   renderHeader() {
     const { data } = this.props.headerAdditional;
 
@@ -219,7 +218,7 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks, headerAdditional: { comments, selectedTechnologies } } = this.props;
+    const { tasks, headerAdditional: { comments, technologies } } = this.props;
     const technologiesList = [
       'Angular.js',
       'Aurelia',
@@ -291,14 +290,13 @@ class Header extends Component {
             component={MultiSelect}
             validate={[requiredArray]}
             titles={technologiesList}
-            values={selectedTechnologies}
-            onChange={(e, array) => this.props.addSelectedData(array)}
+            values={technologies}
+            handler={this.props.addTechonologies}
             placeholder="Technologies"
             multi
             searchable
             creatable
           />
-
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         <NewTaskForm
@@ -335,6 +333,7 @@ Header.propTypes = {
   findTaskAndModify: PropTypes.func.isRequired,
   headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
+  addTechnologies: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

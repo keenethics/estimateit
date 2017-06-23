@@ -9,6 +9,20 @@ import {
 //
 // HEADER
 //
+const TechnologiesType = new InputObjectType({
+  name: 'TechnologiesType',
+  fields: () => ({
+    value: {
+      type: StringType,
+    },
+    label: {
+      type: StringType,
+    },
+    className: {
+      type: StringType,
+    },
+  }),
+});
 
 const HeaderAddionalInputType = new InputObjectType({
   name: 'HeaderAddionalInputType',
@@ -25,11 +39,11 @@ const HeaderAddionalInputType = new InputObjectType({
     sprintNumber: {
       type: FloatType,
     },
-    technologies: {
-      type: StringType,
-    },
     comments: {
       type: StringType,
+    },
+    technologies: {
+      type: new ListType(TechnologiesType),
     },
   },
 });

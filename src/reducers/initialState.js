@@ -3,7 +3,7 @@ export default {
     tasks: [],
     parentTaskId: '',
     infoCollector: {
-      selectedTechnologies: [],
+      technologies: [],
     },
   },
   main: {

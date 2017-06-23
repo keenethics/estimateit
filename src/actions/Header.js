@@ -56,7 +56,7 @@ export function addNewClientData(name, value) {
   };
 }
 
-export function addSelectedData( value ) {
+export function addTechnologies(value) {
   return {
     type: types.ADD_HEADER_INFO_TECHNOLOGIES,
     payload: {

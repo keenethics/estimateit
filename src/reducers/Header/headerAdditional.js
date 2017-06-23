@@ -17,7 +17,7 @@ export default function headerAdditionalData(state = initialState.header.infoCol
 
     case ADD_HEADER_INFO_TECHNOLOGIES:
       const { value } = action.payload;
-      return { ...state, selectedTechnologies: value };
+      return { ...state, technologies: value };
 
     case APPLY_STATE:
       const { headerAdditional } = action.data.header;

@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
-import Select, { Creatable } from 'react-select';
-import { ValidationState } from '../../libs/helpers';
+import { Creatable } from 'react-select';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from 'react-select/dist/react-select.css';
+import { ValidationState } from '../../libs/helpers';
+
 
 class MultiSelect extends Component {
-  singleChangeHandler(func) {
-    return function handleSingleChange(value) {
-      func(value ? value.value : '');
-    };
+  constructor(props) {
+    super(props);
   }
-
-  multiChangeHandler(func) {
+  multiChangeHandler(func, handler) {
     return function handleMultiHandler(values) {
+      handler(values);
       func(values.map(value => value.value));
     };
   }
@@ -28,47 +27,28 @@ class MultiSelect extends Component {
       className,
       multi,
       searchable,
+      handler,
       ...elements
     } = props;
     const itemsList = titles.map(element => ({
       value: element,
       label: element,
     }));
+
     return (
       <div>
-        {!this.props.creatable
-          ? <Select
-            onChange={
-                multi
-                  ? this.multiChangeHandler(onChange)
-                  : this.singleChangeHandler(onChange)
-              }
-            onBlur={() => onBlur(value)}
-            name={name}
-            className={className}
-            placeholder={placeholder}
-            searchable={searchable}
-            value={values}
-            options={itemsList}
-            multi={multi}
-            {...elements}
-          />
-          : <Creatable
-            onChange={
-                multi
-                  ? this.multiChangeHandler(onChange)
-                  : this.singleChangeHandler(onChange)
-              }
-            onBlur={() => onBlur(value)}
-            name={name}
-            className={className}
-            placeholder={placeholder}
-            searchable={searchable}
-            value={values}
-            options={itemsList}
-            multi={multi}
-            {...elements}
-          />}
+        <Creatable
+          onChange={this.multiChangeHandler(onChange, handler)}
+          onBlur={() => onBlur(value)}
+          name={name}
+          className={className}
+          placeholder={placeholder}
+          searchable={searchable}
+          value={values}
+          options={itemsList}
+          multi={multi}
+          {...elements}
+        />
         <ValidationState {...meta} />
       </div>
     );
