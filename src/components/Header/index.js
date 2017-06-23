@@ -291,7 +291,7 @@ class Header extends Component {
             validate={[requiredArray]}
             titles={technologiesList}
             values={technologies}
-            handler={this.props.addTechonologies}
+            handler={this.props.addTechnologies}
             placeholder="Technologies"
             multi
             searchable
