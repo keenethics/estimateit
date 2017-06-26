@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardBlock, Col } from 'reactstrap';
+import { Card, CardBlock, Col, Row} from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import styles from './styles.scss';
@@ -17,7 +17,7 @@ const Calculation = ({
   <Card className={styles.calculation}>
     <CardBlock className={styles.calculation__wrapper}>
       <Col
-        xs="12" lg="4"
+        xs="12" lg="3"
         className={styles.calculation__piechart}
       >
         {
@@ -26,7 +26,7 @@ const Calculation = ({
         }
       </Col>
       <Col
-        xs="12" lg="8"
+        xs="12" lg="9"
         className={styles.calculation__options}
       >
         <EstimateOptions
