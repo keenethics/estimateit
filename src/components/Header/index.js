@@ -9,9 +9,11 @@ import {
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DateField } from 'react-date-picker';
+import DateField from 'react-datepicker';
+import moment from 'moment';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import calendar from 'react-date-picker/index.css';
+import datepicker from 'react-datepicker/dist/react-datepicker.css';
 
 import Task from './Task';
 import styles from './styles.scss';
@@ -170,11 +172,11 @@ class Header extends Component {
       <div className={styles.right}>
         <FormGroup className={styles.right__group}>
           <DateField
-            value={data}
-            placeholder="Date:"
+            selected={data ? moment(data, 'YYYY/MM/DD') : moment()}
+            placeholderText="Click to select a date"
             htmlFor="datePicker"
-            dateFormat="YYYY-MM-DD"
-            className={styles.right__group_item}
+            dateFormat="YYYY/MM/DD"
+            className="react-datepicker-ignore-onclickoutside"
             onChange={e => this.onDateChange(e)}
             ref={(dateField) => {
               this.datefield = dateField;
@@ -309,5 +311,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(calendar, styles)(Header),
+  withStyles(calendar, styles, datepicker)(Header),
 );
