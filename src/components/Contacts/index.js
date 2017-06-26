@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardBlock, CardHeader, Input } from 'reactstrap';
+import { Card, CardBlock, CardHeader } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { Field } from 'redux-form';
@@ -29,7 +29,7 @@ class Contacts extends Component {
             name="pm"
             type="text"
             label="PM's name"
-            validate={[required]}
+            validate={[required, alphaNumeric]}
             component={renderField}
             onChange={this.onContactsChange}
             className={styles.contacts__input}
@@ -38,7 +38,7 @@ class Contacts extends Component {
             type="text"
             name="position"
             label="Position"
-            validate={[required]}
+            validate={[required, alphaNumeric]}
             component={renderField}
             onChange={this.onContactsChange}
             className={styles.contacts__input}
