@@ -245,7 +245,7 @@ class Header extends Component {
                   founders@keenethics.com
                 </a>
               </p>
-              <p><a href="https://keenethics.com/">keenethics.com</a></p>
+              <p><a href="https://keenethics.com/" target="_blank" rel="noreferrer">keenethics.com</a></p>
             </div>
           </Col>
           <Col xs="12" md="7" className={styles.header__right}>
