@@ -18,7 +18,7 @@ import styles from './styles.scss';
 import NewTaskForm from './NewTaskForm';
 import { renderField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
-import { required, number } from '../libs/validation';
+import { required, currency } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -211,7 +211,7 @@ class Header extends Component {
             id="sprintNumber"
             name="sprintNumber"
             label="Sprint:"
-            validate={[required, number]}
+            validate={[required, currency]}
             component={renderField}
             className={styles.right__group_item}
             onBlur={this.handleAddNewClientData}
