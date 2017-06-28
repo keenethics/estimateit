@@ -1,6 +1,6 @@
-export default {
+export default [{
 
-  path: '/',
+  path: '/estimate',
 
   children: [
     require('./home').default,
@@ -19,4 +19,10 @@ export default {
     return route;
   },
 
-};
+}, {
+  path: '/register',
+  title: 'Register',
+  children: [
+    require('./register').default,
+  ],
+}];

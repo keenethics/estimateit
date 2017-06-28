@@ -6,7 +6,6 @@
 :global {
   .react-date-field__input {
     padding: 0 !important;
-    flex: 1 0 50% !important;
   }
   .react-date-field--theme-default {
     width: 100%;
@@ -21,7 +20,7 @@
     text-overflow: ellipsis;
     background: inherit;
     &:last-child {
-      width: 140px;
+      width: 100px;
     }
   }
   input.radarChartPart {
@@ -39,11 +38,7 @@ input[type=text] {
     flex: 1 0 100%;
   }
 }
-input[type=checkbox] {
-  &:focus {
-    outline: none;
-  }
-}
+
 input[type=number] {
   flex: 1 0 50px;
   @media screen and (max-width: 1000px) {
