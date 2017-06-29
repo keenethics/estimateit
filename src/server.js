@@ -10,6 +10,8 @@ import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
 import Nightmare from 'nightmare';
+import passport from 'passport';
+import expressValidator from 'express-validator'
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -20,8 +22,12 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
+import './utils/auth';
 
 mongoose.connect(config.MONGO_URL);
+const db = mongoose.connection;
+db.on('error', () => console.log('Failed to connect to DB.'))
+  .once('open', () => console.log('Connected to DB. '));
 
 const app = express();
 
@@ -30,17 +36,38 @@ global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(passport.initialize());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(expressValidator());
 
 if (__DEV__) {
   app.enable('trust proxy');
 }
 
+
+// Login using passport
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, message) => {
+    if (user) return res.json(user);
+    return res.json({ success: false, err, ...message });
+  })(req, res, next);
+});
+
+// Signup Using passport
+app.post('/register', (req, res, next) => {
+  passport.authenticate('local.signup', (err, user, message) => {
+    if (user) return res.json(user);
+    return res.json({ success: false, err, ...message });
+  })(req, res, next);
+});
+
+
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
+
 app.use('/graphql', expressGraphQL(req => ({
   schema,
   graphiql: __DEV__,
@@ -115,11 +142,8 @@ app.get('*', async (req, res, next) => {
       value: Date.now(),
     }));
 
-    // Global (context) variables that can be easily accessed from any React component
-    // https://facebook.github.io/react/docs/context.html
+
     const context = {
-      // Enables critical path CSS rendering
-      // https://github.com/kriasoft/isomorphic-style-loader
       insertCss: (...styles) => {
         // eslint-disable-next-line no-underscore-dangle
         styles.forEach(style => css.add(style._getCss()));
@@ -180,11 +204,11 @@ pe.skipPackage('express');
 
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(pe.render(err));
-const html = ReactDOM.renderToStaticMarkup(
+  const html = ReactDOM.renderToStaticMarkup(
     <Html
       title="Internal Server Error"
       description={err.message}
-      styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]} // eslint-disable-line no-underscore-dangle
+      styles={[{ id: 'css', cssText: errorPageStyle._getCss() }]}
     >
       {ReactDOM.renderToString(<ErrorPageWithoutStyle error={err} />)}
     </Html>,
@@ -198,6 +222,17 @@ const html = ReactDOM.renderToStaticMarkup(
 // -----------------------------------------------------------------------------
 /* eslint-disable no-console */
 app.listen(config.port, () => {
-  console.info(`The server is running at http://localhost:${config.port}/`);
+  console.info(`
+  
+███████╗███████╗████████╗██╗███╗   ███╗ █████╗ ████████╗ ██████╗ ██████╗ 
+██╔════╝██╔════╝╚══██╔══╝██║████╗ ████║██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗
+█████╗  ███████╗   ██║   ██║██╔████╔██║███████║   ██║   ██║   ██║██████╔╝
+██╔══╝  ╚════██║   ██║   ██║██║╚██╔╝██║██╔══██║   ██║   ██║   ██║██╔══██╗
+███████╗███████║   ██║   ██║██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╔╝██║  ██║
+╚══════╝╚══════╝   ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
+                                                                         
+  
+  
+  The server is running at http://localhost:${config.port}/`);
 });
 /* eslint-enable no-console */

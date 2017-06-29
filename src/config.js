@@ -26,6 +26,7 @@ module.exports = {
   },
 
   // Database
+  SECRET: 'ThisIsFuckingAPpSecret',
   MONGO_URL: process.env.MONGOLAB_ORANGE_URI || 'mongodb://localhost/estimateit',
 
   // Web analytics
