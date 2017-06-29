@@ -29,9 +29,12 @@ module.exports = {
   SECRET: 'ThisIsFuckingAPpSecret',
   MONGO_URL: process.env.MONGOLAB_ORANGE_URI || 'mongodb://localhost/estimateit',
 
-  // Web analytics
+  google: {
+    clientID: '17514047684-ssnv93v150nli9ukgbcic4glf2uml858.apps.googleusercontent.com',
+    clientSecret: 'H2pQRCGUGpW3pCchE08B3Z7h',
+    callbackURL: 'http://localhost:3000/auth/google/callback',
+  },
   analytics: {
-    // https://analytics.google.com/
     googleTrackingId: process.env.GOOGLE_TRACKING_ID, // UA-XXXXX-X
   },
 };

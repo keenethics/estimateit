@@ -4,6 +4,13 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
 
 class LoginPage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      error: '',
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   handleSubmit(e) {
     e.preventDefault();
     const email = e.target.email.value;
@@ -18,9 +25,19 @@ class LoginPage extends React.Component {
       )
       .then((response) => {
         console.log('response in the auth actions', response.data.message);
-      })
-      .catch((error) => {
-        console.log('response in the auth actions', error.data.message);
+        if (response.data.err) {
+          this.setState({
+            error: response.data.err[0].msg,
+          });
+        } else if (!response.data.success) {
+          this.setState({
+            error: response.data.message,
+          });
+        } else {
+          this.setState({
+            error: '',
+          });
+        }
       });
   }
 
@@ -44,6 +61,11 @@ class LoginPage extends React.Component {
           <button className="btn btn-xs btn-danger btn-block" type="submit">
             Login
           </button>
+          <a className="btn btn-xs btn-danger btn-block" href="/register">
+            Register
+          </a>
+          <a className="btn btn-xs btn-primary btn-block" href="/auth/google">Sign In with Google</a>
+          <span className="text-warning">{this.state.error}</span>
         </form>
       </div>
     );

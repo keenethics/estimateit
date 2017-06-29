@@ -14,6 +14,12 @@ export default [{
     return route;
   },
 }, {
+  path: '/login',
+  title: 'Login',
+  children: [
+    require('./login').default,
+  ],
+}, {
   path: '/register',
   title: 'Register',
   children: [

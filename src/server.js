@@ -11,7 +11,7 @@ import App from './components/App';
 import Html from './components/Html';
 import Nightmare from 'nightmare';
 import passport from 'passport';
-import expressValidator from 'express-validator'
+import expressValidator from 'express-validator';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -25,12 +25,8 @@ import config from './config';
 import './utils/auth';
 
 mongoose.connect(config.MONGO_URL);
-const db = mongoose.connection;
-db.on('error', () => console.log('Failed to connect to DB.'))
-  .once('open', () => console.log('Connected to DB. '));
-
+mongoose.Promise = global.Promise;
 const app = express();
-
 
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
@@ -46,34 +42,73 @@ if (__DEV__) {
   app.enable('trust proxy');
 }
 
-
 // Login using passport
 app.post('/login', (req, res, next) => {
-  passport.authenticate('local', (err, user, message) => {
-    if (user) return res.json(user);
-    return res.json({ success: false, err, ...message });
-  })(req, res, next);
+  passport.authenticate(
+    'local',
+    { successRedirect: '/',
+      failureRedirect: '/login',
+      failureFlash: true },
+    (err, user, message) => {
+      if (user) return res.json(user);
+      return res.json({ success: false, err, ...message });
+    },
+  )(req, res, next);
 });
 
 // Signup Using passport
 app.post('/register', (req, res, next) => {
-  passport.authenticate('local.signup', (err, user, message) => {
-    if (user) return res.json(user);
-    return res.json({ success: false, err, ...message });
-  })(req, res, next);
+  passport.authenticate(
+    'local.signup',
+    {
+      successRedirect: '/',
+      failureRedirect: '/register',
+    },
+    (err, user, message) => {
+      if (user) return res.json(user);
+      return res.json({ success: false, err, ...message });
+    },
+  )(req, res, next);
 });
 
+app.post('/register', (req, res, next) => {
+  passport.authenticate(
+    'local.signup',
+    {
+      successRedirect: '/',
+      failureRedirect: '/register',
+    },
+    (err, user, message) => {
+      if (user) return res.json(user);
+      return res.json({ success: false, err, ...message });
+    },
+  )(req, res, next);
+});
+
+app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/auth/google/callback', (req, res, next) => {
+  passport.authenticate('google',
+    (err, user, message) => {
+      if (err) return console.log('\t error!', err);
+      if (user) return res.json(user);
+      return res.json({ success: false, err, ...message });
+    },
+  )(req, res, next);
+});
 
 //
 // Register API middleware
 // -----------------------------------------------------------------------------
 
-app.use('/graphql', expressGraphQL(req => ({
-  schema,
-  graphiql: __DEV__,
-  rootValue: { request: req },
-  pretty: __DEV__,
-})));
+app.use(
+  '/graphql',
+  expressGraphQL(req => ({
+    schema,
+    graphiql: __DEV__,
+    rootValue: { request: req },
+    pretty: __DEV__,
+  })),
+);
 
 app.post('/api/pdf', (req, res) => {
   const { url } = req.body;
@@ -83,7 +118,7 @@ app.post('/api/pdf', (req, res) => {
   });
 
   nightmare
-  .goto(url)
+    .goto(url)
     .wait(2000)
     .evaluate(() => {
       const body = document.querySelector('body');
@@ -137,11 +172,12 @@ app.get('*', async (req, res, next) => {
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
 
-    store.dispatch(setRuntimeVariable({
-      name: 'initialNow',
-      value: Date.now(),
-    }));
-
+    store.dispatch(
+      setRuntimeVariable({
+        name: 'initialNow',
+        value: Date.now(),
+      }),
+    );
 
     const context = {
       insertCss: (...styles) => {
@@ -172,13 +208,8 @@ app.get('*', async (req, res, next) => {
         {route.component}
       </App>,
     );
-    data.styles = [
-      { id: 'css', cssText: [...css].join('') },
-    ];
-    data.scripts = [
-      assets.vendor.js,
-      assets.client.js,
-    ];
+    data.styles = [{ id: 'css', cssText: [...css].join('') }];
+    data.scripts = [assets.vendor.js, assets.client.js];
     if (assets[route.chunk]) {
       data.scripts.push(assets[route.chunk].js);
     }
@@ -202,7 +233,8 @@ const pe = new PrettyError();
 pe.skipNodeFiles();
 pe.skipPackage('express');
 
-app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+app.use((err, req, res, next) => {
+  // eslint-disable-line no-unused-vars
   console.error(pe.render(err));
   const html = ReactDOM.renderToStaticMarkup(
     <Html

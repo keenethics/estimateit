@@ -4,6 +4,13 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
 
 class RegistrationPage extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      error: '',
+    };
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
   handleSubmit(e) {
     e.preventDefault();
     const email = e.target.email.value;
@@ -17,10 +24,23 @@ class RegistrationPage extends React.Component {
       },
       )
       .then((response) => {
-        console.log('response in the auth actions', response.data.message);
+        console.log('response in the auth actions', response);
+        if (response.data.err) {
+          this.setState({
+            error: response.data.err[0].msg,
+          });
+        } else if (!response.data.success) {
+          this.setState({
+            error: response.data.message,
+          });
+        } else {
+          this.setState({
+            error: '',
+          });
+        }
       })
       .catch((error) => {
-        console.log('response in the auth actions', error.data.message);
+        console.log('handle errors', error.message);
       });
   }
 
@@ -44,6 +64,7 @@ class RegistrationPage extends React.Component {
           <button className="btn btn-xs btn-danger btn-block" type="submit">
             Registration
           </button>
+          <span className="text-warning">{this.state.error}</span>
         </form>
       </div>
     );
