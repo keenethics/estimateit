@@ -9,7 +9,8 @@ import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
-import Nightmare from 'nightmare';
+import nodemailer from 'nodemailer';
+
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -20,11 +21,11 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
+import sendEmail from './core/sendEmail';
 
 mongoose.connect(config.MONGO_URL);
 
 const app = express();
-
 
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
@@ -49,45 +50,9 @@ app.use('/graphql', expressGraphQL(req => ({
 })));
 
 app.post('/api/pdf', (req, res) => {
-  const { url } = req.body;
-
-  let nightmare = Nightmare({
-    show: false,
-  });
-
-  console.log('url');
-  console.log(url);
-
-  nightmare
-  .goto(url)
-    .wait(2000)
-    .evaluate(() => {
-      const body = document.querySelector('body');
-      return {
-        height: body.scrollHeight,
-      };
-    })
-    .pdf({
-      printBackground: true,
-      marginsType: 0,
-      pageSize: 'A4',
-      landscape: false,
-    })
-    .then((pdfBuffer) => {
-      console.log('hello');
-      console.log(pdfBuffer);
-
-      res.set('Content-Type', 'application/pdf');
-      res.set('Content-Disposition: attachment; filename=filename.pdf');
-      res.send(new Buffer(pdfBuffer, 'binary'));
-      console.log('sent');
-      nightmare.end();
-      nightmare.ended = true;
-      nightmare = null;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  const { url, emails = 'nazarkukarkin@gmail.com' } = req.body;
+  res.end('ok');
+  sendEmail(emails, url);
 });
 
 //

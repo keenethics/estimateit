@@ -22,6 +22,7 @@ const Mutation = new ObjectType({
         },
       },
       async resolve({ request: { headers } }, { input: { header, main } }) {
+        console.log('dsdasd');
         let url;
         console.log(main);
         const newEstimate = new Estimate({ main, header });
