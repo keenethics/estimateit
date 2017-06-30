@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  CardTitle,
-  Col,
-  FormGroup,
-  Row,
-} from 'reactstrap';
+import { CardTitle, Col, FormGroup, Row } from 'reactstrap';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { DateField } from 'react-date-picker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import calendar from 'react-date-picker/index.css';
+import 'react-select/dist/react-select.css';
 
 import Task from './Task';
 import styles from './styles.scss';
 import NewTaskForm from './NewTaskForm';
+import MultiSelect from '../libs/MultiSelect';
 import { renderField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
-import { required, number } from '../libs/validation';
+import { required, requiredArray, number } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -162,7 +159,6 @@ class Header extends Component {
       );
     });
   }
-
   renderHeader() {
     const { data } = this.props.headerAdditional;
 
@@ -222,7 +218,43 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks } = this.props;
+    const { tasks, headerAdditional: { technologies } } = this.props;
+    const technologiesList = [
+      'Angular.js',
+      'Aurelia',
+      'Backbone.js',
+      'Bootstrap',
+      'Ember.js',
+      'Express',
+      'Ionic',
+      'LoDash',
+      'Firebase',
+      'Hapi',
+      'Meteor.js',
+      'Mocha',
+      'MongoDB',
+      'MEAN',
+      'MERN',
+      'MobX',
+      'Node.js',
+      'NodeBots',
+      'Phonegap',
+      'Polymer',
+      'PWA',
+      'React.js',
+      'Redux',
+      'RxJS',
+      'Sinon',
+      'Socket.io',
+      'Sails',
+      'Underscore.js',
+      'SQL',
+      'GraphQL',
+      'Unit Testing',
+      'Vue.js',
+      'd3',
+      'jQuery',
+    ];
     return (
       <div>
         <Row className={styles.header}>
@@ -254,12 +286,16 @@ class Header extends Component {
         </Row>
         <FormGroup className={styles.right__group}>
           <Field
-            type="textarea"
             name="technologies"
-            validate={[required]}
-            component={renderField}
-            label="Technologies, libraries, APIs"
-            onBlur={this.handleAddNewClientData}
+            component={MultiSelect}
+            validate={[requiredArray]}
+            values={technologies}
+            titles={technologiesList}
+            handler={this.props.addTechnologies}
+            placeholder="Technologies"
+            multi
+            searchable
+            creatable
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
@@ -296,6 +332,7 @@ Header.propTypes = {
   findTaskAndModify: PropTypes.func.isRequired,
   headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
+  addTechnologies: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
