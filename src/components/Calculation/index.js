@@ -22,7 +22,7 @@ const Calculation = ({
       >
         {
           //TODO fix issue
-          //<PieChart data={estimateOptions} />
+          <PieChart data={estimateOptions} />
         }
       </Col>
       <Col

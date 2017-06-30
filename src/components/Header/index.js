@@ -218,7 +218,7 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks, headerAdditional: { comments, technologies } } = this.props;
+    const { tasks, headerAdditional: { technologies } } = this.props;
     const technologiesList = [
       'Angular.js',
       'Aurelia',
@@ -289,8 +289,8 @@ class Header extends Component {
             name="technologies"
             component={MultiSelect}
             validate={[requiredArray]}
-            titles={technologiesList}
             values={technologies}
+            titles={technologiesList}
             handler={this.props.addTechnologies}
             placeholder="Technologies"
             multi
@@ -309,7 +309,6 @@ class Header extends Component {
           <Field
             type="textarea"
             name="comments"
-            value={comments}
             validate={[required]}
             component={renderField}
             label="Comments"
