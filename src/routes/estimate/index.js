@@ -40,7 +40,10 @@ export default {
                 },
               },
               headerAdditional{
-                technologies,
+                technologies{
+                   value,
+                   label,
+                },
                 sprintNumber,
                 data,
                 projectName,
