@@ -50,6 +50,7 @@
     "react-highcharts": "^12.0.0",
     "react-notification-system": "^0.2.14",
     "react-redux": "^5.0.4",
+    "react-select": "^1.0.0-rc.5",
     "react-transition-group": "^1.1.3",
     "reactstrap": "^4.6.2",
     "redux": "^3.6.0",

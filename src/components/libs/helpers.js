@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormGroup, Label, Input } from 'reactstrap';
 
-const ValidationState = ({ touched, error, warning }) => (
+export const ValidationState = ({ touched, error, warning }) => (
   <div>
     {touched &&
       ((error &&

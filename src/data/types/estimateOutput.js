@@ -8,6 +8,17 @@ import {
 //
 // HEADER
 //
+const TechnologiesOutputType = new ObjectType({
+  name: 'TechnologiesOutputType',
+  fields: () => ({
+    value: {
+      type: StringType,
+    },
+    label: {
+      type: StringType,
+    },
+  }),
+});
 
 const HeaderAddionalOutputType = new ObjectType({
   name: 'HeaderAddionalOutputType',
@@ -24,11 +35,11 @@ const HeaderAddionalOutputType = new ObjectType({
     sprintNumber: {
       type: StringType,
     },
-    technologies: {
-      type: StringType,
-    },
     comments: {
       type: StringType,
+    },
+    technologies: {
+      type: new ListType(TechnologiesOutputType),
     },
   },
 });
