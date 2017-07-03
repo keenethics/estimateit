@@ -144,9 +144,9 @@ class Main extends Component {
           maxHours,
         },
         contacts,
-        moneyRate,
         estimateOptions,
       },
+      moneyRate = 0,
       headerState,
       addClientData,
       changeMoneyRate,
@@ -220,7 +220,9 @@ Main.propTypes = {
 };
 
 function mapStateToProps(state) {
+  console.log(state);
   return {
+    moneyRate: state.form.contact.values.moneyRate,
     mainState: state.Main,
     headerState: state.Header,
   };

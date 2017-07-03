@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
 import App from './components/App';
 import Html from './components/Html';
-import nodemailer from 'nodemailer';
 
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';

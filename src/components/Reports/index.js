@@ -14,12 +14,15 @@ import {
 import axios from 'axios';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { Field } from 'redux-form';
 
 import columns from '../../constants/csvCoulumns';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
-
+import MultiSelect from '../libs/MultiSelect';
+import { Creatable } from 'react-select';
+import { required, requiredArray, number } from '../libs/validation';
 
 class Reports extends Component {
   constructor(props) {
@@ -29,7 +32,9 @@ class Reports extends Component {
       axios: [],
       dropdownOpen: false,
       csv: '',
+      value: '',
     };
+    this.handleOnChange = this.handleOnChange.bind(this);
     this.saveAsUrl = this.saveAsUrl.bind(this);
     this.saveAsPdf = this.saveAsPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
@@ -47,12 +52,12 @@ class Reports extends Component {
     this.setState({ dropdownOpen });
   }
 
-  saveAsUrl() {
-    const { mainState: main, headerState: header, mutate } = this.props;
-    console.log(this.props);
+  saveAsUrl(values) {
+    const { mainState: { estimateOptions, devHours }, headerState: { tasks }, mutate } = this.props;
+    console.log(values);
 
     mutate({
-      variables: { input: { header, main } },
+      variables: { input: { ...values, estimateOptions, tasks, devHours } },
     }).then(({ data: { estimateCreate: { url } } }) => {
       this.notificationSystem.addNotification({
         title: 'Success',
@@ -78,6 +83,7 @@ class Reports extends Component {
         ),
       });
     }).catch(error => {
+      console.error(error);
       this.notificationSystem.addNotification({
         title: 'Error',
         level: 'error',
@@ -138,12 +144,26 @@ class Reports extends Component {
     });
   }
 
+  handleOnChange(value) {
+    console.log(value);
+    this.setState({ value });
+  }
+  // <Field
+  //   name="technologies"
+  //   component={MultiSelect}
+  //   validate={[requiredArray]}
+  //   multi={true}
+  //   name='emails'
+  //   onChange={this.handleOnChange}
+  //   placeholder='Emails'
+  //   value={this.state.value}
+  // />
   render() {
     const { handleSubmit } = this.context;
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
-          <input />
+
           <ButtonDropdown
             id="screenShot"
             toggle={this.toggle}

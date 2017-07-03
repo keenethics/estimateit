@@ -171,7 +171,7 @@ class Header extends Component {
             htmlFor="datePicker"
             dateFormat="YYYY-MM-DD"
             className={styles.right__group_item}
-            onChange={e => this.onDateChange(e)}
+
             ref={(dateField) => {
               this.datefield = dateField;
             }}
@@ -186,7 +186,7 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
+
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
@@ -198,7 +198,7 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
+
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
@@ -210,7 +210,7 @@ class Header extends Component {
             validate={[required, number]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
+
           />
         </FormGroup>
       </div>
@@ -255,6 +255,12 @@ class Header extends Component {
       'd3',
       'jQuery',
     ];
+
+    const options = technologiesList.map(element => ({
+      value: element,
+      label: element,
+    }));
+
     return (
       <div>
         <Row className={styles.header}>
@@ -290,7 +296,7 @@ class Header extends Component {
             component={MultiSelect}
             validate={[requiredArray]}
             values={technologies}
-            titles={technologiesList}
+            options={options}
             handler={this.props.addTechnologies}
             placeholder="Technologies"
             multi

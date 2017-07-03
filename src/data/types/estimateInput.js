@@ -9,44 +9,6 @@ import {
 //
 // HEADER
 //
-const TechnologiesType = new InputObjectType({
-  name: 'TechnologiesType',
-  fields: () => ({
-    value: {
-      type: StringType,
-    },
-    label: {
-      type: StringType,
-    },
-    className: {
-      type: StringType,
-    },
-  }),
-});
-
-const HeaderAddionalInputType = new InputObjectType({
-  name: 'HeaderAddionalInputType',
-  fields: {
-    clientName: {
-      type: StringType,
-    },
-    projectName: {
-      type: StringType,
-    },
-    data: {
-      type: StringType,
-    },
-    sprintNumber: {
-      type: FloatType,
-    },
-    comments: {
-      type: StringType,
-    },
-    technologies: {
-      type: new ListType(TechnologiesType),
-    },
-  },
-});
 
 const TaskInputType = new InputObjectType({
   name: 'TaskInputType',
@@ -73,21 +35,6 @@ const TaskInputType = new InputObjectType({
       type: new ListType(TaskInputType),
     },
   }),
-});
-
-const HeaderInputType = new InputObjectType({
-  name: 'HeaderInputType',
-  fields: {
-    headerAdditional: {
-      type: HeaderAddionalInputType,
-    },
-    parentTaskId: {
-      type: StringType,
-    },
-    tasks: {
-      type: new ListType(TaskInputType),
-    },
-  },
 });
 
 //
@@ -127,9 +74,31 @@ const DevHoursInputType = new InputObjectType({
   },
 });
 
-const ContactsInputType = new InputObjectType({
-  name: 'ContactsInputType',
+//
+// EstimateInputType
+//
+
+const EstimateInputType = new InputObjectType({
+  name: 'EstimateInputType',
   fields: {
+    clientName: {
+      type: StringType,
+    },
+    projectName: {
+      type: StringType,
+    },
+    data: {
+      type: StringType,
+    },
+    sprintNumber: {
+      type: FloatType,
+    },
+    comments: {
+      type: StringType,
+    },
+    technologies: {
+      type: new ListType(StringType),
+    },
     pm: {
       type: StringType,
     },
@@ -142,12 +111,6 @@ const ContactsInputType = new InputObjectType({
     position: {
       type: StringType,
     },
-  },
-});
-
-const MainInputType = new InputObjectType({
-  name: 'MainInputType',
-  fields: {
     moneyRate: {
       type: FloatType,
     },
@@ -157,24 +120,8 @@ const MainInputType = new InputObjectType({
     devHours: {
       type: DevHoursInputType,
     },
-    contacts: {
-      type: ContactsInputType,
-    },
-  },
-});
-
-//
-// EstimateInputType
-//
-
-const EstimateInputType = new InputObjectType({
-  name: 'EstimateInputType',
-  fields: {
-    header: {
-      type: HeaderInputType,
-    },
-    main: {
-      type: MainInputType,
+    tasks: {
+      type: new ListType(TaskInputType),
     },
   },
 });

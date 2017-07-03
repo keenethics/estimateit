@@ -9,10 +9,12 @@ class MultiSelect extends Component {
   constructor(props) {
     super(props);
   }
-  multiChangeHandler(func, handler) {
+
+  multiChangeHandler(validate, reduxAction) {
     return function handleMultiHandler(values) {
-      handler(values);
-      func(values.map(value => value.value));
+      console.log(values);
+      // reduxAction(values);
+      validate(values.map(value => value.value));
     };
   }
 
@@ -21,20 +23,20 @@ class MultiSelect extends Component {
     const {
       titles,
       input: { name, value, onBlur, onChange },
-      values,
       meta,
       placeholder,
       className,
       multi,
       searchable,
       handler,
+      options,
       ...elements
     } = props;
-    const itemsList = titles.map(element => ({
-      value: element,
-      label: element,
-    }));
+    const values = value && value.length
+      ? value.map(e => ({ value: e, label: e }))
+      : [];
 
+    console.log(this.props);
     return (
       <div>
         <Creatable
@@ -45,7 +47,7 @@ class MultiSelect extends Component {
           placeholder={placeholder}
           searchable={searchable}
           value={values}
-          options={itemsList}
+          options={options}
           multi={multi}
           {...elements}
         />

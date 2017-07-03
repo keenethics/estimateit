@@ -22,7 +22,8 @@ const estimate = {
 
         return res;
       });
-
+      console.log(_id);
+      console.log(currentEstimate);
       return currentEstimate;
     } catch (err) {
       return console.error(err);
