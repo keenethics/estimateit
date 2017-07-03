@@ -220,7 +220,6 @@ Main.propTypes = {
 };
 
 function mapStateToProps(state) {
-  console.log(state);
   return {
     moneyRate: state.form.contact.values.moneyRate,
     mainState: state.Main,

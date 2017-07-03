@@ -1,39 +1,34 @@
 import nodemailer from 'nodemailer';
 
-import generatePDF from './generatePDF';
-
-const sendEmail = (emails, url) => {
+const sendEmail = (emails, pdfBuffer) => {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'nazar.kukarkin@keenethics.com', // Your email id
-      pass: 'kee#eth!cs' // Your password
-    }
+      user: 'nazar.kukarkin@keenethics.com',
+      pass: 'kee#eth!cs',
+    },
   });
 
+  const text = 'your file is attached';
 
-  const text = `url = ${url}`;
-
-  generatePDF(url);
   const mailOptions = {
-      from: 'estimator@gmail.com', // sender address
-      to: 'nazarkukarkin@gmail.com', // list of receivers
-      subject: 'Email Example', // Subject line
-      text: text //, // plaintext body
-      // html: '<b>Hello world ✔</b>' // You can choose to send an HTML body instead
+    text,
+    to: emails,
+    subject: 'estimate',
+    from: 'estimator@gmail.com',
+    attachments: [{
+      filename: 'filename.pdf',
+      contentType: 'application/pdf',
+      content: new Buffer(pdfBuffer, 'base64'),
+    }],
   };
 
-
-  transporter.sendMail(mailOptions, function(error, info){
-      if(error){
-          console.log('----- here ----  errror ------');
-          console.log(error);
-          // res.json({yo: 'error'});
-      }else{
-          console.log('Message sent: ' + info.response);
-          console.log(info);
-          // res.json({yo: info.response});
-      };
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.error(info);
+    }
   });
 };
 

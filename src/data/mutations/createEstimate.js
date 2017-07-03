@@ -22,12 +22,11 @@ const Mutation = new ObjectType({
         },
       },
       async resolve({ request: { headers } }, { input }) {
-        console.log(input);
-        // { input: { header, main } }) {
+
         let url;
-        // console.log(main);
+
         const newEstimate = new Estimate({ ...input });
-        //
+
         await newEstimate.save((err, estimate) => {
           if (err) return null;
           const { _id } = estimate;

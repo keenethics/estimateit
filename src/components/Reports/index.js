@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
-import fetch from 'isomorphic-fetch';
 import {
   Card,
   CardBlock,
@@ -21,8 +20,8 @@ import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
-import { Creatable } from 'react-select';
-import { required, requiredArray, number } from '../libs/validation';
+
+import { emailsArray } from '../libs/validation';
 
 class Reports extends Component {
   constructor(props) {
@@ -54,7 +53,7 @@ class Reports extends Component {
 
   saveAsUrl(values) {
     const { mainState: { estimateOptions, devHours }, headerState: { tasks }, mutate } = this.props;
-    console.log(values);
+    delete values['emails'];
 
     mutate({
       variables: { input: { ...values, estimateOptions, tasks, devHours } },
@@ -94,28 +93,36 @@ class Reports extends Component {
     });
   }
 
-  async saveAsPdf() {
-    axios.post('/api/pdf', {
-      url: decodeURIComponent(location.href),
-    }, { responseType: 'arraybuffer' })
-      .then((response) => {
-        console.log(response);
-        // const file = new Blob([response.data], { type: 'application/pdf' });
-        // const link = document.createElement('a');
-        //
-        // link.href = window.URL.createObjectURL(file);
-        // link.download = 'keenethics_report.pdf';
-        // link.click();
+  saveAsPdf({ emails }) {
+    const { fetch } = this.context;
+
+    if (!emails || !emails.length) {
+      this.notificationSystem.addNotification({
+        title: 'Error',
+        level: 'error',
+        position: 'br',
+        autoDismiss: 6,
+        message: 'Enter emails',
+      });
+      return null;
+    }
+
+    fetch('/api/pdf', {
+      body: JSON.stringify({
+        emails: decodeURIComponent(emails),
+        url: decodeURIComponent(location.href),
+      }),
+    })
+      .then(res => {
         this.notificationSystem.addNotification({
           title: 'Success',
-          message: 'generation of the PDF was successful!',
           level: 'success',
-          autoDismiss: 6,
           position: 'br',
+          autoDismiss: 6,
+          message: 'PDF will be send to the emails!',
         });
       })
-      .catch((error) => {
-        console.error(error);
+      .catch(error => {
         this.notificationSystem.addNotification({
           title: 'Error',
           level: 'error',
@@ -123,6 +130,7 @@ class Reports extends Component {
           autoDismiss: 6,
           message: 'internal server error',
         });
+        console.error(error);
       });
   }
 
@@ -135,7 +143,6 @@ class Reports extends Component {
     this.setState({
       csv: csvGenerate(columns, tasks, estimateOptions),
     }, () => {
-      console.log('csv', this.state.csv);
       const a = document.createElement('a');
       a.textContent = 'download';
       a.download = csvFilename();
@@ -145,25 +152,24 @@ class Reports extends Component {
   }
 
   handleOnChange(value) {
-    console.log(value);
     this.setState({ value });
   }
-  // <Field
-  //   name="technologies"
-  //   component={MultiSelect}
-  //   validate={[requiredArray]}
-  //   multi={true}
-  //   name='emails'
-  //   onChange={this.handleOnChange}
-  //   placeholder='Emails'
-  //   value={this.state.value}
-  // />
+
   render() {
     const { handleSubmit } = this.context;
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
-
+          <Field
+            multi
+            name="emails"
+            placeholder="Emails"
+            component={MultiSelect}
+            value={this.state.value}
+            validate={[emailsArray]}
+            className={styles.emails}
+            onChange={this.handleOnChange}
+          />
           <ButtonDropdown
             id="screenShot"
             toggle={this.toggle}
@@ -208,6 +214,7 @@ class Reports extends Component {
 
 Reports.contextTypes = {
   handleSubmit: PropTypes.func,
+  fetch: PropTypes.func,
 };
 
 Reports.propTypes = {

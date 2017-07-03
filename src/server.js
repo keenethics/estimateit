@@ -20,7 +20,8 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
-import sendEmail from './core/sendEmail';
+import generatePDF from './core/generatePDF';
+
 
 mongoose.connect(config.MONGO_URL);
 
@@ -49,9 +50,9 @@ app.use('/graphql', expressGraphQL(req => ({
 })));
 
 app.post('/api/pdf', (req, res) => {
-  const { url, emails = 'nazarkukarkin@gmail.com' } = req.body;
-  res.end('ok');
-  sendEmail(emails, url);
+  const { url, emails = '' } = req.body;
+  res.end('oks');
+  generatePDF(url, emails);
 });
 
 //

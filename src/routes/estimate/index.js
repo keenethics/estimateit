@@ -65,21 +65,19 @@ export default {
       });
 
       const { data: { estimate } } = await resp.json();
-      console.log(estimate);
 
       if (estimate) {
         store.dispatch(apply(estimate));
         store.dispatch({
-          type: "@@redux-form/INITIALIZE",
+          type: '@@redux-form/INITIALIZE',
           meta: {
-            form: "contact",
-            keepDirty: false
+            form: 'contact',
+            keepDirty: false,
           },
           payload: estimate,
         });
       }
 
-      console.log('fsfsd');
       return {
         title: 'Estimator',
         component: (
