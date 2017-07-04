@@ -7,12 +7,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
-import App from './components/App';
-import Html from './components/Html';
 import Nightmare from 'nightmare';
 import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
+import App from './components/App';
+import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -51,13 +51,6 @@ if (__DEV__) {
 
 // Login using passport
 
-
-function isAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.redirect('/');
-}
 app.use((req, res, next) => {
   console.log('isAuthenticated', req.isAuthenticated());
   next();
@@ -73,7 +66,7 @@ app.post('/login',
 ));
 
 // Signup Using passport
-app.post('/register', isAuthenticated, (req, res, next) => {
+app.post('/register', (req, res, next) => {
   passport.authenticate(
     'local.signup',
     {

@@ -32,4 +32,10 @@ export default [
     children: [
       require('./register').default,
     ],
+  }, {
+    path: '/settings',
+    title: 'Settings',
+    children: [
+      require('./settings').default,
+    ],
   }];
