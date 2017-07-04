@@ -2,12 +2,10 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import { OAuth2Strategy } from 'passport-google-oauth';
 import User from '../models/user';
-import { createToken } from './index';
 import config from '../config';
 
 const LocalStrategy = passportLocal.Strategy;
 
-// Sign Up using Passport Local strategy
 passport.use(
   'local.signup',
   new LocalStrategy(
@@ -18,6 +16,7 @@ passport.use(
       passReqToCallback: true,
     },
     (req, username, password, done) => {
+      req.check('name', 'Invalid name').notEmpty();
       req.check('email', 'Invalid email').notEmpty().isEmail();
       req.check('password', 'Invalid Password').notEmpty().isLength({ min: 6 });
       const errors = req.validationErrors();
@@ -28,49 +27,80 @@ passport.use(
         });
         return done(errors);
       }
-      return User.findOne({ email: username }, (err, user) => {
-        if (err) return done(err);
-        if (user) {
-          return done(null, false, {
-            success: false,
-            errors: [
-              {
-                msg: 'Email Already exists',
-              },
-            ],
-          });
-        }
-        const newUser = new User();
-        newUser.email = username;
-        newUser.password = password;
-        console.log('newUser', newUser);
-        return newUser.save((err, res) => {
-          if (err) {
+      if (!req.user) {
+        return User.findOne({ 'local.email': username }, (err, user) => {
+          if (err) return done(err);
+          if (user) {
             return done(null, false, {
               success: false,
-              message: 'error saving user',
+              message: 'Email Already exists',
             });
           }
-          const { email, _id, createdAt } = res;
-          return done(null, {
-            success: true,
-            message: 'successfully Registered',
-            user: { _id, email, createdAt },
+          const newUser = new User();
+          newUser.local.name = req.body.name;
+          newUser.local.email = username;
+          newUser.local.password = newUser.generateHash(password);
+          console.log('newUser', newUser);
+          return newUser.save((err, res) => {
+            if (err) {
+              return done(null, false, {
+                success: false,
+                message: `error saving user, ${err}`,
+              });
+            }
+            const { email, _id, createdAt } = res;
+            return done(null, {
+              success: true,
+              message: 'successfully Registered',
+              user: { _id, email, createdAt },
+            });
           });
         });
-      });
+      } else if (!req.user.local.email) {
+        return User.findOne({ 'local.email': username }, (err, user) => {
+          if (err) return done(err);
+          if (user) {
+            return done(null, false, {
+              success: false,
+              err: [
+                {
+                  msg: 'That email is already taken.',
+                },
+              ],
+            });
+          }
+          const newUser = req.user;
+          newUser.local.name = req.body.name;
+          newUser.local.email = username;
+          newUser.local.password = newUser.generateHash(password);
+          console.log('newUser', newUser);
+          return newUser.save((err, res) => {
+            if (err) {
+              return done(null, false, {
+                success: false,
+                message: `error saving user, ${err}`,
+              });
+            }
+            const { _id, email, createdAt } = res;
+            return done(null, {
+              success: true,
+              message: 'successfully Registered',
+              user: { _id, email, createdAt },
+            });
+          });
+        });
+      }
+      return done(null, req.user);
     },
   ),
 );
 
-// LogIn using Passport Local strategy
 passport.use(
-  'local',
+  'local.login',
   new LocalStrategy(
     {
       usernameField: 'email',
       passwordField: 'password',
-      session: false,
       passReqToCallback: true,
     },
     (req, username, password, done) => {
@@ -84,9 +114,9 @@ passport.use(
         });
         return done(errors);
       }
-      return User.findOne({ email: username }, (err, user) => {
+      return User.findOne({ 'local.email': username }, (err, user) => {
         if (err) {
-          return done(err);
+          return done(null, false, err);
         }
         if (!user) {
           return done(null, false, {
@@ -94,18 +124,17 @@ passport.use(
             message: 'Incorrect username.',
           });
         }
-        if (!user.comparePassword(password)) {
+        if (!user.validPassword(password)) {
           return done(null, false, {
             success: false,
-            message: 'Incorrect password.',
+            message: 'Oops! Wrong password.',
+            user,
           });
         }
-        const { _id, email, createdAt } = user;
-        const token = createToken({ _id, email, createdAt });
         return done(null, {
           success: true,
           message: 'Successfully Logged In',
-          user: { _id, email, createdAt, token },
+          user,
         });
       });
     },
@@ -123,55 +152,85 @@ passport.use(
     },
     (req, accessToken, refreshToken, profile, done) => {
       process.nextTick(() => {
-        User.findOne(
-          {
-            id: profile.id,
-          },
-          (err, user) => {
-            if (err) {
-              return done(err);
-            }
-            if (user) {
-              return done(null, user, {
-                success: true,
-                msg: 'You are now connected!',
-              });
-            }
-            const newUser = new User();
-            newUser.google.id = profile.id;
-            newUser.google.token = accessToken;
-            newUser.google.name = profile.displayName;
-            newUser.google.email = profile.emails[0].value;
-            console.log('newUser', newUser);
-            newUser.save((err) => {
+        if (!req.user) {
+          User.findOne(
+            {
+              'google.id': profile.id,
+            },
+            (err, user) => {
               if (err) {
-                console.log('Error when we try createGoogle account');
-                throw err;
+                return done(err);
               }
-              return done(null, newUser, {
-                success: true,
-                msg: 'You are now registered !',
+              if (user) {
+                if (!user.google.token) {
+                  user.google.token = accessToken;
+                  user.google.name = profile.displayName;
+                  user.google.email = (profile.emails[0].value || '').toLowerCase();
+                  user.save((err) => {
+                    if (err) {
+                      return done(null, false, {
+                        success: false,
+                        message: err,
+                      });
+                    }
+                    return done(null, {
+                      success: true,
+                      message: 'Successfully Logged In',
+                      user,
+                    });
+                  });
+                }
+                return done(null, {
+                  success: true,
+                  message: 'Successfully Logged In',
+                  user,
+                });
+              }
+              const newUser = new User();
+              newUser.google.id = profile.id;
+              newUser.google.token = accessToken;
+              newUser.google.name = profile.displayName;
+              newUser.google.email = (profile.emails[0].value || '')
+                  .toLowerCase();
+              console.log('newUser', newUser);
+              newUser.save((err) => {
+                if (err) { return done(err); }
+
+                return done(null, {
+                  success: true,
+                  message: 'Successfully Logged In',
+                  user: newUser,
+                });
               });
+            },
+          );
+        } else {
+          const user = req.user;
+          user.google.token = profile.id;
+          user.google.token = accessToken;
+          user.google.name = profile.displayName;
+          user.google.email = (profile.emails[0].value || '').toLowerCase();
+          user.save((err) => {
+            if (err) { return done(err); }
+
+            return done(null, {
+              success: true,
+              message: 'Successfully Logged In',
+              user,
             });
-          },
-        );
+          });
+        }
       });
     },
   ),
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user);
+passport.serializeUser((req, done) => {
+  done(null, req.user._id);
 });
 
 passport.deserializeUser((id, done) => {
-  User.findOne(
-    {
-      _id: id,
-    },
-    '-password',
-    (err, user) => {
-      done(err, user);
-    },
-  );
+  User.findById(id, (err, req) => {
+    done(err, req);
+  });
 });

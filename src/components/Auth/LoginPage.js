@@ -33,6 +33,10 @@ class LoginPage extends React.Component {
           this.setState({
             error: response.data.message,
           });
+        } else if (response.data.success) {
+          this.setState({
+            error: response.data.message,
+          });
         } else {
           this.setState({
             error: '',
@@ -65,6 +69,7 @@ class LoginPage extends React.Component {
             Register
           </a>
           <a className="btn btn-xs btn-primary btn-block" href="/auth/google">Sign In with Google</a>
+          <a className="btn btn-xs btn-primary btn-block" href="/auth/logout">Logout</a>
           <span className="text-warning">{this.state.error}</span>
         </form>
       </div>

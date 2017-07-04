@@ -32,7 +32,7 @@ module.exports = {
   google: {
     clientID: '17514047684-ssnv93v150nli9ukgbcic4glf2uml858.apps.googleusercontent.com',
     clientSecret: 'H2pQRCGUGpW3pCchE08B3Z7h',
-    callbackURL: 'http://localhost:3000/auth/google/callback',
+    callbackURL: 'http://localhost:3001/auth/google/callback',
   },
   analytics: {
     googleTrackingId: process.env.GOOGLE_TRACKING_ID, // UA-XXXXX-X

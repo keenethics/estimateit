@@ -12,6 +12,7 @@ import Html from './components/Html';
 import Nightmare from 'nightmare';
 import passport from 'passport';
 import expressValidator from 'express-validator';
+import session from 'express-session';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -32,7 +33,13 @@ global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  secret: 'ilovescotchscotchyscotchscotch', // session secret
+  resave: true,
+  saveUninitialized: true,
+}));
 app.use(passport.initialize());
+app.use(passport.session());
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -43,21 +50,30 @@ if (__DEV__) {
 }
 
 // Login using passport
-app.post('/login', (req, res, next) => {
-  passport.authenticate(
-    'local',
-    { successRedirect: '/',
-      failureRedirect: '/login',
-      failureFlash: true },
-    (err, user, message) => {
-      if (user) return res.json(user);
-      return res.json({ success: false, err, ...message });
-    },
-  )(req, res, next);
+
+
+function isAuthenticated(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+}
+app.use((req, res, next) => {
+  console.log('isAuthenticated', req.isAuthenticated());
+  next();
 });
+
+app.post('/login',
+  passport.authenticate(
+    'local.login',
+    {
+      successRedirect: '/',
+      failureRedirect: '/login',
+    },
+));
 
 // Signup Using passport
-app.post('/register', (req, res, next) => {
+app.post('/register', isAuthenticated, (req, res, next) => {
   passport.authenticate(
     'local.signup',
     {
@@ -66,35 +82,27 @@ app.post('/register', (req, res, next) => {
     },
     (err, user, message) => {
       if (user) return res.json(user);
+      console.log('req', req.user);
       return res.json({ success: false, err, ...message });
     },
   )(req, res, next);
 });
 
-app.post('/register', (req, res, next) => {
-  passport.authenticate(
-    'local.signup',
-    {
-      successRedirect: '/',
-      failureRedirect: '/register',
-    },
-    (err, user, message) => {
-      if (user) return res.json(user);
-      return res.json({ success: false, err, ...message });
-    },
-  )(req, res, next);
-});
 
 app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', (req, res, next) => {
-  passport.authenticate('google',
-    (err, user, message) => {
-      if (err) return console.log('\t error!', err);
-      if (user) return res.json(user);
-      return res.json({ success: false, err, ...message });
-    },
-  )(req, res, next);
+app.get('/auth/google/callback', passport.authenticate('google', {
+  successRedirect: '/',
+  failureRedirect: '/',
+}));
+
+app.get('/auth/logout', (req, res) => {
+  console.log('logging out ......');
+  req.logout();
+  req.session.destroy();
+  res.redirect('/');
+  // res.send(401);
 });
+
 
 //
 // Register API middleware

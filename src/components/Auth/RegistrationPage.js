@@ -13,12 +13,14 @@ class RegistrationPage extends React.Component {
   }
   handleSubmit(e) {
     e.preventDefault();
+    const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    console.log(' name, email, password', name, email, password);
     return axios
       .post(
         '/register',
-        { email, password },
+        { name, email, password },
       {
         headers: { 'Content-Type': 'application/json' },
       },
@@ -27,7 +29,7 @@ class RegistrationPage extends React.Component {
         console.log('response in the auth actions', response);
         if (response.data.err) {
           this.setState({
-            error: response.data.err[0].msg,
+            error: response.data.errors['0'].msg,
           });
         } else if (!response.data.success) {
           this.setState({
@@ -49,6 +51,12 @@ class RegistrationPage extends React.Component {
       <div className={styles.wrapper}>
         <form className={styles.form_signin} onSubmit={this.handleSubmit}>
           <h2 className={styles.form_signin_heading}>Registration</h2>
+          <input
+            type="text"
+            className="form-control"
+            name="name"
+            placeholder="Your name"
+          />
           <input
             type="text"
             className="form-control"
