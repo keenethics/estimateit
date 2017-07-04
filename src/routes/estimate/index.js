@@ -10,7 +10,7 @@ import { apply } from '../../actions/Main';
 
 export default {
 
-  path: '/:id',
+  path: '/estimate/:id',
 
   async action({ params: { id }, fetch, store }) {
     try {

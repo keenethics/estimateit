@@ -5,6 +5,7 @@ export default {
   children: [
     require('./home').default,
     require('./estimate').default,
+    require('./dashboard').default,
     require('./notFound').default,
   ],
 
