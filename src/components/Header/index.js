@@ -4,9 +4,8 @@ import { CardTitle, Col, FormGroup, Row } from 'reactstrap';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import calendar from 'react-date-picker/index.css';
+import datepicker from 'react-datepicker/dist/react-datepicker.css';
 import 'react-select/dist/react-select.css';
 
 import Task from './Task';
@@ -332,5 +331,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(calendar, styles)(Header),
+  withStyles(styles, datepicker)(Header),
 );
