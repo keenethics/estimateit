@@ -1,3 +1,44 @@
+body {
+  background: #eee !important;
+}
+
+.wrapper {
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.form_signin {
+  max-width: 600px;
+  padding: 40px 50px;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.form_signin_heading {
+  display: flex;
+  justify-content: center;
+  font-size: 2.3rem;
+  font-weight: 100;
+  line-height: 1.1;
+}
+
+.form-control {
+  position: relative;
+  font-size: 16px;
+  height: auto;
+  padding: 10px;
+
+  &:focus {
+    z-index: 2;
+  }
+}
+input[type="text"] {
+  margin-bottom: 5px;
+}
+input[type="password"] {
+  margin-bottom: 20px;
+}
 
 .button__padding {
   margin: 0 10px;

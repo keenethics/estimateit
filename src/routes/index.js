@@ -4,38 +4,19 @@ export default [
     title: 'Dashboard',
     children: [
       require('./dashboard').default,
-    ],
-  }, {
-    path: '/estimate',
-    children: [
+      require('./login').default,
+      require('./register').default,
       require('./home').default,
       require('./estimate').default,
       require('./notFound').default,
     ],
-    async action({ next }) {
-    // Execute each child route until one of them return the result
+    async action({ next, isAuthenticated }) {
       const route = await next();
-    // Provide default values for title, description etc.
-      route.title = `${route.title || 'Untitled Page'} - www.reactstarterkit.com`;
+      route.title = `${route.title || 'Untitled Page'}`;
       route.description = route.description || '';
+      if (route.authRequired && !isAuthenticated) {
+        return { redirect: '/login' };
+      }
       return route;
     },
-  }, {
-    path: '/login',
-    title: 'Login',
-    children: [
-      require('./login').default,
-    ],
-  }, {
-    path: '/register',
-    title: 'Register',
-    children: [
-      require('./register').default,
-    ],
-  }, {
-    path: '/settings',
-    title: 'Settings',
-    children: [
-      require('./settings').default,
-    ],
   }];

@@ -8,6 +8,7 @@ const ContextType = {
   client: PropTypes.object.isRequired,
   insertCss: PropTypes.func.isRequired,
   fetch: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   ...ReduxProvider.childContextTypes,
 };
 

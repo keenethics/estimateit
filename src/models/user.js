@@ -16,6 +16,11 @@ const userSchema = new Schema(
       token: String,
       name: String,
     },
+    role: {
+      type: String,
+      enum: ['admin', 'manager', 'customer'],
+      default: 'customer',
+    },
     created_at: {
       type: Date,
       default: Date.now(),
@@ -27,12 +32,12 @@ const userSchema = new Schema(
   },
 );
 
-userSchema.methods.generateHash = function(password) {
+userSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
 // checking if password is valid
-userSchema.methods.validPassword = function(password) {
+userSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.local.password);
 };
 export default mongoose.model('user', userSchema);

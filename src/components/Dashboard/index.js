@@ -12,9 +12,9 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="jumbotron text-center">
-          <h1><span className="fa fa-lock" />Estimator</h1>
+      <div className={styles.wrapper}>
+        <div className={`${styles.form_signin} text-center`}>
+          <h1 className={styles.form_signin_heading}><span className="fa fa-lock" />Estimator</h1>
           <p>Login or Register with:</p>
           <a href="/login" className={`${styles.button__padding} btn btn-primary`}><span className="fa fa-user" /> Local Login</a>
           <a href="/register" className={`${styles.button__padding} btn btn-primary`}><span className="fa fa-user" /> Local Signup</a>

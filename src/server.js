@@ -19,6 +19,7 @@ import createApolloClient from './core/createApolloClient/server';
 import createFetch from './createFetch';
 import router from './router';
 import schema from './data/schema';
+import User from './models/user';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
@@ -153,14 +154,20 @@ app.post('/api/pdf', (req, res) => {
 app.get('*', async (req, res, next) => {
   try {
     const css = new Set();
+    const isAuthenticated = req.isAuthenticated();
+    let user = {};
+    if (isAuthenticated) {
+      user = await User.findById(req.user.id);
+    }
 
     const fetch = createFetch({
       baseUrl: config.api.serverUrl,
       cookie: req.headers.cookie,
+      user: user,
     });
 
     const initialState = {
-      user: req.user || null,
+      user: req.user,
     };
 
     const apolloClient = createApolloClient({
@@ -190,6 +197,7 @@ app.get('*', async (req, res, next) => {
       store,
       storeSubscription: null,
       client: apolloClient,
+      isAuthenticated,
     };
 
     const route = await router.resolve({
@@ -217,6 +225,8 @@ app.get('*', async (req, res, next) => {
     data.app = {
       apiUrl: config.api.clientUrl,
       state: context.store.getState(),
+      isAuthenticated: isAuthenticated,
+      // user: user,
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);

@@ -7,12 +7,11 @@ import Header from '../../components/Header';
 import * as actionsHeader from '../../actions/Header';
 
 export default {
-
-  path: '/',
-
+  path: '/estimate',
   async action({ store }) {
     return {
       title: 'Estimator',
+      authRequired: true,
       component:
         <Layout>
           <Header />
