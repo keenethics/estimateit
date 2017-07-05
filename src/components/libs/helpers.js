@@ -30,12 +30,12 @@ export const renderField = ({ className, input, label, type, meta }) => (
 
 export const renderDateField =
 ({
+  input:{
+    onChange,
+    value = '',
+  },
   fieldClassName,
   wrapperClassName,
-  input:{
-    value = '',
-    onChange,
-  },
 }) => (
   <FormGroup
     className={wrapperClassName}

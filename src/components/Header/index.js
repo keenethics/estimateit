@@ -28,7 +28,6 @@ class Header extends Component {
 
     this.renderTasks = this.renderTasks.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-    this.onDateChange = this.onDateChange.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.handleAddNewClientData = this.handleAddNewClientData.bind(this);
     this.calculateHours = this.calculateHours.bind(this);
@@ -36,9 +35,6 @@ class Header extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.date !== this.state.date) {
-      this.datefield.setValue(nextState.date);
-    }
     if (nextProps.tasks !== this.props.tasks) {
       this.props = nextProps;
       this.calculateHours(nextState.parentTaskId, nextState.newTask);
@@ -50,13 +46,6 @@ class Header extends Component {
       parentTaskId,
       newTask,
     });
-  }
-
-  onDateChange(dateString) {
-    if (dateString) {
-      const { dispatch } = this.props;
-      this.props.addNewClientData('data', dateString);
-    }
   }
 
   handleAddNewClientData(event) {
