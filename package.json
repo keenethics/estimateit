@@ -82,6 +82,7 @@
     "browser-sync": "^2.18.8",
     "chai": "^3.5.0",
     "chokidar": "^1.6.1",
+    "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^5.0.0",
     "css-loader": "^0.28.0",
     "editorconfig-tools": "^0.1.1",
