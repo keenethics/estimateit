@@ -7,6 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
+import Nightmare from 'nightmare';
 import App from './components/App';
 import Html from './components/Html';
 
@@ -49,10 +50,46 @@ app.use('/graphql', expressGraphQL(req => ({
   pretty: __DEV__,
 })));
 
-app.post('/api/pdf', (req, res) => {
+app.post('/api/sendPpfToEmails', (req, res) => {
   const { url, emails = '' } = req.body;
-  res.end('oks');
+  res.end('ok');
   generatePDF(url, emails);
+});
+
+app.post('/api/downloadPpdf', (req, res) => {
+  const { url } = req.body;
+
+  let nightmare = Nightmare({
+    show: false,
+  });
+
+  nightmare
+  .goto(url)
+    .wait(2000)
+    .evaluate(() => {
+      const body = document.querySelector('body');
+      return {
+        height: body.scrollHeight,
+      };
+    })
+    .pdf({
+      printBackground: true,
+      marginsType: 0,
+      pageSize: 'A4',
+      landscape: false,
+    })
+    .then((pdfBuffer) => {
+      res.set('Content-Type', 'application/pdf');
+      res.set('Content-Disposition: attachment; filename=filename.pdf');
+      res.send(new Buffer(pdfBuffer, 'binary'));
+
+      nightmare.end();
+      nightmare.ended = true;
+      nightmare = null;
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 });
 
 //

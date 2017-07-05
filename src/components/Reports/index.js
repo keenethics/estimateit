@@ -35,7 +35,8 @@ class Reports extends Component {
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.saveAsUrl = this.saveAsUrl.bind(this);
-    this.saveAsPdf = this.saveAsPdf.bind(this);
+    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
+    this.downloadPdf = this.downloadPdf.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggle = this.toggle.bind(this);
   }
@@ -93,7 +94,7 @@ class Reports extends Component {
     });
   }
 
-  saveAsPdf({ emails }) {
+  sendPdfToEmails({ emails }) {
     const { fetch } = this.context;
 
     if (!emails || !emails.length) {
@@ -107,7 +108,7 @@ class Reports extends Component {
       return null;
     }
 
-    fetch('/api/pdf', {
+    fetch('/api/sendPpfToEmails', {
       body: JSON.stringify({
         emails: decodeURIComponent(emails),
         url: decodeURIComponent(location.href),
@@ -131,6 +132,37 @@ class Reports extends Component {
           message: 'internal server error',
         });
         console.error(error);
+      });
+  }
+
+  downloadPdf() {
+    axios.post('/api/downloadPpdf', {
+      url: decodeURIComponent(location.href),
+    }, { responseType: 'arraybuffer' })
+      .then((response) => {
+        const file = new Blob([response.data], { type: 'application/pdf' });
+        const link = document.createElement('a');
+
+        link.href = window.URL.createObjectURL(file);
+        link.download = 'keenethics_report.pdf';
+        link.click();
+        this.notificationSystem.addNotification({
+          title: 'Success',
+          message: 'generation of the PDF was successful!',
+          level: 'success',
+          autoDismiss: 6,
+          position: 'br',
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.notificationSystem.addNotification({
+          title: 'Error',
+          level: 'error',
+          position: 'br',
+          autoDismiss: 6,
+          message: 'internal server error',
+        });
       });
   }
 
@@ -187,9 +219,15 @@ class Reports extends Component {
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem
                 type="submit"
-                onClick={handleSubmit(this.saveAsPdf)}
+                onClick={handleSubmit(this.sendPdfToEmails)}
               >
-                Generate PDF
+                Send PDF to emails
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.downloadPdf)}
+              >
+                Download PDF
               </DropdownItem>
               <DropdownItem
                 type="submit"
