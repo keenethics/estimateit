@@ -14,21 +14,9 @@ export default {
       bugFixes: 10,
       completing: 100,
     },
-    moneyRate: 25,
     devHours: {
       minHours: 0,
       maxHours: 0,
     },
-    contacts: {
-      pm: '',
-      skype: '',
-      email: '',
-      position: '',
-    },
-  },
-  loading: {
-    items: [],
-    error: undefined,
-    isFetching: false,
   },
 };

@@ -1,5 +1,6 @@
 import React from 'react';
-import { FormGroup, Label, Input } from 'reactstrap';
+import { DateField } from 'react-date-picker';
+import { FormGroup, Input } from 'reactstrap';
 
 export const ValidationState = ({ touched, error, warning }) => (
   <div>
@@ -24,5 +25,28 @@ export const renderField = ({ className, input, label, type, meta }) => (
       type={type}
     />
     <ValidationState {...meta} />
+  </FormGroup>
+);
+
+export const renderDateField =
+({
+  input:{
+    onChange,
+    value = '',
+  },
+  fieldClassName,
+  wrapperClassName,
+}) => (
+  <FormGroup
+    className={wrapperClassName}
+  >
+    <DateField
+      value={value}
+      onChange={onChange}
+      placeholder="Date:"
+      htmlFor="datePicker"
+      dateFormat="YYYY-MM-DD"
+      className={fieldClassName}
+    />
   </FormGroup>
 );

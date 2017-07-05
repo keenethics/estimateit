@@ -9,44 +9,43 @@ class MultiSelect extends Component {
   constructor(props) {
     super(props);
   }
-  multiChangeHandler(func, handler) {
+
+  multiChangeHandler(handleChange) {
     return function handleMultiHandler(values) {
-      handler(values);
-      func(values.map(value => value.value));
+      handleChange(values.map(value => value.value));
     };
   }
 
   render() {
-    const { props } = this;
     const {
-      titles,
-      input: { name, value, onBlur, onChange },
-      values,
       meta,
-      placeholder,
-      className,
       multi,
-      searchable,
+      titles,
       handler,
+      options,
+      className,
+      searchable,
+      placeholder,
+      input: { name, value, onBlur, onChange },
       ...elements
-    } = props;
-    const itemsList = titles.map(element => ({
-      value: element,
-      label: element,
-    }));
+    } = this.props;
+
+    const values = value && value.length
+      ? value.map(e => ({ value: e, label: e }))
+      : [];
 
     return (
       <div>
         <Creatable
-          onChange={this.multiChangeHandler(onChange, handler)}
-          onBlur={() => onBlur(value)}
           name={name}
-          className={className}
-          placeholder={placeholder}
-          searchable={searchable}
-          value={values}
-          options={itemsList}
           multi={multi}
+          value={values}
+          options={options}
+          className={className}
+          searchable={searchable}
+          placeholder={placeholder}
+          onBlur={() => onBlur(value)}
+          onChange={this.multiChangeHandler(onChange)}
           {...elements}
         />
         <ValidationState {...meta} />
