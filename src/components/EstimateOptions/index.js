@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { InputGroup, InputGroupAddon } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { renderOptionsField } from '../libs/helpers.js';
+import { required, currency } from '../libs/validation.js';
 
 import Slider from './slider';
 import styles from './styles.scss';
-import { required } from '../libs/validation';
-import { renderField } from '../libs/helpers';
 
 class EstimateOptions extends Component {
   constructor(props) {
@@ -42,12 +42,12 @@ class EstimateOptions extends Component {
           <Field
             min="0"
             step="1"
-            label="Rate"
-            type="number"
+            label="Rate USD"
+            type="text"
             name="moneyRate"
-            validate={[required]}
-            component={renderField}
-            className="radarChartPart estimate"
+            validate={[required, currency]}
+            component={renderOptionsField}
+            className={styles.range__item}
           />
         </InputGroup>
         <Slider

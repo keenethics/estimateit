@@ -46,7 +46,7 @@ Layout = reduxForm({
 const initializeValues = (state) => {
 
   const initialValues = {
-    moneyRate: 25,
+    moneyRate: '25',
   };
 
   return { initialValues };

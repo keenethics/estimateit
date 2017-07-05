@@ -14,7 +14,7 @@ import NewTaskForm from './NewTaskForm';
 import MultiSelect from '../libs/MultiSelect';
 import { renderField, renderDateField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
-import { required, requiredArray, number } from '../libs/validation';
+import { required, currency, requiredArray } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -188,7 +188,7 @@ class Header extends Component {
             id="sprintNumber"
             name="sprintNumber"
             label="Sprint:"
-            validate={[required, number]}
+            validate={[required, currency]}
             component={renderField}
             className={styles.right__group_item}
 
@@ -264,7 +264,7 @@ class Header extends Component {
                   founders@keenethics.com
                 </a>
               </p>
-              <p><a href="https://keenethics.com/">keenethics.com</a></p>
+              <p><a href="https://keenethics.com/" target="_blank" rel="noreferrer">keenethics.com</a></p>
             </div>
           </Col>
           <Col xs="12" md="7" className={styles.header__right}>

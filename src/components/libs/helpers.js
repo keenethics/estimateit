@@ -1,7 +1,8 @@
 import React from 'react';
+import { FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import DateField from 'react-datepicker';
 import moment from 'moment';
-import { FormGroup, Input } from 'reactstrap';
+
 
 export const ValidationState = ({ touched, error, warning }) => (
   <div>
@@ -29,6 +30,26 @@ export const renderField = ({ className, input, label, type, meta }) => (
   </FormGroup>
 );
 
+export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange }) => {
+  return (
+    <div className={className}>
+      <InputGroup>
+        <InputGroupAddon>{label}</InputGroupAddon>
+        <Input
+          min="0"
+          step="1"
+          name={name}
+          value={value}
+          type="text"
+          onChange={onChange}
+          {...input}
+        />
+      </InputGroup>
+      <ValidationState {...meta} />
+    </div>
+  )
+};
+
 export const renderDateField =
 ({
   input:{
@@ -51,18 +72,3 @@ export const renderDateField =
     />
   </FormGroup>
 );
-
-
-
-  // <DateField
-  //   selected={data ? moment(data, 'YYYY/MM/DD') : moment()}
-  //   placeholderText="Click to select a date"
-  //   htmlFor="datePicker"
-  //   dateFormat="YYYY/MM/DD"
-  //   className="react-datepicker-ignore-onclickoutside"
-  //
-  //   onChange={e => this.onDateChange(e)}
-  //   ref={(dateField) => {
-  //     this.datefield = dateField;
-  //   }}
-  // />

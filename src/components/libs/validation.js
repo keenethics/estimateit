@@ -1,5 +1,5 @@
 export const required = value =>
-  (value ? undefined : 'Required');
+  (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
 export const requiredArray = value =>
   (value && value.length ? undefined : 'Required');
@@ -51,3 +51,6 @@ export const tasksMax = sended => max =>
   Number(sended) < Number(max)
   ? undefined
   : `Max hours ${sended} should be bigger than Min hours ${max}`;
+
+export const currency = value =>
+  value && /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(value) ? undefined : 'Invalid number';
