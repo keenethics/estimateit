@@ -4,7 +4,7 @@ import { CardTitle, Col, FormGroup, Row } from 'reactstrap';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DateField } from 'react-date-picker';
+
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import calendar from 'react-date-picker/index.css';
 import 'react-select/dist/react-select.css';
@@ -13,7 +13,7 @@ import Task from './Task';
 import styles from './styles.scss';
 import NewTaskForm from './NewTaskForm';
 import MultiSelect from '../libs/MultiSelect';
-import { renderField } from '../libs/helpers';
+import { renderField, renderDateField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
 import { required, requiredArray, number } from '../libs/validation';
 
@@ -164,19 +164,13 @@ class Header extends Component {
 
     return (
       <div className={styles.right}>
-        <FormGroup className={styles.right__group}>
-          <DateField
-            value={data}
-            placeholder="Date:"
-            htmlFor="datePicker"
-            dateFormat="YYYY-MM-DD"
-            className={styles.right__group_item}
-
-            ref={(dateField) => {
-              this.datefield = dateField;
-            }}
-          />
-        </FormGroup>
+        <Field
+          id="date"
+          name="date"
+          component={renderDateField}
+          wrapperClassName={styles.right__group_item}
+          fieldClassName={styles.right__group_item}
+        />
         <FormGroup className={styles.right__group}>
           <Field
             type="text"
@@ -186,7 +180,6 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>

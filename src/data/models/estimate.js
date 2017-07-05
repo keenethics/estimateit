@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 
 const EstimateSchema = mongoose.Schema({
+  date: {
+    type: String,
+  },
   clientName: {
     type: String,
   },

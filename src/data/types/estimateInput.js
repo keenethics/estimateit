@@ -81,6 +81,9 @@ const DevHoursInputType = new InputObjectType({
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
+    date: {
+      type: StringType,
+    },
     clientName: {
       type: StringType,
     },

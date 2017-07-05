@@ -17,6 +17,7 @@ export default {
       const resp = await fetch('/graphql', {
         body: JSON.stringify({
           query: `{estimate(id: "${id}"){
+            date,
             clientName,
             projectName,
             sprintNumber,

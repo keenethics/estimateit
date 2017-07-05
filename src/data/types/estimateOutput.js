@@ -80,6 +80,9 @@ const DevHoursOutputType = new ObjectType({
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: {
+    date: {
+      type: StringType,
+    },
     clientName: {
       type: StringType,
     },
