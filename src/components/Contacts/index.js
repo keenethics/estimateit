@@ -31,7 +31,6 @@ class Contacts extends Component {
             label="PM's name"
             validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
@@ -40,7 +39,6 @@ class Contacts extends Component {
             label="Position"
             validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
@@ -49,7 +47,6 @@ class Contacts extends Component {
             label="Email"
             validate={[required, email]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
@@ -58,7 +55,6 @@ class Contacts extends Component {
             label="Skype"
             validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
         </CardBlock>
@@ -69,7 +65,6 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
-  contacts: PropTypes.object.isRequired,
   addClientData: PropTypes.func.isRequired,
 };
 

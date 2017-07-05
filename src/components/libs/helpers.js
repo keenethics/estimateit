@@ -1,7 +1,10 @@
 import React from 'react';
-import { FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import DateField from 'react-datepicker';
+import moment from 'moment';
 
-const ValidationState = ({ touched, error, warning }) => (
+
+export const ValidationState = ({ touched, error, warning }) => (
   <div>
     {touched &&
       ((error &&
@@ -27,22 +30,45 @@ export const renderField = ({ className, input, label, type, meta }) => (
   </FormGroup>
 );
 
-export const renderOptionsField = ({ className, input: { value, ...input}, label, type, meta, name, rate, onChange }) => {
+export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange }) => {
   return (
-  <div className={className}>
-    <InputGroup>
-      <InputGroupAddon>{label}</InputGroupAddon>
-      <Input
-        min="0"
-        step="1"
-        name={name}
-        value={rate}
-        type="text"
-        onChange={onChange}
-        {...input}
-      />
-    </InputGroup>
-    <ValidationState {...meta} />
-  </div>
+    <div className={className}>
+      <InputGroup>
+        <InputGroupAddon>{label}</InputGroupAddon>
+        <Input
+          min="0"
+          step="1"
+          name={name}
+          value={value}
+          type="text"
+          onChange={onChange}
+          {...input}
+        />
+      </InputGroup>
+      <ValidationState {...meta} />
+    </div>
   )
 };
+
+export const renderDateField =
+({
+  input:{
+    onChange,
+    value = '',
+  },
+  fieldClassName,
+  wrapperClassName,
+}) => (
+  <FormGroup
+    className={wrapperClassName}
+  >
+    <DateField
+      selected={value ? moment(value, 'YYYY/MM/DD') : moment()}
+      onChange={onChange}
+      placeholderText="Click to select a date"
+      htmlFor="datePicker"
+      dateFormat="YYYY/MM/DD"
+      className={`react-datepicker-ignore-onclickoutside ${fieldClassName}`}
+    />
+  </FormGroup>
+);

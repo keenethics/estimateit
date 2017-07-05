@@ -1,6 +1,16 @@
 export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
+export const requiredArray = value =>
+  (value && value.length ? undefined : 'Required');
+
+export const emailsArray = (value) => {
+  const invalidEmails = value && value.filter(e => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e));
+  return (invalidEmails && invalidEmails.length)
+    ? 'Invalid email address'
+    : undefined;
+};
+
 export const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
 

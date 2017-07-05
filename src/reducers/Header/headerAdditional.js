@@ -1,5 +1,4 @@
 import {
-  APPLY_STATE,
   ADD_HEADER_INFO_DATA,
 } from '../../constants/actionTypes';
 import initialState from '../initialState';
@@ -13,10 +12,6 @@ export default function headerAdditionalData(state = initialState.header.infoCol
   switch (action.type) {
     case ADD_HEADER_INFO_DATA:
       return insertAdditionalData(state, action.payload);
-
-    case APPLY_STATE:
-      const { headerAdditional } = action.data.header;
-      return { ...state, ...headerAdditional };
 
     default:
       return state;
