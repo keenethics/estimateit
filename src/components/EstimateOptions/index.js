@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Field } from 'redux-form';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Slider from './slider';
 import styles from './styles.scss';
+import { required } from '../libs/validation';
+import { renderField } from '../libs/helpers';
 
 class EstimateOptions extends Component {
   constructor(props) {
@@ -22,9 +25,7 @@ class EstimateOptions extends Component {
 
   render() {
     const {
-      rate,
       totalHours,
-      onRateChange,
       estimateOptions: {
         qa,
         pm,
@@ -38,14 +39,15 @@ class EstimateOptions extends Component {
       <div className={styles.range}>
         <InputGroup className={styles.range__item}>
           <InputGroupAddon>Rate USD</InputGroupAddon>
-          <Input
+          <Field
             min="0"
             step="1"
-            name="rate"
-            value={rate}
+            label="Rate"
             type="number"
+            name="moneyRate"
+            validate={[required]}
+            component={renderField}
             className="radarChartPart estimate"
-            onChange={({ target: { value } }) => onRateChange(parseInt(value, 10))}
           />
         </InputGroup>
         <Slider

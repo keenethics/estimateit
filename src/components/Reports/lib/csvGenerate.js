@@ -4,7 +4,7 @@ export default function csv(columns, data, calculationData, separator = ',') {
   let columnOrder;
   const content = [];
   let column = [];
-  console.log('data', data);
+
   if (columns) {
     columnOrder = columns.map(v => v.map(a => (a.id)));
     column = columns.map(v => v.map(a => ((typeof a.displayName !== 'undefined') ? a.displayName : a.id)));

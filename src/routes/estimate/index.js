@@ -17,7 +17,34 @@ export default {
       const resp = await fetch('/graphql', {
         body: JSON.stringify({
           query: `{estimate(id: "${id}"){
-            header{
+            date,
+            clientName,
+            projectName,
+            sprintNumber,
+            comments,
+            pm,
+            skype,
+            email,
+            position,
+            moneyRate,
+            technologies,
+            estimateOptions{
+              qa,
+              pm,
+              risks,
+              bugFixes,
+              completing
+            },
+            devHours{
+              minHours,
+              maxHours
+            },
+            tasks{
+              id,
+              taskName,
+              isChecked,
+              minimumHours,
+              maximumHours,
               tasks{
                 id,
                 taskName,
@@ -30,43 +57,8 @@ export default {
                   isChecked,
                   minimumHours,
                   maximumHours,
-                  tasks{
-                    id,
-                    taskName,
-                    isChecked,
-                    minimumHours,
-                    maximumHours,
-                  },
                 },
               },
-              headerAdditional{
-                technologies,
-                sprintNumber,
-                data,
-                projectName,
-                clientName,
-                comments
-              }
-            },
-            main{
-              moneyRate,
-              estimateOptions{
-                qa,
-                pm,
-                risks,
-                bugFixes,
-                completing
-              }
-              devHours{
-                minHours,
-                maxHours
-              },
-              contacts{
-                pm,
-                skype,
-                email,
-                position
-              }
             }
           }
         }`,
@@ -75,7 +67,17 @@ export default {
 
       const { data: { estimate } } = await resp.json();
 
-      if (estimate) store.dispatch(apply(estimate));
+      if (estimate) {
+        store.dispatch(apply(estimate));
+        store.dispatch({
+          type: '@@redux-form/INITIALIZE',
+          meta: {
+            form: 'contact',
+            keepDirty: false,
+          },
+          payload: estimate,
+        });
+      }
 
       return {
         title: 'Estimator',

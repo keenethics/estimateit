@@ -10,6 +10,7 @@
 import path from 'path';
 import webpack from 'webpack';
 import AssetsPlugin from 'assets-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import pkg from '../package.json';
 
@@ -344,6 +345,12 @@ const serverConfig = {
       raw: true,
       entryOnly: false,
     }),
+    new CopyWebpackPlugin([
+      { from: './Aptfile', to: '../../' },
+      { from: './.profile', to: '../../' },
+      { from: './Procfile', to: '../../' },
+      { from: './.buildpacks', to: '../../' },
+    ]),
   ],
 
   node: {

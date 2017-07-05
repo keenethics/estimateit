@@ -98,3 +98,40 @@
     margin: auto 0 !important;
   }
 }
+
+.popover_table {
+  td {
+    padding: 5px;
+    text-align: center;
+  }
+}
+
+.input_group {
+  margin: 4px 8px 4px 0;
+
+  &_addon {
+    width: 60px;
+  }
+  &_addon:hover {
+    cursor: default;
+  }
+
+  &_time {
+    background: #d9534f;
+    color: #fff;
+    font-size: 21px;
+    padding: 4px;
+  }
+  &_time:hover {
+    background: #d2322d;
+    cursor: default;
+  }
+
+  &_time_value {
+    vertical-align: middle !important;
+  }
+
+  &_plus, &_minus, &_middle_input {
+    width: 45px;
+  }
+}

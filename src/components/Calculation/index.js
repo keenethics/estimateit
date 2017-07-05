@@ -20,10 +20,7 @@ const Calculation = ({
         xs="12" lg="4"
         className={styles.calculation__piechart}
       >
-        {
-          //TODO fix issue
-          //<PieChart data={estimateOptions} />
-        }
+        <PieChart data={estimateOptions} />
       </Col>
       <Col
         xs="12" lg="8"

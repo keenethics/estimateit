@@ -7,9 +7,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
+import Nightmare from 'nightmare';
 import App from './components/App';
 import Html from './components/Html';
-import Nightmare from 'nightmare';
+
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
 import errorPageStyle from './routes/error/ErrorPage.css';
 import createApolloClient from './core/createApolloClient/server';
@@ -20,11 +21,12 @@ import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
+import generatePDF from './core/generatePDF';
+
 
 mongoose.connect(config.MONGO_URL);
 
 const app = express();
-
 
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
@@ -48,7 +50,13 @@ app.use('/graphql', expressGraphQL(req => ({
   pretty: __DEV__,
 })));
 
-app.post('/api/pdf', (req, res) => {
+app.post('/api/sendPpfToEmails', (req, res) => {
+  const { url, emails = '' } = req.body;
+  res.end('ok');
+  generatePDF(url, emails);
+});
+
+app.post('/api/downloadPpdf', (req, res) => {
   const { url } = req.body;
 
   let nightmare = Nightmare({
