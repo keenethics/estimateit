@@ -6,6 +6,7 @@ export default {
   action() {
     return {
       title: 'Login',
+      denyAuth: true,
       component: (<LoginPage />),
     };
   },

@@ -17,6 +17,9 @@ export default [
       if (route.authRequired && !isAuthenticated) {
         return { redirect: '/login' };
       }
+      if (route.denyAuth && isAuthenticated) {
+        return { redirect: '/' };
+      }
       return route;
     },
   }];

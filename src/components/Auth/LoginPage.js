@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
@@ -11,6 +12,10 @@ class LoginPage extends React.Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  static contextTypes = {
+    isAuthenticated: PropTypes.bool.isRequired,
+  };
+
   handleSubmit(e) {
     e.preventDefault();
     const email = e.target.email.value;
@@ -46,6 +51,7 @@ class LoginPage extends React.Component {
   }
 
   render() {
+    const { isAuthenticated } = this.context;
     return (
       <div className={styles.wrapper}>
         <form className={styles.form_signin} onSubmit={this.handleSubmit}>
@@ -68,9 +74,12 @@ class LoginPage extends React.Component {
           <a className="btn btn-xs btn-danger btn-block" href="/register">
             Register
           </a>
-          <a className="btn btn-xs btn-primary btn-block" href="/auth/google">Sign In with Google</a>
-          <a className="btn btn-xs btn-primary btn-block" href="/auth/logout">Logout</a>
-          <span className="text-warning">{this.state.error}</span>
+          <a className="btn btn-xs btn-primary btn-block" href="/auth/google">
+            Sign In with Google
+          </a>
+          <span className="text-warning">
+            {this.state.error}
+          </span>
         </form>
       </div>
     );

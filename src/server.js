@@ -35,7 +35,7 @@ global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-  secret: 'ilovescotchscotchyscotchscotch', // session secret
+  secret: 'keeneth1cs_secret', // session secret
   resave: true,
   saveUninitialized: true,
 }));
@@ -61,7 +61,7 @@ app.post('/login',
   passport.authenticate(
     'local.login',
     {
-      successRedirect: '/',
+      successRedirect: '/estimate',
       failureRedirect: '/login',
     },
 ));
@@ -85,7 +85,7 @@ app.post('/register', (req, res, next) => {
 
 app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/',
+  successRedirect: '/estimate',
   failureRedirect: '/',
 }));
 

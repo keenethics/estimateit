@@ -6,6 +6,7 @@ export default {
   action() {
     return {
       title: 'Registation',
+      denyAuth: true,
       component: (<RegistrationPage />),
     };
   },
