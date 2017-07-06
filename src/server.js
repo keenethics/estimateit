@@ -188,7 +188,7 @@ pe.skipPackage('express');
 
 app.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(pe.render(err));
-const html = ReactDOM.renderToStaticMarkup(
+  const html = ReactDOM.renderToStaticMarkup(
     <Html
       title="Internal Server Error"
       description={err.message}

@@ -2,12 +2,12 @@ import { combineReducers } from 'redux';
 
 import tasks from './Header/tasks';
 import parentTaskId from './Header/parentTaskId';
-import headerAdditional from './Header/headerAdditional';
+import developmentTime from './Header/developmentTime';
 
 const rootReducer = combineReducers({
   tasks,
   parentTaskId,
-  headerAdditional,
+  developmentTime,
 });
 
 export default rootReducer;

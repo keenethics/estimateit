@@ -235,8 +235,7 @@ export default class Task extends React.Component {
     }
   }
 
-  deleteTask({ target: { dataset: { id, parentid } } }) {
-    const { target } = event;
+  deleteTask({ target: { dataset: { id } } }) {
     this.props.removeTask(id);
 
     const { taskName, minimumHours, maximumHours, isChecked } = this.props;

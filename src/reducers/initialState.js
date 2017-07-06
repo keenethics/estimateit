@@ -2,6 +2,15 @@ export default {
   header: {
     tasks: [],
     parentTaskId: '',
+    developmentTime: {
+      time: [],
+      percent: [],
+      totalHours: 0,
+      devHours: {
+        minHours: 0,
+        maxHours: 0,
+      },
+    },
     infoCollector: {
       technologies: [],
     },

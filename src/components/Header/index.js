@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { CardTitle, Col, FormGroup, Row } from 'reactstrap';
+import {
+  Col,
+  Row,
+  FormGroup,
+  CardTitle,
+} from 'reactstrap';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -27,10 +32,6 @@ class Header extends Component {
 
     this.renderTasks = this.renderTasks.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-    this.textAreaAdjust = this.textAreaAdjust.bind(this);
-    this.handleAddNewClientData = this.handleAddNewClientData.bind(this);
-    this.calculateHours = this.calculateHours.bind(this);
-    this.saveTaskIntoState = this.saveTaskIntoState.bind(this);
   }
 
   componentWillUpdate(nextProps, nextState) {
@@ -40,66 +41,6 @@ class Header extends Component {
     }
   }
 
-  saveTaskIntoState(parentTaskId = undefined, newTask = null) {
-    this.setState({
-      parentTaskId,
-      newTask,
-    });
-  }
-
-  handleAddNewClientData(event) {
-    const newTask = this.state.newTask;
-    const { name, value } = event.target;
-    this.props.addNewClientData(name, value);
-  }
-
-  calculateHours(parentTaskId, newTask) {
-    if (newTask !== null) {
-      parentTaskId = newTask.parentTaskId;
-    }
-    const tasks = [...this.props.tasks];
-    const findNodeWithIndex = (tree, id) =>
-      tree.find((node) => {
-        if (node.id === id) {
-          return node;
-        } else if (node.tasks) {
-          return findNodeWithIndex(node.tasks, id);
-        }
-        return undefined;
-      });
-    const findHighest = (tree, id) => {
-      const node = findNodeWithIndex(tree, id);
-      if (node && !node.parentTaskId) {
-        return node;
-      } else if (node && node.parentTaskId) {
-        return findHighest(tree, id);
-      }
-      return undefined;
-    };
-    const sumMin = (node) => {
-      if (typeof node !== 'undefined') {
-        if (node.tasks && node.tasks.length > 0) {
-          node.tasks.forEach(sumMin);
-          const abc = node.tasks.reduce(
-            (acc, value) => ({
-              calcMin: (acc.calcMin += +value.minimumHours),
-              calcMax: (acc.calcMax += +value.maximumHours),
-            }),
-            { calcMin: 0, calcMax: 0 },
-          );
-          node.minimumHours = abc.calcMin;
-          node.maximumHours = abc.calcMax;
-        }
-      }
-    };
-    const par = findHighest(tasks, parentTaskId);
-    sumMin(par);
-  }
-
-  textAreaAdjust(e) {
-    e.target.style.height = '1px';
-    e.target.style.height = `${10 + e.target.scrollHeight}px`;
-  }
 
   renderTasks(tasks = [], iterator) {
     return tasks.map((task) => {
@@ -140,16 +81,15 @@ class Header extends Component {
                 addNewTask={this.props.addNewTask}
                 removeParentTaskId={this.props.removeParentTaskId}
                 addNewSubTask={this.props.addNewSubTask}
-                saveTaskIntoState={this.saveTaskIntoState}
-              />}
+              />
+            }
           </div>
         </div>
       );
     });
   }
-  renderHeader() {
-    const { data } = this.props.headerAdditional;
 
+  renderHeader() {
     return (
       <div className={styles.right}>
         <Field
@@ -199,7 +139,7 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks, headerAdditional: { technologies } } = this.props;
+    const { tasks } = this.props;
     const technologiesList = [
       'Angular.js',
       'Aurelia',
@@ -276,7 +216,6 @@ class Header extends Component {
             name="technologies"
             component={MultiSelect}
             validate={[requiredArray]}
-            values={technologies}
             options={options}
             handler={this.props.addTechnologies}
             placeholder="Technologies"
@@ -290,8 +229,7 @@ class Header extends Component {
           addNewTask={this.props.addNewTask}
           removeParentTaskId={this.props.removeParentTaskId}
           addNewSubTask={this.props.addNewSubTask}
-          saveTaskIntoState={this.saveTaskIntoState}
-        />
+       />
         <FormGroup className={styles.right__group}>
           <Field
             type="textarea"
@@ -299,8 +237,6 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             label="Comments"
-            onChange={this.textAreaAdjust}
-            onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
       </div>

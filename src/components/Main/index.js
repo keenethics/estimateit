@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
-import DiscreteVector from 'discrete-vector';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -21,143 +20,53 @@ class Main extends Component {
       totalHours: 0,
     };
 
-    this.T = [];
     this.labels = [];
-    this.embodiment = this.embodiment.bind(this);
-    this.parseTaskHours = this.parseTaskHours.bind(this);
     this.transformToVector = this.transformToVector.bind(this);
-    this.calculateAmountOfHours = this.calculateAmountOfHours.bind(this);
   }
 
   componentDidMount() {
-    const { tasks } = this.props.headerState;
-
     this.transformToVector();
-    this.calcDeveloperHours(tasks);
-    this.calculateAmountOfHours();
-  }
-
-  componentWillReceiveProps({ headerState: { tasks: newTasks } }) {
-    // TODO: Make it more beautiful
-    const { tasks } = this.props.headerState;
-    if (JSON.stringify(tasks) !== JSON.stringify(newTasks)) {
-       this.calcDeveloperHours(newTasks);
-    }
   }
 
   componentDidUpdate() {
     this.transformToVector();
-    this.calculateAmountOfHours();
   }
 
   transformToVector() {
-    let { tasks } = this.props.headerState;
-    let arrayOfSubtasksAndTasks = [];
-
-    function getAllSubtasksFrom(arrayOfTasks) {
-    arrayOfTasks.forEach((task) => {
-      if (task.tasks && task.tasks.length > 0) {
-        arrayOfSubtasksAndTasks = arrayOfSubtasksAndTasks.concat(task.tasks);
-        getAllSubtasksFrom(task.tasks);
-      }
-    });
-    }
-
-    getAllSubtasksFrom(tasks);
-    tasks = tasks.concat(arrayOfSubtasksAndTasks);
-    tasks = tasks.filter(task => task.isChecked);
-
-
-    const tasksHours = this.parseTaskHours(tasks);
-    const vector = new DiscreteVector(tasksHours);
-
-    this.T = vector.combinations < 1000
-      ? Array(vector.combinations)
-          .fill()
-          .map(prev => this.embodiment(tasksHours, vector.next()))
-          .sort((a, b) => a - b)
-      : Array(1000)
-          .fill()
-          .map((prev, item) => this.embodiment(tasksHours, vector.randomize()))
-          .sort((a, b) => a - b);
-    this.labels = this.T.map(item => Math.round(item));
-    this.data = this.T.map((item, i) =>
-      Math.round(100 * i / (this.T.length - 1)),
-    );
+    const { time: developmentTime } = this.props.headerState.developmentTime;
+    this.labels = developmentTime.map(item => Math.round(item));
   }
 
-  embodiment(a, b) {
-    return a.reduce((prev, item, i) => prev + +item[b[i]], 0);
-  }
-
-  calcDeveloperHours(data) {
-    const res = { minHours: 0, maxHours: 0 };
-
-    function calculateMinAndMaxHours(arrayOfTasks) {
-      arrayOfTasks.forEach((task) => {
-        if (task.isChecked) {
-          res.minHours += +task.minimumHours;
-          res.maxHours += +task.maximumHours;
-        }
-        // subtasks do not depend on task
-        if (task.tasks && task.tasks.length > 0) {
-          calculateMinAndMaxHours(task.tasks);
-        }
-      });
-    }
-
-    calculateMinAndMaxHours(data);
-    this.props.calcDevHours(res);
-  }
-
-  parseTaskHours(data) {
-    return data.map(item => [item.minimumHours, item.maximumHours, item.isCheckedS]);
-  }
-
-  calculateAmountOfHours() {
-    const {
-      pm,
-      qa,
-      risks,
-      bugFixes,
-      completing,
-    } = this.props.mainState.estimateOptions;
-
-    let highestIndex = this.data.findIndex(item => item > completing);
-
-    if (highestIndex === -1) {
-      highestIndex = this.data.length - 1;
-    }
-
-    const hours = this.T[highestIndex];
-    const additionalHourse = hours * (pm + qa + bugFixes + risks) / 100;
-
-    const totalHours = Math.round(hours + additionalHourse);
-    this.state.totalHours = totalHours;
-  }
 
   render() {
     const {
       mainState: {
-        devHours: {
-          minHours,
-          maxHours,
-        },
         contacts,
         estimateOptions,
       },
-      moneyRate = 0,
-      headerState,
+      headerState: {
+        developmentTime: {
+          percent,
+          totalHours,
+          devHours: {
+            minHours,
+            maxHours,
+          },
+        }
+      },
       addClientData,
       changeMoneyRate,
       addEstimateOptions,
+      moneyRate,
     } = this.props;
 
     this.transformToVector();
     return (
       <Row className={styles.main}>
         <Col xs="12">
-          <LineChart labels={this.labels} data={this.data} />
+          {
+            // <LineChart labels={totalHours} data={percent} />
+          }
         </Col>
         <Col xs="12">
           <Card className={styles.final}>
@@ -169,7 +78,6 @@ class Main extends Component {
               </div>
               <div className={styles.final__result}>
                 <div
-                  onClick={this.calcDeveloperHours}
                   className={styles.final__result_info}
                 >
                   Total developer max hours: {maxHours}
@@ -183,14 +91,15 @@ class Main extends Component {
             rate={moneyRate}
             onRateChange={changeMoneyRate}
             estimateOptions={estimateOptions}
-            totalHours={this.state.totalHours}
+            totalHours={totalHours}
             addEstimateOptions={addEstimateOptions}
           />
         </Col>
         <Col xs="12">
           <FinalEstimate
-            moneyRate={moneyRate}
-            totalHours={this.state.totalHours}
+            mainState={this.props.mainState}
+            totalHours={totalHours}
+            headerState={this.props.headerState}
           />
         </Col>
         <Col xs="12">
@@ -201,7 +110,7 @@ class Main extends Component {
         </Col>
         <Col xs="12">
           <Reports
-            headerState={headerState}
+            headerState={this.props.headerState}
             mainState={this.props.mainState}
           />
         </Col>
@@ -212,7 +121,6 @@ class Main extends Component {
 
 Main.propTypes = {
   mainState: PropTypes.object.isRequired,
-  calcDevHours: PropTypes.func.isRequired,
   headerState: PropTypes.object.isRequired,
   addClientData: PropTypes.func.isRequired,
   changeMoneyRate: PropTypes.func.isRequired,
@@ -221,9 +129,9 @@ Main.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    moneyRate: state.form.contact.values.moneyRate,
     mainState: state.Main,
     headerState: state.Header,
+    moneyRate: state.form.contact.values.moneyRate,
   };
 }
 
