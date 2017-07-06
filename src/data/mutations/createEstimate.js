@@ -4,11 +4,10 @@ import {
 
 import Estimate from '../models';
 
-import {
-  EstimateInputType,
-  EstimateCreateType,
-} from '../types';
-
+      import {
+        EstimateInputType,
+        EstimateCreateType,
+      } from '../types';
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -21,17 +20,15 @@ const Mutation = new ObjectType({
           type: EstimateInputType,
         },
       },
-      async resolve({ request: { headers } }, { input: { header, main } }) {
-        let url;
-        console.log(main);
-        const newEstimate = new Estimate({ main, header });
 
+      async resolve({ request: { headers, user } }, { input: { header, main } }) {
+        let url;
+        const newEstimate = new Estimate({ owner: user._id, main, header });
         await newEstimate.save((err, estimate) => {
           if (err) return null;
           const { _id } = estimate;
           url = `${headers.referer}${_id}`;
         });
-
         return { url };
       },
     },

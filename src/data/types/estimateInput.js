@@ -156,6 +156,9 @@ const MainInputType = new InputObjectType({
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
+    owner: {
+      type: StringType,
+    },
     header: {
       type: HeaderInputType,
     },

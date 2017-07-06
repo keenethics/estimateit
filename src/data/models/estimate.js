@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 
 const EstimateSchema = mongoose.Schema({
+  owner: {
+    type: String,
+    required: true,
+  },
   main: {
     type: Object,
     required: true,

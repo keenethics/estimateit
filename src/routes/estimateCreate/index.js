@@ -1,22 +1,22 @@
 import React from 'react';
-
-import styles from './styles.scss';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
-import * as actionsHeader from '../../actions/Header';
 
 export default {
   path: '/estimate',
-  async action({ store }) {
-    return {
+  children: [{
+    path: '/',
+    action: ({ store }) => ({
       title: 'Estimator',
       authRequired: true,
-      component:
+      component: (
         <Layout>
           <Header />
           <Main />
-        </Layout>,
-    };
+        </Layout>),
+    }),
   },
+    require('../estimateGet').default,
+  ],
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Provider as ReduxProvider } from 'react-redux';
 import bt from 'bootstrap/dist/css/bootstrap.css';
-import styles from '../routes/home/styles.scss';
+import styles from '../routes/estimateCreate/styles.scss';
 
 const ContextType = {
   client: PropTypes.object.isRequired,
