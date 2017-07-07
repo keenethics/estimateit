@@ -1,4 +1,5 @@
 import {
+  GraphQLList as ListType,
   GraphQLString as StringType,
 } from 'graphql';
 
@@ -8,20 +9,16 @@ import {
 import Estimate from '../../data/models/estimate';
 
 
-const estimate = {
-  type: EstimateOutputType,
+const estimates = {
+  type: new ListType(EstimateOutputType),
   args: {
     id: {
       type: StringType,
     },
   },
-  async resolve(root, { id: _id }) {
+  async resolve(root, { id: _id = 1 }) {
     try {
-      const currentEstimate = await Estimate.findOne({ _id }, (err, res) => {
-        if (!err) console.error(err);
-        console.log(res);
-        return res;
-      });
+      const currentEstimate = await Estimate.find();
 
       return currentEstimate;
     } catch (err) {
@@ -30,4 +27,4 @@ const estimate = {
   },
 };
 
-export default estimate;
+export default estimates;

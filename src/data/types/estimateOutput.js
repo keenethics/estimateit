@@ -5,6 +5,8 @@ import {
   GraphQLObjectType as ObjectType,
 } from 'graphql';
 
+import Estimate from '../../data/models/estimate';
+
 //
 // HEADER
 //
@@ -154,14 +156,19 @@ const MainOutputType = new ObjectType({
 
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
-  fields: {
+  fields: () => ({
     header: {
       type: HeaderOutputType,
     },
     main: {
       type: MainOutputType,
     },
-  },
+    estimates: {
+      type: new ListType(EstimateOutputType),
+    },
+  }),
 });
 
-export default EstimateOutputType;
+export {
+  EstimateOutputType,
+};
