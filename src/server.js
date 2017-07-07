@@ -25,6 +25,8 @@ import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
+import generatePDF from './core/generatePDF';
+
 
 mongoose.connect(config.MONGO_URL);
 mongoose.Promise = global.Promise;
@@ -112,7 +114,13 @@ app.use(
   })),
 );
 
-app.post('/api/pdf', (req, res) => {
+app.post('/api/sendPpfToEmails', (req, res) => {
+  const { url, emails = '' } = req.body;
+  res.end('ok');
+  generatePDF(url, emails);
+});
+
+app.post('/api/downloadPpdf', (req, res) => {
   const { url } = req.body;
 
   let nightmare = Nightmare({

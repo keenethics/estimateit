@@ -9,30 +9,6 @@ import {
 // HEADER
 //
 
-const HeaderAddionalOutputType = new ObjectType({
-  name: 'HeaderAddionalOutputType',
-  fields: {
-    clientName: {
-      type: StringType,
-    },
-    projectName: {
-      type: StringType,
-    },
-    data: {
-      type: StringType,
-    },
-    sprintNumber: {
-      type: StringType,
-    },
-    technologies: {
-      type: StringType,
-    },
-    comments: {
-      type: StringType,
-    },
-  },
-});
-
 const TaskOutputType = new ObjectType({
   name: 'TaskOutputType',
   fields: () => ({
@@ -58,21 +34,6 @@ const TaskOutputType = new ObjectType({
       type: new ListType(TaskOutputType),
     },
   }),
-});
-
-const HeaderOutputType = new ObjectType({
-  name: 'HeaderOutputType',
-  fields: {
-    headerAdditional: {
-      type: HeaderAddionalOutputType,
-    },
-    parentTaskId: {
-      type: StringType,
-    },
-    tasks: {
-      type: new ListType(TaskOutputType),
-    },
-  },
 });
 
 //
@@ -112,9 +73,34 @@ const DevHoursOutputType = new ObjectType({
   },
 });
 
-const ContactsOutputType = new ObjectType({
-  name: 'ContactsOutputType',
+//
+// EstimateOutputType
+//
+
+const EstimateOutputType = new ObjectType({
+  name: 'EstimateOutputType',
   fields: {
+    date: {
+      type: StringType,
+    },
+    clientName: {
+      type: StringType,
+    },
+    projectName: {
+      type: StringType,
+    },
+    data: {
+      type: StringType,
+    },
+    sprintNumber: {
+      type: StringType,
+    },
+    comments: {
+      type: StringType,
+    },
+    technologies: {
+      type: new ListType(StringType),
+    },
     pm: {
       type: StringType,
     },
@@ -127,12 +113,6 @@ const ContactsOutputType = new ObjectType({
     position: {
       type: StringType,
     },
-  },
-});
-
-const MainOutputType = new ObjectType({
-  name: 'MainOutputType',
-  fields: {
     moneyRate: {
       type: StringType,
     },
@@ -142,27 +122,11 @@ const MainOutputType = new ObjectType({
     devHours: {
       type: DevHoursOutputType,
     },
-    contacts: {
-      type: ContactsOutputType,
-    },
-  },
-});
-
-//
-// EstimateOutputType
-//
-
-const EstimateOutputType = new ObjectType({
-  name: 'EstimateOutputType',
-  fields: {
     owner: {
       type: StringType,
     },
-    header: {
-      type: HeaderOutputType,
-    },
-    main: {
-      type: MainOutputType,
+    tasks: {
+      type: new ListType(TaskOutputType),
     },
   },
 });

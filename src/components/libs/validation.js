@@ -1,5 +1,15 @@
 export const required = value =>
-  (value ? undefined : 'Required');
+  (value && value.replace(/\s/g, '') ? undefined : 'Required');
+
+export const requiredArray = value =>
+  (value && value.length ? undefined : 'Required');
+
+export const emailsArray = (value) => {
+  const invalidEmails = value && value.filter(e => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e));
+  return (invalidEmails && invalidEmails.length)
+    ? 'Invalid email address'
+    : undefined;
+};
 
 export const maxLength = max => value =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined;
@@ -41,3 +51,6 @@ export const tasksMax = sended => max =>
   Number(sended) < Number(max)
   ? undefined
   : `Max hours ${sended} should be bigger than Min hours ${max}`;
+
+export const currency = value =>
+  value && /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(value) ? undefined : 'Invalid number';

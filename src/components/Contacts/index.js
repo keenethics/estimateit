@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardBlock, CardHeader, Input } from 'reactstrap';
+import { Card, CardBlock, CardHeader } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { Field } from 'redux-form';
@@ -29,18 +29,16 @@ class Contacts extends Component {
             name="pm"
             type="text"
             label="PM's name"
-            validate={[required]}
+            validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
             type="text"
             name="position"
             label="Position"
-            validate={[required]}
+            validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
@@ -49,7 +47,6 @@ class Contacts extends Component {
             label="Email"
             validate={[required, email]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
           <Field
@@ -58,7 +55,6 @@ class Contacts extends Component {
             label="Skype"
             validate={[required, alphaNumeric]}
             component={renderField}
-            onChange={this.onContactsChange}
             className={styles.contacts__input}
           />
         </CardBlock>
@@ -69,7 +65,6 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
-  contacts: PropTypes.object.isRequired,
   addClientData: PropTypes.func.isRequired,
 };
 

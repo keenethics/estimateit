@@ -1,24 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  CardTitle,
-  Col,
-  FormGroup,
-  Row,
-} from 'reactstrap';
+import { CardTitle, Col, FormGroup, Row } from 'reactstrap';
 import { Field } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { DateField } from 'react-date-picker';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import calendar from 'react-date-picker/index.css';
+import datepicker from 'react-datepicker/dist/react-datepicker.css';
+import 'react-select/dist/react-select.css';
 
 import Task from './Task';
 import styles from './styles.scss';
 import NewTaskForm from './NewTaskForm';
-import { renderField } from '../libs/helpers';
+import MultiSelect from '../libs/MultiSelect';
+import { renderField, renderDateField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
-import { required, number } from '../libs/validation';
+import { required, currency, requiredArray } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -31,7 +27,6 @@ class Header extends Component {
 
     this.renderTasks = this.renderTasks.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-    this.onDateChange = this.onDateChange.bind(this);
     this.textAreaAdjust = this.textAreaAdjust.bind(this);
     this.handleAddNewClientData = this.handleAddNewClientData.bind(this);
     this.calculateHours = this.calculateHours.bind(this);
@@ -39,9 +34,6 @@ class Header extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (nextState.date !== this.state.date) {
-      this.datefield.setValue(nextState.date);
-    }
     if (nextProps.tasks !== this.props.tasks) {
       this.props = nextProps;
       this.calculateHours(nextState.parentTaskId, nextState.newTask);
@@ -53,13 +45,6 @@ class Header extends Component {
       parentTaskId,
       newTask,
     });
-  }
-
-  onDateChange(dateString) {
-    if (dateString) {
-      const { dispatch } = this.props;
-      this.props.addNewClientData('data', dateString);
-    }
   }
 
   handleAddNewClientData(event) {
@@ -162,25 +147,18 @@ class Header extends Component {
       );
     });
   }
-
   renderHeader() {
     const { data } = this.props.headerAdditional;
 
     return (
       <div className={styles.right}>
-        <FormGroup className={styles.right__group}>
-          <DateField
-            value={data}
-            placeholder="Date:"
-            htmlFor="datePicker"
-            dateFormat="YYYY-MM-DD"
-            className={styles.right__group_item}
-            onChange={e => this.onDateChange(e)}
-            ref={(dateField) => {
-              this.datefield = dateField;
-            }}
-          />
-        </FormGroup>
+        <Field
+          id="date"
+          name="date"
+          component={renderDateField}
+          wrapperClassName={styles.right__group_item}
+          fieldClassName={styles.right__group_item}
+        />
         <FormGroup className={styles.right__group}>
           <Field
             type="text"
@@ -190,7 +168,6 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
@@ -202,7 +179,7 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
+
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
@@ -211,10 +188,10 @@ class Header extends Component {
             id="sprintNumber"
             name="sprintNumber"
             label="Sprint:"
-            validate={[required, number]}
+            validate={[required, currency]}
             component={renderField}
             className={styles.right__group_item}
-            onBlur={this.handleAddNewClientData}
+
           />
         </FormGroup>
       </div>
@@ -222,7 +199,49 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks, headerAdditional: { comments, technologies } } = this.props;
+    const { tasks, headerAdditional: { technologies } } = this.props;
+    const technologiesList = [
+      'Angular.js',
+      'Aurelia',
+      'Backbone.js',
+      'Bootstrap',
+      'Ember.js',
+      'Express',
+      'Ionic',
+      'LoDash',
+      'Firebase',
+      'Hapi',
+      'Meteor.js',
+      'Mocha',
+      'MongoDB',
+      'MEAN',
+      'MERN',
+      'MobX',
+      'Node.js',
+      'NodeBots',
+      'Phonegap',
+      'Polymer',
+      'PWA',
+      'React.js',
+      'Redux',
+      'RxJS',
+      'Sinon',
+      'Socket.io',
+      'Sails',
+      'Underscore.js',
+      'SQL',
+      'GraphQL',
+      'Unit Testing',
+      'Vue.js',
+      'd3',
+      'jQuery',
+    ];
+
+    const options = technologiesList.map(element => ({
+      value: element,
+      label: element,
+    }));
+
     return (
       <div>
         <Row className={styles.header}>
@@ -245,7 +264,7 @@ class Header extends Component {
                   founders@keenethics.com
                 </a>
               </p>
-              <p><a href="https://keenethics.com/">keenethics.com</a></p>
+              <p><a href="https://keenethics.com/" target="_blank" rel="noreferrer">keenethics.com</a></p>
             </div>
           </Col>
           <Col xs="12" md="7" className={styles.header__right}>
@@ -254,13 +273,16 @@ class Header extends Component {
         </Row>
         <FormGroup className={styles.right__group}>
           <Field
-            type="textarea"
             name="technologies"
-            value={technologies}
-            validate={[required]}
-            component={renderField}
-            label="Technologies, libraries, APIs"
-            onChange={this.textAreaAdjust}
+            component={MultiSelect}
+            validate={[requiredArray]}
+            values={technologies}
+            options={options}
+            handler={this.props.addTechnologies}
+            placeholder="Technologies"
+            multi
+            searchable
+            creatable
           />
         </FormGroup>
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
@@ -274,7 +296,6 @@ class Header extends Component {
           <Field
             type="textarea"
             name="comments"
-            value={comments}
             validate={[required]}
             component={renderField}
             label="Comments"
@@ -298,6 +319,7 @@ Header.propTypes = {
   findTaskAndModify: PropTypes.func.isRequired,
   headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
+  addTechnologies: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
@@ -309,5 +331,5 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(calendar, styles)(Header),
+  withStyles(styles, datepicker)(Header),
 );

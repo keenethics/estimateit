@@ -20,10 +20,9 @@ const Mutation = new ObjectType({
           type: EstimateInputType,
         },
       },
-
-      async resolve({ request: { headers, user } }, { input: { header, main } }) {
+      async resolve({ request: { headers, user } }, { input }) {
         let url;
-        const newEstimate = new Estimate({ owner: user._id, main, header });
+        const newEstimate = new Estimate({  owner: user._id, ...input });
         await newEstimate.save((err, estimate) => {
           if (err) return null;
           const { _id } = estimate;

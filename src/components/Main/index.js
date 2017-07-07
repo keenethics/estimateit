@@ -6,6 +6,7 @@ import DiscreteVector from 'discrete-vector';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
+import Reports from '../Reports';
 import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
@@ -143,9 +144,10 @@ class Main extends Component {
           maxHours,
         },
         contacts,
-        moneyRate,
         estimateOptions,
       },
+      moneyRate = 0,
+      headerState,
       addClientData,
       changeMoneyRate,
       addEstimateOptions,
@@ -187,15 +189,20 @@ class Main extends Component {
         </Col>
         <Col xs="12">
           <FinalEstimate
-            mainState={this.props.mainState}
+            moneyRate={moneyRate}
             totalHours={this.state.totalHours}
-            headerState={this.props.headerState}
           />
         </Col>
         <Col xs="12">
           <Contacts
             contacts={contacts}
             addClientData={addClientData}
+          />
+        </Col>
+        <Col xs="12">
+          <Reports
+            headerState={headerState}
+            mainState={this.props.mainState}
           />
         </Col>
       </Row>
@@ -214,6 +221,7 @@ Main.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    moneyRate: state.form.contact.values.moneyRate,
     mainState: state.Main,
     headerState: state.Header,
   };
