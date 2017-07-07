@@ -31,12 +31,18 @@ const userSchema = new Schema(
     },
   },
 );
-
+userSchema.pre('save', function (next) {
+  const email = this.local.email || this.google.email;
+  const emailDomain = email.substring(email.lastIndexOf('@') + 1);
+  if (emailDomain === 'keenethics.com') {
+    this.role = 'manager';
+  }
+  next();
+});
 userSchema.methods.generateHash = function (password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-// checking if password is valid
 userSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.local.password);
 };

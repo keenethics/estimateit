@@ -40,10 +40,6 @@ passport.use(
           newUser.local.name = req.body.name;
           newUser.local.email = username;
           newUser.local.password = newUser.generateHash(password);
-          if (username.substring(username.lastIndexOf('@') + 1) === 'keenethics.com') {
-            newUser.role = 'admin';
-          }
-          console.log('newUser', newUser);
           return newUser.save((err, res) => {
             if (err) {
               return done(null, false, {
@@ -76,10 +72,6 @@ passport.use(
           newUser.local.name = req.body.name;
           newUser.local.email = username;
           newUser.local.password = newUser.generateHash(password);
-          if (username.substring(username.lastIndexOf('@') + 1) === 'keenethics.com') {
-            newUser.role = 'admin';
-          }
-          console.log('newUser', newUser);
           return newUser.save((err, res) => {
             if (err) {
               return done(null, false, {
@@ -172,9 +164,6 @@ passport.use(
                   user.google.token = accessToken;
                   user.google.name = profile.displayName;
                   user.google.email = (profile.emails[0].value || '').toLowerCase();
-                  if (user.google.email.substring(user.google.email.lastIndexOf('@') + 1) === 'keenethics.com') {
-                    user.role = 'admin';
-                  }
                   user.save((err) => {
                     if (err) {
                       return done(null, false, {
@@ -200,10 +189,6 @@ passport.use(
               newUser.google.token = accessToken;
               newUser.google.name = profile.displayName;
               newUser.google.email = (profile.emails[0].value || '').toLowerCase();
-              if (newUser.google.email.substring(newUser.google.email.lastIndexOf('@') + 1) === 'keenethics.com') {
-                newUser.role = 'admin';
-              }
-              console.log('newUser', newUser);
               newUser.save((err) => {
                 if (err) {
                   return done(err);
@@ -223,9 +208,6 @@ passport.use(
           user.google.token = accessToken;
           user.google.name = profile.displayName;
           user.google.email = (profile.emails[0].value || '').toLowerCase();
-          if (user.google.email.substring(user.google.email.lastIndexOf('@') + 1) === 'keenethics.com') {
-            user.role = 'admin';
-          }
           user.save((err) => {
             if (err) {
               return done(err);

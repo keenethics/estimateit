@@ -79,7 +79,7 @@ export default {
         component: (
           <Layout>
             <Header />
-            <Main />
+            <Main web="isEditable" />
           </Layout>
         ),
       };
