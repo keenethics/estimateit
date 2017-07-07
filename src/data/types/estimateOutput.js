@@ -122,6 +122,9 @@ const EstimateOutputType = new ObjectType({
     devHours: {
       type: DevHoursOutputType,
     },
+    owner: {
+      type: StringType,
+    },
     tasks: {
       type: new ListType(TaskOutputType),
     },

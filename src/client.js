@@ -46,6 +46,7 @@ const context = {
   store: configureStore(window.APP_STATE, { history, apolloClient }),
   // store: configureStore(window.App.state, { history }),
   storeSubscription: null,
+  isAuthenticated: window.App.isAuthenticated,
 };
 
 // Switch off the native scroll restoration behavior and handle it manually

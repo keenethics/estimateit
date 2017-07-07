@@ -123,6 +123,9 @@ const EstimateInputType = new InputObjectType({
     devHours: {
       type: DevHoursInputType,
     },
+    owner: {
+      type: StringType,
+    },
     tasks: {
       type: new ListType(TaskInputType),
     },

@@ -1,8 +1,4 @@
 import React from 'react';
-
-// import Estimate from '../../data/models/estimate';
-// import Estimate from '../../data/models';
-// import styles from './styles.scss';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
@@ -11,12 +7,12 @@ import { apply } from '../../actions/Main';
 export default {
 
   path: '/:id',
-
   async action({ params: { id }, fetch, store }) {
     try {
       const resp = await fetch('/graphql', {
         body: JSON.stringify({
           query: `{estimate(id: "${id}"){
+            owner,
             date,
             clientName,
             projectName,
@@ -81,10 +77,11 @@ export default {
 
       return {
         title: 'Estimator',
+        authRequired: true,
         component: (
           <Layout>
             <Header />
-            <Main />
+            <Main web="isEditable" />
           </Layout>
         ),
       };

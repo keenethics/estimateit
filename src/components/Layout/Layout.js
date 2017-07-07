@@ -7,6 +7,8 @@ import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Layout.scss';
 
+import Header from '../libs/Header';
+
 class Layout extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -20,17 +22,20 @@ class Layout extends React.Component {
 
   render() {
     return (
-      <Container className={s.estimator}>
-        <Card id="screen">
-          <Col xs="12" md="12" lg="10" className={s.estimator__container}>
-            <Form
-              form="contact"
-            >
-              {this.props.children}
-            </Form>
-          </Col>
-        </Card>
-      </Container>
+      <div>
+        <Header />
+        <Container className={s.estimator}>
+          <Card id="screen">
+            <Col xs="12" md="12" lg="10" className={s.estimator__container}>
+              <Form
+                form="contact"
+              >
+                {this.props.children}
+              </Form>
+            </Col>
+          </Card>
+        </Container>
+      </div>
     );
   }
 }
