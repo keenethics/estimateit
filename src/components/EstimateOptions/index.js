@@ -38,7 +38,6 @@ class EstimateOptions extends Component {
     return (
       <div className={styles.range}>
         <InputGroup className={styles.range__item}>
-          <InputGroupAddon>Rate USD</InputGroupAddon>
           <Field
             min="0"
             step="1"
@@ -47,7 +46,6 @@ class EstimateOptions extends Component {
             name="moneyRate"
             validate={[required, currency]}
             component={renderOptionsField}
-            className={styles.range__item}
           />
         </InputGroup>
         <Slider
