@@ -7,7 +7,7 @@ import InputAndPopover from './InputAndPopover';
 
 import { Field, FieldArray } from 'redux-form';
 import { renderField } from '../libs/helpers';
-import { required } from '../libs/validation';
+import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
 import { arrayPush } from 'redux-form';
 
 export default class Task extends React.Component {
@@ -15,36 +15,38 @@ export default class Task extends React.Component {
   render() {
     const { fields, level } = this.props;
     const { store: { dispatch } } = this.context;
+
     return (
       <FormGroup>
         {fields.map((task, index) =>
           <FormGroup className={styles.subtasks}>
             <Field
               type="checkbox"
+              component="input"
               id={`${task}.isChecked`}
               name={`${task}.isChecked`}
-              component="input"
               className={styles.subtasks__item}
             />
             <Field
               type="text"
-              id={`${task}.taskName`}
-              name={`${task}.taskName`}
               label="Task name:"
               validate={[required]}
               component={renderField}
+              id={`${task}.taskName`}
+              name={`${task}.taskName`}
               className={styles.right__group_item}
             />
             <Field
               type="text"
               addon={'min'}
+              validate={[requiredNumber, mixShouldBeLessThenMax(`${task}.maxTime`)]}
               id={`${task}.minTime`}
               name={`${task}.minTime`}
               component={InputAndPopover}
               buttonsNames={{
                 plusHour: 'plusMinHour',
-                plusMinute: 'plusMinMinute',
                 minusHour: 'minusMinHour',
+                plusMinute: 'plusMinMinute',
                 minusMinute: 'minusMinMinute',
               }}
               hoursInputName={'minHoursInput'}
@@ -53,13 +55,15 @@ export default class Task extends React.Component {
             <Field
               type="text"
               addon={'max'}
+
               id={`${task}.maxTime`}
               name={`${task}.maxTime`}
               component={InputAndPopover}
+              validate={[requiredNumber]}
               buttonsNames={{
                 plusHour: 'plusMaxHour',
-                plusMinute: 'plusMaxMinute',
                 minusHour: 'minusMaxHour',
+                plusMinute: 'plusMaxMinute',
                 minusMinute: 'minusMaxMinute',
               }}
               hoursInputName={'maxHoursInput'}

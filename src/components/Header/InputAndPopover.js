@@ -1,10 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { InputGroup, Input, InputGroupAddon, Popover, PopoverContent, Table, Button } from 'reactstrap';
+import {
+  Table,
+  Button,
+  Input,
+  Popover,
+  InputGroup,
+  PopoverContent,
+  InputGroupAddon,
+} from 'reactstrap';
 
 import styles from './styles.scss';
+import { ValidationState } from '../libs/helpers';
 
 class InputAndPopover extends React.Component {
   constructor(props) {
@@ -187,6 +194,7 @@ class InputAndPopover extends React.Component {
     const payload =
       (parseInt(string.hours, 10) + (parseInt(string.minutes, 10) / this.CONSTANTS.TODECIMAL)) || 0;
 
+    this.setState({ value: this.formatTime(payload) });
     this.dispatchonChange(payload);
   }
 
@@ -207,7 +215,7 @@ class InputAndPopover extends React.Component {
       meta: {
         form,
         field,
-        touch: false,
+        touch: true,
         persistentSubmitErrors: false,
       },
       payload,
@@ -217,8 +225,10 @@ class InputAndPopover extends React.Component {
   render() {
     const {
       id,
+      meta,
       name,
       addon,
+      input,
       buttonsNames,
       hoursInputName,
       minutesInputName,
@@ -233,6 +243,7 @@ class InputAndPopover extends React.Component {
     return (
       <InputGroup id={newId} className={styles.input_group}>
         <Input
+          {...input}
           name={name}
           placeholder="0 h 0 m"
           value={formattedValue}
@@ -251,7 +262,7 @@ class InputAndPopover extends React.Component {
         >
           &#9719;
         </InputGroupAddon>
-
+        <ValidationState {...meta} />
         <Popover placement="top" isOpen={isPopoverOpen} target={newId} toggle={this.toggle}>
           <PopoverContent>
             <Table>

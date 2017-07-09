@@ -77,11 +77,11 @@ class Header extends Component {
         <FormGroup className={styles.right__group}>
           <Field
             type="number"
+            label="Sprint:"
             id="sprintNumber"
             name="sprintNumber"
-            label="Sprint:"
-            validate={[required, currency]}
             component={renderField}
+            validate={[required, currency]}
             className={styles.right__group_item}
           />
         </FormGroup>
