@@ -6,7 +6,7 @@ import {
   FormGroup,
   CardTitle,
 } from 'reactstrap';
-import { Field } from 'redux-form';
+import { Field, FieldArray } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
@@ -20,6 +20,39 @@ import MultiSelect from '../libs/MultiSelect';
 import { renderField, renderDateField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
 import { required, currency, requiredArray } from '../libs/validation';
+
+
+const renderTaskss = (props) => {
+  console.log(props);
+
+  const { fields } = props;
+
+  return (
+    <ul>
+      {fields.map((member, index) =>
+        <li key={index}>
+          <button
+            type="button"
+            title="Remove Member"
+            onClick={() => fields.remove(index)}
+          >
+            remove
+          </button>
+          <Field
+            name={`${member}.name`}
+            type="text"
+            component={renderField}
+            label="Task name"
+          />
+        </li>
+      )}
+      <li>
+        <button type="button" onClick={() => fields.push({})}>Add tasks</button>
+      </li>
+    </ul>
+  )
+}
+
 
 class Header extends Component {
   constructor(props) {
@@ -37,56 +70,62 @@ class Header extends Component {
   componentWillUpdate(nextProps, nextState) {
     if (nextProps.tasks !== this.props.tasks) {
       this.props = nextProps;
-      this.calculateHours(nextState.parentTaskId, nextState.newTask);
+      // this.calculateHours(nextState.parentTaskId, nextState.newTask);
     }
   }
 
 
   renderTasks(tasks = [], iterator) {
-    return tasks.map((task) => {
-      const {
-        tasks: tasksList,
-        sumMin,
-        sumMax,
-        taskName,
-        isChecked,
-        id: taskId,
-        minimumHours,
-        maximumHours,
-      } = task;
-
-      const { parentTaskId } = this.props;
-      return (
-        <div key={taskId}>
-          <Task
-            taskId={taskId}
-            taskName={taskName}
-            minimumHours={minimumHours}
-            maximumHours={maximumHours}
-            isChecked={isChecked}
-            sumMin={sumMin}
-            sumMax={sumMax}
-            iterator={iterator}
-            findTaskAndModify={this.props.findTaskAndModify}
-            removeTask={this.props.removeTask}
-            setParentTaskId={this.props.setParentTaskId}
-            saveTaskIntoState={this.saveTaskIntoState}
-          />
-          <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
-            {tasksList && this.renderTasks(tasksList, iterator + 1)}
-            {parentTaskId === taskId &&
-              <NewTaskForm
-                parentTaskId={parentTaskId}
-                isSubtask
-                addNewTask={this.props.addNewTask}
-                removeParentTaskId={this.props.removeParentTaskId}
-                addNewSubTask={this.props.addNewSubTask}
-              />
-            }
-          </div>
-        </div>
-      );
-    });
+    return(
+      <FieldArray
+        name="tasks"
+        level={0}
+        component={Task}
+      />
+    )
+    // return tasks.map((task) => {
+    //   const {
+    //     tasks: tasksList,
+    //     sumMin,
+    //     sumMax,
+    //     taskName,
+    //     isChecked,
+    //     id: taskId,
+    //     minimumHours,
+    //     maximumHours,
+    //   } = task;
+    //
+    //   const { parentTaskId } = this.props;
+    //   return (
+    //     <div key={taskId}>
+    //       <Task
+    //         taskId={taskId}
+    //         taskName={taskName}
+    //         minimumHours={minimumHours}
+    //         maximumHours={maximumHours}
+    //         isChecked={isChecked}
+    //         sumMin={sumMin}
+    //         sumMax={sumMax}
+    //         iterator={iterator}
+    //         findTaskAndModify={this.props.findTaskAndModify}
+    //         removeTask={this.props.removeTask}
+    //         setParentTaskId={this.props.setParentTaskId}
+    //       />
+    //       <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
+    //         {tasksList && this.renderTasks(tasksList, iterator + 1)}
+    //         {parentTaskId === taskId &&
+    //           <NewTaskForm
+    //             parentTaskId={parentTaskId}
+    //             isSubtask
+    //             addNewTask={this.props.addNewTask}
+    //             removeParentTaskId={this.props.removeParentTaskId}
+    //             addNewSubTask={this.props.addNewSubTask}
+    //           />
+    //         }
+    //       </div>
+    //     </div>
+    //   );
+    // });
   }
 
   renderHeader() {
@@ -224,12 +263,17 @@ class Header extends Component {
             creatable
           />
         </FormGroup>
-        <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
-        <NewTaskForm
-          addNewTask={this.props.addNewTask}
-          removeParentTaskId={this.props.removeParentTaskId}
-          addNewSubTask={this.props.addNewSubTask}
-       />
+        {this.renderTasks(tasks)}
+      {
+        // <FormGroup className="tasks">
+        //   {this.renderTasks(tasks, 0)}
+        // </FormGroup>
+      //   <NewTaskForm
+      //   addNewTask={this.props.addNewTask}
+      //   removeParentTaskId={this.props.removeParentTaskId}
+      //   addNewSubTask={this.props.addNewSubTask}
+      // />
+  }
         <FormGroup className={styles.right__group}>
           <Field
             type="textarea"
@@ -253,7 +297,6 @@ Header.propTypes = {
   setParentTaskId: PropTypes.func.isRequired,
   addNewClientData: PropTypes.func.isRequired,
   findTaskAndModify: PropTypes.func.isRequired,
-  headerAdditional: PropTypes.object.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
   addTechnologies: PropTypes.func.isRequired,
 };

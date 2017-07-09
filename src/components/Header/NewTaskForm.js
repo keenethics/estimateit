@@ -298,7 +298,6 @@ export default class NewTaskForm extends React.Component {
       isPopoverOpenForMaxHours: false,
     });
     this.taskNameInput.focus();
-    this.props.saveTaskIntoState(parentTaskId, newTask);
   }
 
   handleInputChange({ target }) {
@@ -431,5 +430,4 @@ NewTaskForm.propTypes = {
   addNewTask: PropTypes.func.isRequired,
   removeParentTaskId: PropTypes.func.isRequired,
   addNewSubTask: PropTypes.func.isRequired,
-  saveTaskIntoState: PropTypes.func.isRequired,
 };
