@@ -9,24 +9,26 @@ import styles from './styles.scss';
 class InputAndPopover extends React.Component {
   constructor(props) {
     super(props);
-
-    const value = this.formatTime(props.input.value);
-
-    this.state = {
-      value,
-      isPopoverOpen: false,
-    };
-
     this.CONSTANTS = {
       MINUTESINHOUR: 60,
       STEPOFMINUTES: 15,
       TODECIMAL: 100,
     };
 
+    const value = this.formatTime(props.input.value);
+
+
+    this.state = {
+      value,
+      isPopoverOpen: false,
+    };
+
     this.toggle = this.toggle.bind(this);
+    this.formatTime = this.formatTime.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.changeHoursAndMinutes = this.changeHoursAndMinutes.bind(this);
+    this.dispatchonChange = this.dispatchonChange.bind(this);
+    this.onChangeHoursAndMinutes = this.onChangeHoursAndMinutes.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -40,8 +42,6 @@ class InputAndPopover extends React.Component {
   }
 
   handleOnChange({ target: { value } }) {
-    // const { input: { onChange } } = this.props;
-    // onChange(value);
     this.setState({ value });
   }
 
@@ -50,21 +50,18 @@ class InputAndPopover extends React.Component {
     let minutes;
     let formattedValue;
     let tempDigit = digit;
-    console.log('formattedValue');
+
     if (typeof digit === 'number') {
-      console.log('number');
       tempDigit = digit.toString();
     }
-    console.log('tempDigit = ', tempDigit);
 
     if (tempDigit && tempDigit.match(/\d+/) && !tempDigit.match(/[a-zA-z]/)) {
-      console.log('only numbers');
       if (tempDigit.match(/\d+.\d+/)) {
         const indexOfHours = 0;
         const indexOfMinutes = 1;
         const minutesAndHours = tempDigit.split('.');
-        hours = parseInt(minutesAndHours[indexOfHours]);
-        minutes = parseInt(minutesAndHours[indexOfMinutes]);
+        hours = parseInt(minutesAndHours[indexOfHours], 10);
+        minutes = parseInt(minutesAndHours[indexOfMinutes], 10);
         if (minutesAndHours[indexOfMinutes] && (minutesAndHours[indexOfMinutes])[0] !== '0' && (minutesAndHours[indexOfMinutes]).length !== 2) {
           minutes *= 10;
         }
@@ -76,24 +73,16 @@ class InputAndPopover extends React.Component {
         const formattedHours = hours ? `${hours} h ` : '';
         const formattedMinutes = minutes ? `${minutes} m` : '';
         formattedValue = `${formattedHours}${formattedMinutes}`;
-        console.log({
-          formattedValue,
-          hours,
-          minutes,
-        });
+
         return {
           formattedValue,
           hours,
           minutes,
         };
       }
-      hours = parseInt(tempDigit.match(/\d+/) && (tempDigit.match(/\d+/))[0]);
+      hours = parseInt(tempDigit.match(/\d+/) && (tempDigit.match(/\d+/))[0], 10);
       formattedValue = hours ? `${hours} h` : '';
-      console.log({
-        formattedValue,
-        hours,
-        minutes,
-      });
+
       return {
         formattedValue,
         hours,
@@ -103,27 +92,16 @@ class InputAndPopover extends React.Component {
 
     hours = tempDigit.match(/\d+(\s+)?h/);
     minutes = tempDigit.match(/\d+(\s+)?m/);
-    console.log('tempDigit2 =', tempDigit);
-    console.log('1.minutes = ', minutes);
-    hours = hours && hours[0] ? parseInt(hours[0]) : 0;
-    minutes = minutes && minutes[0] ? parseInt(minutes[0]) : 0;
-
-    console.log('2.minutes = ', minutes);
+    hours = hours && hours[0] ? parseInt(hours[0], 10) : 0;
+    minutes = minutes && minutes[0] ? parseInt(minutes[0], 10) : 0;
 
     if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
       hours += (Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR));
       minutes %= this.CONSTANTS.MINUTESINHOUR;
     }
-    console.log('another');
 
     const formattedHours = hours ? `${hours} h ` : '';
     formattedValue = minutes ? `${formattedHours}${minutes} m` : `${formattedHours}`;
-
-    console.log({
-      formattedValue,
-      hours,
-      minutes,
-    });
 
     return {
       formattedValue,
@@ -132,107 +110,97 @@ class InputAndPopover extends React.Component {
     };
   }
 
-  changeHoursAndMinutes({ target }) {
-    console.log(target);
-    // let { name } = target;
-    // const { id } = target.dataset;
-    // let value;
-    // const minInputsNames = ['plusMinHour', 'plusMinMinute', 'minusMinHour', 'minusMinMinute', 'minHoursInput', 'minMinutesInput'];
-    // const maxInputsNames = ['plusMaxHour', 'plusMaxMinute', 'minusMaxHour', 'minusMaxMinute', 'maxHoursInput', 'maxMinutesInput'];
-    // if (minInputsNames.includes(name)) {
-    //   name = 'minimumHours';
-    //   value = this.state.minimumHours;
-    // }
-    // if (maxInputsNames.includes(name)) {
-    //   name = 'maximumHours';
-    //   value = this.state.maximumHours;
-    // }
-    // let { hours, minutes } = value;
-    // hours = parseInt(hours);
-    // minutes = parseInt(minutes);
-    //
-    // switch (target.id) {
-    //   case 'plusHour': {
-    //     value = ++hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //     break;
-    //   }
-    //   case 'plusMinute': {
-    //     minutes += this.CONSTANTS.STEPOFMINUTES;
-    //     if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
-    //       hours += Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR);
-    //       minutes %= this.CONSTANTS.MINUTESINHOUR;
-    //     }
-    //     value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //     break;
-    //   }
-    //   case 'minusHour': {
-    //     if (hours === 0) {
-    //       return;
-    //     }
-    //     value = --hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //     break;
-    //   }
-    //   case 'minusMinute': {
-    //     if (minutes <= 14) {
-    //       if (hours === 0) {
-    //         minutes = 0;
-    //         value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //       } else {
-    //         minutes = this.CONSTANTS.MINUTESINHOUR - (this.CONSTANTS.STEPOFMINUTES - minutes);
-    //         hours--;
-    //       }
-    //       value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //       this.props.findTaskAndModify(id, name, value);
-    //       return;
-    //     }
-    //     minutes -= this.CONSTANTS.STEPOFMINUTES;
-    //     value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //     break;
-    //   }
-    //   case 'changeHours': {
-    //     hours = parseInt(target.value) || 0;
-    //     value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //     break;
-    //   }
-    //   case 'changeMinutes': {
-    //     minutes = parseInt(target.value) || 0;
-    //     if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
-    //       hours += Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR);
-    //       minutes %= this.CONSTANTS.MINUTESINHOUR;
-    //     }
-    //     value = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
-    //     this.props.findTaskAndModify(id, name, value);
-    //   }
-    // }
+  onChangeHoursAndMinutes({ target }) {
+    let payload = this.state.value;
+    let { hours, minutes } = payload;
+
+    hours = parseInt(hours, 10);
+    minutes = parseInt(minutes, 10);
+
+    switch (target.id) {
+      case 'plusHour': {
+        payload = ++hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      case 'plusMinute': {
+        minutes += this.CONSTANTS.STEPOFMINUTES;
+        if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
+          hours += Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR);
+          minutes %= this.CONSTANTS.MINUTESINHOUR;
+        }
+        payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      case 'minusHour': {
+        if (hours === 0) {
+          return;
+        }
+        payload = --hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      case 'minusMinute': {
+        if (minutes <= 14) {
+          if (hours === 0) {
+            minutes = 0;
+            payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+          } else {
+            minutes = this.CONSTANTS.MINUTESINHOUR - (this.CONSTANTS.STEPOFMINUTES - minutes);
+            hours--;
+          }
+          payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+          this.dispatchonChange(payload);
+          return;
+        }
+        minutes -= this.CONSTANTS.STEPOFMINUTES;
+        payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      case 'changeHours': {
+        hours = parseInt(target.value, 10) || 0;
+        payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      case 'changeMinutes': {
+        minutes = parseInt(target.value, 10) || 0;
+        if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
+          hours += Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR);
+          minutes %= this.CONSTANTS.MINUTESINHOUR;
+        }
+        payload = hours + (minutes / this.CONSTANTS.TODECIMAL) || 0;
+        this.dispatchonChange(payload);
+        break;
+      }
+      default: {
+        break;
+      }
+    }
   }
 
   handleOnBlur({ target: { value } }) {
+    const string = this.formatTime(value);
+    const payload =
+      (parseInt(string.hours, 10) + (parseInt(string.minutes, 10) / this.CONSTANTS.TODECIMAL)) || 0;
+
+    this.dispatchonChange(payload);
+  }
+
+
+  dispatchonChange(payload) {
     const {
       meta: {
         form,
         dispatch,
       },
       input: {
-        onBlur,
         name: field,
       },
     } = this.props;
-    console.log('onblur');
-    console.log('value');
-    console.log(value);
 
-    const string = this.formatTime(value);
-    console.log('string');
-    console.log(string);
-    const payload =
-      (parseInt(string.hours) + (parseInt(string.minutes) / this.CONSTANTS.TODECIMAL)) || 0;
-      console.log('payload');
-    console.log(payload);
     dispatch({
       type: '@@redux-form/CHANGE',
       meta: {
@@ -246,142 +214,123 @@ class InputAndPopover extends React.Component {
   }
 
   render() {
-
     const {
       id,
       name,
-    //   taskId,
-    //   parentTaskId,
-    //   placeholder,
       addon,
-      input: {
-        value
-      },
-    //   inputName,
-    //   formattedValue,
-    //   onInputChange,
-    //   onInputBlur,
-    //   onToggle,
-    //   isOpen,
       buttonsNames,
-    //   onChangeHoursAndMinutes,
       hoursInputName,
       minutesInputName,
-    //   hours,
-    //   minutes,
     } = this.props;
+
     // remove from id all characters like .,],[, because it is invalid for querySelector
     // which using inside reactstrap(popover)
     const newId = id.replace(/\.|_|\[|\]/g, '');
     const { isPopoverOpen } = this.state;
-    const { value: { formattedValue } } = this.state;
-    console.log(formattedValue);
+    const { value: { hours, minutes, formattedValue } } = this.state;
 
-    // console.log(this.formatDigitToString(value));
-
-    console.log(this);
     return (
       <InputGroup id={newId} className={styles.input_group}>
         <Input
-          value={formattedValue}
-          placeholder="0 h 0 m"
           name={name}
+          placeholder="0 h 0 m"
+          value={formattedValue}
           onBlur={this.handleOnBlur}
           onChange={this.handleOnChange}
         />
-      <InputGroupAddon
-        className={styles.input_group_addon}
-      >
-        {addon}
-      </InputGroupAddon>
-      <InputGroupAddon
-        onClick={this.toggle}
-        id="isPopoverOpenForMinHours"
-        className={styles.input_group_time}
-      >
-        &#9719;
-      </InputGroupAddon>
+        <InputGroupAddon
+          className={styles.input_group_addon}
+        >
+          {addon}
+        </InputGroupAddon>
+        <InputGroupAddon
+          onClick={this.toggle}
+          id="isPopoverOpenForMinHours"
+          className={styles.input_group_time}
+        >
+          &#9719;
+        </InputGroupAddon>
 
-      <Popover placement="top" isOpen={isPopoverOpen} target={newId} toggle={this.toggle}>
-        <PopoverContent>
-          <Table>
-            <tbody className={styles.popover_table}>
-              <tr>
-                <td>
-                  <Button
-                    className={styles.input_group_plus}
-                    id="plusHour"
-                    name={buttonsNames.plusHour}
-                    onClick={this.onChangeHoursAndMinutes}
-                  >
-                  +
-                  </Button>
-                  </td>
-                <td>&nbsp;</td>
-                <td>
-                  <Button
-                    className={styles.input_group_plus}
-                    id="plusMinute"
-                    name={buttonsNames.plusMinute}
-                    onClick={this.onChangeHoursAndMinutes}
-                  >
+        <Popover placement="top" isOpen={isPopoverOpen} target={newId} toggle={this.toggle}>
+          <PopoverContent>
+            <Table>
+              <tbody className={styles.popover_table}>
+                <tr>
+                  <td>
+                    <Button
+                      id="plusHour"
+                      name={buttonsNames.plusHour}
+                      className={styles.input_group_plus}
+                      onClick={this.onChangeHoursAndMinutes}
+                    >
                     +
-                  </Button>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-              <tr>
-                <td className={styles.input_group_middle_input}>
-                  <Input
-                    id="changeHours"
-                    name={hoursInputName}
-                    onClick={this.onChangeHoursAndMinutes}
-                    type="text"
-                    maxLength="2"
-
-                  />
-                </td>
-                <td className={styles.input_group_time_value}>h</td>
-                <td className={styles.input_group_middle_input}>
-                  <Input
-                    id="changeMinutes"
-                    name={minutesInputName}
-                    onClick={this.onChangeHoursAndMinutes}
-                    type="text"
-                    maxLength="2"
-
-                  />
-                </td>
-                <td className={styles.input_group_time_value}>m</td>
-              </tr>
-              <tr>
-                <td>
-                  <Button
-                    className={styles.input_group_minus}
-                    id="minusHour"
-                    name={buttonsNames.minusHour}
-                    onClick={this.onChangeHoursAndMinutes}
-                  >
-                    -
-                  </Button>
-                </td>
-                <td>&nbsp;</td>
-                <td>
-                  <Button
-                    className={styles.input_group_minus}
-                    id="minusMinute"
-                    name={buttonsNames.minusMinute}
-                    onClick={this.onChangeHoursAndMinutes}
-                  >
-                    -
-                  </Button>
-                </td>
-                <td>&nbsp;</td>
-              </tr>
-            </tbody>
-          </Table>
-        </PopoverContent>
-      </Popover>
+                    </Button>
+                  </td>
+                  <td>&nbsp;</td>
+                  <td>
+                    <Button
+                      id="plusMinute"
+                      name={buttonsNames.plusMinute}
+                      className={styles.input_group_plus}
+                      onClick={this.onChangeHoursAndMinutes}
+                    >
+                      +
+                    </Button>
+                  </td>
+                  <td>&nbsp;</td>
+                </tr>
+                <tr>
+                  <td className={styles.input_group_middle_input}>
+                    <Input
+                      type="text"
+                      maxLength="2"
+                      value={hours}
+                      id="changeHours"
+                      name={hoursInputName}
+                      onClick={this.onChangeHoursAndMinutes}
+                    />
+                  </td>
+                  <td className={styles.input_group_time_value}>h</td>
+                  <td className={styles.input_group_middle_input}>
+                    <Input
+                      type="text"
+                      maxLength="2"
+                      value={minutes}
+                      id="changeMinutes"
+                      name={minutesInputName}
+                      onClick={this.onChangeHoursAndMinutes}
+                    />
+                  </td>
+                  <td className={styles.input_group_time_value}>m</td>
+                </tr>
+                <tr>
+                  <td>
+                    <Button
+                      id="minusHour"
+                      name={buttonsNames.minusHour}
+                      className={styles.input_group_minus}
+                      onClick={this.onChangeHoursAndMinutes}
+                    >
+                      -
+                    </Button>
+                  </td>
+                  <td>&nbsp;</td>
+                  <td>
+                    <Button
+                      id="minusMinute"
+                      name={buttonsNames.minusMinute}
+                      className={styles.input_group_minus}
+                      onClick={this.onChangeHoursAndMinutes}
+                    >
+                      -
+                    </Button>
+                  </td>
+                  <td>&nbsp;</td>
+                </tr>
+              </tbody>
+            </Table>
+          </PopoverContent>
+        </Popover>
       </InputGroup>
     );
   }
@@ -394,23 +343,14 @@ InputAndPopover.defaultProps = {
 };
 
 InputAndPopover.propTypes = {
+  meta: PropTypes.object.isRequired,
+  input: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
-  taskId: PropTypes.string,
-  parentTaskId: PropTypes.string,
-  placeholder: PropTypes.string.isRequired,
   addon: PropTypes.string.isRequired,
-  inputName: PropTypes.string.isRequired,
-  formattedValue: PropTypes.string.isRequired,
-  onInputChange: PropTypes.func.isRequired,
-  onInputBlur: PropTypes.func.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
+  name: PropTypes.string.isRequired,
   buttonsNames: PropTypes.objectOf(PropTypes.string).isRequired,
-  onChangeHoursAndMinutes: PropTypes.func,
   hoursInputName: PropTypes.string.isRequired,
   minutesInputName: PropTypes.string.isRequired,
-  hours: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  minutes: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 
 export default InputAndPopover;
