@@ -15,51 +15,16 @@ import 'react-select/dist/react-select.css';
 
 import Task from './Task';
 import styles from './styles.scss';
-import NewTaskForm from './NewTaskForm';
 import MultiSelect from '../libs/MultiSelect';
 import { renderField, renderDateField } from '../libs/helpers';
 import * as actionsHeader from '../../actions/Header';
 import { required, currency, requiredArray } from '../libs/validation';
-
-
-const renderTaskss = (props) => {
-  console.log(props);
-
-  const { fields } = props;
-
-  return (
-    <ul>
-      {fields.map((member, index) =>
-        <li key={index}>
-          <button
-            type="button"
-            title="Remove Member"
-            onClick={() => fields.remove(index)}
-          >
-            remove
-          </button>
-          <Field
-            name={`${member}.name`}
-            type="text"
-            component={renderField}
-            label="Task name"
-          />
-        </li>
-      )}
-      <li>
-        <button type="button" onClick={() => fields.push({})}>Add tasks</button>
-      </li>
-    </ul>
-  )
-}
-
 
 class Header extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      parentTaskId: '',
       newTask: '',
     };
 
@@ -67,65 +32,14 @@ class Header extends Component {
     this.renderHeader = this.renderHeader.bind(this);
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (nextProps.tasks !== this.props.tasks) {
-      this.props = nextProps;
-      // this.calculateHours(nextState.parentTaskId, nextState.newTask);
-    }
-  }
-
-
   renderTasks(tasks = [], iterator) {
-    return(
+    return (
       <FieldArray
-        name="tasks"
         level={0}
+        name="tasks"
         component={Task}
       />
-    )
-    // return tasks.map((task) => {
-    //   const {
-    //     tasks: tasksList,
-    //     sumMin,
-    //     sumMax,
-    //     taskName,
-    //     isChecked,
-    //     id: taskId,
-    //     minimumHours,
-    //     maximumHours,
-    //   } = task;
-    //
-    //   const { parentTaskId } = this.props;
-    //   return (
-    //     <div key={taskId}>
-    //       <Task
-    //         taskId={taskId}
-    //         taskName={taskName}
-    //         minimumHours={minimumHours}
-    //         maximumHours={maximumHours}
-    //         isChecked={isChecked}
-    //         sumMin={sumMin}
-    //         sumMax={sumMax}
-    //         iterator={iterator}
-    //         findTaskAndModify={this.props.findTaskAndModify}
-    //         removeTask={this.props.removeTask}
-    //         setParentTaskId={this.props.setParentTaskId}
-    //       />
-    //       <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
-    //         {tasksList && this.renderTasks(tasksList, iterator + 1)}
-    //         {parentTaskId === taskId &&
-    //           <NewTaskForm
-    //             parentTaskId={parentTaskId}
-    //             isSubtask
-    //             addNewTask={this.props.addNewTask}
-    //             removeParentTaskId={this.props.removeParentTaskId}
-    //             addNewSubTask={this.props.addNewSubTask}
-    //           />
-    //         }
-    //       </div>
-    //     </div>
-    //   );
-    // });
+    );
   }
 
   renderHeader() {
@@ -135,8 +49,8 @@ class Header extends Component {
           id="date"
           name="date"
           component={renderDateField}
-          wrapperClassName={styles.right__group_item}
           fieldClassName={styles.right__group_item}
+          wrapperClassName={styles.right__group_item}
         />
         <FormGroup className={styles.right__group}>
           <Field
@@ -158,7 +72,6 @@ class Header extends Component {
             validate={[required]}
             component={renderField}
             className={styles.right__group_item}
-
           />
         </FormGroup>
         <FormGroup className={styles.right__group}>
@@ -170,7 +83,6 @@ class Header extends Component {
             validate={[required, currency]}
             component={renderField}
             className={styles.right__group_item}
-
           />
         </FormGroup>
       </div>
@@ -252,35 +164,25 @@ class Header extends Component {
         </Row>
         <FormGroup className={styles.right__group}>
           <Field
+            multi
+            creatable
+            searchable
+            options={options}
             name="technologies"
             component={MultiSelect}
             validate={[requiredArray]}
-            options={options}
-            handler={this.props.addTechnologies}
             placeholder="Technologies"
-            multi
-            searchable
-            creatable
+            handler={this.props.addTechnologies}
           />
         </FormGroup>
         {this.renderTasks(tasks)}
-      {
-        // <FormGroup className="tasks">
-        //   {this.renderTasks(tasks, 0)}
-        // </FormGroup>
-      //   <NewTaskForm
-      //   addNewTask={this.props.addNewTask}
-      //   removeParentTaskId={this.props.removeParentTaskId}
-      //   addNewSubTask={this.props.addNewSubTask}
-      // />
-  }
         <FormGroup className={styles.right__group}>
           <Field
-            type="textarea"
             name="comments"
+            type="textarea"
+            label="Comments"
             validate={[required]}
             component={renderField}
-            label="Comments"
           />
         </FormGroup>
       </div>
@@ -290,14 +192,7 @@ class Header extends Component {
 
 Header.propTypes = {
   tasks: PropTypes.array.isRequired,
-  removeTask: PropTypes.func.isRequired,
-  addNewTask: PropTypes.func.isRequired,
-  addNewSubTask: PropTypes.func.isRequired,
-  parentTaskId: PropTypes.string.isRequired,
-  setParentTaskId: PropTypes.func.isRequired,
-  addNewClientData: PropTypes.func.isRequired,
-  findTaskAndModify: PropTypes.func.isRequired,
-  removeParentTaskId: PropTypes.func.isRequired,
+  fields: PropTypes.array.isRequired,
   addTechnologies: PropTypes.func.isRequired,
 };
 

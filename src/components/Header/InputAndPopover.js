@@ -10,13 +10,12 @@ class InputAndPopover extends React.Component {
   constructor(props) {
     super(props);
     this.CONSTANTS = {
-      MINUTESINHOUR: 60,
-      STEPOFMINUTES: 15,
       TODECIMAL: 100,
+      STEPOFMINUTES: 15,
+      MINUTESINHOUR: 60,
     };
 
     const value = this.formatTime(props.input.value);
-
 
     this.state = {
       value,
@@ -55,6 +54,7 @@ class InputAndPopover extends React.Component {
       tempDigit = digit.toString();
     }
 
+    // TempDigit does not include any letters
     if (tempDigit && tempDigit.match(/\d+/) && !tempDigit.match(/[a-zA-z]/)) {
       if (tempDigit.match(/\d+.\d+/)) {
         const indexOfHours = 0;
@@ -90,6 +90,7 @@ class InputAndPopover extends React.Component {
       };
     }
 
+    // TempDigit include letters
     hours = tempDigit.match(/\d+(\s+)?h/);
     minutes = tempDigit.match(/\d+(\s+)?m/);
     hours = hours && hours[0] ? parseInt(hours[0], 10) : 0;
@@ -263,7 +264,7 @@ class InputAndPopover extends React.Component {
                       className={styles.input_group_plus}
                       onClick={this.onChangeHoursAndMinutes}
                     >
-                    +
+                      +
                     </Button>
                   </td>
                   <td>&nbsp;</td>
