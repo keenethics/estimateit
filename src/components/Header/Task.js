@@ -18,7 +18,7 @@ export default class Task extends React.Component {
 
     return (
       <FormGroup>
-        {fields.map((task, index) =>
+        {fields.map((task, index) => (
           <FormGroup className={styles.subtasks}>
             <Field
               type="checkbox"
@@ -39,9 +39,9 @@ export default class Task extends React.Component {
             <Field
               type="text"
               addon={'min'}
-              validate={[requiredNumber, mixShouldBeLessThenMax(`${task}.maxTime`)]}
-              id={`${task}.minTime`}
-              name={`${task}.minTime`}
+              validate={[requiredNumber, mixShouldBeLessThenMax(`${task}.maximumHours`)]}
+              id={`${task}.minimumHours`}
+              name={`${task}.minimumHours`}
               component={InputAndPopover}
               buttonsNames={{
                 plusHour: 'plusMinHour',
@@ -55,9 +55,8 @@ export default class Task extends React.Component {
             <Field
               type="text"
               addon={'max'}
-
-              id={`${task}.maxTime`}
-              name={`${task}.maxTime`}
+              id={`${task}.maximumHours`}
+              name={`${task}.maximumHours`}
               component={InputAndPopover}
               validate={[requiredNumber]}
               buttonsNames={{
@@ -93,7 +92,7 @@ export default class Task extends React.Component {
               />
             </div>
           </FormGroup>
-        )}
+        ))}
         { level === 0 &&
           <Button
             color="danger"

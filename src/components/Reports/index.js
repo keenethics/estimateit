@@ -53,11 +53,11 @@ class Reports extends Component {
   }
 
   saveAsUrl(values) {
-    const { mainState: { estimateOptions, devHours }, headerState: { tasks }, mutate } = this.props;
+    const { mainState: { estimateOptions, devHours }, mutate } = this.props;
     delete values['emails'];
 
     mutate({
-      variables: { input: { ...values, estimateOptions, tasks, devHours } },
+      variables: { input: { ...values, estimateOptions, devHours } },
     }).then(({ data: { estimateCreate: { url } } }) => {
       this.notificationSystem.addNotification({
         title: 'Success',
