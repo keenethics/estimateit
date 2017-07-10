@@ -229,6 +229,7 @@ class InputAndPopover extends React.Component {
       name,
       addon,
       input,
+      disabled,
       buttonsNames,
       hoursInputName,
       minutesInputName,
@@ -237,14 +238,16 @@ class InputAndPopover extends React.Component {
     // remove from id all characters like .,],[, because it is invalid for querySelector
     // which using inside reactstrap(popover)
     const newId = id.replace(/\.|_|\[|\]/g, '');
-    const { isPopoverOpen } = this.state;
+    let { isPopoverOpen } = this.state;
     const { value: { hours, minutes, formattedValue } } = this.state;
+    isPopoverOpen = !disabled && isPopoverOpen;
 
     return (
       <InputGroup id={newId} className={styles.input_group}>
         <Input
           {...input}
           name={name}
+          disabled={disabled}
           placeholder="0 h 0 m"
           value={formattedValue}
           onBlur={this.handleOnBlur}
@@ -355,6 +358,7 @@ InputAndPopover.defaultProps = {
 };
 
 InputAndPopover.propTypes = {
+  disabled: PropTypes.bool.isRequired,
   meta: PropTypes.object.isRequired,
   input: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
