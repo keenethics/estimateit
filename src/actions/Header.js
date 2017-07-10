@@ -1,3 +1,5 @@
+import { formValueSelector } from 'redux-form';
+
 import * as types from '../constants/actionTypes';
 
 const applyAction = (dispatch, getState) => {
@@ -53,99 +55,63 @@ const updateParentTaskHours = (dispatch, getState, parentId) => {
   console.log(calculationSumSubTasks(parent.tasks));
 };
 
-export function addNewTask(task) {
+export function dispatchChange({ form, field, payload }) {
   return (dispatch, getState) => {
+    const selector = formValueSelector(form);
+    const oldValue = selector(getState(), field) || 0;
+    const changeType = field.match(/minimumHours$|maximumHours$/)[0];
+    const difference = payload - oldValue;
+
     dispatch({
-      type: types.ADD_NEW_TASK,
-      payload: {
-        id: task.id,
-        taskName: task.taskName,
-        isChecked: task.isChecked,
-        minimumHours: task.minimumHours,
-        maximumHours: task.maximumHours,
+      type: '@@redux-form/CHANGE',
+      meta: {
+        form,
+        field,
+        touch: true,
+        persistentSubmitErrors: false,
       },
+      payload,
     });
+    console.log(field);
 
-    applyAction(dispatch, getState);
-  };
-}
 
-export function addNewSubTask(parent, subtask) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: types.ADD_NEW_SUBTASK,
-      payload: {
-        parent,
-        id: subtask.id,
-        taskName: subtask.taskName,
-        isChecked: subtask.isChecked,
-        minimumHours: subtask.minimumHours,
-        maximumHours: subtask.maximumHours,
-      },
-    });
-    updateParentTaskHours(dispatch, getState, parent);
-    applyAction(dispatch, getState);
-  };
-}
+    console.log(difference);
+    console.log(payload);
+    console.log(oldValue);
+    console.log('field = ', field);
 
-export function removeTask(id) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: types.REMOVE_TASK,
-      payload: {
-        id,
-      },
-    });
+    let address = field.replace(/\.minimumHours$|\.maximumHours$/, '')
+      .replace(/.?tasks\[\d+\]$/, '');
 
-    applyAction(dispatch, getState);
-  };
-}
 
-export function findTaskAndModify(id, name, value) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: types.MODIFY_TASK,
-      payload: {
-        id,
-        name,
-        value,
-      },
-    });
+    console.log(address);
 
-    applyAction(dispatch, getState);
-  };
-}
+    while (address) {
 
-export function addNewClientData(name, value) {
-  return {
-    type: types.ADD_HEADER_INFO_DATA,
-    payload: {
-      name,
-      value,
-    },
-  };
-}
+      console.log('in the while = ', address);
 
-export function addTechnologies(value) {
-  return {
-    type: types.ADD_HEADER_INFO_TECHNOLOGIES,
-    payload: {
-      value,
-    },
-  };
-}
+      const element = selector(getState(), address);
 
-export function setParentTaskId(id) {
-  return {
-    type: types.SET_PARENT_TASK_ID,
-    payload: {
-      id,
-    },
-  };
-}
+      console.log('element = ', element);
 
-export function removeParentTaskId() {
-  return {
-    type: types.REMOVE_PARENT_TASK_ID,
+      const newValue = element.tasks.length === 1
+        ? payload
+        : element[changeType] + difference;
+
+      console.log('newValue = ', newValue);
+
+      dispatch({
+        type: '@@redux-form/CHANGE',
+        meta: {
+          form,
+          touch: true,
+          persistentSubmitErrors: false,
+          field: `${address}.${changeType}`,
+        },
+        payload: newValue,
+      });
+
+      address = address.replace(/\.?tasks\[\d+\]$/, '');
+    }
   };
 }

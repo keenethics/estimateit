@@ -9,9 +9,11 @@ import {
   PopoverContent,
   InputGroupAddon,
 } from 'reactstrap';
-
+import * as actionsHeader from '../../actions/Header';
 import styles from './styles.scss';
+import { connect } from 'react-redux';
 import { ValidationState } from '../libs/helpers';
+import { bindActionCreators } from 'redux';
 
 class InputAndPopover extends React.Component {
   constructor(props) {
@@ -201,25 +203,11 @@ class InputAndPopover extends React.Component {
 
   dispatchonChange(payload) {
     const {
-      meta: {
-        form,
-        dispatch,
-      },
-      input: {
-        name: field,
-      },
+      meta: { form },
+      input: { name: field },
     } = this.props;
 
-    dispatch({
-      type: '@@redux-form/CHANGE',
-      meta: {
-        form,
-        field,
-        touch: true,
-        persistentSubmitErrors: false,
-      },
-      payload,
-    });
+    this.props.dispatchChange({ form, field, payload });
   }
 
   render() {
@@ -358,6 +346,7 @@ InputAndPopover.defaultProps = {
 };
 
 InputAndPopover.propTypes = {
+  dispatchChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   meta: PropTypes.object.isRequired,
   input: PropTypes.object.isRequired,
@@ -369,4 +358,15 @@ InputAndPopover.propTypes = {
   minutesInputName: PropTypes.string.isRequired,
 };
 
-export default InputAndPopover;
+function mapStateToProps(state) {
+  return { };
+}
+
+function mapDispatchToProps(dispatch) {
+  return { ...bindActionCreators(actionsHeader, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputAndPopover);
+
+
+// export default InputAndPopover;
