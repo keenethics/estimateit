@@ -7,50 +7,22 @@ import {
   CardTitle,
 } from 'reactstrap';
 import { Field, FieldArray } from 'redux-form';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import 'react-select/dist/react-select.css';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import datepicker from 'react-datepicker/dist/react-datepicker.css';
-import 'react-select/dist/react-select.css';
 
 import Task from './Task';
 import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
+import technologiesList from '../../constants/technoligies';
 import { renderField, renderDateField } from '../libs/helpers';
-import * as actionsHeader from '../../actions/Header';
 import { required, currency, requiredArray } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      newTask: '',
-    };
-
-    this.renderTasks = this.renderTasks.bind(this);
     this.renderHeader = this.renderHeader.bind(this);
-  }
-
-  renderTasks(tasks = [], iterator) {
-    const {
-      dispatchToggle,
-      dispatchChange,
-      dispatchRemove,
-      dispatchAddSubTask
-    } = this.props;
-
-    return (
-      <FieldArray
-        level={0}
-        name="tasks"
-        component={Task}
-        dispatchToggle={dispatchToggle}
-        dispatchRemove={dispatchRemove}
-        dispatchChange={dispatchChange}
-        dispatchAddSubTask={dispatchAddSubTask}
-      />
-    );
   }
 
   renderHeader() {
@@ -101,45 +73,6 @@ class Header extends Component {
   }
 
   render() {
-    const { tasks } = this.props;
-
-    const technologiesList = [
-      'Angular.js',
-      'Aurelia',
-      'Backbone.js',
-      'Bootstrap',
-      'Ember.js',
-      'Express',
-      'Ionic',
-      'LoDash',
-      'Firebase',
-      'Hapi',
-      'Meteor.js',
-      'Mocha',
-      'MongoDB',
-      'MEAN',
-      'MERN',
-      'MobX',
-      'Node.js',
-      'NodeBots',
-      'Phonegap',
-      'Polymer',
-      'PWA',
-      'React.js',
-      'Redux',
-      'RxJS',
-      'Sinon',
-      'Socket.io',
-      'Sails',
-      'Underscore.js',
-      'SQL',
-      'GraphQL',
-      'Unit Testing',
-      'Vue.js',
-      'd3',
-      'jQuery',
-    ];
-
     const options = technologiesList.map(element => ({
       value: element,
       label: element,
@@ -187,7 +120,11 @@ class Header extends Component {
             handler={this.props.addTechnologies}
           />
         </FormGroup>
-        {this.renderTasks(tasks)}
+        <FieldArray
+          level={0}
+          name="tasks"
+          component={Task}
+        />
         <FormGroup className={styles.right__group}>
           <Field
             name="comments"
@@ -205,21 +142,7 @@ class Header extends Component {
 Header.propTypes = {
   tasks: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
-  dispatchToggle: PropTypes.func.isRequired,
-  dispatchChange: PropTypes.func.isRequired,
-  dispatchRemove: PropTypes.func.isRequired,
   addTechnologies: PropTypes.func.isRequired,
-  dispatchAddSubTask: PropTypes.func.isRequired,
 };
 
-function mapStateToProps(state) {
-  return { ...state.Header };
-}
-
-function mapDispatchToProps(dispatch) {
-  return { ...bindActionCreators(actionsHeader, dispatch) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles, datepicker)(Header),
-);
+export default withStyles(styles, datepicker)(Header);

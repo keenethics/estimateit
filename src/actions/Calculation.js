@@ -1,7 +1,5 @@
-import axios from 'axios';
 import {
-  CAlCULATE__HOURS,
-  CAlCULATE_TOTAL_HOURS
+  RECALCULATION,
 } from '../constants/actionTypes';
 
 const nAry = (base = 2) => (length = 0) => {
@@ -119,50 +117,79 @@ const nAry = (base = 2) => (length = 0) => {
   };
 };
 
+const calculateHourss = (tasks) => {
+  if (tasks.length < 2) {
+    const {
+      minimumHours = 0,
+      maximumHours = 0,
+    } = tasks[0];
 
-export function calculateHours(tasks) {
-
-  let arrayOfSubtasksAndTasks = [];
-  const getAllSubtasksFrom = (arrayOfTasks) => {
-    arrayOfTasks.forEach((task) => {
-      if (task.tasks && task.tasks.length > 0) {
-        arrayOfSubtasksAndTasks = arrayOfSubtasksAndTasks.concat(task.tasks);
-        getAllSubtasksFrom(task.tasks);
-      }
-    });
+    return [minimumHours, maximumHours];
   }
-  getAllSubtasksFrom(tasks);
-
-  tasks = tasks.concat(arrayOfSubtasksAndTasks);
-  tasks = tasks.filter(task => task.isChecked);
 
   const allComputations = nAry(2)(tasks.length).all();
 
-  const developmentTime = allComputations.map((computation) => {
+  return allComputations.map((computation) => {
     if (!computation.length) return 0;
 
-    const sumOfComputation = computation.reduce((acumulate, item, index) => {
+    return computation.reduce((acumulate, item, index) => {
+      let value;
       let minOrMax;
       let result = acumulate;
 
       if (index === 1) {
         minOrMax = acumulate ? 'maximumHours' : 'minimumHours';
-        result = +tasks[0][minOrMax];
+        value = tasks[0][minOrMax] || 0;
+        result = parseInt(value, 10);
       }
 
       minOrMax = item ? 'maximumHours' : 'minimumHours';
-
-      return result + +tasks[index][minOrMax];
+      value = tasks[index][minOrMax] || 0;
+      return result + parseInt(value, 10);
     });
+  }).sort((a, b) => a - b);
+};
 
-    return sumOfComputation;
-  });
-  console.log(developmentTime);
 
-  return {
-    type: CAlCULATE__HOURS,
-    payload: {
-      value: developmentTime,
-    },
+export const calculateHours = form =>
+  (dispatch, getState) => {
+    const { values: { tasks, estimateOptions } } = getState().form[form];
+    const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
+
+    const time = calculateHourss(checkedTasks);
+    const percent = time.map((item, i) =>
+      Math.round(100 * i / (time.length - 1)),
+    );
+
+    const {
+      pm,
+      qa,
+      risks,
+      bugFixes,
+      completing,
+    } = estimateOptions;
+
+    let highestIndex = percent.findIndex(item => item > completing);
+
+    if (highestIndex === -1) {
+      highestIndex = percent.length - 1;
+    }
+    const developmentHours = time[highestIndex];
+    const additionalHours = developmentHours * (pm + qa + bugFixes + risks) / 100;
+    const totalHours = Math.round(developmentHours + additionalHours);
+
+    const devHours = {
+      minHours: time[0],
+      maxHours: time[time.length - 1],
+    };
+
+    dispatch({
+      type: RECALCULATION,
+      payload: {
+        time,
+        percent,
+        devHours,
+        totalHours,
+      },
+    });
   };
-}

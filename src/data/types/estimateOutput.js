@@ -61,18 +61,6 @@ const EstimateOptionsOutputType = new ObjectType({
   },
 });
 
-const DevHoursOutputType = new ObjectType({
-  name: 'DevHoursOutputType',
-  fields: {
-    minHours: {
-      type: StringType,
-    },
-    maxHours: {
-      type: StringType,
-    },
-  },
-});
-
 //
 // EstimateOutputType
 //
@@ -118,9 +106,6 @@ const EstimateOutputType = new ObjectType({
     },
     estimateOptions: {
       type: EstimateOptionsOutputType,
-    },
-    devHours: {
-      type: DevHoursOutputType,
     },
     tasks: {
       type: new ListType(TaskOutputType),

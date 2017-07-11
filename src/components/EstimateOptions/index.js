@@ -10,29 +10,9 @@ import Slider from './slider';
 import styles from './styles.scss';
 
 class EstimateOptions extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onFieldChange = this.onFieldChange.bind(this);
-  }
-
-  onFieldChange({ target: { name, value } }) {
-    const { estimateOptions, addEstimateOptions } = this.props;
-    const newestimateOptions = { ...estimateOptions, [name]: parseInt(value, 10) };
-
-    addEstimateOptions(newestimateOptions);
-  }
-
   render() {
     const {
       totalHours,
-      estimateOptions: {
-        qa,
-        pm,
-        risks,
-        bugFixes,
-        completing,
-      },
     } = this.props;
 
     return (
@@ -42,48 +22,43 @@ class EstimateOptions extends Component {
           <Field
             min="0"
             step="1"
-            label="Rate USD"
             type="text"
+            label="Rate USD"
             name="moneyRate"
             validate={[required, currency]}
             component={renderOptionsField}
             className={styles.range__item}
           />
         </InputGroup>
-        <Slider
-          name="qa"
+        <Field
+          name="estimateOptions.qa"
           title="QA"
-          value={qa}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
         />
-        <Slider
-          name="pm"
+        <Field
+          name="estimateOptions.pm"
           title="PM"
-          value={pm}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
         />
-        <Slider
-          name="bugFixes"
+        <Field
+          name="estimateOptions.bugFixes"
           title="Bug Fixes"
-          value={bugFixes}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
         />
-        <Slider
-          name="risks"
+        <Field
+          name="estimateOptions.risks"
           title="Risks"
-          value={risks}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
         />
-        <Slider
-          name="completing"
+        <Field
+          name="estimateOptions.completing"
           title="Probability"
-          value={completing}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
         />
       </div>
     );
@@ -94,9 +69,7 @@ class EstimateOptions extends Component {
 EstimateOptions.propTypes = {
   rate: PropTypes.number.isRequired,
   totalHours: PropTypes.number.isRequired,
-  onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
-  addEstimateOptions: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EstimateOptions);

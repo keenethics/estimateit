@@ -11,9 +11,11 @@ import styles from './styles.scss';
 import InputAndPopover from './InputAndPopover';
 import { renderField } from '../libs/helpers';
 import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import * as R from 'redux-form';
-console.log(R);
+import * as actionsTasks from '../../actions/Tasks';
+
 class Task extends React.Component {
   constructor(props) {
     super(props);
@@ -162,4 +164,12 @@ Task.propTypes = {
   dispatchAddSubTask: PropTypes.func,
 };
 
-export default Task;
+function mapStateToProps() {
+  return { };
+}
+
+function mapDispatchToProps(dispatch) {
+  return { ...bindActionCreators(actionsTasks, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Task);

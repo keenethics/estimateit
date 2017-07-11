@@ -16,6 +16,7 @@ export function apply(data) {
   };
 }
 
+
 export function addEstimateOptions(value) {
   return {
     type: types.ADD_ESTIMATE_OPTIONS,

@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
+
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -11,61 +11,29 @@ import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import Calculation from '../Calculation';
 import FinalEstimate from '../FinalEstimate';
-import * as actionsMain from '../../actions/Main';
+
+import { ESTIMATE_FORM } from '../../constants';
 
 class Main extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      totalHours: 0,
-    };
-
-    this.labels = [];
-    this.transformToVector = this.transformToVector.bind(this);
-  }
-
-  componentDidMount() {
-    this.transformToVector();
-  }
-
-  componentDidUpdate() {
-    this.transformToVector();
-  }
-
-  transformToVector() {
-    const { time: developmentTime } = this.props.headerState.developmentTime;
-    this.labels = developmentTime.map(item => Math.round(item));
-  }
-
-
   render() {
     const {
-      mainState: {
-        contacts,
-        estimateOptions,
-      },
-      headerState: {
-        developmentTime: {
-          percent,
-          totalHours,
-          devHours: {
-            minHours,
-            maxHours,
-          },
-        }
-      },
-      addClientData,
-      changeMoneyRate,
-      addEstimateOptions,
+      time,
+      tasks,
+      percent,
       moneyRate,
+      totalHours,
+      estimateOptions,
+      devHours: {
+        minHours,
+        maxHours,
+      },
     } = this.props;
 
-    this.transformToVector();
     return (
       <Row className={styles.main}>
         <Col xs="12">
           {
-            // <LineChart labels={totalHours} data={percent} />
+            <LineChart labels={time} data={percent} />
           }
         </Col>
         <Col xs="12">
@@ -88,31 +56,26 @@ class Main extends Component {
         </Col>
         <Col xs="12">
           <Calculation
-            rate={moneyRate}
-            onRateChange={changeMoneyRate}
+            totalHours={totalHours}
             estimateOptions={estimateOptions}
-            totalHours={totalHours}
-            addEstimateOptions={addEstimateOptions}
           />
         </Col>
         <Col xs="12">
-          <FinalEstimate
-            mainState={this.props.mainState}
-            totalHours={totalHours}
-            headerState={this.props.headerState}
-          />
+        <FinalEstimate
+          moneyRate={moneyRate}
+          totalHours={totalHours}
+        />
         </Col>
         <Col xs="12">
-          <Contacts
-            contacts={contacts}
-            addClientData={addClientData}
-          />
+          <Contacts />
         </Col>
         <Col xs="12">
+          {
           <Reports
-            headerState={this.props.headerState}
-            mainState={this.props.mainState}
+            tasks={tasks}
+            estimateOptions={estimateOptions}
           />
+      }
         </Col>
       </Row>
     );
@@ -120,24 +83,26 @@ class Main extends Component {
 }
 
 Main.propTypes = {
-  mainState: PropTypes.object.isRequired,
-  headerState: PropTypes.object.isRequired,
-  addClientData: PropTypes.func.isRequired,
-  changeMoneyRate: PropTypes.func.isRequired,
-  addEstimateOptions: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {
+  const { calculation: {
+    time,
+    percent,
+    devHours,
+    totalHours,
+  } } = state;
+  const { values: { estimateOptions, moneyRate, tasks } } = state.form[ESTIMATE_FORM];
+
   return {
-    mainState: state.Main,
-    headerState: state.Header,
-    moneyRate: state.form.contact.values.moneyRate,
+    time,
+    tasks,
+    percent,
+    devHours,
+    moneyRate,
+    totalHours,
+    estimateOptions,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return { ...bindActionCreators(actionsMain, dispatch) }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Main));
+export default connect(mapStateToProps)(withStyles(styles)(Main));

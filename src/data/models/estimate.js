@@ -40,9 +40,6 @@ const EstimateSchema = mongoose.Schema({
   estimateOptions: {
     type: Object,
   },
-  devHours: {
-    type: Object,
-  },
   tasks: {
     type: Array,
   },

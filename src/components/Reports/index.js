@@ -31,14 +31,13 @@ class Reports extends Component {
       axios: [],
       dropdownOpen: false,
       csv: '',
-      value: '',
     };
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.saveAsUrl = this.saveAsUrl.bind(this);
-    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
-    this.downloadPdf = this.downloadPdf.bind(this);
-    this.saveAsCSV = this.saveAsCSV.bind(this);
+
     this.toggle = this.toggle.bind(this);
+    this.saveAsCSV = this.saveAsCSV.bind(this);
+    this.saveAsUrl = this.saveAsUrl.bind(this);
+    this.downloadPdf = this.downloadPdf.bind(this);
+    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
 
   copyUrlToClipboard(url) {
@@ -53,11 +52,11 @@ class Reports extends Component {
   }
 
   saveAsUrl(values) {
-    const { mainState: { estimateOptions, devHours }, mutate } = this.props;
+    const { mutate } = this.props;
     delete values['emails'];
 
     mutate({
-      variables: { input: { ...values, estimateOptions, devHours } },
+      variables: { input: { ...values } },
     }).then(({ data: { estimateCreate: { url } } }) => {
       this.notificationSystem.addNotification({
         title: 'Success',
@@ -168,8 +167,8 @@ class Reports extends Component {
 
   saveAsCSV() {
     const {
-      headerState: { tasks },
-      mainState: { estimateOptions },
+      tasks,
+      estimateOptions,
     } = this.props;
 
     this.setState({
@@ -181,10 +180,6 @@ class Reports extends Component {
       a.href = `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(this.state.csv)}`;
       a.click();
     });
-  }
-
-  handleOnChange(value) {
-    this.setState({ value });
   }
 
   render() {
@@ -200,7 +195,6 @@ class Reports extends Component {
             value={this.state.value}
             validate={[emailsArray]}
             className={styles.emails}
-            onChange={this.handleOnChange}
           />
           <ButtonDropdown
             id="screenShot"
@@ -257,8 +251,6 @@ Reports.contextTypes = {
 
 Reports.propTypes = {
   mutate: PropTypes.func.isRequired,
-  mainState: PropTypes.object.isRequired,
-  headerState: PropTypes.object.isRequired,
 };
 
 export default compose(

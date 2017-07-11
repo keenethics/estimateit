@@ -1,12 +1,12 @@
 import React from 'react';
-
-// import Estimate from '../../data/models/estimate';
-// import Estimate from '../../data/models';
-// import styles from './styles.scss';
+import { initialize } from 'redux-form';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
 import { apply } from '../../actions/Main';
+import { ESTIMATE_FORM } from '../../constants';
+
+initialize
 
 export default {
 
@@ -35,10 +35,6 @@ export default {
               bugFixes,
               completing
             },
-            devHours{
-              minHours,
-              maxHours
-            },
             tasks{
               id,
               taskName,
@@ -66,13 +62,14 @@ export default {
       });
 
       const { data: { estimate } } = await resp.json();
-
+      console.log(estimate);
       if (estimate) {
-        store.dispatch(apply(estimate));
+        // store.dispatch(apply(estimate));
+        // store.dispatch(initialize(ESTIMATE_FORM, estimate))
         store.dispatch({
           type: '@@redux-form/INITIALIZE',
           meta: {
-            form: 'contact',
+            form: 'ESTIMATE_FORM',
             keepDirty: false,
           },
           payload: estimate,
