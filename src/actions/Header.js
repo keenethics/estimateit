@@ -55,6 +55,98 @@ const updateParentTaskHours = (dispatch, getState, parentId) => {
   console.log(calculationSumSubTasks(parent.tasks));
 };
 
+
+// eta
+// :
+// Object
+// field
+// :
+// "tasks[0].tasks"
+// form
+// :
+// "contact"
+// index
+// :
+// 0
+// __proto__
+// :
+// Object
+// type
+// :
+// "@@redux-form/ARRAY_REMOVE"
+
+export function dispatchRemove({ form, field, index }) {
+  return (dispatch, getState) => {
+    console.log(form);
+    console.log(field);
+    console.log(index);
+
+    const selector = formValueSelector(form);
+    const removedValue = selector(getState(), field);
+    const {
+      maximumHours: removedMaxHours = 0,
+      minimumHours: removedMinHours = 0,
+    } = removedValue;
+
+
+    console.log('removedValue');
+    console.log(removedMinHours);
+    console.log(removedMaxHours);
+    console.log(field.replace(/\[\d+\]$/, ''));
+
+    dispatch({
+      type: '@@redux-form/ARRAY_REMOVE',
+      meta: {
+        form,
+        field: field.replace(/\[\d+\]$/, ''),
+        index,
+      },
+    });
+    console.log(field);
+    let address = field.replace(/.?tasks\[\d+\]$/, '');
+
+    while (address) {
+      console.log(address);
+
+      const element = selector(getState(), address);
+      const { minimumHours, maximumHours } = element;
+
+      console.log('in while');
+      console.log(element);
+
+      const minPayload = minimumHours - removedMinHours;
+      const maxPayload = maximumHours - removedMaxHours;
+
+      console.log('minPayload = ', minPayload);
+      console.log('maxPayload = ', maxPayload);
+
+      dispatch({
+        type: '@@redux-form/CHANGE',
+        meta: {
+          form,
+          touch: true,
+          persistentSubmitErrors: false,
+          field: `${address}.minimumHours`,
+        },
+        payload: minPayload
+      });
+
+      dispatch({
+        type: '@@redux-form/CHANGE',
+        meta: {
+          form,
+          touch: true,
+          persistentSubmitErrors: false,
+          field: `${address}.maximumHours`,
+        },
+        payload: maxPayload
+      });
+
+      address = address.replace(/\.?tasks\[\d+\]$/, '');
+    }
+  };
+}
+
 export function dispatchChange({ form, field, payload }) {
   return (dispatch, getState) => {
     const selector = formValueSelector(form);
@@ -72,33 +164,15 @@ export function dispatchChange({ form, field, payload }) {
       },
       payload,
     });
-    console.log(field);
-
-
-    console.log(difference);
-    console.log(payload);
-    console.log(oldValue);
-    console.log('field = ', field);
 
     let address = field.replace(/\.minimumHours$|\.maximumHours$/, '')
       .replace(/.?tasks\[\d+\]$/, '');
 
-
-    console.log(address);
-
     while (address) {
-
-      console.log('in the while = ', address);
-
       const element = selector(getState(), address);
-
-      console.log('element = ', element);
-
       const newValue = element.tasks.length === 1
         ? payload
         : element[changeType] + difference;
-
-      console.log('newValue = ', newValue);
 
       dispatch({
         type: '@@redux-form/CHANGE',

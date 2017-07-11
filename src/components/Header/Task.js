@@ -13,11 +13,21 @@ import InputAndPopover from './InputAndPopover';
 import { renderField } from '../libs/helpers';
 import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
 
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as actionsHeader from '../../actions/Header';
 
 class Task extends React.Component {
 
   render() {
-    const { fields, level, meta: { form } } = this.props;
+    const {
+      level,
+      fields,
+      meta: { form },
+      dispatchChange,
+      dispatchRemove,
+    } = this.props;
+    console.log(this.props);
     const { store: { dispatch, getState } } = this.context;
 
     const selector = formValueSelector(form)
@@ -50,9 +60,10 @@ class Task extends React.Component {
                 type="text"
                 addon={'min'}
                 disabled={disabled}
+                component={InputAndPopover}
                 id={`${task}.minimumHours`}
                 name={`${task}.minimumHours`}
-                component={InputAndPopover}
+                dispatchChange={dispatchChange}
                 buttonsNames={{
                   plusHour: 'plusMinHour',
                   minusHour: 'minusMinHour',
@@ -67,10 +78,11 @@ class Task extends React.Component {
                 type="text"
                 addon={'max'}
                 disabled={disabled}
-                id={`${task}.maximumHours`}
-                name={`${task}.maximumHours`}
                 component={InputAndPopover}
                 validate={[requiredNumber]}
+                id={`${task}.maximumHours`}
+                name={`${task}.maximumHours`}
+                dispatchChange={dispatchChange}
                 buttonsNames={{
                   plusHour: 'plusMaxHour',
                   minusHour: 'minusMaxHour',
@@ -84,23 +96,25 @@ class Task extends React.Component {
               <Button
                 color="danger"
                 className={styles.subtasks__item}
-                onClick={() => dispatch(arrayPush('contact', `${task}.tasks`, {}))}
+                onClick={() => dispatch(arrayPush(form, `${task}.tasks`, {}))}
               >
                 Add subtask
               </Button>
               <Button
                 color="danger"
                 className={styles.subtasks__item}
-                onClick={() => fields.remove(index)}
+                onClick={() => dispatchRemove({ index, form, field: task })}
               >
                 Delete
               </Button>
 
               <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
                 <FieldArray
-                  name={`${task}.tasks`}
                   level={level+1}
                   component={Task}
+                  name={`${task}.tasks`}
+                  dispatchRemove={dispatchRemove}
+                  dispatchChange={dispatchChange}
                 />
               </div>
             </FormGroup>
@@ -126,6 +140,8 @@ Task.contextTypes = {
 Task.propTypes = {
   fields: PropTypes.array,
   level: PropTypes.number,
+  dispatchChange: PropTypes.func,
+  dispatchRemove: PropTypes.func,
 };
 
 export default Task;

@@ -33,11 +33,15 @@ class Header extends Component {
   }
 
   renderTasks(tasks = [], iterator) {
+    const { dispatchChange, dispatchRemove } = this.props;
+
     return (
       <FieldArray
         level={0}
         name="tasks"
         component={Task}
+        dispatchRemove={dispatchRemove}
+        dispatchChange={dispatchChange}
       />
     );
   }
@@ -91,6 +95,7 @@ class Header extends Component {
 
   render() {
     const { tasks } = this.props;
+
     const technologiesList = [
       'Angular.js',
       'Aurelia',
