@@ -26,17 +26,18 @@ class Task extends React.Component {
       meta: { form },
       dispatchChange,
       dispatchRemove,
+      dispatchAddSubTask,
     } = this.props;
-    console.log(this.props);
-    const { store: { dispatch, getState } } = this.context;
+
+    const { store: { getState } } = this.context;
 
     const selector = formValueSelector(form)
-
+    console.log(this.props);
     return (
       <FormGroup>
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
-          const disabled = !!taskObj.tasks;
+          const disabled = taskObj.tasks && taskObj.tasks.length;
 
           return (
             <FormGroup className={styles.subtasks}>
@@ -93,13 +94,16 @@ class Task extends React.Component {
                 minutesInputName={'maxMinutesInput'}
               />
 
-              <Button
-                color="danger"
-                className={styles.subtasks__item}
-                onClick={() => dispatch(arrayPush(form, `${task}.tasks`, {}))}
-              >
-                Add subtask
-              </Button>
+              {
+                level < 2 &&
+                <Button
+                    color="danger"
+                    className={styles.subtasks__item}
+                    onClick={() => dispatchAddSubTask({ form, field: `${task}.tasks` })}
+                  >
+                    Add subtask
+                </Button>
+              }
               <Button
                 color="danger"
                 className={styles.subtasks__item}
@@ -115,6 +119,7 @@ class Task extends React.Component {
                   name={`${task}.tasks`}
                   dispatchRemove={dispatchRemove}
                   dispatchChange={dispatchChange}
+                  dispatchAddSubTask={dispatchAddSubTask}
                 />
               </div>
             </FormGroup>
@@ -142,6 +147,7 @@ Task.propTypes = {
   level: PropTypes.number,
   dispatchChange: PropTypes.func,
   dispatchRemove: PropTypes.func,
+  dispatchAddSubTask: PropTypes.func,
 };
 
 export default Task;

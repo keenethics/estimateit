@@ -2,7 +2,7 @@ export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
 export const requiredNumber = value =>
-  (typeof value === 'number' && value !== 0 ? undefined : 'Required');
+  (typeof value === 'number' ? undefined : 'Required');
 
 export const mixShouldBeLessThenMax = maxTimeId =>
   (value, allValues) => {

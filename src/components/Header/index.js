@@ -33,7 +33,7 @@ class Header extends Component {
   }
 
   renderTasks(tasks = [], iterator) {
-    const { dispatchChange, dispatchRemove } = this.props;
+    const { dispatchChange, dispatchRemove, dispatchAddSubTask } = this.props;
 
     return (
       <FieldArray
@@ -42,6 +42,7 @@ class Header extends Component {
         component={Task}
         dispatchRemove={dispatchRemove}
         dispatchChange={dispatchChange}
+        dispatchAddSubTask={dispatchAddSubTask}
       />
     );
   }

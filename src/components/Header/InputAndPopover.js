@@ -13,7 +13,6 @@ import {
 import styles from './styles.scss';
 import { ValidationState } from '../libs/helpers';
 
-
 class InputAndPopover extends React.Component {
   constructor(props) {
     super(props);
@@ -221,7 +220,7 @@ class InputAndPopover extends React.Component {
       hoursInputName,
       minutesInputName,
     } = this.props;
-    console.log(this.props);
+
     // remove from id all characters like .,],[, because it is invalid for querySelector
     // which using inside reactstrap(popover)
     const newId = id.replace(/\.|_|\[|\]/g, '');
