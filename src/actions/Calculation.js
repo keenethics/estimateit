@@ -1,5 +1,6 @@
 import {
-  RECALCULATION,
+  CALCULATE_TOTAL_HOURS,
+  CALCULATE_GENERAL_HOURS,
 } from '../constants/actionTypes';
 
 const nAry = (base = 2) => (length = 0) => {
@@ -151,23 +152,20 @@ const calculateHourss = (tasks) => {
 };
 
 
-export const calculateHours = form =>
+export const calculateTotalHours = form =>
   (dispatch, getState) => {
-    const { values: { tasks, estimateOptions } } = getState().form[form];
-    const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
-
-    const time = calculateHourss(checkedTasks);
-    const percent = time.map((item, i) =>
-      Math.round(100 * i / (time.length - 1)),
-    );
-
-    const {
+    const state = getState();
+    const { calculation: {
+      time,
+      percent,
+    } } = state;
+    const { values: { estimateOptions: {
       pm,
       qa,
       risks,
       bugFixes,
       completing,
-    } = estimateOptions;
+    } } } = state.form[form];
 
     let highestIndex = percent.findIndex(item => item > completing);
 
@@ -178,18 +176,36 @@ export const calculateHours = form =>
     const additionalHours = developmentHours * (pm + qa + bugFixes + risks) / 100;
     const totalHours = Math.round(developmentHours + additionalHours);
 
+    dispatch({
+      type: CALCULATE_TOTAL_HOURS,
+      payload: {
+        totalHours,
+      },
+    });
+  };
+
+export const calculateHours = form =>
+  (dispatch, getState) => {
+    const { values: { tasks } } = getState().form[form];
+    const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
+
+    const time = calculateHourss(checkedTasks);
+    const percent = time.map((item, i) =>
+      Math.round(100 * i / (time.length - 1)),
+    );
+
     const devHours = {
       minHours: time[0],
       maxHours: time[time.length - 1],
     };
 
     dispatch({
-      type: RECALCULATION,
+      type: CALCULATE_GENERAL_HOURS,
       payload: {
         time,
         percent,
         devHours,
-        totalHours,
       },
     });
+    dispatch(calculateTotalHours(form));
   };

@@ -10,11 +10,20 @@ const Slider = ({
   title,
   totalHours,
   input: {
+    value,
     onChange,
-    value
   },
+  meta: {
+    form,
+  },
+  calculateTotalHours,
 }) => {
   const hours = Math.round(totalHours * value / 100);
+  const handleChange = ({ target }) => {
+    onChange(parseInt(target.value, 10));
+    calculateTotalHours(form);
+  };
+
   return (
     <InputGroup className={styles.range__item}>
       <InputGroupAddon>{title}</InputGroupAddon>
@@ -27,7 +36,7 @@ const Slider = ({
         type="range"
         value={value}
         className="radarChartPart"
-        onChange={({ target }) => onChange(parseInt(target.value, 10))}
+        onChange={e => handleChange(e)}
       />
       <InputGroupAddon>
         {value}%, {hours} h
@@ -42,6 +51,7 @@ Slider.propTypes = {
   input: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
+  calculateTotalHours: PropTypes.func.isRequired,
 };
 
 export default Slider;
