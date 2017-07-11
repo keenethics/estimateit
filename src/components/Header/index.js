@@ -33,13 +33,19 @@ class Header extends Component {
   }
 
   renderTasks(tasks = [], iterator) {
-    const { dispatchChange, dispatchRemove, dispatchAddSubTask } = this.props;
+    const {
+      dispatchToggle,
+      dispatchChange,
+      dispatchRemove,
+      dispatchAddSubTask
+    } = this.props;
 
     return (
       <FieldArray
         level={0}
         name="tasks"
         component={Task}
+        dispatchToggle={dispatchToggle}
         dispatchRemove={dispatchRemove}
         dispatchChange={dispatchChange}
         dispatchAddSubTask={dispatchAddSubTask}
@@ -199,7 +205,11 @@ class Header extends Component {
 Header.propTypes = {
   tasks: PropTypes.array.isRequired,
   fields: PropTypes.array.isRequired,
+  dispatchToggle: PropTypes.func.isRequired,
+  dispatchChange: PropTypes.func.isRequired,
+  dispatchRemove: PropTypes.func.isRequired,
   addTechnologies: PropTypes.func.isRequired,
+  dispatchAddSubTask: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

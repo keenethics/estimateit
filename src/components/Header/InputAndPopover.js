@@ -42,11 +42,6 @@ class InputAndPopover extends React.Component {
     this.setState({ value });
   }
 
-  toggle() {
-    const isPopoverOpen = !this.state.isPopoverOpen;
-    this.setState({ isPopoverOpen });
-  }
-
   handleOnChange({ target: { value } }) {
     this.setState({ value });
   }
@@ -189,6 +184,11 @@ class InputAndPopover extends React.Component {
     }
   }
 
+  toggle() {
+    const isPopoverOpen = !this.state.isPopoverOpen;
+    this.setState({ isPopoverOpen });
+  }
+
   handleOnBlur({ target: { value } }) {
     const string = this.formatTime(value);
     const payload =
@@ -202,10 +202,11 @@ class InputAndPopover extends React.Component {
   dispatchonChange(payload) {
     const {
       meta: { form },
+      dispatchChange,
       input: { name: field },
     } = this.props;
 
-    this.props.dispatchChange({ form, field, payload });
+    dispatchChange({ form, field, payload });
   }
 
   render() {

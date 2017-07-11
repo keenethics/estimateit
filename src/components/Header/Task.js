@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { FormGroup, Button } from 'reactstrap';
 import {
   Field,
-  arrayPush,
   FieldArray,
   formValueSelector,
 } from 'redux-form';
@@ -13,17 +12,28 @@ import InputAndPopover from './InputAndPopover';
 import { renderField } from '../libs/helpers';
 import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
 
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actionsHeader from '../../actions/Header';
-
+import * as R from 'redux-form';
+console.log(R);
 class Task extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleToggle = this.handleToggle.bind(this);
+  }
+
+  handleToggle(field, event) {
+    const { target: { checked: payload } } = event;
+    const { meta: { form }, dispatchToggle } = this.props;
+
+    dispatchToggle({ form, field, payload });
+  }
 
   render() {
     const {
       level,
       fields,
       meta: { form },
+      dispatchToggle,
       dispatchChange,
       dispatchRemove,
       dispatchAddSubTask,
@@ -32,9 +42,16 @@ class Task extends React.Component {
     const { store: { getState } } = this.context;
 
     const selector = formValueSelector(form)
-    console.log(this.props);
     return (
       <FormGroup>
+        { level === 0 &&
+          <Button
+            color="danger"
+            onClick={() => fields.unshift({ isChecked: true })}
+          >
+            Add task
+          </Button>
+        }
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
           const disabled = taskObj.tasks && taskObj.tasks.length;
@@ -43,10 +60,11 @@ class Task extends React.Component {
             <FormGroup className={styles.subtasks}>
               <Field
                 type="checkbox"
-                component="input"
+                component={renderField}
                 id={`${task}.isChecked`}
                 name={`${task}.isChecked`}
                 className={styles.subtasks__item}
+                onChange={e => this.handleToggle(task, e)}
               />
               <Field
                 type="text"
@@ -96,13 +114,13 @@ class Task extends React.Component {
 
               {
                 level < 2 &&
-                <Button
+                  <Button
                     color="danger"
                     className={styles.subtasks__item}
                     onClick={() => dispatchAddSubTask({ form, field: `${task}.tasks` })}
                   >
-                    Add subtask
-                </Button>
+                      Add subtask
+                  </Button>
               }
               <Button
                 color="danger"
@@ -117,6 +135,7 @@ class Task extends React.Component {
                   level={level+1}
                   component={Task}
                   name={`${task}.tasks`}
+                  dispatchToggle={dispatchToggle}
                   dispatchRemove={dispatchRemove}
                   dispatchChange={dispatchChange}
                   dispatchAddSubTask={dispatchAddSubTask}
@@ -125,14 +144,6 @@ class Task extends React.Component {
             </FormGroup>
           )
         })}
-        { level === 0 &&
-          <Button
-            color="danger"
-            onClick={() => fields.push({})}
-          >
-            Add task
-          </Button>
-        }
       </FormGroup>
     );
   }
@@ -147,6 +158,7 @@ Task.propTypes = {
   level: PropTypes.number,
   dispatchChange: PropTypes.func,
   dispatchRemove: PropTypes.func,
+  dispatchToggle: PropTypes.func,
   dispatchAddSubTask: PropTypes.func,
 };
 

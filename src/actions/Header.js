@@ -1,7 +1,7 @@
 import {
   change,
-  arrayPush,
   arrayRemove,
+  arrayUnshift,
   formValueSelector,
 } from 'redux-form';
 
@@ -61,40 +61,73 @@ const updateParentTaskHours = (dispatch, getState, parentId) => {
   console.log(calculationSumSubTasks(parent.tasks));
 };
 
-export const dispatchRemove = ({ form, field, index }) =>
+export const dispatchToggle = ({ form, field, payload }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
-    const removedValue = selector(getState(), field);
+    const removedTask = selector(getState(), field);
     const {
       maximumHours: removedMaxHours = 0,
       minimumHours: removedMinHours = 0,
-    } = removedValue;
-
-    dispatch(arrayRemove(form, field.replace(/\[\d+\]$/, ''), index));
+    } = removedTask;
 
     let address = field.replace(/.?tasks\[\d+\]$/, '');
 
     while (address) {
       const element = selector(getState(), address);
-      const { minimumHours, maximumHours } = element;
+
+      const { isChecked, minimumHours, maximumHours } = element;
+      const minPayload = minimumHours + (payload || -1) * removedMinHours;
+      const maxPayload = maximumHours + (payload || -1) * removedMaxHours;
+
+      dispatch(change(form, `${address}.minimumHours`, minPayload));
+      dispatch(change(form, `${address}.maximumHours`, maxPayload));
+
+      if (!isChecked) break;
+
+      address = address.replace(/\.?tasks\[\d+\]$/, '');
+    }
+  };
+
+
+export const dispatchRemove = ({ form, field, index }) =>
+  (dispatch, getState) => {
+    const selector = formValueSelector(form);
+    const removedTask = selector(getState(), field);
+    const {
+      maximumHours: removedMaxHours = 0,
+      minimumHours: removedMinHours = 0,
+      isChecked
+    } = removedTask;
+
+    dispatch(arrayRemove(form, field.replace(/\[\d+\]$/, ''), index));
+
+    if (!isChecked) return null;
+
+    let address = field.replace(/.?tasks\[\d+\]$/, '');
+
+    while (address) {
+      const element = selector(getState(), address);
+      const { isChecked,minimumHours, maximumHours } = element;
       const minPayload = minimumHours - removedMinHours;
       const maxPayload = maximumHours - removedMaxHours;
 
       dispatch(change(form, `${address}.minimumHours`, minPayload));
       dispatch(change(form, `${address}.maximumHours`, maxPayload));
 
+      if (!isChecked) break;
+
       address = address.replace(/\.?tasks\[\d+\]$/, '');
     }
   };
 
-export const dispatchChange = ({ form, field, payload: value }) =>
+export const dispatchChange = ({ form, field, payload }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const oldValue = selector(getState(), field) || 0;
     const changeType = field.match(/minimumHours$|maximumHours$/)[0];
-    const difference = value - oldValue;
+    const difference = payload - oldValue;
 
-    dispatch(change(form, field, value));
+    dispatch(change(form, field, payload));
 
     let address = field.replace(/\.minimumHours$|\.maximumHours$/, '')
       .replace(/.?tasks\[\d+\]$/, '');
@@ -102,11 +135,11 @@ export const dispatchChange = ({ form, field, payload: value }) =>
     // change values of all parent tasks
     while (address) {
       const element = selector(getState(), address);
-      const newValue = element.tasks.length === 1
-        ? value
-        : element[changeType] + difference;
+      const newValue = element[changeType] + difference;
 
       dispatch(change(form, `${address}.${changeType}`, newValue));
+
+      if (!element.isChecked) break;
 
       address = address.replace(/\.?tasks\[\d+\]$/, '');
     }
@@ -131,5 +164,6 @@ export const dispatchAddSubTask = ({ form, field }) =>
         field: `${parentTask}.maximumHours`,
       }));
     }
-    dispatch(arrayPush(form, field, {}));
+
+    dispatch(arrayUnshift(form, field, { isChecked: true }));
   };

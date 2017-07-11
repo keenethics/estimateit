@@ -75,6 +75,8 @@
   flex-wrap: wrap;
   margin-bottom: 1rem !important;
   position: relative;
+
+
   &__item {
     @media screen and (max-width: 1000px) {
       margin-bottom: .5rem;
@@ -85,7 +87,7 @@
     }
     &:first-child {
       position: absolute;
-      top: 50%;
+      top: 15px !important;
       transform: translateY(-50%);
       margin-top: 0;
       margin-bottom: 0;
