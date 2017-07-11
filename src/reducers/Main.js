@@ -1,4 +1,5 @@
 import {
+  ADD_DASHBOARD_STATE,
   APPLY_STATE,
   CALC_DEV_HOURS,
   CHANGE_MONEY_RATE,
@@ -25,8 +26,11 @@ export function main(state = initialState.main, action) {
 
     case APPLY_STATE:
       const { main = {} } = action.data;
-      main.moneyRate = +main.moneyRate;
+      //main.moneyRate = +main.moneyRate;
       return { ...state, ...main };
+
+    case ADD_DASHBOARD_STATE:
+      return Object.assign({}, state, action.data);
 
     default:
       return state;

@@ -1,0 +1,30 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.singleEstimate {
+  flex: 0 0 300px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: column;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.25rem;
+  padding-bottom: 5%;
+  padding-top: 5%;
+  padding-left: 3%;
+  padding-right: 3%;
+  width: 40%;
+  margin-top: 8%;
+
+  &__text {
+    align-self: flex-start;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    font-size: 14px;
+  }
+}

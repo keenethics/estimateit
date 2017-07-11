@@ -1,21 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import SingleEstimate from './SingleEstimate';
+import styles from './styles.scss';
 
-const Dashboard = () => {
-  const testEstimates = [
-    {
-      clientName: 'Some guy',
-      projectName: 'Some old sht',
-      sprint: 2,
-      date: new Date(),
-    },
-    {
-      clientName: 'Some guy2',
-      projectName: 'Some old sht2',
-      sprint: 3,
-      date: new Date(),
-    },
-  ];
+const Dashboard = (props) => {
 
   const renderEstimates = estimates =>
     estimates.map((estimate, key) =>
@@ -23,11 +12,23 @@ const Dashboard = () => {
     );
 
   return (
-    <div>
-      <p>Hello</p>
-      {renderEstimates(testEstimates)}
+    <div className={styles.wrapper}>
+      {renderEstimates(props.allEstimates)}
     </div>
-  )
+  );
+};
+
+
+function mapStateToProps(state) {
+  return {
+    allEstimates: state.Main.allEstimates,
+  };
 }
 
-export default Dashboard;
+function mapDispatchToProps(dispatch) {
+  return {
+    // ...bindActionCreators(actionsMain, dispatch)
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Dashboard));

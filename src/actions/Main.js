@@ -43,3 +43,10 @@ export function addClientData(name, value) {
     },
   };
 }
+
+export function addDashboardData(data) {
+  return {
+    type: types.ADD_DASHBOARD_STATE,
+    data,
+  }
+}

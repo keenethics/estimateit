@@ -157,6 +157,9 @@ const MainOutputType = new ObjectType({
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: () => ({
+    id: {
+      type: StringType,
+    },
     header: {
       type: HeaderOutputType,
     },

@@ -23,6 +23,9 @@ export default {
       email: '',
       position: '',
     },
+    allEstimates: {
+      
+    },
   },
   loading: {
     items: [],
