@@ -189,6 +189,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
+    console.log('this.context', this.context);
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>

@@ -79,7 +79,7 @@ export default {
         title: 'Estimator',
         authRequired: true,
         component: (
-          <Layout>
+          <Layout id="59629c2a022bef2dd40081c0">
             <Header />
             <Main web="isEditable" />
           </Layout>

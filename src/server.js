@@ -11,6 +11,8 @@ import Nightmare from 'nightmare';
 import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
+import { formatError } from 'apollo-errors';
+
 import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
@@ -109,6 +111,7 @@ app.use(
   expressGraphQL(req => ({
     schema,
     graphiql: __DEV__,
+    formatError,
     rootValue: { request: req },
     pretty: __DEV__,
   })),
@@ -173,6 +176,7 @@ app.get('*', async (req, res, next) => {
       cookie: req.headers.cookie,
       user: user,
     });
+
 
     const initialState = {
       user: req.user,

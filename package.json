@@ -14,6 +14,8 @@
   ],
   "dependencies": {
     "apollo-client": "^1.4.2",
+    "apollo-errors": "^1.4.0",
+    "apollo-fetch": "^0.3.0",
     "axios": "^0.16.2",
     "babel-polyfill": "^6.23.0",
     "bcrypt-nodejs": "0.0.3",
@@ -33,6 +35,7 @@
     "graphql": "^0.9.3",
     "graphql-tag": "^2.2.2",
     "history": "^4.6.1",
+    "invariant": "^2.2.2",
     "isomorphic-fetch": "^2.2.1",
     "isomorphic-style-loader": "^2.0.0",
     "jsonwebtoken": "^7.3.0",

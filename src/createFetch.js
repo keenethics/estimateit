@@ -10,6 +10,7 @@
 /* @flow */
 
 import fetch from 'isomorphic-fetch';
+import { createApolloFetch } from 'apollo-fetch';
 
 type Options = {
   baseUrl: string,
@@ -34,7 +35,6 @@ function createFetch({ baseUrl, cookie }: Options) {
       ...(cookie ? { Cookie: cookie } : null),
     },
   };
-
   return (url, options) => ((url.startsWith('/graphql') || url.startsWith('/api')) ?
     fetch(`${baseUrl}${url}`, {
       ...defaults,

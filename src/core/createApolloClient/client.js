@@ -4,26 +4,35 @@ import history from '../history';
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql',
-  opts: {
-    // Additional fetch options like `credentials` or `headers`
-    credentials: 'include',
-  },
+
 });
 
-// const logErrors = {
-//   applyAfterware({ response }, next) {
+const logErrors = {
+  applyAfterware(response, next) {
+    console.log('applyAfterware', response);
+    response.clone().json().then((res) => {
+      const { errors, code } = res;
+      console.log('response.clone', errors, code);
+      if (errors) {
+        console.log('Error, response.clone', code);
+        history.push('/');
+      } else {
+        next();
+      }
+      next();
+    });
+  },
+};
 
-//     response.clone().json().then(({ errors }) => {
-//       if (errors) {
+const loggingAfterware = {
+  applyAfterware(res, next) {
+    console.log('res', res.responses);
+    next();
+  },
+};
 
-//       } else {
-//         next();
-//       }
-//     });
-//   },
-// };
 
-// networkInterface.useAfter([logErrors]);
+networkInterface.useAfter([loggingAfterware, logErrors]);
 
 
 const client = new ApolloClient({
