@@ -8,6 +8,19 @@ import {
 import { calculateHours } from './Calculation';
 
 
+const changeWrapper = (dispatch, form, field, payload) => {
+  dispatch({
+    type: '@@redux-form/CHANGE',
+    meta: {
+      form,
+      field,
+      touch: true,
+      persistentSubmitErrors: false,
+    },
+    payload,
+  });
+};
+
 export const dispatchToggle = ({ form, field, payload }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
@@ -26,8 +39,8 @@ export const dispatchToggle = ({ form, field, payload }) =>
       const minPayload = minimumHours + (payload || -1) * removedMinHours;
       const maxPayload = maximumHours + (payload || -1) * removedMaxHours;
 
-      dispatch(change(form, `${address}.minimumHours`, minPayload));
-      dispatch(change(form, `${address}.maximumHours`, maxPayload));
+      changeWrapper(dispatch, form, `${address}.minimumHours`, minPayload);
+      changeWrapper(dispatch, form, `${address}.maximumHours`, maxPayload);
 
       if (!isChecked) break;
 
@@ -60,9 +73,8 @@ export const dispatchRemove = ({ form, field, index }) =>
       const minPayload = minimumHours - removedMinHours;
       const maxPayload = maximumHours - removedMaxHours;
 
-      dispatch(change(form, `${address}.minimumHours`, minPayload));
-      dispatch(change(form, `${address}.maximumHours`, maxPayload));
-
+      changeWrapper(dispatch, form, `${address}.minimumHours`, minPayload);
+      changeWrapper(dispatch, form, `${address}.maximumHours`, maxPayload);
       if (!isChecked) break;
 
       address = address.replace(/\.?tasks\[\d+\]$/, '');
@@ -78,7 +90,7 @@ export const dispatchChange = ({ form, field, payload }) =>
     const changeType = field.match(/minimumHours$|maximumHours$/)[0];
     const difference = payload - oldValue;
 
-    dispatch(change(form, field, payload));
+    changeWrapper(dispatch, form, field, payload);
 
     let address = field.replace(/\.minimumHours$|\.maximumHours$/, '')
       .replace(/.?tasks\[\d+\]$/, '');
@@ -88,7 +100,7 @@ export const dispatchChange = ({ form, field, payload }) =>
       const element = selector(getState(), address);
       const newValue = element[changeType] + difference;
 
-      dispatch(change(form, `${address}.${changeType}`, newValue));
+      changeWrapper(dispatch, form, `${address}.${changeType}`, newValue)
 
       if (!element.isChecked) break;
 

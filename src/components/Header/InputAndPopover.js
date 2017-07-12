@@ -42,10 +42,6 @@ class InputAndPopover extends React.Component {
     this.setState({ value });
   }
 
-  handleOnChange({ target: { value } }) {
-    this.setState({ value });
-  }
-
   formatTime(digit) {
     let hours;
     let minutes;
@@ -189,6 +185,11 @@ class InputAndPopover extends React.Component {
     this.setState({ isPopoverOpen });
   }
 
+  handleOnChange(event) {
+    const { target: { value } } = event;
+    this.setState({ value });
+  }
+
   handleOnBlur({ target: { value } }) {
     const string = this.formatTime(value);
     const payload =
@@ -206,7 +207,7 @@ class InputAndPopover extends React.Component {
       input: { name: field },
     } = this.props;
 
-    dispatchChange({ form, field, payload });
+    dispatchChange({ form, field, payload: parseInt(payload, 10) });
   }
 
   render() {

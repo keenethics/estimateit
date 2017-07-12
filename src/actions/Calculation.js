@@ -119,7 +119,9 @@ const nAry = (base = 2) => (length = 0) => {
 };
 
 const calculateHourss = (tasks) => {
-  if (tasks.length < 2) {
+  if (tasks.length === 0) return [0, 0];
+
+  if (tasks.length === 1) {
     const {
       minimumHours = 0,
       maximumHours = 0,
