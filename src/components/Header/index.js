@@ -117,7 +117,6 @@ class Header extends Component {
             component={MultiSelect}
             validate={[requiredArray]}
             placeholder="Technologies"
-            handler={this.props.addTechnologies}
           />
         </FormGroup>
         <FieldArray
@@ -140,9 +139,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  tasks: PropTypes.array.isRequired,
-  fields: PropTypes.array.isRequired,
-  addTechnologies: PropTypes.func.isRequired,
+  fields: PropTypes.array,
 };
 
 export default withStyles(styles, datepicker)(Header);

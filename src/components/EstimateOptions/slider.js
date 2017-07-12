@@ -5,8 +5,6 @@ import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import styles from './styles.scss';
 
 const Slider = ({
-  id,
-  name,
   title,
   totalHours,
   input: {
@@ -28,11 +26,9 @@ const Slider = ({
     <InputGroup className={styles.range__item}>
       <InputGroupAddon>{title}</InputGroupAddon>
       <Input
-        id={id}
         min="0"
         step="1"
         max="100"
-        name={name}
         type="range"
         value={value}
         className="radarChartPart"
@@ -46,8 +42,6 @@ const Slider = ({
 };
 
 Slider.propTypes = {
-  id: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   input: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,

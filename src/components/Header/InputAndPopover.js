@@ -213,7 +213,6 @@ class InputAndPopover extends React.Component {
     const {
       id,
       meta,
-      name,
       addon,
       input,
       disabled,
@@ -233,7 +232,6 @@ class InputAndPopover extends React.Component {
       <InputGroup id={newId} className={styles.input_group}>
         <Input
           {...input}
-          name={name}
           disabled={disabled}
           placeholder="0 h 0 m"
           value={formattedValue}
@@ -346,12 +344,11 @@ InputAndPopover.defaultProps = {
 
 InputAndPopover.propTypes = {
   dispatchChange: PropTypes.func.isRequired,
-  disabled: PropTypes.bool.isRequired,
+  disabled: PropTypes.bool,
   meta: PropTypes.object.isRequired,
   input: PropTypes.object.isRequired,
   id: PropTypes.string.isRequired,
   addon: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
   buttonsNames: PropTypes.objectOf(PropTypes.string).isRequired,
   hoursInputName: PropTypes.string.isRequired,
   minutesInputName: PropTypes.string.isRequired,

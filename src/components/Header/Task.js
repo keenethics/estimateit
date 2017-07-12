@@ -59,7 +59,10 @@ class Task extends React.Component {
           const disabled = taskObj.tasks && taskObj.tasks.length;
 
           return (
-            <FormGroup className={styles.subtasks}>
+            <FormGroup
+              key={task}
+              className={styles.subtasks}
+            >
               <Field
                 type="checkbox"
                 component={renderField}
@@ -156,8 +159,8 @@ Task.contextTypes = {
 };
 
 Task.propTypes = {
-  fields: PropTypes.array,
   level: PropTypes.number,
+  fields: PropTypes.object,
   dispatchChange: PropTypes.func,
   dispatchRemove: PropTypes.func,
   dispatchToggle: PropTypes.func,

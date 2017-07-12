@@ -11,15 +11,6 @@ import styles from './styles.scss';
 
 
 class Contacts extends Component {
-  constructor(props) {
-    super(props);
-    this.onContactsChange = this.onContactsChange.bind(this);
-  }
-
-  onContactsChange({ currentTarget: { name, value } }) {
-    this.props.addClientData(name, value);
-  }
-
   render() {
     return (
       <Card className={styles.contacts}>
@@ -65,7 +56,6 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
-  addClientData: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Contacts);

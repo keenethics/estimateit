@@ -77,7 +77,6 @@ class EstimateOptions extends Component {
 
 
 EstimateOptions.propTypes = {
-  rate: PropTypes.number.isRequired,
   totalHours: PropTypes.number.isRequired,
   estimateOptions: PropTypes.object.isRequired,
   calculateTotalHours: PropTypes.func.isRequired,
