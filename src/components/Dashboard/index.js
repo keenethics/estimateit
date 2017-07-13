@@ -6,26 +6,11 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
 
 class Dashboard extends React.Component {
-  constructor() {
-    super();
-    this.createEstimate = this.createEstimate.bind(this);
-  }
   static contextTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
-  createEstimate(values) {
-    const { mutate } = this.props;
 
-    mutate({
-      variables: { input: { ...values } },
-    }).then(({ data: { estimateCreate: { url } } }) => {
-      console.log('URL', url);
-    })
-    .catch((error) => {
-      console.error('ERROR', error);
-    });
-  }
   render() {
     const { isAuthenticated, handleSubmit } = this.context;
     return (
@@ -35,7 +20,7 @@ class Dashboard extends React.Component {
           {isAuthenticated ? (
             <div className={styles.form_signin_body}>
               <p>Go to Dashboard</p>
-              <button className={`${styles.button__padding} btn btn-xs btn-danger`} onClick={handleSubmit(this.createEstimate)}>Create Estimate</button>
+              <a className={`${styles.button__padding} btn btn-xs btn-danger`} href="/estimate">Create Estimate</a>
             </div>
           ) : (
             <div className="">

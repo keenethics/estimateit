@@ -1,5 +1,5 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-
+import history from '../history';
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql',
@@ -9,11 +9,12 @@ const networkInterface = createNetworkInterface({
 });
 
 const logErrors = {
-  applyAfterware({ response }, next) {
+  applyAfterware({ response, ...get }, next) {
+    console.log('res', response, get);
     response.clone().json().then((res) => {
       console.log('res', res);
       if (res.errors && res.errors.length > 0) {
-        res.errors.forEach(e => console.log('Client Error: ', e.message)); // eslint-disable-line
+        location.replace('/404');
       }
       next();
     }).catch((e) => {
