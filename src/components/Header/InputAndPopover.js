@@ -207,7 +207,7 @@ class InputAndPopover extends React.Component {
       input: { name: field },
     } = this.props;
 
-    dispatchChange({ form, field, payload: parseInt(payload, 10) });
+    dispatchChange({ form, field, payload: parseFloat(payload, 10) });
   }
 
   render() {

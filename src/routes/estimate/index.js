@@ -5,8 +5,8 @@ import Layout from '../../components/Layout';
 import Header from '../../components/Header';
 import { apply } from '../../actions/Main';
 import { ESTIMATE_FORM } from '../../constants';
+import { calculateAtFirstTime } from '../../actions/Calculation'
 
-initialize
 
 export default {
 
@@ -62,18 +62,19 @@ export default {
       });
 
       const { data: { estimate } } = await resp.json();
-      console.log(estimate);
+
       if (estimate) {
         // store.dispatch(apply(estimate));
         // store.dispatch(initialize(ESTIMATE_FORM, estimate))
         store.dispatch({
           type: '@@redux-form/INITIALIZE',
           meta: {
-            form: 'ESTIMATE_FORM',
+            form: ESTIMATE_FORM,
             keepDirty: false,
           },
           payload: estimate,
         });
+        store.dispatch(calculateAtFirstTime(ESTIMATE_FORM));
       }
 
       return {

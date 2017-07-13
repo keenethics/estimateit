@@ -211,3 +211,9 @@ export const calculateHours = form =>
     });
     dispatch(calculateTotalHours(form));
   };
+
+export const calculateAtFirstTime = form =>
+  (dispatch) => {
+    dispatch(calculateHours(form));
+    dispatch(calculateTotalHours(form));
+  };

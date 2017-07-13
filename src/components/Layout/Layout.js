@@ -43,7 +43,7 @@ Layout.childContextTypes = {
 
 Layout = reduxForm({
   form: ESTIMATE_FORM,
-  enableReinitialize: true
+  enableReinitialize: false,
 })(Layout);
 
 const initializeValues = (state) => {
