@@ -1,88 +1,24 @@
 import React from 'react';
+import Wrapper from './wrapper';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
-import { apply } from '../../actions/Main';
 
 export default {
 
   path: '/:id',
-  async action({ params: { id }, fetch, store }) {
+  async action({ params: { id } }) {
     try {
-      const resp = await fetch('/graphql', {
-        body: JSON.stringify({
-          query: `{estimate(id: "${id}"){
-            owner,
-            date,
-            clientName,
-            projectName,
-            sprintNumber,
-            comments,
-            pm,
-            skype,
-            email,
-            position,
-            moneyRate,
-            technologies,
-            estimateOptions{
-              qa,
-              pm,
-              risks,
-              bugFixes,
-              completing
-            },
-            devHours{
-              minHours,
-              maxHours
-            },
-            tasks{
-              id,
-              taskName,
-              isChecked,
-              minimumHours,
-              maximumHours,
-              tasks{
-                id,
-                taskName,
-                isChecked,
-                minimumHours,
-                maximumHours,
-                tasks{
-                  id,
-                  taskName,
-                  isChecked,
-                  minimumHours,
-                  maximumHours,
-                },
-              },
-            }
-          }
-        }`,
-        }),
-      });
-
-      const { data: { estimate } } = await resp.json();
-
-      if (estimate) {
-        store.dispatch(apply(estimate));
-        store.dispatch({
-          type: '@@redux-form/INITIALIZE',
-          meta: {
-            form: 'contact',
-            keepDirty: false,
-          },
-          payload: estimate,
-        });
-      }
-
       return {
         title: 'Estimator',
         authRequired: true,
         component: (
-          <Layout id="59629c2a022bef2dd40081c0">
-            <Header />
-            <Main web="isEditable" />
-          </Layout>
+          <Wrapper id={id}>
+            <Layout>
+              <Header />
+              <Main />
+            </Layout>
+          </Wrapper>
         ),
       };
     } catch (err) {

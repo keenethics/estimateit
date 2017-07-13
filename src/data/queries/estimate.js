@@ -1,13 +1,7 @@
-import invariant from 'invariant';
-import {
-  GraphQLString as StringType,
-} from 'graphql';
-import {
-  EstimateOutputType,
-} from '../types';
+import { GraphQLString as StringType } from 'graphql';
+import { EstimateOutputType } from '../types';
 import TokenError from '../errors/permissions';
 import Estimate from '../../data/models/estimate';
-
 
 const estimate = {
   type: EstimateOutputType,
@@ -16,23 +10,20 @@ const estimate = {
       type: StringType,
     },
   },
+  // TODO: Improve search secure
   async resolve(_, args, req) {
     const { id: _id } = args;
-    const { user } = req;
-    const userId = user._id || null;
+    const { user: { role: userRole = null, id: userId = null } } = req;
+    let currentEstimate;
     try {
-      // TODO: Improve secure
-      const currentEstimate = await Estimate.findOne({ _id }, (err, res) => {
-        if (!err) console.error(err);
-        if (userId.toString() !== res.owner || user.role !== 'admin') {
-          throw new TokenError({});
-        }
-        return res;
-      });
-      return currentEstimate;
+      currentEstimate = await Estimate.findOne({ _id });
     } catch (err) {
       return console.error(err);
     }
+    if (userId.toString() !== currentEstimate.owner && userRole !== 'admin') {
+      throw new TokenError({});
+    }
+    return currentEstimate;
   },
 };
 

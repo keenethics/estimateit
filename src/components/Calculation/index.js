@@ -39,7 +39,7 @@ const Calculation = ({
 );
 
 Calculation.propTypes = {
-  rate: PropTypes.number.isRequired,
+  rate: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
   onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,

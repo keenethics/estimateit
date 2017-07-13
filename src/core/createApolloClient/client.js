@@ -1,38 +1,30 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-// import { INVALID_TOKEN } from '../../data/errors/types';
-import history from '../history';
+
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql',
-
+  opts: {
+    credentials: 'include',
+  },
 });
 
 const logErrors = {
-  applyAfterware(response, next) {
-    console.log('applyAfterware', response);
+  applyAfterware({ response }, next) {
     response.clone().json().then((res) => {
-      const { errors, code } = res;
-      console.log('response.clone', errors, code);
-      if (errors) {
-        console.log('Error, response.clone', code);
-        history.push('/');
-      } else {
-        next();
+      console.log('res', res);
+      if (res.errors && res.errors.length > 0) {
+        res.errors.forEach(e => console.log('Client Error: ', e.message)); // eslint-disable-line
       }
+      next();
+    }).catch((e) => {
+      console.error('Unhandled networkInterface error: ', e); // eslint-disable-line
       next();
     });
   },
 };
 
-const loggingAfterware = {
-  applyAfterware(res, next) {
-    console.log('res', res.responses);
-    next();
-  },
-};
 
-
-networkInterface.useAfter([loggingAfterware, logErrors]);
+networkInterface.useAfter([logErrors]);
 
 
 const client = new ApolloClient({

@@ -12,7 +12,6 @@ import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
 import { formatError } from 'apollo-errors';
-
 import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
@@ -38,17 +37,18 @@ global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(expressValidator());
 app.use(session({
   secret: 'keeneth1cs_secret', // session secret
-  resave: true,
+  resave: false,
   saveUninitialized: true,
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-app.use(expressValidator());
+
 
 if (__DEV__) {
   app.enable('trust proxy');
@@ -89,7 +89,7 @@ app.post('/register', (req, res, next) => {
 
 app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/estimate',
+  successRedirect: '/estimate/59629c2a022bef2dd40081c0',
   failureRedirect: '/',
 }));
 
@@ -189,6 +189,7 @@ app.get('*', async (req, res, next) => {
 
     const store = configureStore(initialState, {
       fetch,
+      apolloClient,
       // I should not use `history` on server.. but how I do redirection? follow universal-router
     });
 
@@ -238,7 +239,7 @@ app.get('*', async (req, res, next) => {
       apiUrl: config.api.clientUrl,
       state: context.store.getState(),
       isAuthenticated: isAuthenticated,
-      // user: user,
+      user: user,
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);

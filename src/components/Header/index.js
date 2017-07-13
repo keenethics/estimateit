@@ -285,6 +285,7 @@ class Header extends Component {
             creatable
           />
         </FormGroup>
+
         <FormGroup className="tasks">{this.renderTasks(tasks, 0)}</FormGroup>
         <NewTaskForm
           addNewTask={this.props.addNewTask}
