@@ -58,8 +58,14 @@ class InputAndPopover extends React.Component {
         const indexOfHours = 0;
         const indexOfMinutes = 1;
         const minutesAndHours = tempDigit.split('.');
+        if (minutesAndHours[indexOfMinutes].length > 2) {
+          minutesAndHours[indexOfMinutes] = minutesAndHours[indexOfMinutes].slice(0, 2);
+        }
         hours = parseInt(minutesAndHours[indexOfHours], 10);
         minutes = parseInt(minutesAndHours[indexOfMinutes], 10);
+        console.log(hours);
+        console.log(minutes);
+
         if (minutesAndHours[indexOfMinutes] && (minutesAndHours[indexOfMinutes])[0] !== '0' && (minutesAndHours[indexOfMinutes]).length !== 2) {
           minutes *= 10;
         }
