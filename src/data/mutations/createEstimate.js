@@ -6,6 +6,7 @@ import {
   EstimateInputType,
   EstimateCreateType,
 } from '../types';
+import { UserError } from '../errors';
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -20,13 +21,16 @@ const Mutation = new ObjectType({
       },
       async resolve({ request: { headers, user } }, { input }) {
         let url;
+        if (!user) {
+          throw new UserError({});
+        }
         const newEstimate = new Estimate({ owner: user._id, ...input });
         await newEstimate.save((err, estimate) => {
           if (err) return null;
           const { _id } = estimate;
           url = `${_id}`;
         });
-        console.log('\t  Hey', url);
+        console.log('\t  createEstimate url:', url);
         return { url };
       },
     },

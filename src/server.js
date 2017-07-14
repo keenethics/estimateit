@@ -42,7 +42,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(session({
-  secret: 'keeneth1cs_secret', // session secret
+  secret: config.SECRET,
   resave: false,
   saveUninitialized: true,
 }));
@@ -89,16 +89,15 @@ app.post('/register', (req, res, next) => {
 
 app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
 app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/estimate/59629c2a022bef2dd40081c0',
+  successRedirect: '/',
   failureRedirect: '/',
 }));
 
 app.get('/auth/logout', (req, res) => {
-  console.log('logging out ......');
+  console.log('logging out ...');
   req.logout();
   req.session.destroy();
   res.redirect('/');
-  // res.send(401);
 });
 
 

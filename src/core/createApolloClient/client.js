@@ -10,11 +10,9 @@ const networkInterface = createNetworkInterface({
 
 const logErrors = {
   applyAfterware({ response, ...get }, next) {
-    console.log('res', response, get);
     response.clone().json().then((res) => {
-      console.log('res', res);
       if (res.errors && res.errors.length > 0) {
-        // location.replace('/404');
+        location.replace('/404');
       }
       next();
     }).catch((e) => {

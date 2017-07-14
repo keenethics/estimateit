@@ -1,6 +1,6 @@
 import { GraphQLString as StringType } from 'graphql';
 import { EstimateOutputType } from '../types';
-import TokenError from '../errors/permissions';
+import { TokenError } from '../errors';
 import Estimate from '../../data/models/estimate';
 
 const estimate = {
