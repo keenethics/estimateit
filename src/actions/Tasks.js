@@ -31,16 +31,6 @@ export const dispatchToggle = ({ form, field, payload }) =>
 
     let address = field.replace(/.?tasks\[\d+\]$/, '');
 
-    // changeWrapper(dispatch, form, `${field}.isChecked`, '', false);
-    // dispatch({
-    //   type: '@@redux-form/BLUR',
-    //   meta: {
-    //     form,
-    //     field: `${field}.isChecked`,
-    //     touch: true,
-    //   },
-    //   payload,
-    // })
     while (address) {
       const element = selector(getState(), address);
 
