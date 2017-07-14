@@ -129,8 +129,13 @@ const calculateHourss = (tasks) => {
 
     return [minimumHours, maximumHours];
   }
+  const maxNumberOfTask = 12;
+  const array = nAry(2)(tasks.length);
+  const allComputations = tasks.length < maxNumberOfTask
+    ? array.all()
+    : array.randomSet(2**(maxNumberOfTask-1));
 
-  const allComputations = nAry(2)(tasks.length).all();
+  allComputations.push(array.zero, array.last);
 
   return allComputations.map((computation) => {
     if (!computation.length) return 0;
@@ -148,11 +153,11 @@ const calculateHourss = (tasks) => {
 
       minOrMax = item ? 'maximumHours' : 'minimumHours';
       value = tasks[index][minOrMax] || 0;
+
       return result + parseInt(value, 10);
     });
   }).sort((a, b) => a - b);
 };
-
 
 export const calculateTotalHours = form =>
   (dispatch, getState) => {

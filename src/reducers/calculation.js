@@ -1,6 +1,6 @@
 import {
   CALCULATE_TOTAL_HOURS,
-  CALCULATE_GENERAL_HOURS
+  CALCULATE_GENERAL_HOURS,
 } from '../constants/actionTypes';
 
 import initialState from './initialState';
