@@ -1,5 +1,6 @@
 import {
   GraphQLList as ListType,
+  GraphQLFloat as FloatType,
   GraphQLBoolean as BoolType,
   GraphQLString as StringType,
   GraphQLObjectType as ObjectType,
@@ -19,10 +20,10 @@ const TaskOutputType = new ObjectType({
       type: StringType,
     },
     minimumHours: {
-      type: StringType,
+      type: FloatType,
     },
     maximumHours: {
-      type: StringType,
+      type: FloatType,
     },
     parent: {
       type: StringType,
@@ -44,31 +45,19 @@ const EstimateOptionsOutputType = new ObjectType({
   name: 'EstimateOptionsOutputType',
   fields: {
     qa: {
-      type: StringType,
+      type: FloatType,
     },
     pm: {
-      type: StringType,
+      type: FloatType,
     },
     risks: {
-      type: StringType,
+      type: FloatType,
     },
     bugFixes: {
-      type: StringType,
+      type: FloatType,
     },
     completing: {
-      type: StringType,
-    },
-  },
-});
-
-const DevHoursOutputType = new ObjectType({
-  name: 'DevHoursOutputType',
-  fields: {
-    minHours: {
-      type: StringType,
-    },
-    maxHours: {
-      type: StringType,
+      type: FloatType,
     },
   },
 });
@@ -118,9 +107,6 @@ const EstimateOutputType = new ObjectType({
     },
     estimateOptions: {
       type: EstimateOptionsOutputType,
-    },
-    devHours: {
-      type: DevHoursOutputType,
     },
     tasks: {
       type: new ListType(TaskOutputType),

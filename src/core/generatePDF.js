@@ -8,11 +8,12 @@ const generatePDF = (url, emails) => {
 
   nightmare
     .goto(url)
-    .wait(2000)
+    .wait(3000)
     .evaluate(() => {
       const body = document.querySelector('body');
       return { height: body.scrollHeight };
     })
+    .wait(2000)
     .pdf({
       marginsType: 0,
       pageSize: 'A4',

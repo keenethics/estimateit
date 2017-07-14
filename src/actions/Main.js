@@ -9,21 +9,13 @@ export function changeMoneyRate(value) {
   };
 }
 
-export function calcDevHours(value) {
-  return {
-    type: types.CALC_DEV_HOURS,
-    payload: {
-      value,
-    },
-  };
-}
-
 export function apply(data) {
   return {
     type: types.APPLY_STATE,
     data,
   };
 }
+
 
 export function addEstimateOptions(value) {
   return {

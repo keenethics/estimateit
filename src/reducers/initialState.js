@@ -1,19 +1,14 @@
 export default {
-  header: {
-    tasks: [],
-    parentTaskId: '',
-    infoCollector: {
-      technologies: [],
+  main: {
+    devHours: {
+      minHours: 0,
+      maxHours: 0,
     },
   },
-  main: {
-    estimateOptions: {
-      qa: 10,
-      pm: 10,
-      risks: 10,
-      bugFixes: 10,
-      completing: 100,
-    },
+  calculation: {
+    time: [],
+    percent: [],
+    totalHours: 0,
     devHours: {
       minHours: 0,
       maxHours: 0,

@@ -7,6 +7,8 @@ import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Layout.scss';
 
+import { ESTIMATE_FORM } from '../../constants';
+
 class Layout extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -40,13 +42,21 @@ Layout.childContextTypes = {
 };
 
 Layout = reduxForm({
-  form: 'contact',
+  form: ESTIMATE_FORM,
+  enableReinitialize: false,
 })(Layout);
 
 const initializeValues = (state) => {
 
   const initialValues = {
     moneyRate: '25',
+    estimateOptions: {
+      qa: 10,
+      pm: 10,
+      risks: 10,
+      bugFixes: 10,
+      completing: 100,
+    },
   };
 
   return { initialValues };
