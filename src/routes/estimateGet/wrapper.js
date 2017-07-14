@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { apply } from '../../actions/Main';
+import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
   constructor(props) {
@@ -46,11 +47,10 @@ class Wrapper extends React.Component {
     const {
       data,
     } = this.props;
-    console.log('\t  New data in our app', data);
     return (
       <div>
         {data.loading
-          ? <h3>Loading</h3>
+          ? <Loading />
           : <div>
             {this.props.children}
           </div>}
