@@ -14,7 +14,7 @@ const logErrors = {
     response.clone().json().then((res) => {
       console.log('res', res);
       if (res.errors && res.errors.length > 0) {
-        location.replace('/404');
+        // location.replace('/404');
       }
       next();
     }).catch((e) => {
