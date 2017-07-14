@@ -5,28 +5,34 @@ import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import styles from './styles.scss';
 
 const Slider = ({
-  id,
-  name,
   title,
-  value,
   totalHours,
-  handleChange,
+  input: {
+    value,
+    onChange,
+  },
+  meta: {
+    form,
+  },
+  calculateTotalHours,
 }) => {
   const hours = Math.round(totalHours * value / 100);
+  const handleChange = ({ target }) => {
+    onChange(parseInt(target.value, 10));
+    calculateTotalHours(form);
+  };
 
   return (
     <InputGroup className={styles.range__item}>
       <InputGroupAddon>{title}</InputGroupAddon>
       <Input
-        id={id}
         min="0"
         step="1"
         max="100"
-        name={name}
         type="range"
         value={value}
-        onChange={handleChange}
         className="radarChartPart"
+        onChange={e => handleChange(e)}
       />
       <InputGroupAddon>
         {value}%, {hours} h
@@ -36,12 +42,10 @@ const Slider = ({
 };
 
 Slider.propTypes = {
-  id: PropTypes.string,
-  name: PropTypes.string,
+  input: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
-  value: PropTypes.number.isRequired,
   totalHours: PropTypes.number.isRequired,
-  handleChange: PropTypes.func.isRequired,
+  calculateTotalHours: PropTypes.func.isRequired,
 };
 
 export default Slider;

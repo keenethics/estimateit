@@ -1,38 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { InputGroup, InputGroupAddon } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { renderOptionsField } from '../libs/helpers.js';
 import { required, currency } from '../libs/validation.js';
 
+import * as actionsCalculate from '../../actions/Calculation';
+
 import Slider from './slider';
 import styles from './styles.scss';
 
 class EstimateOptions extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onFieldChange = this.onFieldChange.bind(this);
-  }
-
-  onFieldChange({ target: { name, value } }) {
-    const { estimateOptions, addEstimateOptions } = this.props;
-    const newestimateOptions = { ...estimateOptions, [name]: parseInt(value, 10) };
-
-    addEstimateOptions(newestimateOptions);
-  }
-
   render() {
     const {
       totalHours,
-      estimateOptions: {
-        qa,
-        pm,
-        risks,
-        bugFixes,
-        completing,
-      },
+      calculateTotalHours,
     } = this.props;
 
     return (
@@ -41,47 +26,47 @@ class EstimateOptions extends Component {
           <Field
             min="0"
             step="1"
-            label="Rate USD"
             type="text"
+            label="Rate USD"
             name="moneyRate"
             validate={[required, currency]}
             component={renderOptionsField}
           />
         </InputGroup>
-        <Slider
-          name="qa"
+        <Field
+          name="estimateOptions.qa"
           title="QA"
-          value={qa}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
+          calculateTotalHours={calculateTotalHours}
         />
-        <Slider
-          name="pm"
+        <Field
+          name="estimateOptions.pm"
           title="PM"
-          value={pm}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
+          calculateTotalHours={calculateTotalHours}
         />
-        <Slider
-          name="bugFixes"
+        <Field
+          name="estimateOptions.bugFixes"
           title="Bug Fixes"
-          value={bugFixes}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
+          calculateTotalHours={calculateTotalHours}
         />
-        <Slider
-          name="risks"
+        <Field
+          name="estimateOptions.risks"
           title="Risks"
-          value={risks}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
+          calculateTotalHours={calculateTotalHours}
         />
-        <Slider
-          name="completing"
+        <Field
+          name="estimateOptions.completing"
           title="Probability"
-          value={completing}
+          component={Slider}
           totalHours={totalHours}
-          handleChange={this.onFieldChange}
+          calculateTotalHours={calculateTotalHours}
         />
       </div>
     );
@@ -90,11 +75,19 @@ class EstimateOptions extends Component {
 
 
 EstimateOptions.propTypes = {
-  rate: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
-  onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
-  addEstimateOptions: PropTypes.func.isRequired,
+  calculateTotalHours: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(EstimateOptions);
+function mapStateToProps() {
+  return { };
+}
+
+function mapDispatchToProps(dispatch) {
+  return { ...bindActionCreators(actionsCalculate, dispatch) };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(EstimateOptions),
+);

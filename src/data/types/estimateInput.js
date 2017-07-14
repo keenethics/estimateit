@@ -62,17 +62,6 @@ const EstimateOptionsInputType = new InputObjectType({
   },
 });
 
-const DevHoursInputType = new InputObjectType({
-  name: 'DevHoursInputType',
-  fields: {
-    minHours: {
-      type: StringType,
-    },
-    maxHours: {
-      type: StringType,
-    },
-  },
-});
 
 //
 // EstimateInputType
@@ -81,6 +70,9 @@ const DevHoursInputType = new InputObjectType({
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
+    owner: {
+      type: StringType,
+    },
     date: {
       type: StringType,
     },
@@ -119,12 +111,6 @@ const EstimateInputType = new InputObjectType({
     },
     estimateOptions: {
       type: EstimateOptionsInputType,
-    },
-    devHours: {
-      type: DevHoursInputType,
-    },
-    owner: {
-      type: StringType,
     },
     tasks: {
       type: new ListType(TaskInputType),

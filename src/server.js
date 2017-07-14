@@ -138,6 +138,7 @@ app.post('/api/downloadPpdf', (req, res) => {
         height: body.scrollHeight,
       };
     })
+    .wait(2000)
     .pdf({
       printBackground: true,
       marginsType: 0,

@@ -8,11 +8,8 @@ import PieChart from '../PieChart';
 import EstimateOptions from '../EstimateOptions';
 
 const Calculation = ({
-  rate,
   totalHours,
-  onRateChange,
   estimateOptions,
-  addEstimateOptions,
 }) => (
   <Card className={styles.calculation}>
     <CardBlock className={styles.calculation__wrapper}>
@@ -27,11 +24,8 @@ const Calculation = ({
         className={styles.calculation__options}
       >
         <EstimateOptions
-          rate={rate}
           totalHours={totalHours}
-          onRateChange={onRateChange}
           estimateOptions={estimateOptions}
-          addEstimateOptions={addEstimateOptions}
         />
       </Col>
     </CardBlock>
@@ -39,11 +33,8 @@ const Calculation = ({
 );
 
 Calculation.propTypes = {
-  rate: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
-  onRateChange: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
-  addEstimateOptions: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(Calculation);

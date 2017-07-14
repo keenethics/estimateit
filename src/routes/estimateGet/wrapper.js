@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-import { apply } from '../../actions/Main';
+import { ESTIMATE_FORM } from '../../constants';
+import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
@@ -32,15 +33,15 @@ class Wrapper extends React.Component {
 
   getEstimate(props) {
     const { dispatch, data: { estimate } } = props;
-    dispatch(apply(estimate));
     dispatch({
       type: '@@redux-form/INITIALIZE',
       meta: {
-        form: 'contact',
+        form: ESTIMATE_FORM,
         keepDirty: false,
       },
       payload: estimate,
     });
+    dispatch(calculateAtFirstTime(ESTIMATE_FORM));
   }
 
   render() {
@@ -86,10 +87,6 @@ const estimate = gql`
         risks
         bugFixes
         completing
-      }
-      devHours {
-        minHours
-        maxHours
       }
       tasks {
         id

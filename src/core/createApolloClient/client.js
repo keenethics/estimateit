@@ -9,7 +9,7 @@ const networkInterface = createNetworkInterface({
 });
 
 const logErrors = {
-  applyAfterware({ response, ...get }, next) {
+  applyAfterware({ response }, next) {
     response.clone().json().then((res) => {
       if (res.errors && res.errors.length > 0) {
         location.replace('/404');
