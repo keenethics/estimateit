@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FormGroup, Button } from 'reactstrap';
 import {
   Field,
+  change,
   FieldArray,
   formValueSelector,
 } from 'redux-form';
@@ -24,6 +25,7 @@ class Task extends React.Component {
   }
 
   handleToggle(field, event) {
+    event.preventDefault();
     const { target: { checked: payload } } = event;
     const { meta: { form }, dispatchToggle } = this.props;
 
@@ -69,6 +71,7 @@ class Task extends React.Component {
                 id={`${task}.isChecked`}
                 name={`${task}.isChecked`}
                 className={styles.subtasks__item}
+
                 onChange={e => this.handleToggle(task, e)}
               />
               <Field

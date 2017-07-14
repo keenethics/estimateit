@@ -1,5 +1,4 @@
 import {
-  change,
   arrayRemove,
   arrayUnshift,
   formValueSelector,
@@ -8,13 +7,13 @@ import {
 import { calculateHours } from './Calculation';
 
 
-const changeWrapper = (dispatch, form, field, payload) => {
+const changeWrapper = (dispatch, form, field, payload, touch = true) => {
   dispatch({
     type: '@@redux-form/CHANGE',
     meta: {
       form,
       field,
-      touch: true,
+      touch,
       persistentSubmitErrors: false,
     },
     payload,
@@ -31,6 +30,8 @@ export const dispatchToggle = ({ form, field, payload }) =>
     } = removedTask;
 
     let address = field.replace(/.?tasks\[\d+\]$/, '');
+
+    changeWrapper(dispatch, form, `${field}.isChecked`, payload, false);
 
     while (address) {
       const element = selector(getState(), address);
