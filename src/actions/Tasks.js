@@ -31,8 +31,6 @@ export const dispatchToggle = ({ form, field, payload }) =>
 
     let address = field.replace(/.?tasks\[\d+\]$/, '');
 
-    changeWrapper(dispatch, form, `${field}.isChecked`, payload, false);
-
     while (address) {
       const element = selector(getState(), address);
 
