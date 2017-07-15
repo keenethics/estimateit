@@ -7,16 +7,16 @@ class RegistrationPage extends React.Component {
   constructor() {
     super();
     this.state = {
-      error: '',
+      message: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
   handleSubmit(e) {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(' name, email, password', name, email, password);
     return axios
       .post(
         '/register',
@@ -26,19 +26,17 @@ class RegistrationPage extends React.Component {
       },
       )
       .then((response) => {
-        console.log('response in the auth actions', response);
-        if (response.data.err) {
+        if (!response.data.success) {
           this.setState({
-            error: response.data.errors['0'].msg,
-          });
-        } else if (!response.data.success) {
-          this.setState({
-            error: response.data.message,
+            message: response.data.message || response.data.err['0'].msg,
           });
         } else {
           this.setState({
-            error: '',
+            message: response.data.message,
           });
+          setTimeout(() => {
+            location.replace(response.data.redirectUrl);
+          }, 1000);
         }
       })
       .catch((error) => {
@@ -72,7 +70,9 @@ class RegistrationPage extends React.Component {
           <button className="btn btn-xs btn-danger btn-block" type="submit">
             Registration
           </button>
-          <span className="text-warning">{this.state.error}</span>
+          <span className="text-warning">
+            {this.state.message}
+          </span>
         </form>
       </div>
     );

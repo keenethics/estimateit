@@ -28,7 +28,6 @@ import config from './config';
 import './utils/auth';
 import generatePDF from './core/generatePDF';
 
-
 mongoose.connect(config.MONGO_URL);
 mongoose.Promise = global.Promise;
 const app = express();
@@ -41,14 +40,15 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
-app.use(session({
-  secret: config.SECRET,
-  resave: false,
-  saveUninitialized: true,
-}));
+app.use(
+  session({
+    secret: config.SECRET,
+    resave: false,
+    saveUninitialized: true,
+  }),
+);
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 if (__DEV__) {
   app.enable('trust proxy');
@@ -61,37 +61,35 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/login',
-  passport.authenticate(
-    'local.login',
-    {
-      successRedirect: '/estimate',
-      failureRedirect: '/login',
-    },
-));
-
-// Signup Using passport
-app.post('/register', (req, res, next) => {
-  passport.authenticate(
-    'local.signup',
-    {
-      successRedirect: '/',
-      failureRedirect: '/register',
-    },
-    (err, user, message) => {
-      if (user) return res.json(user);
-      console.log('req', req.user);
-      return res.json({ success: false, err, ...message });
-    },
-  )(req, res, next);
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local.login', (err, user, info) => {
+    if (err) return next(err);
+    if (!user) return res.json(info);
+    return req.logIn(user, (error) => {
+      if (error) return next(error);
+      return res.json({ ...user, redirectUrl: '/' });
+    });
+  })(req, res, next);
 });
 
+app.post('/register', (req, res, next) => {
+  passport.authenticate('local.signup', (err, user, message) => {
+    if (user) return res.json({ ...user, redirectUrl: '/' });
+    return res.json({ success: false, err, ...message });
+  })(req, res, next);
+});
 
-app.get('/auth/google/', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', passport.authenticate('google', {
-  successRedirect: '/',
-  failureRedirect: '/',
-}));
+app.get(
+  '/auth/google/',
+  passport.authenticate('google', { scope: ['profile', 'email'] }),
+);
+app.get(
+  '/auth/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/',
+    failureRedirect: '/',
+  }),
+);
 
 app.get('/auth/logout', (req, res) => {
   console.log('logging out ...');
@@ -99,7 +97,6 @@ app.get('/auth/logout', (req, res) => {
   req.session.destroy();
   res.redirect('/');
 });
-
 
 //
 // Register API middleware
@@ -174,9 +171,8 @@ app.get('*', async (req, res, next) => {
     const fetch = createFetch({
       baseUrl: config.api.serverUrl,
       cookie: req.headers.cookie,
-      user: user,
+      user,
     });
-
 
     const initialState = {
       user: req.user,
@@ -238,8 +234,8 @@ app.get('*', async (req, res, next) => {
     data.app = {
       apiUrl: config.api.clientUrl,
       state: context.store.getState(),
-      isAuthenticated: isAuthenticated,
-      user: user,
+      isAuthenticated,
+      user,
     };
 
     const html = ReactDOM.renderToStaticMarkup(<Html {...data} />);

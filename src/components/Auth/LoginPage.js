@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
@@ -8,13 +7,10 @@ class LoginPage extends React.Component {
   constructor() {
     super();
     this.state = {
-      error: '',
+      message: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  static contextTypes = {
-    isAuthenticated: PropTypes.bool.isRequired,
-  };
 
   handleSubmit(e) {
     e.preventDefault();
@@ -29,29 +25,25 @@ class LoginPage extends React.Component {
       },
       )
       .then((response) => {
-        console.log('response in the auth actions', response.data.message);
-        if (response.data.err) {
+        if (!response.data.success) {
           this.setState({
-            error: response.data.err[0].msg,
-          });
-        } else if (!response.data.success) {
-          this.setState({
-            error: response.data.message,
-          });
-        } else if (response.data.success) {
-          this.setState({
-            error: response.data.message,
+            message: response.data.message || response.data.err['0'].msg,
           });
         } else {
           this.setState({
-            error: '',
+            message: response.data.message,
           });
+          setTimeout(() => {
+            location.replace(response.data.redirectUrl);
+          }, 1000);
         }
+      })
+      .catch((error) => {
+        console.log('handle errors', error.message);
       });
   }
 
   render() {
-    const { isAuthenticated } = this.context;
     return (
       <div className={styles.wrapper}>
         <form className={styles.form_signin} onSubmit={this.handleSubmit}>
@@ -78,7 +70,7 @@ class LoginPage extends React.Component {
             Sign In with Google
           </a>
           <span className="text-warning">
-            {this.state.error}
+            {this.state.message}
           </span>
         </form>
       </div>

@@ -50,7 +50,7 @@ passport.use(
             const { email, _id, createdAt } = res;
             return done(null, {
               success: true,
-              message: 'successfully Registered',
+              message: 'Successfully Registered',
               user: { _id, email, createdAt },
             });
           });
@@ -61,11 +61,7 @@ passport.use(
           if (user) {
             return done(null, false, {
               success: false,
-              err: [
-                {
-                  msg: 'That email is already taken.',
-                },
-              ],
+              message: 'That email is already taken',
             });
           }
           const newUser = req.user;
@@ -76,7 +72,7 @@ passport.use(
             if (err) {
               return done(null, false, {
                 success: false,
-                message: `error saving user, ${err}`,
+                message: `Error saving user, ${err}`,
               });
             }
             const { _id, email, createdAt } = res;
@@ -119,14 +115,13 @@ passport.use(
         if (!user) {
           return done(null, false, {
             success: false,
-            message: 'Incorrect username.',
+            message: 'Oops! Unable to log in.',
           });
         }
         if (!user.validPassword(password)) {
           return done(null, false, {
             success: false,
-            message: 'Oops! Wrong password.',
-            user,
+            message: 'Oops! Unable to log in.',
           });
         }
         return done(null, {
