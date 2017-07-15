@@ -1,4 +1,5 @@
 import React from 'react';
+import { Card } from 'reactstrap';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
 import Header from '../../components/Header';
@@ -12,8 +13,8 @@ export default {
       authRequired: true,
       component: (
         <Layout>
-          <Header />
-          <Main />
+            <Header />
+            <Main />
         </Layout>),
     }),
   },

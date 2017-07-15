@@ -25,13 +25,8 @@ class Dashboard extends React.Component {
           ) : (
             <div className="">
               <p>Login or Register with:</p>
-              <a href="/login" className={`${styles.button__padding} btn btn-primary`}><span className="fa fa-user" />
-                Local Login</a>
-              <a href="/register" className={`${styles.button__padding} btn btn-primary`}><span className="fa fa-user" />
-                Local Signup</a>
-              <a href="/auth/google" className={`${styles.button__padding} btn btn-danger`}><span
-                className="fa fa-google-plus"
-              /> Google+</a>
+              <a href="/login" className="btn btn-xs btn-danger"><span className="fa fa-user" />
+               Login</a>
             </div>
           )}
 

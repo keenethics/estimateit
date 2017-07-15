@@ -70,6 +70,9 @@ class RegistrationPage extends React.Component {
           <button className="btn btn-xs btn-danger btn-block" type="submit">
             Registration
           </button>
+          <a className="btn btn-xs btn-primary btn-block" href="/">
+            Back
+          </a>
           <span className="text-warning">
             {this.state.message}
           </span>
