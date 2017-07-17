@@ -1,5 +1,4 @@
 import React from 'react';
-import { Card } from 'reactstrap';
 import Wrapper from './wrapper';
 import Main from '../../components/Main';
 import Layout from '../../components/Layout';
@@ -16,8 +15,8 @@ export default {
         component: (
           <Wrapper id={id}>
             <Layout>
-                <Header />
-                <Main />
+              <Header />
+              <Main />
             </Layout>
           </Wrapper>
         ),

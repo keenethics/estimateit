@@ -21,13 +21,43 @@ class Task extends React.Component {
     super(props);
 
     this.handleToggle = this.handleToggle.bind(this);
+    this.handleBlur = this.handleBlur.bind(this);
   }
 
   handleToggle(field, event) {
+    const { store } = this.context;
     const { target: { checked: payload } } = event;
     const { meta: { form }, dispatchToggle } = this.props;
 
+    store.dispatch({
+      type: '@@redux-form/CHANGE',
+      meta: {
+        form,
+        field: `${field}isChecked`,
+        touch: true,
+        persistentSubmitErrors: false,
+      },
+      payload,
+    })
+
     dispatchToggle({ form, field, payload });
+  }
+
+  handleBlur(field, task, e) {
+    const { store } = this.context;
+    const { target: { value: payload } } = event;
+    const { meta: { form } } = this.props;
+
+
+    store.dispatch({
+      type: '@@redux-form/BLUR',
+      meta: {
+        form,
+        field: `${field}isChecked`,
+        touch: true,
+      },
+      payload,
+    });
   }
 
   render() {
@@ -70,6 +100,7 @@ class Task extends React.Component {
                 name={`${task}.isChecked`}
                 className={styles.subtasks__item}
                 onChange={e => this.handleToggle(task, e)}
+                onBlur={e => this.handleBlur(task, taskObj, e)}
               />
               <Field
                 type="text"
