@@ -29,6 +29,7 @@ networkInterface.useAfter([logErrors]);
 const client = new ApolloClient({
   networkInterface,
   queryDeduplication: true,
+  connectToDevTools: true, // REMOVE THIS IN PRODUCTION
   // reduxRootSelector: state => state.apollo,
 });
 

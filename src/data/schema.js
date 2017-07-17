@@ -8,6 +8,7 @@ import Mutation from './mutations/createEstimate';
 
 import {
   estimate,
+  allEstimates,
 } from './queries';
 
 const schema = new Schema({
@@ -15,6 +16,7 @@ const schema = new Schema({
     name: 'Query',
     fields: {
       estimate,
+      allEstimates,
     },
   }),
   mutation: Mutation,
