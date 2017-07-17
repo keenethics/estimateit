@@ -30,29 +30,27 @@ export const renderField = ({ className, input, label, type, meta }) => (
   </FormGroup>
 );
 
-export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange }) => {
-  return (
-    <div className={className}>
-      <InputGroup>
-        <InputGroupAddon>{label}</InputGroupAddon>
-        <Input
-          min="0"
-          step="1"
-          name={name}
-          value={value}
-          type="text"
-          onChange={onChange}
-          {...input}
-        />
-      </InputGroup>
-      <ValidationState {...meta} />
-    </div>
-  )
-};
+export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange }) => (
+  <div style={{ width: '100%' }}>
+    <InputGroup>
+      <InputGroupAddon>{label}</InputGroupAddon>
+      <Input
+        min="0"
+        step="1"
+        name={name}
+        value={value}
+        type="text"
+        onChange={onChange}
+        {...input}
+      />
+    </InputGroup>
+    <ValidationState {...meta} />
+  </div>
+  );
 
 export const renderDateField =
 ({
-  input:{
+  input: {
     onChange,
     value = '',
   },

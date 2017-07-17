@@ -69,6 +69,9 @@ const EstimateOptionsOutputType = new ObjectType({
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: {
+    owner: {
+      type: StringType,
+    },
     date: {
       type: StringType,
     },

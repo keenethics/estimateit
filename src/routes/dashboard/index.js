@@ -1,21 +1,18 @@
 import React from 'react';
+import Dashboard from '../../components/Dashboard';
 import Layout from '../../components/Layout';
-import NotFound from './NotFound';
 
-const title = 'Page Not Found';
 
 export default {
-  path: '*',
-
+  path: '/',
   action() {
     return {
-      title,
+      title: 'Dashboard',
       component: (
         <Layout>
-          <NotFound title={title} />
+          <Dashboard />
         </Layout>
       ),
-      status: 404,
     };
   },
 };

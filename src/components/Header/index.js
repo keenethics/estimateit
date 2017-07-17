@@ -14,7 +14,7 @@ import datepicker from 'react-datepicker/dist/react-datepicker.css';
 import Task from './Task';
 import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
-import technologiesList from '../../constants/technoligies';
+import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
 import { required, currency, requiredArray } from '../libs/validation';
 

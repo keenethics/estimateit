@@ -70,6 +70,9 @@ const EstimateOptionsInputType = new InputObjectType({
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
+    owner: {
+      type: StringType,
+    },
     date: {
       type: StringType,
     },
