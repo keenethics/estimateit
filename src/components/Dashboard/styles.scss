@@ -8,10 +8,7 @@ body {
 }
 
 .form_signin {
-  max-width: 600px;
-  padding: 40px 50px;
-  margin: 0 auto;
-  background-color: #fff;
+  width: 100%;
   //border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
@@ -53,24 +50,37 @@ input[type="password"] {
 }
 
 .singleEstimate {
-  flex: 0 0 300px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-  border: 1px solid rgba(0, 0, 0, 0.125);
-  border-radius: 0.25rem;
-  padding-bottom: 5%;
-  padding-top: 5%;
-  padding-left: 3%;
-  padding-right: 3%;
-  width: 40%;
-  margin-top: 8%;
-
+  height: 262px;
+  &:hover {
+    text-decoration: none;
+  }
   &__text {
     align-self: flex-start;
     overflow-wrap: break-word;
     word-break: break-word;
     font-size: 14px;
+  }
+}
+
+.card_pf {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(3,3,3,.175);
+  border: 2px solid transparent;
+  margin: 0 -10px 20px;
+  padding: 0 20px;
+  height: 100%;
+  &:hover {
+    text-decoration: none;
+    box-shadow: 0 1px 6px rgba(3,3,3,.35);
+  }
+  &__title {
+    font-size: 20px;
+    font-weight: 300;
+    margin-bottom: 15px;
+    margin-top: 15px;
+  }
+  &__body {
+    margin: 20px 0 0;
+    padding: 0 0 20px;
   }
 }

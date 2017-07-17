@@ -19,11 +19,10 @@ class Dashboard extends React.Component {
     return (
       <div className={styles.wrapper}>
         <div className={`${styles.form_signin} text-center`}>
-          <h1 className={styles.form_signin_heading}>
-            <span className="fa fa-lock" />Estimator
-          </h1>
+          <h1 className={styles.form_signin_heading}>Estimator</h1>
           {isAuthenticated
-            ? <div className={styles.form_signin_body}>
+            ? <div className={`${styles.form_signin_body} container-fluid`}>
+              <div className="row">
               {this.props.allEstimates.length
                   ? this.props.allEstimates.map((estimate, key) =>
                     <SingleEstimate estimate={estimate} key={key} />,
@@ -37,6 +36,7 @@ class Dashboard extends React.Component {
                         Create Estimate
                       </a>
                   </div>}
+              </div>
             </div>
             : <div className="">
               <p>Login or Register with:</p>
