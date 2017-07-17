@@ -30,9 +30,9 @@ module.exports = {
   MONGO_URL: process.env.MONGOLAB_ORANGE_URI || 'mongodb://localhost/estimateit',
 
   google: {
-    clientID: '17514047684-ssnv93v150nli9ukgbcic4glf2uml858.apps.googleusercontent.com',
-    clientSecret: 'H2pQRCGUGpW3pCchE08B3Z7h',
-    callbackURL:  process.env.CALLBACK_URL || 'http://localhost:3001/auth/google/callback',
+    clientID: process.env.GOOGLE_CLIEN_ID || '17514047684-ssnv93v150nli9ukgbcic4glf2uml858.apps.googleusercontent.com',
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET || 'H2pQRCGUGpW3pCchE08B3Z7h',
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3001/auth/google/callback',
   },
   analytics: {
     googleTrackingId: process.env.GOOGLE_TRACKING_ID, // UA-XXXXX-X
