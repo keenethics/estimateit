@@ -4,6 +4,7 @@ export default {
       minHours: 0,
       maxHours: 0,
     },
+    allEstimates: {},
   },
   calculation: {
     time: [],

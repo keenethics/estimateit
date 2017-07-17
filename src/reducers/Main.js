@@ -1,4 +1,5 @@
 import {
+  ADD_DASHBOARD_STATE,
   APPLY_STATE,
 } from '../constants/actionTypes';
 
@@ -10,6 +11,9 @@ export function main(state = initialState.main, action) {
     case APPLY_STATE:
       const { estimateOptions } = action.data;
       return { ...state, estimateOptions };
+
+    case ADD_DASHBOARD_STATE:
+      return Object.assign({}, state, action.data);
 
     default:
       return state;
