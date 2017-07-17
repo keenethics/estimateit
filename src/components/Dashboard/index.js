@@ -13,6 +13,9 @@ class Dashboard extends React.Component {
     isAuthenticated: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
+  static defaultProps = {
+    allEstimates: [],
+  };
 
   render() {
     const { isAuthenticated } = this.context;
@@ -23,7 +26,7 @@ class Dashboard extends React.Component {
           {isAuthenticated
             ? <div className={`${styles.form_signin_body} container-fluid`}>
               <div className="row">
-                {this.props.allEstimates.length
+                {this.props.allEstimates
                   ? this.props.allEstimates.map((estimate, key) =>
                     <SingleEstimate estimate={estimate} key={key} />,
                     )

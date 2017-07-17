@@ -2,11 +2,11 @@ import {
   GraphQLList as ListType,
   GraphQLString as StringType,
 } from 'graphql';
-
 import {
   EstimateOutputType,
 } from '../types';
 import Estimate from '../../data/models/estimate';
+import { TokenError } from '../errors';
 
 
 const estimates = {
@@ -16,14 +16,18 @@ const estimates = {
       type: StringType,
     },
   },
-  async resolve(root, { id: _id = 1 }) {
-    try {
-      const currentEstimate = await Estimate.find();
-
-      return currentEstimate;
-    } catch (err) {
-      return console.error(err);
+  async resolve(_, args, req) {
+    const { user: { role: userRole = null, _id: userId } } = req;
+    let allEstimates;
+    if (userRole !== 'customer') {
+      allEstimates = await Estimate.find();
+    } else {
+      allEstimates = await Estimate.find({ owner: userId });
     }
+    if (!req.user) {
+      throw new TokenError({});
+    }
+    return allEstimates;
   },
 };
 
