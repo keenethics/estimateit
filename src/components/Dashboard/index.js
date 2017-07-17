@@ -23,7 +23,7 @@ class Dashboard extends React.Component {
           {isAuthenticated
             ? <div className={`${styles.form_signin_body} container-fluid`}>
               <div className="row">
-              {this.props.allEstimates.length
+                {this.props.allEstimates.length
                   ? this.props.allEstimates.map((estimate, key) =>
                     <SingleEstimate estimate={estimate} key={key} />,
                     )
@@ -40,10 +40,7 @@ class Dashboard extends React.Component {
             </div>
             : <div className="">
               <p>Login or Register with:</p>
-              <a href="/login" className="btn btn-xs btn-danger">
-                <span className="fa fa-user" />
-                  Login
-                </a>
+              <a href="/login" className="btn btn-xs btn-danger">Login</a>
             </div>}
         </div>
       </div>

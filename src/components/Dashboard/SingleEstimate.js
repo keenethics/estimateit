@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './styles.scss';
 
 const SingleEstimate = (props) => {
-  console.log(props.estimate);
   return (
     <a
       href={`/estimate/${props.estimate._id}`}
