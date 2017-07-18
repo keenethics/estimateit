@@ -8,25 +8,28 @@ import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getEstimate = this.getEstimate.bind(this);
-  }
-
   static contextTypes = {
     client: PropTypes.object,
   };
+
   static propTypes = {
     children: PropTypes.node.isRequired,
     id: PropTypes.string.isRequired,
   };
+
   static defaultProps = {
     id: null,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.getEstimate = this.getEstimate.bind(this);
+  }
+
   componentWillReceiveProps(nextProps) {
     const { loading, estimate } = nextProps.data;
-    if (!loading && estimate !== this.props.data.estimate) {
+    if (!loading && JSON.stringify(estimate) !== JSON.stringify(this.props.data.estimate)) {
       this.getEstimate(nextProps);
     }
   }
@@ -50,11 +53,13 @@ class Wrapper extends React.Component {
     } = this.props;
     return (
       <div>
-        {data.loading
+        {
+          data.loading
           ? <Loading />
           : <div>
             {this.props.children}
-          </div>}
+          </div>
+        }
       </div>
     );
   }

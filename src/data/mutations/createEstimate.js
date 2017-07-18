@@ -1,40 +1,29 @@
-import {
-  GraphQLObjectType as ObjectType,
-} from 'graphql';
 import Estimate from '../models';
-import {
-  EstimateInputType,
-  EstimateCreateType,
-} from '../types';
 import { UserError } from '../errors';
+import { EstimateCreateType } from '../types';
 
-const Mutation = new ObjectType({
-  name: 'EstimateMutation',
-  description: 'Estimate',
-  fields: () => ({
-    estimateCreate: {
-      type: EstimateCreateType,
-      args: {
-        input: {
-          type: EstimateInputType,
-        },
-      },
-      async resolve({ request: { headers, user } }, { input }) {
-        let url;
-        if (!user) {
-          throw new UserError({});
-        }
-        const newEstimate = new Estimate({ owner: user._id, ...input });
-        await newEstimate.save((err, estimate) => {
-          if (err) return null;
-          const { _id } = estimate;
-          url = `${_id}`;
-        });
-        console.log('\t  createEstimate url:', url);
-        return { url };
-      },
-    },
-  }),
-});
 
-export default Mutation;
+const estimateCreate = {
+  type: EstimateCreateType,
+  async resolve({ request: { user } }) {
+    if (!user) {
+      throw new UserError({});
+    }
+
+    let url;
+    const { _id: userId } = user;
+
+    try {
+      const newEstimate = new Estimate({ owner: userId });
+      const { _id } = await newEstimate.save();
+
+      url = `estimate/${_id}`;
+    } catch (error) {
+      return console.error(error);
+    }
+
+    return { url };
+  },
+};
+
+export default estimateCreate;

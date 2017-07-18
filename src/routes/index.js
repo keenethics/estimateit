@@ -6,7 +6,8 @@ export default [
       require('./dashboard').default,
       require('./login').default,
       require('./register').default,
-      require('./estimateCreate').default,
+      require('./estimateGet').default,
+      // require('./estimateCreate').default,
       require('./notFound').default,
     ],
     async action({ next, isAuthenticated }) {
