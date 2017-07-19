@@ -116,7 +116,7 @@ app.use(
 app.post('/api/sendPpfToEmails', (req, res) => {
   const { url, emails = '' } = req.body;
   res.end('ok');
-  generatePDF(url, emails);
+  generatePDF(req.cookies, url, emails);
 });
 
 app.post('/api/downloadPpdf', (req, res) => {
@@ -128,13 +128,15 @@ app.post('/api/downloadPpdf', (req, res) => {
 
   nightmare
     .goto(url)
-    .wait(2000)
-    .evaluate(() => {
-      const body = document.querySelector('body');
-      return {
-        height: body.scrollHeight,
-      };
+    .cookies.clear('connect.sid')
+    .cookies.set({
+      name: 'connect.sid',
+      value: req.cookies['connect.sid'],
+      path: '/',
     })
+    .refresh()
+    .goto(url)
+    .viewport(1300, 900)
     .wait(2000)
     .pdf({
       printBackground: true,
