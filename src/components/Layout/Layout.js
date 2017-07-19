@@ -23,21 +23,21 @@ class Layout extends React.Component {
   render() {
     return (
       <div>
-            <Header />
-            <Container className={s.estimator}>
-              <Card id="screen">
-                <Col
-                  xs="12"
-                  md="12"
-                  lg="10"
-                  className={s.estimator__container}
-                >
-                  <Form form="contact">
-                    {this.props.children}
-                  </Form>
-                </Col>
-              </Card>
-            </Container>
+        <Header />
+        <Container className={s.estimator}>
+          <Card id="screen">
+            <Col
+              xs="12"
+              md="12"
+              lg="10"
+              className={s.estimator__container}
+            >
+              <Form form="contact">
+                {this.props.children}
+              </Form>
+            </Col>
+          </Card>
+        </Container>
       </div>
     );
   }
@@ -52,7 +52,7 @@ Layout = reduxForm({
   enableReinitialize: false,
 })(Layout);
 
-const initializeValues = (state) => {
+const initializeValues = () => {
   const initialValues = {
     moneyRate: '25',
     estimateOptions: {

@@ -13,8 +13,9 @@ class Wrapper extends React.Component {
   };
 
   static propTypes = {
+    data: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
-    id: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -34,8 +35,9 @@ class Wrapper extends React.Component {
     }
   }
 
-  getEstimate(props) {
-    const { dispatch, data: { estimate } } = props;
+  getEstimate(nextProps) {
+    const { dispatch } = this.props;
+    const { data: { estimate } } = nextProps;
     dispatch({
       type: '@@redux-form/INITIALIZE',
       meta: {
@@ -65,15 +67,10 @@ class Wrapper extends React.Component {
   }
 }
 
-const initializeValues = (state) => {
-  const initialValues = {
-    moneyRate: '25',
-  };
-  return { initialValues };
-};
 const estimate = gql`
   query estimate($id: String) {
     estimate(id: $id) {
+      _id
       owner
       date
       clientName
@@ -92,34 +89,36 @@ const estimate = gql`
         risks
         bugFixes
         completing
+        __typename @skip(if: true)
       }
       tasks {
-        id
         taskName
         isChecked
         minimumHours
         maximumHours
+        __typename @skip(if: true)
         tasks {
-          id
           taskName
           isChecked
           minimumHours
           maximumHours
+          __typename @skip(if: true)
           tasks {
-            id
             taskName
             isChecked
             minimumHours
             maximumHours
+            __typename @skip(if: true)
           }
         }
       }
+      __typename @skip(if: true)
     }
   }
 `;
 
 export default compose(
-  connect(initializeValues),
+  connect(),
   graphql(estimate, {
     options: props => ({
       variables: {

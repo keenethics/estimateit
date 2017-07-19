@@ -3,16 +3,23 @@ import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
+import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import SingleEstimate from './SingleEstimate';
+
 import styles from './styles.scss';
 import history from '../../history';
+import SingleEstimate from './SingleEstimate';
 
 
 class Dashboard extends React.Component {
   static contextTypes = {
     isAuthenticated: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+  };
+
+  static propTypes = {
+    allEstimates: PropTypes.array,
+    mutate: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -33,7 +40,16 @@ class Dashboard extends React.Component {
       .then(({ data: { estimateCreate: { url } } }) => {
         history.replace(url);
       })
-      .catch(error => console.error(error));
+      .catch((error) => {
+        console.error(error);
+        this.notificationSystem.addNotification({
+          autoDismiss: 6,
+          position: 'br',
+          title: 'Error',
+          level: 'error',
+          message: 'internal server error',
+        });
+      });
   }
 
   render() {
@@ -67,6 +83,7 @@ class Dashboard extends React.Component {
               <a href="/login" className="btn btn-xs btn-danger">Login</a>
             </div>}
         </div>
+        <Notification ref={ref => this.notificationSystem = ref} />
       </div>
     );
   }

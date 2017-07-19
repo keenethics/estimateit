@@ -55,39 +55,26 @@ class Reports extends Component {
     const { mutate } = this.props;
     delete values['emails'];
 
+
+    values.date = values.date ? values.date.format() : '';
+
     mutate({
       variables: { input: { ...values } },
-    }).then(({ data: { estimateCreate: { url } } }) => {
+    }).then(() => {
       this.notificationSystem.addNotification({
-        title: 'Success',
+        autoDismiss: 6,
         position: 'br',
+        title: 'Success',
         level: 'success',
-        children: (
-          <div>
-            <input
-              type="text"
-              value={url}
-              onClick={e => e.stopPropagation()}
-              className={styles['custom-notification-input']}
-              ref={node => (this.customNotificationInput = node)}
-            />
-            <button
-              type="button"
-              onClick={this.copyUrlToClipboard.bind(this, url)}
-              className={styles['custom-notification-action-button']}
-            >
-            Copy to clipboard
-          </button>
-          </div>
-        ),
+        message: 'Estimate saved',
       });
-    }).catch(error => {
+    }).catch((error) => {
       console.error(error);
       this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
         title: 'Error',
         level: 'error',
-        position: 'br',
-        autoDismiss: 6,
         message: 'internal server error',
       });
     });
@@ -113,7 +100,7 @@ class Reports extends Component {
         url: decodeURIComponent(location.href),
       }),
     })
-      .then(res => {
+      .then(() => {
         this.notificationSystem.addNotification({
           title: 'Success',
           level: 'success',
@@ -122,7 +109,8 @@ class Reports extends Component {
           message: 'PDF will be send to the emails!',
         });
       })
-      .catch(error => {
+      .catch((error) => {
+        console.error(error);
         this.notificationSystem.addNotification({
           title: 'Error',
           level: 'error',
@@ -213,6 +201,12 @@ class Reports extends Component {
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem
                 type="submit"
+                onClick={handleSubmit(this.saveAsUrl)}
+              >
+                Save Estimate
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
                 onClick={handleSubmit(this.sendPdfToEmails)}
               >
                 Send PDF to emails
@@ -228,12 +222,6 @@ class Reports extends Component {
                 onClick={handleSubmit(this.saveAsCSV)}
               >
                 Generate CSV
-              </DropdownItem>
-              <DropdownItem
-                type="submit"
-                onClick={handleSubmit(this.saveAsUrl)}
-              >
-                Generate URL
               </DropdownItem>
             </DropdownMenu>
           </ButtonDropdown>
@@ -255,12 +243,12 @@ Reports.propTypes = {
 
 export default compose(
   graphql(gql`
-    mutation EstimateMutation (
-      $input: EstimateInputType!
+    mutation Mutation (
+      $input: EstimateInputType
     ) {
-      estimateCreate (
+      estimateSave (
         input: $input
-      ) {
+      ){
         url
       }
     },
