@@ -31,6 +31,7 @@ class Header extends Component {
         <Field
           id="date"
           name="date"
+          validate={[required]}
           component={renderDateField}
           fieldClassName={styles.right__group_item}
           wrapperClassName={styles.right__group_item}
