@@ -35,7 +35,9 @@ class MultiSelect extends Component {
       : [];
 
     return (
-      <div>
+      <div
+        name={name}
+      >
         <Creatable
           name={name}
           multi={multi}

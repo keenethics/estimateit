@@ -8,7 +8,7 @@ import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Header from '../libs/Header';
 import s from './Layout.scss';
-
+import scrollToItem from '../libs/scroll';
 import { ESTIMATE_FORM } from '../../constants';
 
 class Layout extends React.Component {
@@ -20,24 +20,27 @@ class Layout extends React.Component {
     const { handleSubmit } = this.props;
     return { handleSubmit };
   }
+
   render() {
     return (
       <div>
-            <Header />
-            <Container className={s.estimator}>
-              <Card id="screen">
-                <Col
-                  xs="12"
-                  md="12"
-                  lg="10"
-                  className={s.estimator__container}
-                >
-                  <Form form="contact">
-                    {this.props.children}
-                  </Form>
-                </Col>
-              </Card>
-            </Container>
+        <Header />
+        <Container className={s.estimator}>
+          <Card id="screen">
+            <Col
+              xs="12"
+              md="12"
+              lg="10"
+              className={s.estimator__container}
+            >
+              <Form
+                form={ESTIMATE_FORM}
+              >
+                {this.props.children}
+              </Form>
+            </Col>
+          </Card>
+        </Container>
       </div>
     );
   }
@@ -47,12 +50,14 @@ Layout.childContextTypes = {
   handleSubmit: PropTypes.func,
 };
 
+
 Layout = reduxForm({
   form: ESTIMATE_FORM,
   enableReinitialize: false,
+  onSubmitFail: scrollToItem,
 })(Layout);
 
-const initializeValues = (state) => {
+const initializeValues = () => {
   const initialValues = {
     moneyRate: '25',
     estimateOptions: {
