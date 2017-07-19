@@ -16,16 +16,15 @@ const estimateSave = {
       throw new UserError({});
     }
 
-    let res;
     const { _id } = input;
 
     try {
-      res = await Estimate.update({ _id }, { $set: { ...input } });
+      const res = await Estimate.update({ _id: 'sss' }, { $set: { ...input } });
+      console.log(res);
+      return { url: 'ok ' };
     } catch (error) {
       return console.error(error);
     }
-
-    return { url: 'ok ' };
   },
 };
 

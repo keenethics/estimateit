@@ -51,8 +51,8 @@ export const renderOptionsField = ({ className, input: { value, ...input }, labe
 export const renderDateField =
 ({
   input: {
+    value,
     onChange,
-    value = '',
   },
   fieldClassName,
   wrapperClassName,
@@ -61,11 +61,11 @@ export const renderDateField =
     className={wrapperClassName}
   >
     <DateField
-      selected={value ? moment(value, 'YYYY/MM/DD') : moment()}
-      onChange={onChange}
-      placeholderText="Click to select a date"
       htmlFor="datePicker"
       dateFormat="YYYY/MM/DD"
+      placeholderText="Click to select a date"
+      selected={value ? moment(value) : moment()}
+      onChange={momentInstance => onChange(momentInstance.format())}
       className={`react-datepicker-ignore-onclickoutside ${fieldClassName}`}
     />
   </FormGroup>

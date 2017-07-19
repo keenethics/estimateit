@@ -55,9 +55,6 @@ class Reports extends Component {
     const { mutate } = this.props;
     delete values['emails'];
 
-
-    values.date = values.date ? values.date.format() : '';
-
     mutate({
       variables: { input: { ...values } },
     }).then(() => {
