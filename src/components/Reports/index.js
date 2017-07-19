@@ -35,7 +35,7 @@ class Reports extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
-    this.saveAsUrl = this.saveAsUrl.bind(this);
+    this.estimateUpdate = this.estimateUpdate.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
@@ -51,13 +51,13 @@ class Reports extends Component {
     this.setState({ dropdownOpen });
   }
 
-  saveAsUrl(values) {
+  estimateUpdate(values) {
     const { mutate } = this.props;
     delete values['emails'];
 
     mutate({
       variables: { input: { ...values } },
-    }).then(() => {
+    }).then((res) => {
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -66,13 +66,13 @@ class Reports extends Component {
         message: 'Estimate saved',
       });
     }).catch((error) => {
-      console.error(error);
+      console.error(error.message);
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
         title: 'Error',
         level: 'error',
-        message: 'internal server error',
+        message: error.message,
       });
     });
   }
@@ -115,7 +115,6 @@ class Reports extends Component {
           autoDismiss: 6,
           message: 'internal server error',
         });
-        console.error(error);
       });
   }
 
@@ -198,7 +197,7 @@ class Reports extends Component {
               <DropdownItem header>Type</DropdownItem>
               <DropdownItem
                 type="submit"
-                onClick={handleSubmit(this.saveAsUrl)}
+                onClick={handleSubmit(this.estimateUpdate)}
               >
                 Save Estimate
               </DropdownItem>
@@ -243,11 +242,9 @@ export default compose(
     mutation Mutation (
       $input: EstimateInputType
     ) {
-      estimateSave (
+      estimateUpdate (
         input: $input
-      ){
-        url
-      }
+      )
     },
   `),
   withStyles(styles),
