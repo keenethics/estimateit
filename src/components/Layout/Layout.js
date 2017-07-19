@@ -8,7 +8,7 @@ import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Header from '../libs/Header';
 import s from './Layout.scss';
-
+import scrollToItem from '../libs/scroll';
 import { ESTIMATE_FORM } from '../../constants';
 
 class Layout extends React.Component {
@@ -20,6 +20,7 @@ class Layout extends React.Component {
     const { handleSubmit } = this.props;
     return { handleSubmit };
   }
+
   render() {
     return (
       <div>
@@ -32,7 +33,9 @@ class Layout extends React.Component {
               lg="10"
               className={s.estimator__container}
             >
-              <Form form="contact">
+              <Form
+                form={ESTIMATE_FORM}
+              >
                 {this.props.children}
               </Form>
             </Col>
@@ -47,9 +50,11 @@ Layout.childContextTypes = {
   handleSubmit: PropTypes.func,
 };
 
+
 Layout = reduxForm({
   form: ESTIMATE_FORM,
   enableReinitialize: false,
+  onSubmitFail: scrollToItem,
 })(Layout);
 
 const initializeValues = () => {

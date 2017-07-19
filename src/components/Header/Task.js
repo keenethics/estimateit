@@ -91,6 +91,7 @@ class Task extends React.Component {
           return (
             <FormGroup
               key={task}
+              name="tasks"
               className={styles.subtasks}
             >
               <Field
