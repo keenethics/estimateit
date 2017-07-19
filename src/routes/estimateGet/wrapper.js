@@ -8,31 +8,36 @@ import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
-  constructor(props) {
-    super(props);
-    this.getEstimate = this.getEstimate.bind(this);
-  }
-
   static contextTypes = {
     client: PropTypes.object,
   };
+
   static propTypes = {
+    data: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
-    id: PropTypes.string.isRequired,
+    dispatch: PropTypes.func.isRequired,
   };
+
   static defaultProps = {
     id: null,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.getEstimate = this.getEstimate.bind(this);
+  }
+
   componentWillReceiveProps(nextProps) {
     const { loading, estimate } = nextProps.data;
-    if (!loading && estimate !== this.props.data.estimate) {
+    if (!loading && JSON.stringify(estimate) !== JSON.stringify(this.props.data.estimate)) {
       this.getEstimate(nextProps);
     }
   }
 
-  getEstimate(props) {
-    const { dispatch, data: { estimate } } = props;
+  getEstimate(nextProps) {
+    const { dispatch } = this.props;
+    const { data: { estimate } } = nextProps;
     dispatch({
       type: '@@redux-form/INITIALIZE',
       meta: {
@@ -50,25 +55,22 @@ class Wrapper extends React.Component {
     } = this.props;
     return (
       <div>
-        {data.loading
+        {
+          data.loading
           ? <Loading />
           : <div>
             {this.props.children}
-          </div>}
+          </div>
+        }
       </div>
     );
   }
 }
 
-const initializeValues = (state) => {
-  const initialValues = {
-    moneyRate: '25',
-  };
-  return { initialValues };
-};
 const estimate = gql`
   query estimate($id: String) {
     estimate(id: $id) {
+      _id
       owner
       date
       clientName
@@ -87,34 +89,36 @@ const estimate = gql`
         risks
         bugFixes
         completing
+        __typename @skip(if: true)
       }
       tasks {
-        id
         taskName
         isChecked
         minimumHours
         maximumHours
+        __typename @skip(if: true)
         tasks {
-          id
           taskName
           isChecked
           minimumHours
           maximumHours
+          __typename @skip(if: true)
           tasks {
-            id
             taskName
             isChecked
             minimumHours
             maximumHours
+            __typename @skip(if: true)
           }
         }
       }
+      __typename @skip(if: true)
     }
   }
 `;
 
 export default compose(
-  connect(initializeValues),
+  connect(),
   graphql(estimate, {
     options: props => ({
       variables: {

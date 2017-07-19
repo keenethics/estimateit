@@ -6,7 +6,7 @@ import Header from '../../components/Header';
 
 export default {
 
-  path: '/:id',
+  path: '/estimate/:id',
   async action({ params: { id } }) {
     try {
       return {

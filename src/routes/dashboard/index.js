@@ -5,14 +5,14 @@ import Layout from '../../components/Layout';
 
 export default {
   path: '/',
-  async  action({next, isAuthenticated}) {
+  async  action({ isAuthenticated }) {
     if (isAuthenticated) {
       return {
         title: 'Dashboard',
         component: (
           <Wrapper>
             <Layout>
-              <Dashboard />,
+              <Dashboard />
             </Layout>
           </Wrapper>
         ),
@@ -22,7 +22,7 @@ export default {
       title: 'Dashboard',
       component: (
         <Layout>
-          <Dashboard />,
+          <Dashboard />
         </Layout>
       ),
     };
