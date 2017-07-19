@@ -6,18 +6,9 @@ import {
   GraphQLObjectType as ObjectType,
 } from 'graphql';
 
-import Estimate from '../../data/models/estimate';
-
-//
-// HEADER
-//
-
 const TaskOutputType = new ObjectType({
   name: 'TaskOutputType',
   fields: () => ({
-    id: {
-      type: StringType,
-    },
     taskName: {
       type: StringType,
     },
@@ -39,10 +30,6 @@ const TaskOutputType = new ObjectType({
   }),
 });
 
-//
-// MAIN
-//
-
 const EstimateOptionsOutputType = new ObjectType({
   name: 'EstimateOptionsOutputType',
   fields: {
@@ -63,10 +50,6 @@ const EstimateOptionsOutputType = new ObjectType({
     },
   },
 });
-
-//
-// EstimateOutputType
-//
 
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',

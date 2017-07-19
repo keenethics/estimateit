@@ -1,5 +1,9 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
-import history from '../history';
+import {
+  MONGO_ERROR,
+  UNAUTHORIZED_USER,
+  INVALID_PERMISSION,
+} from '../../data/errors/types';
 
 const networkInterface = createNetworkInterface({
   uri: '/graphql',
@@ -11,10 +15,15 @@ const networkInterface = createNetworkInterface({
 const logErrors = {
   applyAfterware({ response }, next) {
     response.clone().json().then((res) => {
-      if (res.errors && res.errors.length > 0) {
-        location.replace('/404');
-      }
-      next();
+      if (!res.errors || !res.errors.length) return next();
+
+      res.errors.forEach(({ name }) => {
+        if (name === UNAUTHORIZED_USER || name === INVALID_PERMISSION) {
+          location.replace('/404');
+        }
+      });
+
+      return next();
     }).catch((e) => {
       console.error('Unhandled networkInterface error: ', e); // eslint-disable-line
       next();

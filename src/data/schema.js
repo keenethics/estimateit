@@ -3,7 +3,7 @@ import {
   GraphQLObjectType as ObjectType,
 
 } from 'graphql';
-import Mutation from './mutations/createEstimate';
+import Mutation from './mutations';
 
 
 import {

@@ -6,10 +6,6 @@ import {
   GraphQLInputObjectType as InputObjectType,
 } from 'graphql';
 
-//
-// HEADER
-//
-
 const TaskInputType = new InputObjectType({
   name: 'TaskInputType',
   fields: () => ({
@@ -36,10 +32,6 @@ const TaskInputType = new InputObjectType({
     },
   }),
 });
-
-//
-// MAIN
-//
 
 const EstimateOptionsInputType = new InputObjectType({
   name: 'EstimateOptionsInputType',
@@ -70,6 +62,9 @@ const EstimateOptionsInputType = new InputObjectType({
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
+    _id: {
+      type: StringType,
+    },
     owner: {
       type: StringType,
     },
@@ -80,9 +75,6 @@ const EstimateInputType = new InputObjectType({
       type: StringType,
     },
     projectName: {
-      type: StringType,
-    },
-    data: {
       type: StringType,
     },
     sprintNumber: {

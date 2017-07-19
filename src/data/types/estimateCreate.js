@@ -4,7 +4,7 @@ import {
 } from 'graphql';
 
 const EstimateCreateType = new ObjectType({
-  name: 'estimate',
+  name: 'estimateCreateResponse',
   fields: {
     url: {
       type: StringType,

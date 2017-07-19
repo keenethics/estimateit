@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
+import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import SingleEstimate from './SingleEstimate';
+
 import styles from './styles.scss';
+import history from '../../history';
+import SingleEstimate from './SingleEstimate';
 
 
 class Dashboard extends React.Component {
@@ -13,12 +16,45 @@ class Dashboard extends React.Component {
     isAuthenticated: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
+
+  static propTypes = {
+    allEstimates: PropTypes.array,
+    mutate: PropTypes.func.isRequired,
+  };
+
   static defaultProps = {
     allEstimates: [],
   };
 
+  constructor(props) {
+    super(props);
+
+    this.createNewEstimate = this.createNewEstimate.bind(this);
+  }
+
+
+  createNewEstimate(e) {
+    e.preventDefault();
+
+    this.props.mutate()
+      .then(({ data: { estimateCreate: { url } } }) => {
+        history.replace(url);
+      })
+      .catch((error) => {
+        console.error(error);
+        this.notificationSystem.addNotification({
+          autoDismiss: 6,
+          position: 'br',
+          title: 'Error',
+          level: 'error',
+          message: 'internal server error',
+        });
+      });
+  }
+
   render() {
     const { isAuthenticated } = this.context;
+
     return (
       <div className={styles.wrapper}>
         <div className={`${styles.form_signin} text-center`}>
@@ -26,19 +62,20 @@ class Dashboard extends React.Component {
           {isAuthenticated
             ? <div className={`${styles.form_signin_body} container-fluid`}>
               <div className="row">
-                {this.props.allEstimates
+                {this.props.allEstimates.length
                   ? this.props.allEstimates.map((estimate, key) =>
                     <SingleEstimate estimate={estimate} key={key} />,
                     )
                   : <div>
                     <p>Go to Dashboard</p>
-                    <a
-                      className={`${styles.button__padding} btn btn-xs btn-danger`}
-                      href="/estimate"
-                    >
-                        Create Estimate
-                      </a>
-                  </div>}
+                  </div>
+                }
+                <a
+                  className={`${styles.button__padding} btn btn-xs btn-danger`}
+                  onClick={this.createNewEstimate}
+                >
+                    Create Estimate
+                </a>
               </div>
             </div>
             : <div className="">
@@ -46,10 +83,12 @@ class Dashboard extends React.Component {
               <a href="/login" className="btn btn-xs btn-danger">Login</a>
             </div>}
         </div>
+        <Notification ref={ref => this.notificationSystem = ref} />
       </div>
     );
   }
 }
+
 function mapStateToProps(state) {
   return {
     allEstimates: state.Main.allEstimates,
@@ -59,8 +98,8 @@ function mapStateToProps(state) {
 export default compose(
   connect(mapStateToProps),
   graphql(gql`
-    mutation EstimateMutation($input: EstimateInputType!) {
-      estimateCreate(input: $input) {
+    mutation Mutation{
+      estimateCreate {
         url
       }
     }
