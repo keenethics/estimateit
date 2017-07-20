@@ -1,13 +1,11 @@
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
+import scrollIntoView from 'scroll-into-view';
 
 /* eslint-disable */
 const scrollToItem = function scrollToItem(errors) {
   setTimeout(() => {
     const firstInvalidItem = document.getElementsByClassName('text-danger')[0];
     if (!firstInvalidItem) return null;
-    scrollIntoViewIfNeeded(firstInvalidItem, true, {
-      duration: 150
-    })
+    scrollIntoView(firstInvalidItem);
  }, 0);
 };
 
