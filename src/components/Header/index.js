@@ -60,7 +60,7 @@ class Header extends Component {
         </FormGroup>
         <FormGroup className={styles.right__group}>
           <Field
-            type="number"
+            type="text"
             label="Sprint:"
             id="sprintNumber"
             name="sprintNumber"
