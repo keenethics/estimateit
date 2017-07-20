@@ -56,6 +56,7 @@ export const renderDateField =
   },
   fieldClassName,
   wrapperClassName,
+  meta,
 }) => (
   <FormGroup
     className={wrapperClassName}
@@ -65,8 +66,12 @@ export const renderDateField =
       dateFormat="YYYY/MM/DD"
       placeholderText="Click to select a date"
       selected={value ? moment(value) : moment()}
-      onChange={momentInstance => onChange(momentInstance.format())}
+      onChange={momentInstance => onChange(momentInstance && momentInstance.format())}
       className={`react-datepicker-ignore-onclickoutside ${fieldClassName}`}
     />
+    {(meta.error &&
+    <div>
+      <span className="text-danger">{meta.error}</span>
+    </div>)}
   </FormGroup>
 );

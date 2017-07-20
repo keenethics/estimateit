@@ -59,7 +59,7 @@ query allEstimates {
     clientName
     projectName
     sprintNumber
-    data
+    date
   }
 }
 `;

@@ -161,109 +161,115 @@ class InputAndPopover extends React.Component {
     isPopoverOpen = !disabled && isPopoverOpen;
 
     return (
-      <InputGroup id={newId} className={styles.input_group}>
-        <Input
-          {...input}
-          disabled={disabled}
-          placeholder="0 h 0 m"
-          value={formattedValue}
-          onBlur={this.handleOnBlur}
-          onChange={this.handleOnChange}
-        />
-        <InputGroupAddon
-          className={styles.input_group_addon}
-        >
-          {addon}
-        </InputGroupAddon>
-        <InputGroupAddon
-          onClick={this.toggle}
-          id="isPopoverOpenForMinHours"
-          className={styles.input_group_time}
-        >
-          &#9719;
-        </InputGroupAddon>
-        <ValidationState {...meta} />
-        <Popover placement="top" isOpen={isPopoverOpen} target={newId} toggle={this.toggle}>
-          <PopoverContent>
-            <Table>
-              <tbody className={styles.popover_table}>
-                <tr>
-                  <td>
-                    <Button
-                      id="plusHour"
-                      name={buttonsNames.plusHour}
-                      className={styles.input_group_plus}
-                      onClick={this.onChangeHoursAndMinutes}
-                    >
-                      +
-                    </Button>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    <Button
-                      id="plusMinute"
-                      name={buttonsNames.plusMinute}
-                      className={styles.input_group_plus}
-                      onClick={this.onChangeHoursAndMinutes}
-                    >
-                      +
-                    </Button>
-                  </td>
-                  <td>&nbsp;</td>
-                </tr>
-                <tr>
-                  <td className={styles.input_group_middle_input}>
-                    <Input
-                      type="text"
-                      maxLength="2"
-                      value={hours}
-                      id="changeHours"
-                      name={hoursInputName}
-                      onClick={this.onChangeHoursAndMinutes}
-                    />
-                  </td>
-                  <td className={styles.input_group_time_value}>h</td>
-                  <td className={styles.input_group_middle_input}>
-                    <Input
-                      type="text"
-                      maxLength="2"
-                      value={minutes}
-                      id="changeMinutes"
-                      name={minutesInputName}
-                      onClick={this.onChangeHoursAndMinutes}
-                    />
-                  </td>
-                  <td className={styles.input_group_time_value}>m</td>
-                </tr>
-                <tr>
-                  <td>
-                    <Button
-                      id="minusHour"
-                      name={buttonsNames.minusHour}
-                      className={styles.input_group_minus}
-                      onClick={this.onChangeHoursAndMinutes}
-                    >
-                      -
-                    </Button>
-                  </td>
-                  <td>&nbsp;</td>
-                  <td>
-                    <Button
-                      id="minusMinute"
-                      name={buttonsNames.minusMinute}
-                      className={styles.input_group_minus}
-                      onClick={this.onChangeHoursAndMinutes}
-                    >
-                      -
-                    </Button>
-                  </td>
-                  <td>&nbsp;</td>
-                </tr>
-              </tbody>
-            </Table>
-          </PopoverContent>
-        </Popover>
-      </InputGroup>
+      <div>
+        <div>
+          <InputGroup id={newId} className={styles.input_group}>
+            <Input
+              {...input}
+              disabled={disabled}
+              placeholder="0 h 0 m"
+              value={formattedValue}
+              onBlur={this.handleOnBlur}
+              onChange={this.handleOnChange}
+            />
+            <InputGroupAddon
+              className={styles.input_group_addon}
+            >
+              {addon}
+            </InputGroupAddon>
+            <InputGroupAddon
+              onClick={this.toggle}
+              id="isPopoverOpenForMinHours"
+              className={styles.input_group_time}
+            >
+              &#9719;
+            </InputGroupAddon>
+            <Popover placement="top" isOpen={isPopoverOpen} target={newId} toggle={this.toggle}>
+              <PopoverContent>
+                <Table>
+                  <tbody className={styles.popover_table}>
+                    <tr>
+                      <td>
+                        <Button
+                          id="plusHour"
+                          name={buttonsNames.plusHour}
+                          className={styles.input_group_plus}
+                          onClick={this.onChangeHoursAndMinutes}
+                        >
+                        +
+                      </Button>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
+                        <Button
+                          id="plusMinute"
+                          name={buttonsNames.plusMinute}
+                          className={styles.input_group_plus}
+                          onClick={this.onChangeHoursAndMinutes}
+                        >
+                        +
+                      </Button>
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                      <td className={styles.input_group_middle_input}>
+                        <Input
+                          type="text"
+                          maxLength="2"
+                          value={hours}
+                          id="changeHours"
+                          name={hoursInputName}
+                          onClick={this.onChangeHoursAndMinutes}
+                        />
+                      </td>
+                      <td className={styles.input_group_time_value}>h</td>
+                      <td className={styles.input_group_middle_input}>
+                        <Input
+                          type="text"
+                          maxLength="2"
+                          value={minutes}
+                          id="changeMinutes"
+                          name={minutesInputName}
+                          onClick={this.onChangeHoursAndMinutes}
+                        />
+                      </td>
+                      <td className={styles.input_group_time_value}>m</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <Button
+                          id="minusHour"
+                          name={buttonsNames.minusHour}
+                          className={styles.input_group_minus}
+                          onClick={this.onChangeHoursAndMinutes}
+                        >
+                        -
+                      </Button>
+                      </td>
+                      <td>&nbsp;</td>
+                      <td>
+                        <Button
+                          id="minusMinute"
+                          name={buttonsNames.minusMinute}
+                          className={styles.input_group_minus}
+                          onClick={this.onChangeHoursAndMinutes}
+                        >
+                        -
+                      </Button>
+                      </td>
+                      <td>&nbsp;</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              </PopoverContent>
+            </Popover>
+          </InputGroup>
+        </div>
+        <div>
+          <ValidationState {...meta} />
+        </div>
+      </div>
     );
   }
 }

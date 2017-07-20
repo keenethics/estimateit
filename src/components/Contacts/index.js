@@ -5,7 +5,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { Field } from 'redux-form';
 import { renderField } from '../libs/helpers.js';
-import { required, email, alphaNumeric } from '../libs/validation.js';
+import { required, email, alphaNumeric, maxLength } from '../libs/validation.js';
 
 import styles from './styles.scss';
 
@@ -20,7 +20,7 @@ class Contacts extends Component {
             name="pm"
             type="text"
             label="PM's name"
-            validate={[required, alphaNumeric]}
+            validate={[required, alphaNumeric, maxLength(100)]}
             component={renderField}
             className={styles.contacts__input}
           />
@@ -28,7 +28,7 @@ class Contacts extends Component {
             type="text"
             name="position"
             label="Position"
-            validate={[required, alphaNumeric]}
+            validate={[required, alphaNumeric, maxLength(100)]}
             component={renderField}
             className={styles.contacts__input}
           />
@@ -36,7 +36,7 @@ class Contacts extends Component {
             type="email"
             name="email"
             label="Email"
-            validate={[required, email]}
+            validate={[required, email, maxLength(60)]}
             component={renderField}
             className={styles.contacts__input}
           />
@@ -44,7 +44,7 @@ class Contacts extends Component {
             type="text"
             name="skype"
             label="Skype"
-            validate={[required, alphaNumeric]}
+            validate={[required, alphaNumeric, maxLength(60)]}
             component={renderField}
             className={styles.contacts__input}
           />

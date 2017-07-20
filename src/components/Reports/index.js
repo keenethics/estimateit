@@ -7,7 +7,7 @@ import {
   CardBlock,
   DropdownMenu,
   DropdownItem,
-  ButtonDropdown,
+  Dropdown,
   DropdownToggle,
 } from 'reactstrap';
 import axios from 'axios';
@@ -27,7 +27,6 @@ class Reports extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // TODO
       axios: [],
       dropdownOpen: false,
       csv: '',
@@ -180,11 +179,12 @@ class Reports extends Component {
             validate={[emailsArray]}
             className={styles.emails}
           />
-          <ButtonDropdown
+          <Dropdown
             id="screenShot"
             toggle={this.toggle}
             className={styles.final__result}
             isOpen={this.state.dropdownOpen}
+            dropup
           >
             <DropdownToggle
               caret
@@ -220,7 +220,7 @@ class Reports extends Component {
                 Generate CSV
               </DropdownItem>
             </DropdownMenu>
-          </ButtonDropdown>
+          </Dropdown>
         </CardBlock>
         <Notification ref={ref => this.notificationSystem = ref} />
       </Card>

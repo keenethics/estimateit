@@ -40,66 +40,29 @@
 }
 
 .tasks {
-  &__group {
-    display: flex;
-    flex-wrap: wrap;
-    position: relative;
-    &_item {
-      @media screen and (max-width: 1000px) {
-        margin-bottom: .5rem;
-        &:first-child {
-          top: calc(50% - 28px) !important;
-          margin-left: -15.5px !important;
-        }
-      }
-      &:first-child {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        margin-top: 0;
-        margin-bottom: 0;
-      }
-      &:not(:last-child) {
-        margin-right: 10px;
-      }
-    }
-    @media screen and (max-width: 1000px) {
-      margin-left: 0 !important;
-      margin-right: 0 !important;
-    }
+  margin-bottom: 0!important;
+  &__add {
+    margin: 4px 8px 4px 0;
   }
 }
-
 .subtasks {
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: 1rem !important;
-  position: relative;
-
-
-  &__item {
-    @media screen and (max-width: 1000px) {
-      margin-bottom: .5rem;
-      &:first-child {
-        top: calc(50% - 28px) !important;
-        margin-left: -15.5px !important;
-      }
-    }
-    &:first-child {
-      position: absolute;
-      top: 15px !important;
-      transform: translateY(-50%);
-      margin-top: 0;
-      margin-bottom: 0;
-    }
-    &:not(:nth-child(6n+6)) {
-      margin-right: 10px;
-    }
+  &__wrapper {
+    position: relative;
   }
-  @media screen and (max-width: 1000px) {
-    margin: auto 0 !important;
+  &__checkbox {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-top: 0;
+  }
+  &__item {
+    margin: 4px 8px 4px 0;
+    &:not(button) {
+      width: 100%;
+    }
   }
 }
+
 
 .popover_table {
   td {

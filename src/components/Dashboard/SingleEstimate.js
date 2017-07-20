@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import styles from './styles.scss';
 
 const SingleEstimate = (props) => {
@@ -19,7 +20,7 @@ const SingleEstimate = (props) => {
             Sprint number: {props.estimate.sprintNumber}
           </div>
           <div className={styles.singleEstimate__text}>
-            Date: {props.estimate.data}
+            Date: {moment(props.estimate.date).format("MMM Do YY")}
           </div>
         </div>
       </div>

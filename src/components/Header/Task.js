@@ -8,6 +8,7 @@ import {
 } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import styles from './styles.scss';
 
 import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
@@ -74,14 +75,15 @@ class Task extends React.Component {
     const { store: { getState } } = this.context;
 
     return (
-      <FormGroup>
-        { level === 0 &&
-          <Button
-            color="danger"
-            onClick={() => fields.unshift({ isChecked: true })}
-          >
-            Add task
-          </Button>
+      <FormGroup className={styles.tasks}>
+        {level === 0 &&
+        <Button
+          color="danger"
+          onClick={() => fields.unshift({ isChecked: true })}
+          className={styles.tasks__add}
+        >
+          Add task
+        </Button>
         }
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
@@ -93,70 +95,75 @@ class Task extends React.Component {
               name="tasks"
               className={styles.subtasks}
             >
-              <Field
-                type="checkbox"
-                component={renderField}
-                id={`${task}.isChecked`}
-                name={`${task}.isChecked`}
-                className={styles.subtasks__item}
-                onChange={e => this.handleToggle(task, e)}
-                onBlur={e => this.handleBlur(task, taskObj, e)}
-              />
-              <Field
-                type="text"
-                label="Task name:"
-                validate={[required]}
-                component={renderField}
-                id={`${task}.taskName`}
-                name={`${task}.taskName`}
-                className={styles.right__group_item}
-              />
-              <Field
-                type="text"
-                addon={'min'}
-                disabled={disabled}
-                component={InputAndPopover}
-                id={`${task}.minimumHours`}
-                name={`${task}.minimumHours`}
-                dispatchChange={dispatchChange}
-                buttonsNames={{
-                  plusHour: 'plusMinHour',
-                  minusHour: 'minusMinHour',
-                  plusMinute: 'plusMinMinute',
-                  minusMinute: 'minusMinMinute',
-                }}
-                hoursInputName={'minHoursInput'}
-                minutesInputName={'minMinutesInput'}
-                validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
-              />
-              <Field
-                type="text"
-                addon={'max'}
-                disabled={disabled}
-                component={InputAndPopover}
-                validate={[taskHourValidation(disabled)]}
-                id={`${task}.maximumHours`}
-                name={`${task}.maximumHours`}
-                dispatchChange={dispatchChange}
-                buttonsNames={{
-                  plusHour: 'plusMaxHour',
-                  minusHour: 'minusMaxHour',
-                  plusMinute: 'plusMaxMinute',
-                  minusMinute: 'minusMaxMinute',
-                }}
-                hoursInputName={'maxHoursInput'}
-                minutesInputName={'maxMinutesInput'}
-              />
-
+              <div className={styles.subtasks__wrapper}>
+                <Field
+                  type="checkbox"
+                  component={renderField}
+                  id={`${task}.isChecked`}
+                  name={`${task}.isChecked`}
+                  className={styles.subtasks__checkbox}
+                  onChange={e => this.handleToggle(task, e)}
+                  onBlur={e => this.handleBlur(task, taskObj, e)}
+                />
+                <Field
+                  type="text"
+                  label="Task name:"
+                  validate={[required]}
+                  component={renderField}
+                  id={`${task}.taskName`}
+                  name={`${task}.taskName`}
+                  className={styles.subtasks__item}
+                />
+                <div>
+                  <Field
+                    type="text"
+                    addon={'min'}
+                    disabled={disabled}
+                    component={InputAndPopover}
+                    id={`${task}.minimumHours`}
+                    name={`${task}.minimumHours`}
+                    dispatchChange={dispatchChange}
+                    buttonsNames={{
+                      plusHour: 'plusMinHour',
+                      minusHour: 'minusMinHour',
+                      plusMinute: 'plusMinMinute',
+                      minusMinute: 'minusMinMinute',
+                    }}
+                    hoursInputName={'minHoursInput'}
+                    minutesInputName={'minMinutesInput'}
+                    className={styles.subtasks__item}
+                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
+                  />
+                  <Field
+                    type="text"
+                    addon={'max'}
+                    disabled={disabled}
+                    component={InputAndPopover}
+                    validate={[taskHourValidation(disabled)]}
+                    id={`${task}.maximumHours`}
+                    name={`${task}.maximumHours`}
+                    dispatchChange={dispatchChange}
+                    buttonsNames={{
+                      plusHour: 'plusMaxHour',
+                      minusHour: 'minusMaxHour',
+                      plusMinute: 'plusMaxMinute',
+                      minusMinute: 'minusMaxMinute',
+                    }}
+                    hoursInputName={'maxHoursInput'}
+                    className={styles.subtasks__item}
+                    minutesInputName={'maxMinutesInput'}
+                  />
+                </div>
+              </div>
               {
                 level < 2 &&
-                  <Button
-                    color="danger"
-                    className={styles.subtasks__item}
-                    onClick={() => dispatchAddSubTask({ form, field: `${task}.tasks` })}
-                  >
-                      Add subtask
-                  </Button>
+                <Button
+                  color="danger"
+                  className={styles.subtasks__item}
+                  onClick={() => dispatchAddSubTask({ form, field: `${task}.tasks` })}
+                >
+                  Add subtask
+                </Button>
               }
               <Button
                 color="danger"
@@ -200,7 +207,7 @@ Task.propTypes = {
 };
 
 function mapStateToProps() {
-  return { };
+  return {};
 }
 
 function mapDispatchToProps(dispatch) {

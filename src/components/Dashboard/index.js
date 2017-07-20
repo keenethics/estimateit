@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
-import { connect } from 'react-redux';
-import { graphql, compose } from 'react-apollo';
+import {connect} from 'react-redux';
+import {graphql, compose} from 'react-apollo';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
     e.preventDefault();
 
     this.props.mutate()
-      .then(({ data: { estimateCreate: { url } } }) => {
+      .then(({data: {estimateCreate: {url}}}) => {
         history.replace(url);
       })
       .catch((error) => {
@@ -53,37 +53,41 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const { isAuthenticated } = this.context;
+    const {isAuthenticated} = this.context;
 
     return (
       <div className={styles.wrapper}>
-        <div className={`${styles.form_signin} text-center`}>
-          <h1 className={styles.form_signin_heading}>Estimator</h1>
+        <div className={`${styles.estimate} text-center`}>
+          <h1 className={styles.estimate__header}>Estimator</h1>
           {isAuthenticated
-            ? <div className={`${styles.form_signin_body} container-fluid`}>
-              <div className="row">
-                {this.props.allEstimates.length
-                  ? this.props.allEstimates.map((estimate, key) =>
-                    <SingleEstimate estimate={estimate} key={key} />,
+            ? <div className={`${styles.estimate__body} container-fluid`}>
+              <div className={styles.estimate__body_items}>
+                <div className="row">
+                  {this.props.allEstimates.length
+                    ? this.props.allEstimates.map((estimate, key) =>
+                      <SingleEstimate estimate={estimate} key={key}/>,
                     )
-                  : <div>
-                    <p>Go to Dashboard</p>
-                  </div>
-                }
-                <a
-                  className={`${styles.button__padding} btn btn-xs btn-danger`}
-                  onClick={this.createNewEstimate}
-                >
+                    : <div>
+                      <p>Go to Dashboard</p>
+                    </div>
+                  }
+                </div>
+                <div className="row">
+                  <button
+                    className={`${styles.estimate__body_btn} btn btn-xs btn-danger`}
+                    onClick={this.createNewEstimate}
+                  >
                     Create Estimate
-                </a>
+                  </button>
+                </div>
               </div>
             </div>
-            : <div className="">
+            : <div>
               <p>Login or Register with:</p>
               <a href="/login" className="btn btn-xs btn-danger">Login</a>
             </div>}
         </div>
-        <Notification ref={ref => this.notificationSystem = ref} />
+        <Notification ref={ref => this.notificationSystem = ref}/>
       </div>
     );
   }
