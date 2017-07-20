@@ -13,7 +13,7 @@ export const mixShouldBeLessThenMax = maxTimeId =>
       .replace(/\[/g, '.');
 
     const maxTime = address.split('.')
-      .reduce((obj, i) => obj[i], allValues);
+      .reduce((obj, i) => obj && obj[i], allValues);
 
     return (!maxTime || maxTime >= value)
       ? undefined
