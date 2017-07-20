@@ -6,15 +6,15 @@ import {
   FieldArray,
   formValueSelector,
 } from 'redux-form';
-
-import styles from './styles.scss';
-import InputAndPopover from './InputAndPopover';
-import { renderField } from '../libs/helpers';
-import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import styles from './styles.scss';
+import { renderField } from '../libs/helpers';
+import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
+import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
+
 
 class Task extends React.Component {
   constructor(props) {
@@ -33,17 +33,17 @@ class Task extends React.Component {
       type: '@@redux-form/CHANGE',
       meta: {
         form,
-        field: `${field}isChecked`,
         touch: true,
+        field: `${field}isChecked`,
         persistentSubmitErrors: false,
       },
       payload,
-    })
+    });
 
     dispatchToggle({ form, field, payload });
   }
 
-  handleBlur(field, task, e) {
+  handleBlur(field) {
     const { store } = this.context;
     const { target: { value: payload } } = event;
     const { meta: { form } } = this.props;
@@ -53,8 +53,8 @@ class Task extends React.Component {
       type: '@@redux-form/BLUR',
       meta: {
         form,
-        field: `${field}isChecked`,
         touch: true,
+        field: `${field}isChecked`,
       },
       payload,
     });
@@ -70,10 +70,9 @@ class Task extends React.Component {
       dispatchRemove,
       dispatchAddSubTask,
     } = this.props;
-
+    const selector = formValueSelector(form);
     const { store: { getState } } = this.context;
 
-    const selector = formValueSelector(form)
     return (
       <FormGroup>
         { level === 0 &&
@@ -169,7 +168,7 @@ class Task extends React.Component {
 
               <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
                 <FieldArray
-                  level={level+1}
+                  level={level + 1}
                   component={Task}
                   name={`${task}.tasks`}
                   dispatchToggle={dispatchToggle}
@@ -179,7 +178,7 @@ class Task extends React.Component {
                 />
               </div>
             </FormGroup>
-          )
+          );
         })}
       </FormGroup>
     );
@@ -191,12 +190,13 @@ Task.contextTypes = {
 };
 
 Task.propTypes = {
-  level: PropTypes.number,
-  fields: PropTypes.object,
-  dispatchChange: PropTypes.func,
-  dispatchRemove: PropTypes.func,
-  dispatchToggle: PropTypes.func,
-  dispatchAddSubTask: PropTypes.func,
+  meta: PropTypes.object.isRequired,
+  level: PropTypes.number.isRequired,
+  fields: PropTypes.object.isRequired,
+  dispatchChange: PropTypes.func.isRequired,
+  dispatchRemove: PropTypes.func.isRequired,
+  dispatchToggle: PropTypes.func.isRequired,
+  dispatchAddSubTask: PropTypes.func.isRequired,
 };
 
 function mapStateToProps() {

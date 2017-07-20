@@ -16,7 +16,7 @@ const changeWrapper = (dispatch, form, field, payload, touch = true) => {
       touch,
       persistentSubmitErrors: false,
     },
-    payload,
+    payload: payload || '',
   });
 };
 
@@ -35,8 +35,8 @@ export const dispatchToggle = ({ form, field, payload }) =>
       const element = selector(getState(), address);
 
       const { isChecked, minimumHours, maximumHours } = element;
-      const minPayload = minimumHours + (payload || -1) * removedMinHours;
-      const maxPayload = maximumHours + (payload || -1) * removedMaxHours;
+      const minPayload = minimumHours + ((payload || -1) * removedMinHours);
+      const maxPayload = maximumHours + ((payload || -1) * removedMaxHours);
 
       changeWrapper(dispatch, form, `${address}.minimumHours`, minPayload);
       changeWrapper(dispatch, form, `${address}.maximumHours`, maxPayload);
@@ -57,7 +57,7 @@ export const dispatchRemove = ({ form, field, index }) =>
     const {
       maximumHours: removedMaxHours = 0,
       minimumHours: removedMinHours = 0,
-      isChecked: removedIsChecked
+      isChecked: removedIsChecked,
     } = removedTask;
 
     dispatch(arrayRemove(form, field.replace(/\[\d+\]$/, ''), index));
@@ -99,7 +99,7 @@ export const dispatchChange = ({ form, field, payload }) =>
       const element = selector(getState(), address);
       const newValue = element[changeType] + difference;
 
-      changeWrapper(dispatch, form, `${address}.${changeType}`, newValue)
+      changeWrapper(dispatch, form, `${address}.${changeType}`, newValue);
 
       if (!element.isChecked) break;
 

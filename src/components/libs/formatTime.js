@@ -2,6 +2,15 @@ const MINUTESINHOUR = 60;
 
 
 const formatTime = (digit) => {
+  if (!digit) {
+    return {
+      hours: 0,
+      minutes: 0,
+      formattedValue: '',
+      fromatedDigitValue: 0,
+    };
+  }
+
   let hours;
   let minutes;
   let formattedValue;

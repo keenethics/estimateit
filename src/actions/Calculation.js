@@ -2,6 +2,7 @@ import {
   CALCULATE_TOTAL_HOURS,
   CALCULATE_GENERAL_HOURS,
 } from '../constants/actionTypes';
+import formatTime from '../components/libs/formatTime';
 
 const nAry = (base = 2) => (length = 0) => {
   /**
@@ -117,8 +118,6 @@ const nAry = (base = 2) => (length = 0) => {
     sumEquals,
   };
 };
-
-import formatTime from '../components/libs/formatTime';
 
 const calculateHourss = (tasks) => {
   if (tasks.length === 0) return [0, 0];

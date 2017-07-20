@@ -124,7 +124,7 @@ class InputAndPopover extends React.Component {
 
   handleOnBlur({ target: { value } }) {
     const string = formatTime(value);
-    const payload = string.fromatedDigitValue || 0;
+    const payload = string.fromatedDigitValue;
 
     this.setState({ value: string });
     this.dispatchonChange(payload);
