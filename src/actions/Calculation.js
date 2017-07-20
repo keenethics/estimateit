@@ -118,6 +118,8 @@ const nAry = (base = 2) => (length = 0) => {
   };
 };
 
+import formatTime from '../components/libs/formatTime';
+
 const calculateHourss = (tasks) => {
   if (tasks.length === 0) return [0, 0];
 
@@ -133,14 +135,14 @@ const calculateHourss = (tasks) => {
   const array = nAry(2)(tasks.length);
   const allComputations = tasks.length < maxNumberOfTask
     ? array.all()
-    : array.randomSet(2**(maxNumberOfTask-1));
+    : array.randomSet(2 ** (maxNumberOfTask - 1));
 
   allComputations.push(array.zero, array.last);
 
   return allComputations.map((computation) => {
     if (!computation.length) return 0;
 
-    return computation.reduce((acumulate, item, index) => {
+    const sum = computation.reduce((acumulate, item, index) => {
       let value;
       let minOrMax;
       let result = acumulate;
@@ -148,14 +150,16 @@ const calculateHourss = (tasks) => {
       if (index === 1) {
         minOrMax = acumulate ? 'maximumHours' : 'minimumHours';
         value = tasks[0][minOrMax] || 0;
-        result = parseInt(value, 10);
+        result = parseFloat(value, 10);
       }
 
       minOrMax = item ? 'maximumHours' : 'minimumHours';
       value = tasks[index][minOrMax] || 0;
 
-      return result + parseInt(value, 10);
+      return result + parseFloat(value, 10);
     });
+
+    return formatTime(sum).fromatedDigitValue;
   }).sort((a, b) => a - b);
 };
 
@@ -180,9 +184,11 @@ export const calculateTotalHours = form =>
       highestIndex = percent.length - 1;
     }
     const developmentHours = time[highestIndex];
-    const additionalHours = developmentHours * (pm + qa + bugFixes + risks) / 100;
-    const totalHours = Math.round(developmentHours + additionalHours);
+    const { fromatedDigitValue: additionalHours }
+      = formatTime(developmentHours * ((pm + qa + bugFixes + risks) / 100));
 
+    const { hours, minutes } = formatTime(developmentHours + additionalHours);
+    const totalHours = minutes >= 30 ? hours + 1 : hours;
     dispatch({
       type: CALCULATE_TOTAL_HOURS,
       payload: {
@@ -198,7 +204,7 @@ export const calculateHours = form =>
 
     const time = calculateHourss(checkedTasks);
     const percent = time.map((item, i) =>
-      Math.round(100 * i / (time.length - 1)),
+      Math.round((100 * i) / (time.length - 1)),
     );
 
     const devHours = {

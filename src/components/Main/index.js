@@ -10,8 +10,8 @@ import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import Calculation from '../Calculation';
+import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
-
 import { ESTIMATE_FORM } from '../../constants';
 
 class Main extends Component {
@@ -41,14 +41,14 @@ class Main extends Component {
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
                 <div className={styles.final__result_info}>
-                  Total developer min hours: {minHours}
+                  Total developer min hours: {formatTime(minHours).formattedValue}
                 </div>
               </div>
               <div className={styles.final__result}>
                 <div
                   className={styles.final__result_info}
                 >
-                  Total developer max hours: {maxHours}
+                  Total developer max hours: {formatTime(maxHours).formattedValue}
                 </div>
               </div>
             </CardBlock>
