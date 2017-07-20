@@ -11,7 +11,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
 
 const FinalEstimate = ({ totalHours, moneyRate }) => {
-  const totalSum = totalHours * moneyRate;
+  const totalSum = Math.round(totalHours * moneyRate);
 
   return (
     <Card className={styles.final}>
@@ -32,6 +32,7 @@ const FinalEstimate = ({ totalHours, moneyRate }) => {
 };
 
 FinalEstimate.propTypes = {
+  moneyRate: PropTypes.number.isRequired,
   totalHours: PropTypes.number.isRequired,
 };
 

@@ -16,9 +16,16 @@ class Layout extends React.Component {
     children: PropTypes.node.isRequired,
     handleSubmit: PropTypes.func.isRequired,
   };
+
   getChildContext() {
     const { handleSubmit } = this.props;
     return { handleSubmit };
+  }
+
+  handleOnKeyPress(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
   }
 
   render() {
@@ -35,6 +42,7 @@ class Layout extends React.Component {
             >
               <Form
                 form={ESTIMATE_FORM}
+                onKeyPress={this.handleOnKeyPress}
               >
                 {this.props.children}
               </Form>
