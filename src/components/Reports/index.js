@@ -56,7 +56,7 @@ class Reports extends Component {
 
     mutate({
       variables: { input: { ...values } },
-    }).then((res) => {
+    }).then(() => {
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -234,7 +234,9 @@ Reports.contextTypes = {
 };
 
 Reports.propTypes = {
+  tasks: PropTypes.array.isRequired,
   mutate: PropTypes.func.isRequired,
+  estimateOptions: PropTypes.object.isRequired,
 };
 
 export default compose(

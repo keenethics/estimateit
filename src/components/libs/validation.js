@@ -1,17 +1,19 @@
 export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
-export const requiredNumber = value =>
-  (typeof value === 'number' ? undefined : 'Required');
+export const taskHourValidation = haveSubTasks =>
+  value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
 export const mixShouldBeLessThenMax = maxTimeId =>
   (value, allValues) => {
+    if (!allValues.tasks.length) return undefined;
+
     const address = maxTimeId
       .replace(/\]/g, '')
       .replace(/\[/g, '.');
 
     const maxTime = address.split('.')
-      .reduce((obj, i) => obj[i], allValues);
+      .reduce((obj, i) => obj && obj[i], allValues);
 
     return (!maxTime || maxTime >= value)
       ? undefined
@@ -76,4 +78,4 @@ export const tasksMax = sended => max =>
   );
 
 export const currency = value =>
-  (value && /^(?:[1-9]\d*|0)?(?:\.\d+)?$/.test(value) ? undefined : 'Invalid number');
+  (value && /^[0-9]+$/.test(value) ? undefined : 'Should be integer');

@@ -11,6 +11,7 @@ import {
 } from 'reactstrap';
 
 import styles from './styles.scss';
+import formatTime from '../libs/formatTime';
 import { ValidationState } from '../libs/helpers';
 
 class InputAndPopover extends React.Component {
@@ -22,7 +23,7 @@ class InputAndPopover extends React.Component {
       MINUTESINHOUR: 60,
     };
 
-    const value = this.formatTime(props.input.value);
+    const value = formatTime(props.input.value);
 
     this.state = {
       value,
@@ -30,7 +31,6 @@ class InputAndPopover extends React.Component {
     };
 
     this.toggle = this.toggle.bind(this);
-    this.formatTime = this.formatTime.bind(this);
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.dispatchonChange = this.dispatchonChange.bind(this);
@@ -38,79 +38,8 @@ class InputAndPopover extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const value = this.formatTime(nextProps.input.value);
+    const value = formatTime(nextProps.input.value);
     this.setState({ value });
-  }
-
-  formatTime(digit) {
-    let hours;
-    let minutes;
-    let formattedValue;
-    let tempDigit = digit;
-
-    if (typeof digit === 'number') {
-      tempDigit = digit.toString();
-    }
-
-    // TempDigit does not include any letters
-    if (tempDigit && tempDigit.match(/\d+/) && !tempDigit.match(/[a-zA-z]/)) {
-      if (tempDigit.match(/\d+.\d+/)) {
-        const indexOfHours = 0;
-        const indexOfMinutes = 1;
-        const minutesAndHours = tempDigit.split('.');
-        if (minutesAndHours[indexOfMinutes] && minutesAndHours[indexOfMinutes].length > 2) {
-          minutesAndHours[indexOfMinutes] = minutesAndHours[indexOfMinutes].slice(0, 2);
-        }
-        hours = parseInt(minutesAndHours[indexOfHours], 10);
-        minutes = parseInt(minutesAndHours[indexOfMinutes], 10);
-
-        if (minutesAndHours[indexOfMinutes] && (minutesAndHours[indexOfMinutes])[0] !== '0' && (minutesAndHours[indexOfMinutes]).length !== 2) {
-          minutes *= 10;
-        }
-        if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
-          hours += (Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR));
-          minutes %= this.CONSTANTS.MINUTESINHOUR;
-        }
-
-        const formattedHours = hours ? `${hours} h ` : '';
-        const formattedMinutes = minutes ? `${minutes} m` : '';
-        formattedValue = `${formattedHours}${formattedMinutes}`;
-
-        return {
-          formattedValue,
-          hours,
-          minutes,
-        };
-      }
-      hours = parseInt(tempDigit.match(/\d+/) && (tempDigit.match(/\d+/))[0], 10);
-      formattedValue = hours ? `${hours} h` : '';
-
-      return {
-        formattedValue,
-        hours,
-        minutes: 0,
-      };
-    }
-
-    // TempDigit include letters
-    hours = tempDigit.match(/\d+(\s+)?h/);
-    minutes = tempDigit.match(/\d+(\s+)?m/);
-    hours = hours && hours[0] ? parseInt(hours[0], 10) : 0;
-    minutes = minutes && minutes[0] ? parseInt(minutes[0], 10) : 0;
-
-    if (minutes >= this.CONSTANTS.MINUTESINHOUR) {
-      hours += (Math.floor(minutes / this.CONSTANTS.MINUTESINHOUR));
-      minutes %= this.CONSTANTS.MINUTESINHOUR;
-    }
-
-    const formattedHours = hours ? `${hours} h ` : '';
-    formattedValue = minutes ? `${formattedHours}${minutes} m` : `${formattedHours}`;
-
-    return {
-      formattedValue,
-      hours,
-      minutes,
-    };
   }
 
   onChangeHoursAndMinutes({ target }) {
@@ -189,17 +118,15 @@ class InputAndPopover extends React.Component {
     this.setState({ isPopoverOpen });
   }
 
-  handleOnChange(event) {
-    const { target: { value } } = event;
+  handleOnChange({ target: { value } }) {
     this.setState({ value });
   }
 
   handleOnBlur({ target: { value } }) {
-    const string = this.formatTime(value);
-    const payload =
-      (parseInt(string.hours, 10) + (parseInt(string.minutes, 10) / this.CONSTANTS.TODECIMAL)) || 0;
+    const string = formatTime(value);
+    const payload = string.fromatedDigitValue;
 
-    this.setState({ value: this.formatTime(payload) });
+    this.setState({ value: string });
     this.dispatchonChange(payload);
   }
 
@@ -211,7 +138,7 @@ class InputAndPopover extends React.Component {
       input: { name: field },
     } = this.props;
 
-    dispatchChange({ form, field, payload: parseFloat(payload, 10) });
+    dispatchChange({ form, field, payload });
   }
 
   render() {
