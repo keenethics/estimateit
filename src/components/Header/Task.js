@@ -7,12 +7,12 @@ import {
   formValueSelector,
 } from 'redux-form';
 
-import styles from './Task.scss';
 import InputAndPopover from './InputAndPopover';
 import { renderField } from '../libs/helpers';
 import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import styles from './styles.scss';
 
 import * as actionsTasks from '../../actions/Tasks';
 
