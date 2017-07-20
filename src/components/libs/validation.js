@@ -1,11 +1,13 @@
 export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
-export const requiredNumber = value =>
-  (typeof value === 'number' ? undefined : 'Required');
+export const taskHourValidation = haveSubTasks =>
+  value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
 export const mixShouldBeLessThenMax = maxTimeId =>
   (value, allValues) => {
+    if (!allValues.tasks.length) return undefined;
+
     const address = maxTimeId
       .replace(/\]/g, '')
       .replace(/\[/g, '.');

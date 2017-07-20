@@ -13,7 +13,7 @@ import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
-import { required, requiredNumber, mixShouldBeLessThenMax } from '../libs/validation';
+import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
 
 
 class Task extends React.Component {
@@ -127,14 +127,14 @@ class Task extends React.Component {
                 }}
                 hoursInputName={'minHoursInput'}
                 minutesInputName={'minMinutesInput'}
-                validate={[requiredNumber, mixShouldBeLessThenMax(`${task}.maximumHours`)]}
+                validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
               />
               <Field
                 type="text"
                 addon={'max'}
                 disabled={disabled}
                 component={InputAndPopover}
-                validate={[requiredNumber]}
+                validate={[taskHourValidation(disabled)]}
                 id={`${task}.maximumHours`}
                 name={`${task}.maximumHours`}
                 dispatchChange={dispatchChange}
@@ -161,7 +161,7 @@ class Task extends React.Component {
               <Button
                 color="danger"
                 className={styles.subtasks__item}
-                onClick={() => dispatchRemove({ index, form, field: task })}
+                onClick={() => dispatchRemove({ index, form, field: task, level })}
               >
                 Delete
               </Button>

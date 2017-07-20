@@ -1,4 +1,4 @@
-import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed'
+import scrollIntoViewIfNeeded from 'scroll-into-view-if-needed';
 
 /* eslint-disable */
 const scrollToItem = function scrollToItem(errors) {
