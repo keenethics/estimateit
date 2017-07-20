@@ -9,8 +9,6 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import styles from './styles.scss';
-
-import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
