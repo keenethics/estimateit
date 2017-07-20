@@ -16,7 +16,7 @@ import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
-import { required, currency, requiredArray } from '../libs/validation';
+import { required, currency, requiredArray, maxLength } from '../libs/validation';
 
 class Header extends Component {
   constructor(props) {
@@ -42,7 +42,7 @@ class Header extends Component {
             id="clientName"
             name="clientName"
             label="Client name:"
-            validate={[required]}
+            validate={[required, maxLength(30)]}
             component={renderField}
             className={styles.right__group_item}
           />
@@ -53,7 +53,7 @@ class Header extends Component {
             id="projectName"
             name="projectName"
             label="Project name:"
-            validate={[required]}
+            validate={[required, maxLength(30)]}
             component={renderField}
             className={styles.right__group_item}
           />
@@ -65,7 +65,7 @@ class Header extends Component {
             id="sprintNumber"
             name="sprintNumber"
             component={renderField}
-            validate={[required, currency]}
+            validate={[required, currency, maxLength(30)]}
             className={styles.right__group_item}
           />
         </FormGroup>
@@ -130,7 +130,7 @@ class Header extends Component {
             name="comments"
             type="textarea"
             label="Comments"
-            validate={[required]}
+            validate={[required, maxLength(5000)]}
             component={renderField}
           />
         </FormGroup>
