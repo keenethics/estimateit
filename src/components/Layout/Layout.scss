@@ -2,6 +2,9 @@
   .input-group .form-control {
     z-index: 0 !important;
   }
+  input[type=range] {
+    height: 100%;
+  }
 }
 .estimator {
   margin: 5px auto;
