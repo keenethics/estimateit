@@ -61,21 +61,21 @@ class Main extends Component {
           />
         </Col>
         <Col xs="12">
-        <FinalEstimate
-          moneyRate={moneyRate}
-          totalHours={totalHours}
-        />
+          <FinalEstimate
+            moneyRate={moneyRate}
+            totalHours={totalHours}
+          />
         </Col>
         <Col xs="12">
           <Contacts />
         </Col>
         <Col xs="12">
           {
-          <Reports
-            tasks={tasks}
-            estimateOptions={estimateOptions}
-          />
-      }
+            <Reports
+              tasks={tasks}
+              estimateOptions={estimateOptions}
+            />
+          }
         </Col>
       </Row>
     );
