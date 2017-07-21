@@ -17,6 +17,7 @@ import { ESTIMATE_FORM } from '../../constants';
 class Main extends Component {
   render() {
     const {
+      estimateId,
       time,
       tasks,
       percent,
@@ -72,6 +73,7 @@ class Main extends Component {
         <Col xs="12">
           {
             <Reports
+              estimateId={estimateId}
               tasks={tasks}
               estimateOptions={estimateOptions}
             />

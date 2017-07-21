@@ -20,9 +20,9 @@ const estimates = {
     const { user: { role: userRole = null, _id: userId } } = req;
     let allEstimates;
     if (userRole !== 'customer') {
-      allEstimates = await Estimate.find();
+      allEstimates = await Estimate.find({ isRemoved: { $exists: false } });
     } else {
-      allEstimates = await Estimate.find({ owner: userId });
+      allEstimates = await Estimate.find({ owner: userId, isRemoved: { $exists: false } });
     }
     if (!req.user) {
       throw new TokenError({});

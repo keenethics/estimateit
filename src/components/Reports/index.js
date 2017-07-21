@@ -35,6 +35,7 @@ class Reports extends Component {
     this.toggle = this.toggle.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
+    this.estimateRemove = this.estimateRemove.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
@@ -51,10 +52,10 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
-    const { mutate } = this.props;
+    const { estimateUpdate } = this.props;
     delete values['emails'];
 
-    mutate({
+    estimateUpdate({
       variables: { input: { ...values } },
     }).then(() => {
       this.notificationSystem.addNotification({
@@ -63,6 +64,31 @@ class Reports extends Component {
         title: 'Success',
         level: 'success',
         message: 'Estimate saved',
+      });
+    }).catch((error) => {
+      console.error(error.message);
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: error.message,
+      });
+    });
+  }
+
+  estimateRemove(e) {
+    e.preventDefault();
+
+    this.props.estimateRemove({
+      variables: { id: this.props.estimateId },
+    }).then(() => {
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Success',
+        level: 'success',
+        message: 'Estimate removed',
       });
     }).catch((error) => {
       console.error(error.message);
@@ -221,6 +247,7 @@ class Reports extends Component {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+          <button className="btn btn-xs btn-danger" type="button" onClick={this.estimateRemove}>Delete</button>
         </CardBlock>
         <Notification ref={ref => this.notificationSystem = ref} />
       </Card>
@@ -234,20 +261,39 @@ Reports.contextTypes = {
 };
 
 Reports.propTypes = {
+  estimateId: PropTypes.string,
   tasks: PropTypes.array.isRequired,
-  mutate: PropTypes.func.isRequired,
+  estimateUpdate: PropTypes.func.isRequired,
+  estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
 };
 
+const estimateUpdate = gql`
+  mutation Mutation (
+    $input: EstimateInputType
+  ) {
+    estimateUpdate (
+      input: $input
+    )
+  },
+`;
+
+const estimateRemove = gql`
+  mutation Mutation (
+    $id: String!
+  ) {
+    estimateRemove (
+      id: $id
+    )
+  },
+`;
+
 export default compose(
-  graphql(gql`
-    mutation Mutation (
-      $input: EstimateInputType
-    ) {
-      estimateUpdate (
-        input: $input
-      )
-    },
-  `),
+  graphql(estimateUpdate, {
+    name: 'estimateUpdate',
+  }),
+  graphql(estimateRemove, {
+    name: 'estimateRemove',
+  }),
   withStyles(styles),
 )(Reports);

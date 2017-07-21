@@ -77,6 +77,9 @@ const EstimateSchema = mongoose.Schema({
   tasks: {
     type: Array,
   },
+  isRemoved: {
+    type: Boolean,
+  },
 });
 
 const Estimate = mongoose.model('estimates', EstimateSchema);
