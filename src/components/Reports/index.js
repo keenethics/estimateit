@@ -3,6 +3,11 @@ import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Card,
   CardBlock,
   DropdownMenu,
@@ -15,10 +20,11 @@ import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Field } from 'redux-form';
 
+import styles from './styles.scss';
+
 import columns from '../../constants/csvCoulumns';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
-import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 
 import { emailsArray } from '../libs/validation';
@@ -30,9 +36,11 @@ class Reports extends Component {
       axios: [],
       dropdownOpen: false,
       csv: '',
+      modal: false,
     };
 
     this.toggle = this.toggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
@@ -83,6 +91,9 @@ class Reports extends Component {
     this.props.estimateRemove({
       variables: { id: this.props.estimateId },
     }).then(() => {
+      this.setState({
+        modal: false,
+      });
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -91,7 +102,9 @@ class Reports extends Component {
         message: 'Estimate removed',
       });
     }).catch((error) => {
-      console.error(error.message);
+      this.setState({
+        modal: false,
+      });
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -99,6 +112,12 @@ class Reports extends Component {
         level: 'error',
         message: error.message,
       });
+    });
+  }
+
+  toggleModal() {
+    this.setState({
+      modal: !this.state.modal,
     });
   }
 
@@ -193,6 +212,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
+
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -247,9 +267,19 @@ class Reports extends Component {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <button className="btn btn-xs btn-danger" type="button" onClick={this.estimateRemove}>Delete</button>
+          <Button color="danger" onClick={this.toggleModal}>Delete</Button>
         </CardBlock>
         <Notification ref={ref => this.notificationSystem = ref} />
+        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
+          <ModalBody>
+            Do you really want to remove this estimate?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" onClick={this.estimateRemove}>Yes</Button>{' '}
+            <Button color="secondary" onClick={this.toggleModal}>No</Button>
+          </ModalFooter>
+        </Modal>
       </Card>
     );
   }
