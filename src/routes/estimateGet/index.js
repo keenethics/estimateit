@@ -1,8 +1,9 @@
 import React from 'react';
 import Wrapper from './wrapper';
-import Main from '../../components/Main';
 import Layout from '../../components/Layout';
+import NavBar from '../../components/NavBar';
 import Header from '../../components/Header';
+import Main from '../../components/Main';
 
 export default {
 
@@ -15,6 +16,7 @@ export default {
         component: (
           <Wrapper id={id}>
             <Layout>
+              <NavBar />
               <Header />
               <Main />
             </Layout>
