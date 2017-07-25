@@ -18,7 +18,7 @@
   }
 }
 .navbar {
-  background: #333;
+  background: #eceeef;
   width: 100px;
   height: 100%;
   position: absolute;
@@ -47,9 +47,9 @@
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 7px;
-    color: #eee;
-    border-bottom: 1px solid #222;
-    background: #2a2a2a;
+    color: #fff;
+    //border-bottom: 1px solid #222;
+    background: #d9534f;
     &_text {
       display: none;
     }
@@ -69,23 +69,24 @@
     font-size: 12px;
     color: #eee;
     border-bottom: 1px solid #222;
+    background: #444;
+    a {
+      color: white;
+    }
     &_icon {
       font: 14px fontawesome;
       position: absolute;
-      top: 14px;
+      top: 17px;
       left: 20px;
     }
     &_toggle {
       font: 14px fontawesome;
       position: absolute;
-      top: 14px;
+      top: 17px;
       right: 20px;
     }
     &_active {
       box-shadow: inset 5px 0 0 #5b5, inset 6px 0 0 #222;
-      background: #444;
-    }
-    &:hover {
       background: #444;
     }
   }
