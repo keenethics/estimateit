@@ -9,10 +9,6 @@ import Loading from '../../components/libs/Loading';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 class Wrapper extends React.Component {
-  static contextTypes = {
-    client: PropTypes.object,
-  };
-
   static propTypes = {
     data: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,

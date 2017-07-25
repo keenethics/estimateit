@@ -40,6 +40,7 @@
     "jsonwebtoken": "^7.3.0",
     "moment": "^2.18.1",
     "mongoose": "^4.10.5",
+    "mongoose-search-plugin": "^0.1.2",
     "nightmare": "^2.10.0",
     "nodemailer": "^4.0.1",
     "normalize.css": "^7.0.0",
@@ -72,6 +73,7 @@
     "shortid": "^2.2.8",
     "source-map-support": "^0.4.14",
     "sqlite3": "^3.1.8",
+    "textgoose": "^0.1.2",
     "universal-router": "^3.1.0"
   },
   "devDependencies": {

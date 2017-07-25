@@ -1,13 +1,13 @@
 import {
   GraphQLSchema as Schema,
   GraphQLObjectType as ObjectType,
-
 } from 'graphql';
 import Mutation from './mutations';
 
 
 import {
   estimate,
+  usersList,
   allEstimates,
 } from './queries';
 
@@ -16,6 +16,7 @@ const schema = new Schema({
     name: 'Query',
     fields: {
       estimate,
+      usersList,
       allEstimates,
     },
   }),
