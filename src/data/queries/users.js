@@ -11,27 +11,22 @@ import {
   MongoError,
 } from '../errors';
 
-
 const usersList = {
   type: new ListType(UsersOutputType),
-  args: {
-    query: {
-      type: StringType,
-    },
-  },
+  args: {},
   async resolve(_, { query }, req) {
     if (!req.user) {
       throw new TokenError({});
     }
 
     try {
-      const res = await Users.find({
-        $text: { $search: 'nazar' },
-      });
+      const res = await Users.find({});
 
-      console.log(res);
-
-      return [{ email: 'e', name: 'aa' }];
+      return res.map(({ _id, google, local }) => ({
+        _id,
+        name: google.name ? google.name : local.name,
+        email: google.email ? google.email : local.email,
+      }));
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

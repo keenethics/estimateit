@@ -8,10 +8,6 @@ import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
-  static contextTypes = {
-    client: PropTypes.object,
-  };
-
   static propTypes = {
     data: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,

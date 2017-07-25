@@ -7,6 +7,9 @@ import {
 const UsersOutputType = new ObjectType({
   name: 'ManagersListOutputType',
   fields: () => ({
+    _id: {
+      type: StringType,
+    },
     name: {
       type: StringType,
     },

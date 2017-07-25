@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
-
+import textgoose from 'textgoose';
+mongoose.set('debug', true);
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   local: {
+    name: String,
     email: String,
     password: String,
   },
@@ -28,8 +30,12 @@ const userSchema = new Schema({
     default: Date.now(),
   },
 });
+// postSchema.index({title: 'text', text: 'text'});
+//
+// console.log(userSchema);
 
-userSchema.index({ 'local.email': 'text', 'google.email': 'text' });
+
+// userSchema.plugin(textgoose, {});
 
 userSchema.pre('save', function (next) {
   const email = this.local.email || this.google.email;
@@ -47,5 +53,61 @@ userSchema.methods.generateHash = function (password) {
 userSchema.methods.validPassword = function (password) {
   return bcrypt.compareSync(password, this.local.password);
 };
+
+
+
+// import searchPlugin from 'mongoose-search-plugin';
+
+// var Schema = mongoose.Schema({
+//   title: String,
+//   descirption: String,
+//   tags: [String]
+// });
+
+// userSchema.plugin(searchPlugin, {
+//   fields: ['role'],
+// });
+
+// var Model = mongoose.model('MySearchModel', Schema);
+
+
+
+// userSchema.on('index', function(err) {
+//   if (err) {
+//     console.error('User index error: %s', err);
+//   } else {
+//     console.info('User indexing complete');
+//   }
+// });
+//
+// userSchema.index({login: 'text', fullname: 'text', email: 'text'}, {default_language: 'none'});
+//
+//
+// // BookSchema.index(
+// //     {
+// //          "name": "text",
+// //          "description": "text",
+// //          "body": "text"
+// //     },
+// //     {
+// //         "weights": {
+// //             "name": 5,
+// //             "description": 2
+// //         }
+// //     }
+// // )
+//
+userSchema.index({
+  "role": "text",
+//   // "local.name": "text",
+//   // "local.email": "text",
+//   "login.name": "text",
+//   // "google.email": "text",
+//   // local: {
+//   //   'name': 'text',
+//   //   'email': 'text',
+//   // },
+});
+// console.log(userSchema );
 
 export default mongoose.model('user', userSchema);
