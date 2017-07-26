@@ -18,7 +18,6 @@ import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
 import { required, currency, requiredArray, maxLength } from '../libs/validation';
 
-import AddUsers from './addUsersComponent';
 
 class Header extends Component {
   constructor(props) {
@@ -30,7 +29,6 @@ class Header extends Component {
   renderHeader() {
     return (
       <div className={styles.right}>
-        <AddUsers />
         <Field
           id="date"
           name="date"

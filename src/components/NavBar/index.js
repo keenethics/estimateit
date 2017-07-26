@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Item from './Item';
 import styles from './styles.scss';
+import AddUsers from '../Header/addUsersComponent';
 
 class NavBar extends Component {
   render() {
@@ -14,6 +15,7 @@ class NavBar extends Component {
         </div>
         <ul className={styles.navbar__list}>
           <Item text="Add User" icon="users">
+            <AddUsers />
             <ul>
               <li>as</li>
               <li>as</li>

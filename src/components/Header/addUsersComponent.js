@@ -17,6 +17,18 @@ import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
 
+const SelectC = ({ options, optionRender, parentProps: { input: { value, onChange } } }) => {
+  return (
+    <Select
+      value={value}
+      backspaceRemoves
+      options={options}
+      onChange={onChange}
+      optionRenderer={optionRender}
+    />
+  );
+}
+
 
 class AddUsers extends React.Component {
 
@@ -58,24 +70,42 @@ class AddUsers extends React.Component {
     };
   }
 
+  submitAddUser(e) {
+    // e.preventDefault();
+    console.log(e);
+  }
+
+
   render() {
     const { usersList = [] } = this.props.data;
     const options = usersList.map(item => this.mapItemToOption(item));
 
+    const select = props => (
+      <SelectC
+        options={options}
+        parentProps={props}
+        optionRender={this.optionRender}
+      />
+    );
     return (
       <Form
+        onSubmit={this.props.handleSubmit(this.submitAddUser)}
         form='add_user_to_estimate'
         onKeyPress={this.handleOnKeyPress}
       >
         <div>
-          <Select
-            backspaceRemoves
-            options={options}
-            optionRenderer={this.optionRender}
+          <Field
+            multi
+            name="addUser"
+            placeholder="Find user"
+            component={select}
           />
-          <button>
-            add new user
-          </button>
+          <Button
+            type="submit"
+            color="danger"
+          >
+            Add new user
+          </Button>
         </div>
       </Form>
     );
