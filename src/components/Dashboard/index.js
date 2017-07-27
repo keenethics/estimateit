@@ -37,7 +37,7 @@ class Dashboard extends React.Component {
     e.preventDefault();
 
     this.props.mutate()
-      .then(({data: {estimateCreate: {url}}}) => {
+      .then(({ data: { estimateCreate: { url } } }) => {
         history.replace(url);
       })
       .catch((error) => {

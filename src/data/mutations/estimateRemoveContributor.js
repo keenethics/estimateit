@@ -1,6 +1,9 @@
 import Estimate from '../models';
 import User from '../../models/user';
-import { UserError } from '../errors';
+import {
+  UserError,
+  MongoError,
+} from '../errors';
 import { EstimateRemoveContributor } from '../types';
 import {
   GraphQLBoolean as BoolType,
@@ -14,19 +17,22 @@ const estimateRemoveContributor = {
       type: EstimateRemoveContributor,
     },
   },
-  async resolve({ request: { user } }, { input: { userId } }) {
+  async resolve({ request: { user } }, { input: { userId, estimateId } }) {
     if (!user) {
       throw new UserError({});
     }
-    console.log(userId);
-    // user already added???
-    // const { users = [] } = await Estimate.find({ _id: estimateId });
-    // const res = await Estimate.update(
-    //   { _id: estimateId },
-    //   { $push: { users: { userId, username, userEmail } } },
-    // );
 
-    return true;
+    try {
+      const { ok } = await Estimate.update(
+        { _id: estimateId },
+        { $pull: { users: { userId } } },
+      );
+
+      return ok;
+    } catch (error) {
+      console.error(error);
+      throw new MongoError({ message: error.message });
+    }
   },
 };
 

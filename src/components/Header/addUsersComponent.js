@@ -17,7 +17,7 @@ import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
 import { ESTIMATE_FORM } from '../../constants';
-
+import _ from 'underscore';
 
 import { estimate } from '../../data/queriesClient';
 
@@ -50,12 +50,12 @@ class AddUsers extends React.Component {
 
   mapItemToOption = ({ _id, name, email }) =>
   ({
+    email,
     value: _id,
     label: name,
-    email: email,
   })
 
-  optionRender = ({ value, label, email }) => {
+  optionRender = ({ label, email }) => {
     return (
       <div>
         <p>{label}</p>
@@ -81,27 +81,26 @@ class AddUsers extends React.Component {
     label: username,
     email: userEmail,
   } }) {
-    const { mutate, estimateId } = this.props;
+    const { mutate, estimateId, reset } = this.props;
 
     mutate({
       variables: { input: { estimateId, userId, username, userEmail } },
-      update: (store, res) => {
+      update: (store) => {
         const data = store.readQuery(
           { query: estimate,
-            variables: { id: estimateId }
+            variables: { id: estimateId },
           },
         );
         data.estimate.users.push({
           userId,
           userEmail,
           username,
-        })
+        });
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
       },
     }).then(() => {
-      console.log('sucsses');
-      console.log(res);
+      reset();
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -111,52 +110,63 @@ class AddUsers extends React.Component {
       });
     }).catch((error) => {
       console.error(error.message);
-      // this.notificationSystem.addNotification({
-      //   autoDismiss: 6,
-      //   position: 'br',
-      //   title: 'Error',
-      //   level: 'error',
-      //   message: error.message,
-      // });
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: error.message,
+      });
     });
   }
 
   removeUser({ target: { id: userId } }) {
-    const { estimateRemoveContributor } = this.props;
+    const { estimateRemoveContributor, estimateId } = this.props;
+
     estimateRemoveContributor({
-      variables: { input: { userId } },
-    }).then((res) => {
-      console.log('sucsses');
-      console.log(res);
-      // this.notificationSystem.addNotification({
-      //   autoDismiss: 6,
-      //   position: 'br',
-      //   title: 'Success',
-      //   level: 'success',
-      //   message: 'Estimate saved',
-      // });
+      variables: { input: { userId, estimateId } },
+      update: (store) => {
+        const data = store.readQuery(
+          { query: estimate,
+            variables: { id: estimateId },
+          },
+        );
+        data.estimate.users = data.estimate.users.filter(e => e.userId !== userId);
+
+        store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
+      },
+    }).then(() => {
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Success',
+        level: 'success',
+        message: 'User removed',
+      });
     }).catch((error) => {
       console.error(error.message);
-      // this.notificationSystem.addNotification({
-      //   autoDismiss: 6,
-      //   position: 'br',
-      //   title: 'Error',
-      //   level: 'error',
-      //   message: error.message,
-      // });
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: error.message,
+      });
     });
 
   }
 
 
   render() {
-    console.log('addUser');
     console.log(this.props);
     const {
       contributors = [],
       data: { usersList = [] }
     } = this.props;
-    const options = usersList.map(item => this.mapItemToOption(item));
+
+    const options = usersList
+      .filter(({ _id }) => !_.findWhere(contributors, { userId: _id }))
+      .map(user => this.mapItemToOption(user));
 
     const select = props => (
       <SelectC
@@ -178,6 +188,7 @@ class AddUsers extends React.Component {
               multi
               name="addUser"
               placeholder="Find user"
+              validate={[required]}
               component={select}
             />
             <Button

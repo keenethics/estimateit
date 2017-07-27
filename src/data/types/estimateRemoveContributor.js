@@ -9,6 +9,9 @@ const EstimateRemoveContributor = new InputObjectType({
     userId: {
       type: StringType,
     },
+    estimateId: {
+      type: StringType,
+    },
   },
 });
 
