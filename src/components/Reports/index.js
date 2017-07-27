@@ -53,6 +53,7 @@ class Reports extends Component {
   estimateUpdate(values) {
     const { mutate } = this.props;
     delete values['emails'];
+    delete values['users'];
 
     mutate({
       variables: { input: { ...values } },

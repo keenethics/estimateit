@@ -120,6 +120,7 @@ class AddUsers extends React.Component {
   }
 
   render() {
+    const { contributors = [] } = this.props;
     return (
       <div>
         <Form
@@ -144,7 +145,7 @@ class AddUsers extends React.Component {
           </div>
         </Form>
         {
-          this.props.contributors.map(({ username, userId }) => (
+          contributors.map(({ username, userId }) => (
             <div className={styles.contributor_item}>
               {username}
               <Button

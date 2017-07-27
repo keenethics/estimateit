@@ -6,7 +6,13 @@ import styles from './styles.scss';
 import AddUsers from '../Header/addUsersComponent';
 
 class NavBar extends Component {
+  static contextTypes = {
+    isAuthenticated: PropTypes.bool.isRequired,
+  };
   render() {
+    const { isAuthenticated } = this.context;
+    if (!isAuthenticated) return null;
+
     return (
       <div className={styles.navbar}>
         <div className={styles.navbar__title}>
