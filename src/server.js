@@ -27,6 +27,7 @@ import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
 import generatePDF from './core/generatePDF';
+import sendEmail from './core/sendEmail';
 
 mongoose.connect(config.MONGO_URL);
 mongoose.Promise = global.Promise;
@@ -117,6 +118,15 @@ app.post('/api/sendPpfToEmails', (req, res) => {
   const { url, emails = '' } = req.body;
   res.end('ok');
   generatePDF(req.cookies, url, emails);
+});
+
+app.post('/api/shareViaEmails', (req, res) => {
+  const { url, emails = '' } = req.body;
+  res.end('ok');
+  sendEmail({
+    emails,
+    text: `somebody share this estimate ${url} with you`,
+  });
 });
 
 app.post('/api/downloadPpdf', (req, res) => {
@@ -277,16 +287,16 @@ app.use((err, req, res, next) => {
 /* eslint-disable no-console */
 app.listen(config.port, () => {
   console.info(`
-  
-███████╗███████╗████████╗██╗███╗   ███╗ █████╗ ████████╗ ██████╗ ██████╗ 
+
+███████╗███████╗████████╗██╗███╗   ███╗ █████╗ ████████╗ ██████╗ ██████╗
 ██╔════╝██╔════╝╚══██╔══╝██║████╗ ████║██╔══██╗╚══██╔══╝██╔═══██╗██╔══██╗
 █████╗  ███████╗   ██║   ██║██╔████╔██║███████║   ██║   ██║   ██║██████╔╝
 ██╔══╝  ╚════██║   ██║   ██║██║╚██╔╝██║██╔══██║   ██║   ██║   ██║██╔══██╗
 ███████╗███████║   ██║   ██║██║ ╚═╝ ██║██║  ██║   ██║   ╚██████╔╝██║  ██║
 ╚══════╝╚══════╝   ╚═╝   ╚═╝╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝
-                                                                         
-  
-  
+
+
+
   The server is running at http://localhost:${config.port}/`);
 });
 /* eslint-enable no-console */

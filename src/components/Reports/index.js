@@ -34,8 +34,9 @@ class Reports extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
-    this.estimateUpdate = this.estimateUpdate.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
+    this.shareViaEmail = this.shareViaEmail.bind(this);
+    this.estimateUpdate = this.estimateUpdate.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
 
@@ -166,6 +167,47 @@ class Reports extends Component {
     });
   }
 
+  shareViaEmail({ emails }) {
+    const { fetch } = this.context;
+
+    if (!emails || !emails.length) {
+      this.notificationSystem.addNotification({
+        title: 'Error',
+        level: 'error',
+        position: 'br',
+        autoDismiss: 6,
+        message: 'Enter emails',
+      });
+      return null;
+    }
+
+    fetch('/api/shareViaEmails', {
+      body: JSON.stringify({
+        emails: decodeURIComponent(emails),
+        url: decodeURIComponent(location.href),
+      }),
+    })
+      .then(() => {
+        this.notificationSystem.addNotification({
+          title: 'Success',
+          level: 'success',
+          position: 'br',
+          autoDismiss: 6,
+          message: 'This estimate is shared',
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+        this.notificationSystem.addNotification({
+          title: 'Error',
+          level: 'error',
+          position: 'br',
+          autoDismiss: 6,
+          message: 'internal server error',
+        });
+      });
+  }
+
   render() {
     const { handleSubmit } = this.context;
     return (
@@ -201,6 +243,12 @@ class Reports extends Component {
                 onClick={handleSubmit(this.estimateUpdate)}
               >
                 Save Estimate
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.shareViaEmail)}
+              >
+                Share via emails
               </DropdownItem>
               <DropdownItem
                 type="submit"
