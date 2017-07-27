@@ -16,7 +16,7 @@ export default {
           <Wrapper id={id}>
             <Layout>
               <Header />
-              <Main />
+              <Main estimateId={id} />
             </Layout>
           </Wrapper>
         ),
