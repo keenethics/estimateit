@@ -20,7 +20,7 @@ const usersList = {
     }
 
     try {
-      const res = await Users.find({});
+      const res = await Users.find({ _id: { $nin: req.user._id } });
 
       return res.map(({ _id, google, local }) => ({
         _id,
