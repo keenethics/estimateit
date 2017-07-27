@@ -3,3 +3,4 @@ export { default as EstimateInputType } from './estimateInput';
 export { default as EstimateCreateType } from './estimateCreate';
 export { EstimateOutputType, AllEstimatesOutputType } from './estimateOutput';
 export { default as EstimateAddNewContributor } from './estimateAddNewContributor';
+export { default as EstimateRemoveContributor } from './estimateRemoveContributor';

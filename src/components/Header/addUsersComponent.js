@@ -40,6 +40,7 @@ class AddUsers extends React.Component {
       value: '',
     };
 
+    this.removeUser = this.removeUser.bind(this);
     this.optionRender = this.optionRender.bind(this);
     this.submitAddUser = this.submitAddUser.bind(this);
   }
@@ -103,11 +104,41 @@ class AddUsers extends React.Component {
     });
   }
 
+  removeUser({ target: { id: userId } }) {
+    const { estimateRemoveContributor } = this.props;
+    estimateRemoveContributor({
+      variables: { input: { userId } },
+    }).then((res) => {
+      console.log('sucsses');
+      console.log(res);
+      // this.notificationSystem.addNotification({
+      //   autoDismiss: 6,
+      //   position: 'br',
+      //   title: 'Success',
+      //   level: 'success',
+      //   message: 'Estimate saved',
+      // });
+    }).catch((error) => {
+      console.error(error.message);
+      // this.notificationSystem.addNotification({
+      //   autoDismiss: 6,
+      //   position: 'br',
+      //   title: 'Error',
+      //   level: 'error',
+      //   message: error.message,
+      // });
+    });
+
+  }
+
 
   render() {
     console.log('addUser');
     console.log(this.props);
-    const { usersList = [] } = this.props.data;
+    const {
+      contributors = [],
+      data: { usersList = [] }
+    } = this.props;
     const options = usersList.map(item => this.mapItemToOption(item));
 
     const select = props => (
@@ -140,7 +171,24 @@ class AddUsers extends React.Component {
             </Button>
           </div>
         </Form>
-
+        <ul>
+          {
+            contributors.map(({ username, userEmail, userId }) => (
+              <li>
+                <p>{username}</p>
+                <p>{userEmail}</p>
+                <Button
+                  id={userId}
+                  color="danger"
+                  onClick={this.removeUser}
+                >
+                  Remove user
+                </Button>
+              </li>
+            ),
+            )
+          }
+        </ul>
       </div>
     );
   }
@@ -186,4 +234,13 @@ export default compose(
       )
     },
   `),
+  graphql(gql`
+    mutation Mutation (
+      $input: estimateRemoveContributor
+    ) {
+      estimateRemoveContributor (
+        input: $input
+      )
+    },
+  `, { name: 'estimateRemoveContributor' }),
 )(AddUsers);
