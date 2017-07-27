@@ -6,12 +6,12 @@ const SingleEstimate = (props) => {
   return (
     <a
       href={`/estimate/${props.estimate._id}`}
-      className={`${styles.singleEstimate} col-xs-12 col-sm-6 col-md-4 col-lg-3`}
+      className={`${styles.singleEstimate} col-xs-12 col-sm-12 col-md-6 col-lg-4`}
     >
       <div className={styles.card_pf}>
         <div className={styles.card_pf__body}>
           <div className={styles.card_pf__title}>
-            Project name: {props.estimate.projectName}
+            {props.estimate.projectName}
           </div>
           <div className={styles.singleEstimate__text}>
             Client name: {props.estimate.clientName}
