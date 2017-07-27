@@ -14,14 +14,8 @@ class NavBar extends Component {
           <span className={styles.navbar__title_text}>Project</span>
         </div>
         <ul className={styles.navbar__list}>
-          <Item text="Add User" icon="users">
+          <Item text="Users" icon="users">
             <AddUsers />
-            <ul>
-              <li>as</li>
-              <li>as</li>
-              <li>as</li>
-              <li>as</li>
-            </ul>
           </Item>
           <Item text="Settings" icon="cog" link="/settings" />
         </ul>

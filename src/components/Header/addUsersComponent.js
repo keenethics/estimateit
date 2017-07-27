@@ -1,100 +1,53 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { FormGroup, Button } from 'reactstrap';
-import {
-  Field,
-  FieldArray,
-  formValueSelector,
-} from 'redux-form';
-import { Form, reduxForm } from 'redux-form';
-import Select from 'react-select';
-import gql from 'graphql-tag';
-import { graphql, compose } from 'react-apollo';
-import Notification from 'react-notification-system';
-import { connect } from 'react-redux';
-// import { bindActionCreators } from 'redux';
-import styles from './styles.scss';
-import { renderField } from '../libs/helpers';
-import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
-import { ESTIMATE_FORM } from '../../constants';
 import _ from 'underscore';
+import gql from 'graphql-tag';
+import PropTypes from 'prop-types';
+import { Button } from 'reactstrap';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
+import { Form, Field, reduxForm } from 'redux-form';
+import Notification from 'react-notification-system';
 
+import styles from './styles.scss';
+import { renderSelectField } from '../libs/helpers';
+import { requiredSelect } from '../libs/validation';
 import { estimate } from '../../data/queriesClient';
-
-const SelectC = ({ options, optionRender, parentProps: { input: { value, onChange } } }) => {
-  return (
-    <Select
-      value={value}
-      backspaceRemoves
-      options={options}
-      onChange={onChange}
-      optionRenderer={optionRender}
-    />
-  );
-}
+import {
+  ESTIMATE_FORM,
+  ADD_USER_TO_ESTIMATE_FORM,
+} from '../../constants';
 
 
 class AddUsers extends React.Component {
-
   constructor(props) {
     super(props);
 
-    this.state = {
-      value: '',
-    };
-
+    this.options = this.options.bind(this);
+    this.addUser = this.addUser.bind(this);
     this.removeUser = this.removeUser.bind(this);
-    this.optionRender = this.optionRender.bind(this);
-    this.submitAddUser = this.submitAddUser.bind(this);
   }
 
-  mapItemToOption = ({ _id, name, email }) =>
-  ({
-    email,
-    value: _id,
-    label: name,
-  })
+  addUser({
+    addUser: {
+      value: userId,
+      label: username,
+      email: userEmail,
+    },
+  }) {
+    const { estimateAddNewContributor, estimateId, reset } = this.props;
 
-  optionRender = ({ label, email }) => {
-    return (
-      <div>
-        <p>{label}</p>
-        <p>{email}</p>
-      </div>
-    )
-  }
-
-  handleChange = (option) => {
-    const value = option ? option.value : '';
-    this.setState({ value });
-  }
-
-
-  multiChangeHandler(handleChange) {
-    return function handleMultiHandler(values) {
-      handleChange(values.map(value => value.value));
-    };
-  }
-
-  submitAddUser({ addUser: {
-    value: userId,
-    label: username,
-    email: userEmail,
-  } }) {
-    const { mutate, estimateId, reset } = this.props;
-
-    mutate({
+    estimateAddNewContributor({
       variables: { input: { estimateId, userId, username, userEmail } },
       update: (store) => {
-        const data = store.readQuery(
-          { query: estimate,
-            variables: { id: estimateId },
-          },
-        );
+        const data = store.readQuery({
+          query: estimate,
+          variables: { id: estimateId },
+        });
+
         data.estimate.users.push({
           userId,
-          userEmail,
           username,
+          userEmail,
         });
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
@@ -126,11 +79,11 @@ class AddUsers extends React.Component {
     estimateRemoveContributor({
       variables: { input: { userId, estimateId } },
       update: (store) => {
-        const data = store.readQuery(
-          { query: estimate,
-            variables: { id: estimateId },
-          },
-        );
+        const data = store.readQuery({
+          query: estimate,
+          variables: { id: estimateId },
+        });
+
         data.estimate.users = data.estimate.users.filter(e => e.userId !== userId);
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
@@ -153,43 +106,38 @@ class AddUsers extends React.Component {
         message: error.message,
       });
     });
-
   }
 
-
-  render() {
-    console.log(this.props);
+  options = () => {
     const {
       contributors = [],
-      data: { usersList = [] }
+      data: { usersList = [] },
     } = this.props;
 
-    const options = usersList
+    return usersList
       .filter(({ _id }) => !_.findWhere(contributors, { userId: _id }))
-      .map(user => this.mapItemToOption(user));
+      .map(({ _id, name, email }) => ({
+        email,
+        value: _id,
+        label: name,
+      }));
+  }
 
-    const select = props => (
-      <SelectC
-        options={options}
-        parentProps={props}
-        optionRender={this.optionRender}
-      />
-    );
-
+  render() {
     return (
       <div>
         <Form
-          onSubmit={this.props.handleSubmit(this.submitAddUser)}
           form='add_user_to_estimate'
-          onKeyPress={this.handleOnKeyPress}
+          onSubmit={this.props.handleSubmit(this.addUser)}
         >
           <div>
             <Field
               multi
               name="addUser"
               placeholder="Find user"
-              validate={[required]}
-              component={select}
+              options={this.options()}
+              validate={[requiredSelect]}
+              component={renderSelectField}
             />
             <Button
               type="submit"
@@ -199,24 +147,21 @@ class AddUsers extends React.Component {
             </Button>
           </div>
         </Form>
-        <ul>
-          {
-            contributors.map(({ username, userEmail, userId }) => (
-              <li>
-                <p>{username}</p>
-                <p>{userEmail}</p>
-                <Button
-                  id={userId}
-                  color="danger"
-                  onClick={this.removeUser}
-                >
-                  Remove user
-                </Button>
-              </li>
-            ),
-            )
-          }
-        </ul>
+        {
+          this.props.contributors.map(({ username, userId }) => (
+            <div className={styles.contributor_item}>
+              {username}
+              <Button
+                id={userId}
+                color="danger"
+                onClick={this.removeUser}
+              >
+                Remove user
+              </Button>
+            </div>
+          ),
+          )
+        }
         <Notification ref={ref => this.notificationSystem = ref} />
       </div>
     );
@@ -224,52 +169,61 @@ class AddUsers extends React.Component {
 }
 
 AddUsers.propTypes = {
-
+  reset: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired,
+  estimateId: PropTypes.string.isRequired,
+  contributors: PropTypes.array.isRequired,
+  estimateAddNewContributor: PropTypes.func.isRequired,
+  estimateRemoveContributor: PropTypes.func.isRequired,
 };
 
 
 AddUsers = reduxForm({
-  form: 'add_user_to_estimate',
-  enableReinitialize: false,
+  form: ADD_USER_TO_ESTIMATE_FORM,
 })(AddUsers);
 
-function mapStateToProps({
-  form,
-}) {
+function mapStateToProps({ form }) {
   return {
-    contributors: form.ESTIMATE_FORM.values.users,
-    estimateId: form.ESTIMATE_FORM.values._id,
+    contributors: form[ESTIMATE_FORM].values.users,
+    estimateId: form[ESTIMATE_FORM].values._id,
   };
 }
 
 
+const userLIst = gql`
+  query usersList {
+    usersList {
+      _id,
+      name,
+      email,
+    }
+  },
+`;
+
+const addNewContributor = gql`
+  mutation Mutation (
+    $input: estimateAddNewContributor
+  ) {
+    estimateAddNewContributor (
+      input: $input
+    )
+  },
+`;
+
+const removeContributor = gql`
+  mutation Mutation (
+    $input: estimateRemoveContributor
+  ) {
+    estimateRemoveContributor (
+      input: $input
+    )
+  },
+`;
+
+
 export default compose(
   connect(mapStateToProps),
-  graphql(gql`
-    query usersList {
-      usersList {
-        _id,
-        name,
-        email,
-      }
-    },
-  `),
-  graphql(gql`
-    mutation Mutation (
-      $input: estimateAddNewContributor
-    ) {
-      estimateAddNewContributor (
-        input: $input
-      )
-    },
-  `),
-  graphql(gql`
-    mutation Mutation (
-      $input: estimateRemoveContributor
-    ) {
-      estimateRemoveContributor (
-        input: $input
-      )
-    },
-  `, { name: 'estimateRemoveContributor' }),
+  graphql(userLIst),
+  graphql(addNewContributor, { name: 'estimateAddNewContributor' }),
+  graphql(removeContributor, { name: 'estimateRemoveContributor' }),
 )(AddUsers);

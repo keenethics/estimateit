@@ -1,6 +1,9 @@
 export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
+export const requiredSelect = value =>
+  (value && value.value ? undefined : 'Required');
+
 export const taskHourValidation = haveSubTasks =>
   value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
