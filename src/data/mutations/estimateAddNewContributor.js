@@ -1,24 +1,14 @@
-import Estimate from '../models';
-import User from '../../models/user';
-import { UserError } from '../errors';
-import { EstimateAddNewContributor } from '../types';
+import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
+import Estimate from '../models';
 
-// import {
-//   GraphQLObjectType as ObjectType,
-//   GraphQLString as StringType,
-// } from 'graphql';
-//
-// const typeExp = new ObjectType({
-//   name: 'typeExp',
-//   fields: {
-//     _id: {
-//       type: StringType,
-//     },
-//   },
-// });
+import {
+  UserError,
+  MongoError,
+} from '../errors';
+import { EstimateAddNewContributor } from '../types';
 
 
 const estimateAddNewContributor = {
@@ -32,15 +22,24 @@ const estimateAddNewContributor = {
     if (!user) {
       throw new UserError({});
     }
-    // user already added???
-    const { users = [] } = await Estimate.find({ _id: estimateId });
 
-    const res = await Estimate.update(
-      { _id: estimateId },
-      { $push: { users: { userId, username, userEmail } } },
-    );
+    const { users = [] } = await Estimate.findOne({ _id: estimateId });
 
-    return true;
+    if (_.findWhere(users, { userId })) {
+      throw new MongoError({ message: 'This users alreday added' });
+    }
+
+    try {
+      const { ok } = await Estimate.update(
+        { _id: estimateId },
+        { $push: { users: { userId, username, userEmail } } },
+      );
+
+      return ok;
+    } catch (error) {
+      console.error(error);
+      throw new MongoError({ message: error.message });
+    }
   },
 };
 
