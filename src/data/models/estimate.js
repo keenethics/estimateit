@@ -81,6 +81,9 @@ const EstimateSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  isRemoved: {
+    type: Boolean,
+  },
 });
 
 const Estimate = mongoose.model('estimates', EstimateSchema);

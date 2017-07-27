@@ -18,7 +18,7 @@ export default {
             <Layout>
               <NavBar />
               <Header />
-              <Main />
+              <Main estimateId={id} />
             </Layout>
           </Wrapper>
         ),

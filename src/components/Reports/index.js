@@ -3,6 +3,11 @@ import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import {
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
   Card,
   CardBlock,
   DropdownMenu,
@@ -15,10 +20,11 @@ import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Field } from 'redux-form';
 
+import styles from './styles.scss';
+
 import columns from '../../constants/csvCoulumns';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
-import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 
 import { emailsArray } from '../libs/validation';
@@ -30,14 +36,17 @@ class Reports extends Component {
       axios: [],
       dropdownOpen: false,
       csv: '',
+      modal: false,
     };
 
     this.toggle = this.toggle.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
     this.shareViaEmail = this.shareViaEmail.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
+    this.estimateRemove = this.estimateRemove.bind(this);
   }
 
   copyUrlToClipboard(url) {
@@ -52,11 +61,11 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
-    const { mutate } = this.props;
+    const { estimateUpdate } = this.props;
     delete values['emails'];
     delete values['users'];
 
-    mutate({
+    estimateUpdate({
       variables: { input: { ...values } },
     }).then(() => {
       this.notificationSystem.addNotification({
@@ -75,6 +84,42 @@ class Reports extends Component {
         level: 'error',
         message: error.message,
       });
+    });
+  }
+
+  estimateRemove(e) {
+    e.preventDefault();
+
+    this.props.estimateRemove({
+      variables: { id: this.props.estimateId },
+    }).then(() => {
+      this.setState({
+        modal: false,
+      });
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Success',
+        level: 'success',
+        message: 'Estimate removed',
+      });
+    }).catch((error) => {
+      this.setState({
+        modal: false,
+      });
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: error.message,
+      });
+    });
+  }
+
+  toggleModal() {
+    this.setState({
+      modal: !this.state.modal,
     });
   }
 
@@ -210,6 +255,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
+
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -270,8 +316,19 @@ class Reports extends Component {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
+          <Button color="danger" onClick={this.toggleModal}>Delete</Button>
         </CardBlock>
         <Notification ref={ref => this.notificationSystem = ref} />
+        <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
+          <ModalBody>
+            Do you really want to remove this estimate?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="danger" onClick={this.estimateRemove}>Yes</Button>{' '}
+            <Button color="secondary" onClick={this.toggleModal}>No</Button>
+          </ModalFooter>
+        </Modal>
       </Card>
     );
   }
@@ -283,20 +340,39 @@ Reports.contextTypes = {
 };
 
 Reports.propTypes = {
+  estimateId: PropTypes.string,
   tasks: PropTypes.array.isRequired,
-  mutate: PropTypes.func.isRequired,
+  estimateUpdate: PropTypes.func.isRequired,
+  estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
 };
 
+const estimateUpdate = gql`
+  mutation Mutation (
+    $input: EstimateInputType
+  ) {
+    estimateUpdate (
+      input: $input
+    )
+  },
+`;
+
+const estimateRemove = gql`
+  mutation Mutation (
+    $id: String!
+  ) {
+    estimateRemove (
+      id: $id
+    )
+  },
+`;
+
 export default compose(
-  graphql(gql`
-    mutation Mutation (
-      $input: EstimateInputType
-    ) {
-      estimateUpdate (
-        input: $input
-      )
-    },
-  `),
+  graphql(estimateUpdate, {
+    name: 'estimateUpdate',
+  }),
+  graphql(estimateRemove, {
+    name: 'estimateRemove',
+  }),
   withStyles(styles),
 )(Reports);

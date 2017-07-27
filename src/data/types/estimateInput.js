@@ -107,6 +107,9 @@ const EstimateInputType = new InputObjectType({
     tasks: {
       type: new ListType(TaskInputType),
     },
+    isRemoved: {
+      type: BoolType,
+    },
   },
 });
 
