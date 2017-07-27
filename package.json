@@ -74,6 +74,7 @@
     "source-map-support": "^0.4.14",
     "sqlite3": "^3.1.8",
     "textgoose": "^0.1.2",
+    "underscore": "^1.8.3",
     "universal-router": "^3.1.0"
   },
   "devDependencies": {
