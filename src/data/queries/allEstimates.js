@@ -2,11 +2,15 @@ import {
   GraphQLList as ListType,
   GraphQLString as StringType,
 } from 'graphql';
+
+import {
+  TokenError,
+  MongoError,
+} from '../errors';
 import {
   EstimateOutputType,
 } from '../types';
 import Estimate from '../../data/models/estimate';
-import { TokenError } from '../errors';
 
 
 const estimates = {
@@ -17,17 +21,24 @@ const estimates = {
     },
   },
   async resolve(_, args, req) {
-    const { user: { role: userRole = null, _id: userId } } = req;
-    let allEstimates;
-    if (userRole !== 'customer') {
-      allEstimates = await Estimate.find({ isRemoved: { $exists: false } });
-    } else {
-      allEstimates = await Estimate.find({ owner: userId, isRemoved: { $exists: false } });
-    }
     if (!req.user) {
       throw new TokenError({});
     }
-    return allEstimates;
+
+    try {
+      const { user: { _id: userId } } = req;
+      const allEstimates = await Estimate.find({
+        $or: [
+          { owner: userId },
+          { 'users.userId': userId.toString() },
+        ],
+      });
+
+      return allEstimates;
+    } catch (error) {
+      console.error(error);
+      throw new MongoError({ message: error.message });
+    }
   },
 };
 

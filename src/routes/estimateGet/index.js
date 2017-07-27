@@ -12,7 +12,7 @@ export default {
     try {
       return {
         title: 'Estimator',
-        authRequired: true,
+        authRequired: false,
         component: (
           <Wrapper id={id}>
             <Layout>

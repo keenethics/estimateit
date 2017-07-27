@@ -1,6 +1,9 @@
 export const required = value =>
   (value && value.replace(/\s/g, '') ? undefined : 'Required');
 
+export const requiredSelect = value =>
+  (value && value.value ? undefined : 'Required');
+
 export const taskHourValidation = haveSubTasks =>
   value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
@@ -78,4 +81,4 @@ export const tasksMax = sended => max =>
   );
 
 export const currency = value =>
-  (value && /^[1-9][0-9]+$/.test(value) ? undefined : 'Should be integer');
+  (value && /^[1-9]{1}[0-9]*$/.test(value.toString()) ? undefined : 'Should be integer');

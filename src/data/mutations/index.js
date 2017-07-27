@@ -5,6 +5,9 @@ import {
 import estimateUpdate from './estimateUpdate';
 import estimateCreate from './estimateCreate';
 import estimateRemove from './estimateRemove';
+import estimateAddNewContributor from './estimateAddNewContributor';
+import estimateRemoveContributor from './estimateRemoveContributor';
+
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -13,6 +16,8 @@ const Mutation = new ObjectType({
     estimateUpdate,
     estimateCreate,
     estimateRemove,
+    estimateAddNewContributor,
+    estimateRemoveContributor,
   }),
 });
 

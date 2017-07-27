@@ -3,9 +3,16 @@ import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Item from './Item';
 import styles from './styles.scss';
+import AddUsers from '../Header/addUsersComponent';
 
 class NavBar extends Component {
+  static contextTypes = {
+    isAuthenticated: PropTypes.bool.isRequired,
+  };
   render() {
+    const { isAuthenticated } = this.context;
+    if (!isAuthenticated) return null;
+
     return (
       <div className={styles.navbar}>
         <div className={styles.navbar__title}>
@@ -13,13 +20,8 @@ class NavBar extends Component {
           <span className={styles.navbar__title_text}>Project</span>
         </div>
         <ul className={styles.navbar__list}>
-          <Item text="Add User" icon="users">
-            <ul>
-              <li>as</li>
-              <li>as</li>
-              <li>as</li>
-              <li>as</li>
-            </ul>
+          <Item text="Users" icon="users">
+            <AddUsers />
           </Item>
           <Item text="Settings" icon="cog" link="/settings" />
         </ul>

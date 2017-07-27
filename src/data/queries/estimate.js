@@ -12,17 +12,14 @@ const estimate = {
       type: StringType,
     },
   },
-  // TODO: Improve search secure
-  async resolve(_, args, req) {
+  async resolve(_, args) {
     const { id: _id } = args;
-    const { user: { role: userRole = null, id: userId = null } } = req;
+
     const currentEstimate = await Estimate.findOne({ _id });
     if (isEmpty(currentEstimate)) {
       throw new TokenError({});
     }
-    if (userId.toString() !== currentEstimate.owner && userRole !== 'manager') {
-      throw new TokenError({});
-    }
+
     return currentEstimate;
   },
 };

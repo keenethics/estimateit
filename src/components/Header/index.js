@@ -18,6 +18,7 @@ import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
 import { required, currency, requiredArray, maxLength } from '../libs/validation';
 
+
 class Header extends Component {
   constructor(props) {
     super(props);

@@ -77,6 +77,10 @@ const EstimateSchema = mongoose.Schema({
   tasks: {
     type: Array,
   },
+  users: {
+    type: Array,
+    default: [],
+  },
   isRemoved: {
     type: Boolean,
   },
