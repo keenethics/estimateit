@@ -6,6 +6,20 @@ import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
 
+// import {
+//   GraphQLObjectType as ObjectType,
+//   GraphQLString as StringType,
+// } from 'graphql';
+//
+// const typeExp = new ObjectType({
+//   name: 'typeExp',
+//   fields: {
+//     _id: {
+//       type: StringType,
+//     },
+//   },
+// });
+
 
 const estimateAddNewContributor = {
   type: BoolType,
@@ -14,28 +28,17 @@ const estimateAddNewContributor = {
       type: EstimateAddNewContributor,
     },
   },
-  async resolve({ request: { user } }, { input: { estimateId, username, userId, userEmail }}) {
+  async resolve({ request: { user } }, { input: { estimateId, username, userId, userEmail } }) {
     if (!user) {
       throw new UserError({});
     }
     // user already added???
     const { users = [] } = await Estimate.find({ _id: estimateId });
+
     const res = await Estimate.update(
       { _id: estimateId },
       { $push: { users: { userId, username, userEmail } } },
     );
-
-    // let url;
-    // const { _id: userId } = user;
-    //
-    // try {
-    //   const newEstimate = new Estimate({ owner: userId });
-    //   const { _id } = await newEstimate.save();
-    //
-    //   url = `estimate/${_id}`;
-    // } catch (error) {
-    //   return console.error(error);
-    // }
 
     return true;
   },

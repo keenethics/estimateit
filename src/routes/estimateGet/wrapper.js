@@ -7,6 +7,7 @@ import { ESTIMATE_FORM } from '../../constants';
 import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import { estimate } from '../../data/queriesClient';
 
 class Wrapper extends React.Component {
   static propTypes = {
@@ -64,61 +65,6 @@ class Wrapper extends React.Component {
   }
 }
 
-const estimate = gql`
-  query estimate($id: String) {
-    estimate(id: $id) {
-      _id
-      owner
-      date
-      clientName
-      projectName
-      sprintNumber
-      comments
-      pm
-      skype
-      email
-      position
-      moneyRate
-      technologies
-      users {
-        userId
-        username
-        userEmail
-        __typename @skip(if: true)
-      }
-      estimateOptions {
-        qa
-        pm
-        risks
-        bugFixes
-        completing
-        __typename @skip(if: true)
-      }
-      tasks {
-        taskName
-        isChecked
-        minimumHours
-        maximumHours
-        __typename @skip(if: true)
-        tasks {
-          taskName
-          isChecked
-          minimumHours
-          maximumHours
-          __typename @skip(if: true)
-          tasks {
-            taskName
-            isChecked
-            minimumHours
-            maximumHours
-            __typename @skip(if: true)
-          }
-        }
-      }
-      __typename @skip(if: true)
-    }
-  }
-`;
 
 export default compose(
   connect(),

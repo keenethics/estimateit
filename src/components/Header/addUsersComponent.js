@@ -10,13 +10,16 @@ import { Form, reduxForm } from 'redux-form';
 import Select from 'react-select';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-
+import Notification from 'react-notification-system';
 import { connect } from 'react-redux';
 // import { bindActionCreators } from 'redux';
 import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
 import { ESTIMATE_FORM } from '../../constants';
+
+
+import { estimate } from '../../data/queriesClient';
 
 const SelectC = ({ options, optionRender, parentProps: { input: { value, onChange } } }) => {
   return (
@@ -82,16 +85,30 @@ class AddUsers extends React.Component {
 
     mutate({
       variables: { input: { estimateId, userId, username, userEmail } },
-    }).then((res) => {
+      update: (store, res) => {
+        const data = store.readQuery(
+          { query: estimate,
+            variables: { id: estimateId }
+          },
+        );
+        data.estimate.users.push({
+          userId,
+          userEmail,
+          username,
+        })
+
+        store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
+      },
+    }).then(() => {
       console.log('sucsses');
       console.log(res);
-      // this.notificationSystem.addNotification({
-      //   autoDismiss: 6,
-      //   position: 'br',
-      //   title: 'Success',
-      //   level: 'success',
-      //   message: 'Estimate saved',
-      // });
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Success',
+        level: 'success',
+        message: 'User added',
+      });
     }).catch((error) => {
       console.error(error.message);
       // this.notificationSystem.addNotification({
@@ -189,6 +206,7 @@ class AddUsers extends React.Component {
             )
           }
         </ul>
+        <Notification ref={ref => this.notificationSystem = ref} />
       </div>
     );
   }
