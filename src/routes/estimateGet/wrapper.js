@@ -6,6 +6,7 @@ import { graphql, compose } from 'react-apollo';
 import { ESTIMATE_FORM } from '../../constants';
 import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 class Wrapper extends React.Component {
   static contextTypes = {
@@ -54,7 +55,7 @@ class Wrapper extends React.Component {
       data,
     } = this.props;
     return (
-      <div>
+      <div style={{ position: 'relative' }}>
         {
           data.loading
           ? <Loading />

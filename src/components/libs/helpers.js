@@ -68,6 +68,7 @@ export const renderDateField =
       selected={value ? moment(value) : moment()}
       onChange={momentInstance => onChange(momentInstance && momentInstance.format())}
       className={`react-datepicker-ignore-onclickoutside ${fieldClassName}`}
+      readOnly
     />
     {(meta.error &&
     <div>
