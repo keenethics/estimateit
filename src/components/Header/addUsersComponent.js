@@ -44,11 +44,7 @@ class AddUsers extends React.Component {
           variables: { id: estimateId },
         });
 
-        data.estimate.users.push({
-          userId,
-          username,
-          userEmail,
-        });
+        data.estimate.users.push({ userId, username, userEmail });
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
       },
@@ -172,6 +168,7 @@ AddUsers.propTypes = {
   reset: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   estimateId: PropTypes.string.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
   contributors: PropTypes.array.isRequired,
   estimateAddNewContributor: PropTypes.func.isRequired,
   estimateRemoveContributor: PropTypes.func.isRequired,
