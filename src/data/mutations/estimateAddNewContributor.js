@@ -9,7 +9,7 @@ import {
   MongoError,
 } from '../errors';
 import { EstimateAddNewContributor } from '../types';
-
+import sendEmail from '../../core/sendEmail';
 
 const estimateAddNewContributor = {
   type: BoolType,
@@ -18,11 +18,13 @@ const estimateAddNewContributor = {
       type: EstimateAddNewContributor,
     },
   },
-  async resolve({ request: { user } }, { input: { estimateId, username, userId, userEmail } }) {
+  async resolve(
+    { request: { user, headers } },
+    { input: { estimateId, username, userId, userEmail } },
+  ) {
     if (!user) {
       throw new UserError({});
     }
-
     const { users = [] } = await Estimate.findOne({ _id: estimateId });
 
     if (_.findWhere(users, { userId })) {
@@ -34,6 +36,11 @@ const estimateAddNewContributor = {
         { _id: estimateId },
         { $push: { users: { userId, username, userEmail } } },
       );
+
+      sendEmail({
+        emails: userEmail,
+        text: `Somebody added you to the estimate ${headers.referer}`,
+      });
 
       return ok;
     } catch (error) {

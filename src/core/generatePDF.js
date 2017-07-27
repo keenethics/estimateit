@@ -28,7 +28,12 @@ const generatePDF = (cookies, url, emails) => {
       printBackground: true,
     })
     .then((pdfBuffer) => {
-      sendEmail(emails, pdfBuffer);
+      sendEmail({
+        emails,
+        attach: pdfBuffer,
+        text: 'your file is attached',
+      });
+
       nightmare.end();
       nightmare.ended = true;
       nightmare = null;
