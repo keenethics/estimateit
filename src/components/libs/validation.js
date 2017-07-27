@@ -81,4 +81,4 @@ export const tasksMax = sended => max =>
   );
 
 export const currency = value =>
-  (value && /^[1-9][0-9]+$/.test(value) ? undefined : 'Should be integer');
+  (value && /^[1-9]{1}[0-9]*$/.test(value.toString()) ? undefined : 'Should be integer');
