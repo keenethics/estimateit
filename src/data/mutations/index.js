@@ -4,6 +4,7 @@ import {
 
 import estimateUpdate from './estimateUpdate';
 import estimateCreate from './estimateCreate';
+import estimateAddNewContributor from './estimateAddNewContributor';
 
 const Mutation = new ObjectType({
   name: 'EstimateMutation',
@@ -11,6 +12,7 @@ const Mutation = new ObjectType({
   fields: () => ({
     estimateUpdate,
     estimateCreate,
+    estimateAddNewContributor,
   }),
 });
 

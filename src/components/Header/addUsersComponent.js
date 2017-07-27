@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
+import { ESTIMATE_FORM } from '../../constants';
 
 const SelectC = ({ options, optionRender, parentProps: { input: { value, onChange } } }) => {
   return (
@@ -40,6 +41,7 @@ class AddUsers extends React.Component {
     };
 
     this.optionRender = this.optionRender.bind(this);
+    this.submitAddUser = this.submitAddUser.bind(this);
   }
 
   mapItemToOption = ({ _id, name, email }) =>
@@ -70,13 +72,41 @@ class AddUsers extends React.Component {
     };
   }
 
-  submitAddUser(e) {
-    // e.preventDefault();
-    console.log(e);
+  submitAddUser({ addUser: {
+    value: userId,
+    label: username,
+    email: userEmail,
+  } }) {
+    const { mutate, estimateId } = this.props;
+
+    mutate({
+      variables: { input: { estimateId, userId, username, userEmail } },
+    }).then((res) => {
+      console.log('sucsses');
+      console.log(res);
+      // this.notificationSystem.addNotification({
+      //   autoDismiss: 6,
+      //   position: 'br',
+      //   title: 'Success',
+      //   level: 'success',
+      //   message: 'Estimate saved',
+      // });
+    }).catch((error) => {
+      console.error(error.message);
+      // this.notificationSystem.addNotification({
+      //   autoDismiss: 6,
+      //   position: 'br',
+      //   title: 'Error',
+      //   level: 'error',
+      //   message: error.message,
+      // });
+    });
   }
 
 
   render() {
+    console.log('addUser');
+    console.log(this.props);
     const { usersList = [] } = this.props.data;
     const options = usersList.map(item => this.mapItemToOption(item));
 
@@ -87,27 +117,31 @@ class AddUsers extends React.Component {
         optionRender={this.optionRender}
       />
     );
+
     return (
-      <Form
-        onSubmit={this.props.handleSubmit(this.submitAddUser)}
-        form='add_user_to_estimate'
-        onKeyPress={this.handleOnKeyPress}
-      >
-        <div>
-          <Field
-            multi
-            name="addUser"
-            placeholder="Find user"
-            component={select}
-          />
-          <Button
-            type="submit"
-            color="danger"
-          >
-            Add new user
-          </Button>
-        </div>
-      </Form>
+      <div>
+        <Form
+          onSubmit={this.props.handleSubmit(this.submitAddUser)}
+          form='add_user_to_estimate'
+          onKeyPress={this.handleOnKeyPress}
+        >
+          <div>
+            <Field
+              multi
+              name="addUser"
+              placeholder="Find user"
+              component={select}
+            />
+            <Button
+              type="submit"
+              color="danger"
+            >
+              Add new user
+            </Button>
+          </div>
+        </Form>
+
+      </div>
     );
   }
 }
@@ -122,9 +156,18 @@ AddUsers = reduxForm({
   enableReinitialize: false,
 })(AddUsers);
 
+function mapStateToProps({
+  form,
+}) {
+  return {
+    contributors: form.ESTIMATE_FORM.values.users,
+    estimateId: form.ESTIMATE_FORM.values._id,
+  };
+}
+
 
 export default compose(
-  connect(),
+  connect(mapStateToProps),
   graphql(gql`
     query usersList {
       usersList {
@@ -132,6 +175,15 @@ export default compose(
         name,
         email,
       }
-    }
+    },
+  `),
+  graphql(gql`
+    mutation Mutation (
+      $input: estimateAddNewContributor
+    ) {
+      estimateAddNewContributor (
+        input: $input
+      )
+    },
   `),
 )(AddUsers);

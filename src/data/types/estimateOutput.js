@@ -51,9 +51,27 @@ const EstimateOptionsOutputType = new ObjectType({
   },
 });
 
+const UsersOutputType = new ObjectType({
+  name: 'UsersOutputType',
+  fields: () => ({
+    userId: {
+      type: StringType,
+    },
+    username: {
+      type: StringType,
+    },
+    userEmail: {
+      type: StringType,
+    },
+  }),
+});
+
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: () => ({
+    users: {
+      type: new ListType(UsersOutputType),
+    },
     _id: {
       type: StringType,
     },

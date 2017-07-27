@@ -80,6 +80,12 @@ const estimate = gql`
       position
       moneyRate
       technologies
+      users {
+        userId
+        username
+        userEmail
+        __typename @skip(if: true)
+      }
       estimateOptions {
         qa
         pm

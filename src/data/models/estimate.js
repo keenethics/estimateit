@@ -77,6 +77,10 @@ const EstimateSchema = mongoose.Schema({
   tasks: {
     type: Array,
   },
+  users: {
+    type: Array,
+    default: [],
+  },
 });
 
 const Estimate = mongoose.model('estimates', EstimateSchema);
