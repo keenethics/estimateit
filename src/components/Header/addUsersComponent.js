@@ -107,12 +107,13 @@ class AddUsers extends React.Component {
 
   options = () => {
     const {
+      owner,
       contributors = [],
       data: { usersList = [] },
     } = this.props;
 
     return usersList
-      .filter(({ _id }) => !_.findWhere(contributors, { userId: _id }))
+      .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner))
       .map(({ _id, name, email }) => ({
         email,
         value: _id,
@@ -121,7 +122,13 @@ class AddUsers extends React.Component {
   }
 
   render() {
-    const { contributors = [] } = this.props;
+    const {
+      owner,
+      contributors = [],
+      data: { usersList = [] },
+    } = this.props;
+    const ownerObject = _.findWhere(usersList, { _id: owner });
+
     return (
       <div>
         <Form
@@ -141,10 +148,16 @@ class AddUsers extends React.Component {
               type="submit"
               color="danger"
             >
-              Add new user
+              Add contributor
             </Button>
           </div>
         </Form>
+        { ownerObject &&
+          <div className={styles.owner_item}>
+            {ownerObject.name}
+            <span>Owner</span>
+          </div>
+        }
         {
           contributors.map(({ username, userId }) => (
             <div className={styles.contributor_item}>
@@ -154,7 +167,7 @@ class AddUsers extends React.Component {
                 color="danger"
                 onClick={this.removeUser}
               >
-                Remove user
+                Remove
               </Button>
             </div>
           ),
@@ -169,6 +182,7 @@ class AddUsers extends React.Component {
 AddUsers.propTypes = {
   reset: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
+  owner: PropTypes.string.isRequired,
   estimateId: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   contributors: PropTypes.array.isRequired,
@@ -182,10 +196,8 @@ AddUsers = reduxForm({
 })(AddUsers);
 
 function mapStateToProps({ form }) {
-  return {
-    contributors: form[ESTIMATE_FORM].values.contributors,
-    estimateId: form[ESTIMATE_FORM].values._id,
-  };
+  const { owner, _id: estimateId, contributors } = form[ESTIMATE_FORM].values;
+  return { estimateId, contributors, owner };
 }
 
 
