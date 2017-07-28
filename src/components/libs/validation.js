@@ -27,6 +27,13 @@ export const mixShouldBeLessThenMax = maxTimeId =>
 export const requiredArray = value =>
   (value && value.length ? undefined : 'Required');
 
+export const arrayItemMaxLength = max => (value) => {
+  const invalidItems = value.filter(item => item.length > 30);
+  return invalidItems && invalidItems.length
+    ? `Must be ${max} characters or less`
+    : undefined;
+};
+
 export const emailsArray = (value) => {
   const invalidEmails = value && value.filter(e => !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(e));
   return (invalidEmails && invalidEmails.length)
@@ -66,18 +73,6 @@ export const alphaNumeric = value =>
   (value && /[^a-zA-Z0-9 ]/i.test(value)
     ? 'Only alphanumeric characters'
     : undefined
-  );
-
-export const tasksMin = sended => max =>
-  (Number(max) < Number(sended)
-  ? undefined
-  : `Min hours ${max} should be less than Max hours ${sended}`
-);
-
-export const tasksMax = sended => max =>
-  (Number(sended) < Number(max)
-    ? undefined
-    : `Max hours ${sended} should be bigger than Min hours ${max}`
   );
 
 export const currency = value =>

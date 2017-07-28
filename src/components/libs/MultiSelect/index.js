@@ -3,7 +3,7 @@ import { Creatable } from 'react-select';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from 'react-select/dist/react-select.css';
 import { ValidationState } from '../../libs/helpers';
-
+import s from './styles.scss';
 
 class MultiSelect extends Component {
   constructor(props) {
@@ -37,11 +37,13 @@ class MultiSelect extends Component {
     return (
       <div
         name={name}
+        className={s.technologies}
       >
         <Creatable
           name={name}
           multi={multi}
           value={values}
+          autosize={false}
           options={options}
           className={className}
           searchable={searchable}

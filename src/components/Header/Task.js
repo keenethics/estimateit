@@ -12,7 +12,12 @@ import styles from './styles.scss';
 import { renderField } from '../libs/helpers';
 import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
-import { required, taskHourValidation, mixShouldBeLessThenMax } from '../libs/validation';
+import {
+  required,
+  maxLength,
+  taskHourValidation,
+  mixShouldBeLessThenMax,
+} from '../libs/validation';
 
 
 class Task extends React.Component {
@@ -106,7 +111,7 @@ class Task extends React.Component {
                 <Field
                   type="text"
                   label="Task name:"
-                  validate={[required]}
+                  validate={[required, maxLength(100)]}
                   component={renderField}
                   id={`${task}.taskName`}
                   name={`${task}.taskName`}
