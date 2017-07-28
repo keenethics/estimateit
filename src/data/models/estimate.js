@@ -77,7 +77,7 @@ const EstimateSchema = mongoose.Schema({
   tasks: {
     type: Array,
   },
-  users: {
+  contributors: {
     type: Array,
     default: [],
   },

@@ -25,7 +25,7 @@ const estimateRemoveContributor = {
     try {
       const { ok } = await Estimate.update(
         { _id: estimateId },
-        { $pull: { users: { userId } } },
+        { $pull: { contributors: { userId } } },
       );
 
       return ok;

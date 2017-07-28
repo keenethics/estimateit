@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
-import {connect} from 'react-redux';
-import {graphql, compose} from 'react-apollo';
+import { connect } from 'react-redux';
+import { graphql, compose } from 'react-apollo';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 

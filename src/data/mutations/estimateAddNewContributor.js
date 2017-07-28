@@ -25,16 +25,17 @@ const estimateAddNewContributor = {
     if (!user) {
       throw new UserError({});
     }
-    const { users = [] } = await Estimate.findOne({ _id: estimateId });
 
-    if (_.findWhere(users, { userId })) {
+    const { contributors = [] } = await Estimate.findOne({ _id: estimateId });
+
+    if (_.findWhere(contributors, { userId })) {
       throw new MongoError({ message: 'This users alreday added' });
     }
 
     try {
       const { ok } = await Estimate.update(
         { _id: estimateId },
-        { $push: { users: { userId, username, userEmail } } },
+        { $push: { contributors: { userId, username, userEmail } } },
       );
 
       sendEmail({

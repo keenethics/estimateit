@@ -16,7 +16,7 @@ export const estimate = gql`
       position
       moneyRate
       technologies
-      users {
+      contributors {
         userId
         username
         userEmail

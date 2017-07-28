@@ -44,7 +44,7 @@ class AddUsers extends React.Component {
           variables: { id: estimateId },
         });
 
-        data.estimate.users.push({ userId, username, userEmail });
+        data.estimate.contributors.push({ userId, username, userEmail });
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
       },
@@ -80,7 +80,8 @@ class AddUsers extends React.Component {
           variables: { id: estimateId },
         });
 
-        data.estimate.users = data.estimate.users.filter(e => e.userId !== userId);
+        data.estimate.contributors =
+          data.estimate.contributors.filter(e => e.userId !== userId);
 
         store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
       },
@@ -124,7 +125,7 @@ class AddUsers extends React.Component {
     return (
       <div>
         <Form
-          form='add_user_to_estimate'
+          form={ADD_USER_TO_ESTIMATE_FORM}
           onSubmit={this.props.handleSubmit(this.addUser)}
         >
           <div>
@@ -182,7 +183,7 @@ AddUsers = reduxForm({
 
 function mapStateToProps({ form }) {
   return {
-    contributors: form[ESTIMATE_FORM].values.users,
+    contributors: form[ESTIMATE_FORM].values.contributors,
     estimateId: form[ESTIMATE_FORM].values._id,
   };
 }

@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import _ from 'underscore';
 import gql from 'graphql-tag';
+import {connect} from 'react-redux';
+import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import {
@@ -30,6 +32,9 @@ import csvFilename from './lib/csvFilename';
 import MultiSelect from '../libs/MultiSelect';
 
 import { emailsArray } from '../libs/validation';
+import {
+  ESTIMATE_FORM,
+} from '../../constants';
 
 class Reports extends Component {
   constructor(props) {
@@ -42,13 +47,14 @@ class Reports extends Component {
     };
 
     this.toggle = this.toggle.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.shareViaEmail = this.shareViaEmail.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
-    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
+    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
+    this.userCanNotEditThisEstimate = this.userCanNotEditThisEstimate.bind(this);
   }
 
   toggle() {
@@ -57,6 +63,18 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
+    if (this.userCanNotEditThisEstimate()) {
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: 'You can not do this operation',
+      });
+
+      return null;
+    }
+
     const { estimateUpdate } = this.props;
     delete values['emails'];
     delete values['users'];
@@ -85,6 +103,18 @@ class Reports extends Component {
 
   estimateRemove(e) {
     e.preventDefault();
+
+    if (this.userCanNotEditThisEstimate()) {
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: 'You can not do this operation',
+      });
+
+      return null;
+    }
 
     this.props.estimateRemove({
       variables: { id: this.props.estimateId },
@@ -243,6 +273,12 @@ class Reports extends Component {
       });
   }
 
+  userCanNotEditThisEstimate() {
+    const { user: { _id: currentUserId } } = this.context;
+    const { owner, contributors } = this.props;
+    return !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+  }
+
   render() {
     const { handleSubmit } = this.context;
 
@@ -325,13 +361,16 @@ class Reports extends Component {
 }
 
 Reports.contextTypes = {
-  handleSubmit: PropTypes.func,
   fetch: PropTypes.func,
+  user: PropTypes.object,
+  handleSubmit: PropTypes.func,
 };
 
 Reports.propTypes = {
+  owner: PropTypes.string,
   estimateId: PropTypes.string,
   tasks: PropTypes.array.isRequired,
+  contributors: PropTypes.array.isRequired,
   estimateUpdate: PropTypes.func.isRequired,
   estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
@@ -357,7 +396,13 @@ const estimateRemove = gql`
   },
 `;
 
+function mapStateToProps({ form }) {
+  const { contributors, owner } = form[ESTIMATE_FORM].values;
+  return { owner, contributors };
+}
+
 export default compose(
+  connect(mapStateToProps),
   graphql(estimateUpdate, {
     name: 'estimateUpdate',
   }),
