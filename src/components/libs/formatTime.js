@@ -26,6 +26,9 @@ const formatTime = (digit) => {
       const indexOfHours = 0;
       const indexOfMinutes = 1;
       const minutesAndHours = tempDigit.split('.');
+      if (minutesAndHours.length === 1) {
+        minutesAndHours[1] = 0;
+      }
       if (minutesAndHours[indexOfMinutes] && minutesAndHours[indexOfMinutes].length > 2) {
         minutesAndHours[indexOfMinutes] = minutesAndHours[indexOfMinutes].slice(0, 2);
       }

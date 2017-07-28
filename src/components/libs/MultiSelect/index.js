@@ -37,7 +37,6 @@ class MultiSelect extends Component {
     return (
       <div
         name={name}
-        className={s.technologies}
       >
         <Creatable
           name={name}
@@ -58,4 +57,4 @@ class MultiSelect extends Component {
   }
 }
 
-export default withStyles(styles)(MultiSelect);
+export default withStyles(styles, s)(MultiSelect);

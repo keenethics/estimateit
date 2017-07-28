@@ -1,16 +1,10 @@
-.technologies {
-  div {
-    div {
-      span {
-        div {
-          span {  
-            max-width: 380px;
-            white-space: normal;
-            overflow: hidden;
-            text-overflow: ellipsis;
-          }
-        }
-      }
+:global{
+
+    .Select-value-label {
+      max-width: 380px !important;
+      white-space: normal !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
     }
-  }
+
 }
