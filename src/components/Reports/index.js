@@ -16,9 +16,11 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 import axios from 'axios';
+import { Field } from 'redux-form';
+import history from '../../history';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { Field } from 'redux-form';
+
 
 import styles from './styles.scss';
 
@@ -47,12 +49,6 @@ class Reports extends Component {
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
-  }
-
-  copyUrlToClipboard(url) {
-    this.customNotificationInput.value = url.trim();
-    this.customNotificationInput.select();
-    document.execCommand('copy');
   }
 
   toggle() {
@@ -96,13 +92,7 @@ class Reports extends Component {
       this.setState({
         modal: false,
       });
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Success',
-        level: 'success',
-        message: 'Estimate removed',
-      });
+      history.replace('/');
     }).catch((error) => {
       this.setState({
         modal: false,

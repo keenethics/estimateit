@@ -21,8 +21,6 @@ const estimateRemove = {
       throw new UserError({});
     }
 
-    console.log(id);
-
     try {
       const { ok } = await Estimate.update({ _id: id }, { $set: { isRemoved: true } });
 
