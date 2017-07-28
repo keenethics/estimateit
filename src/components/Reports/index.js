@@ -77,7 +77,7 @@ class Reports extends Component {
 
     const { estimateUpdate } = this.props;
     delete values['emails'];
-    delete values['users'];
+    delete values['contributors'];
 
     estimateUpdate({
       variables: { input: { ...values } },

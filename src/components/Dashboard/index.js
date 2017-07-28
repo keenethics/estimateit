@@ -63,13 +63,10 @@ class Dashboard extends React.Component {
             ? <div className={`${styles.estimate__body} container-fluid`}>
               <div className={styles.estimate__body_items}>
                 <div className="row">
-                  {this.props.allEstimates.length
-                    ? this.props.allEstimates.map((estimate, key) =>
-                      <SingleEstimate estimate={estimate} key={key}/>,
+                  {!!this.props.allEstimates.length &&
+                    this.props.allEstimates.map((estimate, key) =>
+                      <SingleEstimate estimate={estimate} key={key} />,
                     )
-                    : <div>
-                      <p>Go to Dashboard</p>
-                    </div>
                   }
                 </div>
                 <div className="row">

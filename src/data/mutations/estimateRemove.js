@@ -23,9 +23,10 @@ const estimateRemove = {
       throw new UserError({});
     }
 
-    const { owner, users: contributors } = await Estimate.findOne({ _id: id });
+    const { owner, contributors } = await Estimate.findOne({ _id: id });
+    const userId = user._id.toString();
     const userCanNotEditThisEstimate =
-      !(owner === user._id || _.findWhere(contributors, { userId: user._id.toString() }));
+          !(owner === userId || _.findWhere(contributors, { userId }));
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});
