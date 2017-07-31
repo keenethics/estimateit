@@ -9,9 +9,10 @@ import { required, email, alphaNumeric, maxLength } from '../libs/validation.js'
 
 import styles from './styles.scss';
 
-
 class Contacts extends Component {
   render() {
+    const { userCanEditThisEstimate } = this.props;
+
     return (
       <Card className={styles.contacts}>
         <CardHeader>If you have any questions about this estimate, please contact</CardHeader>
@@ -20,33 +21,37 @@ class Contacts extends Component {
             name="pm"
             type="text"
             label="PM's name"
-            validate={[required, alphaNumeric, maxLength(100)]}
             component={renderField}
             className={styles.contacts__input}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, alphaNumeric, maxLength(100)]}
           />
           <Field
             type="text"
             name="position"
             label="Position"
-            validate={[required, alphaNumeric, maxLength(100)]}
             component={renderField}
             className={styles.contacts__input}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, alphaNumeric, maxLength(100)]}
           />
           <Field
             type="email"
             name="email"
             label="Email"
-            validate={[required, email, maxLength(60)]}
             component={renderField}
             className={styles.contacts__input}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, email, maxLength(60)]}
           />
           <Field
             type="text"
             name="skype"
             label="Skype"
-            validate={[required, alphaNumeric, maxLength(60)]}
             component={renderField}
             className={styles.contacts__input}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, alphaNumeric, maxLength(60)]}
           />
         </CardBlock>
       </Card>
@@ -56,6 +61,7 @@ class Contacts extends Component {
 }
 
 Contacts.propTypes = {
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(Contacts);

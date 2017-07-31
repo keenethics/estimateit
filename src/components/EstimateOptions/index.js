@@ -18,6 +18,7 @@ class EstimateOptions extends Component {
     const {
       totalHours,
       calculateTotalHours,
+      userCanEditThisEstimate,
     } = this.props;
 
     return (
@@ -31,41 +32,47 @@ class EstimateOptions extends Component {
             name="moneyRate"
             validate={[required, currency]}
             component={renderOptionsField}
+            disabled={!userCanEditThisEstimate}
           />
         </InputGroup>
         <Field
-          name="estimateOptions.qa"
           title="QA"
           component={Slider}
           totalHours={totalHours}
+          name="estimateOptions.qa"
+          disabled={!userCanEditThisEstimate}
           calculateTotalHours={calculateTotalHours}
         />
         <Field
-          name="estimateOptions.pm"
           title="PM"
           component={Slider}
           totalHours={totalHours}
+          name="estimateOptions.pm"
+          disabled={!userCanEditThisEstimate}
           calculateTotalHours={calculateTotalHours}
         />
         <Field
-          name="estimateOptions.bugFixes"
           title="Bug Fixes"
           component={Slider}
           totalHours={totalHours}
+          name="estimateOptions.bugFixes"
+          disabled={!userCanEditThisEstimate}
           calculateTotalHours={calculateTotalHours}
         />
         <Field
-          name="estimateOptions.risks"
           title="Risks"
           component={Slider}
           totalHours={totalHours}
+          name="estimateOptions.risks"
+          disabled={!userCanEditThisEstimate}
           calculateTotalHours={calculateTotalHours}
         />
         <Field
-          name="estimateOptions.completing"
           title="Probability"
           component={Slider}
           totalHours={totalHours}
+          name="estimateOptions.completing"
+          disabled={!userCanEditThisEstimate}
           calculateTotalHours={calculateTotalHours}
         />
       </div>
@@ -78,6 +85,7 @@ EstimateOptions.propTypes = {
   totalHours: PropTypes.number.isRequired,
   estimateOptions: PropTypes.object.isRequired,
   calculateTotalHours: PropTypes.func.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps() {

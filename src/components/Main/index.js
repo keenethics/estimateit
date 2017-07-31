@@ -24,6 +24,7 @@ class Main extends Component {
       moneyRate,
       totalHours,
       estimateOptions,
+      userCanEditThisEstimate,
       devHours: {
         minHours,
         maxHours,
@@ -59,6 +60,7 @@ class Main extends Component {
           <Calculation
             totalHours={totalHours}
             estimateOptions={estimateOptions}
+            userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
         <Col xs="12">
@@ -68,13 +70,15 @@ class Main extends Component {
           />
         </Col>
         <Col xs="12">
-          <Contacts />
+          <Contacts
+            userCanEditThisEstimate={userCanEditThisEstimate}
+          />
         </Col>
         <Col xs="12">
-          {
+          { userCanEditThisEstimate &&
             <Reports
-              estimateId={estimateId}
               tasks={tasks}
+              estimateId={estimateId}
               estimateOptions={estimateOptions}
             />
           }
@@ -94,7 +98,12 @@ function mapStateToProps(state) {
     devHours,
     totalHours,
   } } = state;
-  const { values: { estimateOptions, moneyRate, tasks } } = state.form[ESTIMATE_FORM];
+  const { values: {
+    tasks,
+    moneyRate,
+    estimateOptions,
+    userCanEditThisEstimate,
+  } } = state.form[ESTIMATE_FORM];
 
   return {
     time,
@@ -104,6 +113,7 @@ function mapStateToProps(state) {
     moneyRate,
     totalHours,
     estimateOptions,
+    userCanEditThisEstimate,
   };
 }
 

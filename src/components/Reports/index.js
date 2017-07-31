@@ -1,6 +1,6 @@
 import _ from 'underscore';
 import gql from 'graphql-tag';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
@@ -54,7 +54,6 @@ class Reports extends Component {
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
     this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
-    this.userCanNotEditThisEstimate = this.userCanNotEditThisEstimate.bind(this);
   }
 
   toggle() {
@@ -63,21 +62,10 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
-    if (this.userCanNotEditThisEstimate()) {
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Error',
-        level: 'error',
-        message: 'You can not do this operation',
-      });
-
-      return null;
-    }
-
     const { estimateUpdate } = this.props;
     delete values['emails'];
     delete values['contributors'];
+    delete values['userCanEditThisEstimate'];
 
     estimateUpdate({
       variables: { input: { ...values } },
@@ -103,18 +91,6 @@ class Reports extends Component {
 
   estimateRemove(e) {
     e.preventDefault();
-
-    if (this.userCanNotEditThisEstimate()) {
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Error',
-        level: 'error',
-        message: 'You can not do this operation',
-      });
-
-      return null;
-    }
 
     this.props.estimateRemove({
       variables: { id: this.props.estimateId },
@@ -271,12 +247,6 @@ class Reports extends Component {
           message: 'internal server error',
         });
       });
-  }
-
-  userCanNotEditThisEstimate() {
-    const { user: { _id: currentUserId } } = this.context;
-    const { owner, contributors } = this.props;
-    return !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
   }
 
   render() {

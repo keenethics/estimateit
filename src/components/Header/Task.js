@@ -73,24 +73,27 @@ class Task extends React.Component {
       dispatchChange,
       dispatchRemove,
       dispatchAddSubTask,
+      userCanEditThisEstimate
     } = this.props;
     const selector = formValueSelector(form);
+    const disabled = !userCanEditThisEstimate;
+    const showButton = userCanEditThisEstimate;
     const { store: { getState } } = this.context;
 
     return (
       <FormGroup className={styles.tasks}>
-        {level === 0 &&
-        <Button
-          color="danger"
-          onClick={() => fields.unshift({ isChecked: true })}
-          className={styles.tasks__add}
-        >
-          Add task
-        </Button>
+        { (level === 0 && showButton) &&
+          <Button
+            color="danger"
+            onClick={() => fields.unshift({ isChecked: true })}
+            className={styles.tasks__add}
+          >
+            Add task
+          </Button>
         }
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
-          const disabled = taskObj.tasks && taskObj.tasks.length;
+          const haveSubtask = taskObj.tasks && taskObj.tasks.length;
 
           return (
             <FormGroup
@@ -101,6 +104,7 @@ class Task extends React.Component {
               <div className={styles.subtasks__wrapper}>
                 <Field
                   type="checkbox"
+                  disabled={disabled}
                   component={renderField}
                   id={`${task}.isChecked`}
                   name={`${task}.isChecked`}
@@ -111,55 +115,56 @@ class Task extends React.Component {
                 <Field
                   type="text"
                   label="Task name:"
-                  validate={[required, maxLength(100)]}
+                  disabled={disabled}
                   component={renderField}
                   id={`${task}.taskName`}
                   name={`${task}.taskName`}
                   className={styles.subtasks__item}
+                  validate={[required, maxLength(100)]}
                 />
                 <div>
                   <Field
                     type="text"
                     addon={'min'}
-                    disabled={disabled}
                     component={InputAndPopover}
                     id={`${task}.minimumHours`}
                     name={`${task}.minimumHours`}
                     dispatchChange={dispatchChange}
+                    hoursInputName={'minHoursInput'}
+                    className={styles.subtasks__item}
+                    disabled={disabled || haveSubtask}
+                    minutesInputName={'minMinutesInput'}
+                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
                     buttonsNames={{
                       plusHour: 'plusMinHour',
                       minusHour: 'minusMinHour',
                       plusMinute: 'plusMinMinute',
                       minusMinute: 'minusMinMinute',
                     }}
-                    hoursInputName={'minHoursInput'}
-                    minutesInputName={'minMinutesInput'}
-                    className={styles.subtasks__item}
-                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
                   />
                   <Field
                     type="text"
                     addon={'max'}
-                    disabled={disabled}
                     component={InputAndPopover}
-                    validate={[taskHourValidation(disabled)]}
                     id={`${task}.maximumHours`}
                     name={`${task}.maximumHours`}
                     dispatchChange={dispatchChange}
+                    hoursInputName={'maxHoursInput'}
+                    className={styles.subtasks__item}
+                    disabled={disabled || haveSubtask}
+                    minutesInputName={'maxMinutesInput'}
+                    validate={[taskHourValidation(disabled)]}
                     buttonsNames={{
                       plusHour: 'plusMaxHour',
                       minusHour: 'minusMaxHour',
                       plusMinute: 'plusMaxMinute',
                       minusMinute: 'minusMaxMinute',
                     }}
-                    hoursInputName={'maxHoursInput'}
-                    className={styles.subtasks__item}
-                    minutesInputName={'maxMinutesInput'}
                   />
                 </div>
               </div>
               {
-                level < 2 &&
+                (level < 2 && showButton) &&
                 <Button
                   color="danger"
                   className={styles.subtasks__item}
@@ -168,13 +173,16 @@ class Task extends React.Component {
                   Add subtask
                 </Button>
               }
-              <Button
-                color="danger"
-                className={styles.subtasks__item}
-                onClick={() => dispatchRemove({ index, form, field: task, level })}
-              >
-                Delete
-              </Button>
+              {
+                showButton &&
+                <Button
+                  color="danger"
+                  className={styles.subtasks__item}
+                  onClick={() => dispatchRemove({ index, form, field: task, level })}
+                >
+                  Delete
+                </Button>
+              }
 
               <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
                 <FieldArray
@@ -185,6 +193,7 @@ class Task extends React.Component {
                   dispatchRemove={dispatchRemove}
                   dispatchChange={dispatchChange}
                   dispatchAddSubTask={dispatchAddSubTask}
+                  userCanEditThisEstimate={userCanEditThisEstimate}
                 />
               </div>
             </FormGroup>
@@ -207,6 +216,7 @@ Task.propTypes = {
   dispatchRemove: PropTypes.func.isRequired,
   dispatchToggle: PropTypes.func.isRequired,
   dispatchAddSubTask: PropTypes.func.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
 function mapStateToProps() {

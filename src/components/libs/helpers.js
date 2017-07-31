@@ -18,28 +18,30 @@ export const ValidationState = ({ touched, error, warning }) => (
   </div>
 );
 
-export const renderField = ({ className, input, label, type, meta }) => (
+export const renderField = ({ className, input, label, type, meta, disabled }) => (
   <FormGroup className={className}>
     <Input
       {...input}
-      className={className}
-      placeholder={label}
       type={type}
+      disabled={disabled}
+      placeholder={label}
+      className={className}
     />
     <ValidationState {...meta} />
   </FormGroup>
 );
 
-export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange }) => (
+export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange, disabled }) => (
   <div style={{ width: '100%' }}>
     <InputGroup>
       <InputGroupAddon>{label}</InputGroupAddon>
       <Input
         min="0"
         step="1"
+        type="text"
         name={name}
         value={value}
-        type="text"
+        disabled={disabled}
         onChange={onChange}
         {...input}
       />
@@ -69,6 +71,7 @@ export const renderDateField =
       onChange={momentInstance => onChange(momentInstance && momentInstance.format())}
       className={`react-datepicker-ignore-onclickoutside ${fieldClassName}`}
       readOnly
+      disabled={true}
     />
     {(meta.error &&
     <div>

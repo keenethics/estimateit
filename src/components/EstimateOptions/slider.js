@@ -6,6 +6,7 @@ import styles from './styles.scss';
 
 const Slider = ({
   title,
+  disabled,
   totalHours,
   input: {
     value,
@@ -16,7 +17,7 @@ const Slider = ({
   },
   calculateTotalHours,
 }) => {
-  const hours = Math.round(totalHours * value / 100);
+  const hours = Math.round(totalHours * (value / 100));
   const handleChange = ({ target }) => {
     onChange(parseInt(target.value, 10));
     calculateTotalHours(form);
@@ -31,6 +32,7 @@ const Slider = ({
         max="100"
         type="range"
         value={value}
+        disabled={disabled}
         className="radarChartPart"
         onChange={e => handleChange(e)}
       />
@@ -42,8 +44,10 @@ const Slider = ({
 };
 
 Slider.propTypes = {
+  meta: PropTypes.object.isRequired,
   input: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
+  disabled: PropTypes.bool.isRequired,
   totalHours: PropTypes.number.isRequired,
   calculateTotalHours: PropTypes.func.isRequired,
 };
