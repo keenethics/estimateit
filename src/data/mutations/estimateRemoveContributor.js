@@ -1,14 +1,14 @@
-import Estimate from '../models';
-import User from '../../models/user';
-import {
-  UserError,
-  MongoError,
-} from '../errors';
-import { EstimateRemoveContributor } from '../types';
+import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
-
+import Estimate from '../models';
+import {
+  UserError,
+  MongoError,
+  AccessDenied,
+} from '../errors';
+import { EstimateRemoveContributor } from '../types';
 
 const estimateRemoveContributor = {
   type: BoolType,
@@ -21,6 +21,17 @@ const estimateRemoveContributor = {
     if (!user) {
       throw new UserError({});
     }
+
+    const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
+
+    const currentUserId = user._id.toString();
+    const userCanNotEditThisEstimate =
+          !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+
+    if (userCanNotEditThisEstimate) {
+      throw new AccessDenied({});
+    }
+
 
     try {
       const { ok } = await Estimate.update(

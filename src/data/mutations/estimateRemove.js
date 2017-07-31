@@ -23,7 +23,7 @@ const estimateRemove = {
       throw new UserError({});
     }
 
-    const { owner, contributors } = await Estimate.findOne({ _id: id });
+    const { owner, contributors = [] } = await Estimate.findOne({ _id: id });
     const userId = user._id.toString();
     const userCanNotEditThisEstimate =
           !(owner === userId || _.findWhere(contributors, { userId }));
