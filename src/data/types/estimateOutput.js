@@ -123,6 +123,9 @@ const EstimateOutputType = new ObjectType({
     estimates: {
       type: new ListType(EstimateOutputType),
     },
+    userCanEditThisEstimate: {
+      type: BoolType,
+    },
   }),
 });
 

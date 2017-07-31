@@ -6,6 +6,7 @@ export const estimate = gql`
       _id
       owner
       date
+      userCanEditThisEstimate,
       clientName
       projectName
       sprintNumber
