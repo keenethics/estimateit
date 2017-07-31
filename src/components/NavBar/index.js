@@ -1,17 +1,18 @@
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Item from './Item';
 import styles from './styles.scss';
 import AddUsers from '../Header/addUsersComponent';
+import {
+  ESTIMATE_FORM,
+} from '../../constants';
 
 class NavBar extends Component {
-  static contextTypes = {
-    isAuthenticated: PropTypes.bool.isRequired,
-  };
   render() {
-    const { isAuthenticated } = this.context;
-    if (!isAuthenticated) return null;
+    const { userCanEditThisEstimate } = this.props;
+    if (!userCanEditThisEstimate) return null;
 
     return (
       <div className={styles.navbar}>
@@ -30,4 +31,16 @@ class NavBar extends Component {
   }
 }
 
-export default withStyles(styles)(NavBar);
+NavBar.propTypes = {
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
+};
+
+function mapStateToProps({ form }) {
+  const { userCanEditThisEstimate } = form[ESTIMATE_FORM].values;
+  return { userCanEditThisEstimate };
+}
+
+
+export default connect(mapStateToProps)(
+  withStyles(styles)(NavBar),
+);
