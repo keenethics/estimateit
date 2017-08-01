@@ -10,6 +10,7 @@ import EstimateOptions from '../EstimateOptions';
 const Calculation = ({
   totalHours,
   estimateOptions,
+  userCanEditThisEstimate,
 }) => (
   <Card className={styles.calculation}>
     <CardBlock className={styles.calculation__wrapper}>
@@ -26,6 +27,7 @@ const Calculation = ({
         <EstimateOptions
           totalHours={totalHours}
           estimateOptions={estimateOptions}
+          userCanEditThisEstimate={userCanEditThisEstimate}
         />
       </Col>
     </CardBlock>
@@ -35,6 +37,7 @@ const Calculation = ({
 Calculation.propTypes = {
   totalHours: PropTypes.number.isRequired,
   estimateOptions: PropTypes.object.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
 export default withStyles(styles)(Calculation);

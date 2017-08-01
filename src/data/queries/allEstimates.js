@@ -32,6 +32,7 @@ const estimates = {
           { owner: userId },
           { 'users.userId': userId.toString() },
         ],
+        isRemoved: { $exists: false },
       });
 
       return allEstimates;

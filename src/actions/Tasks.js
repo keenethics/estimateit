@@ -34,7 +34,7 @@ export const dispatchToggle = ({ form, field, payload }) =>
     while (address) {
       const element = selector(getState(), address);
 
-      const { isChecked, minimumHours, maximumHours } = element;
+      const { isChecked, minimumHours = 0, maximumHours = 0 } = element;
       const minPayload = minimumHours + ((payload || -1) * removedMinHours);
       const maxPayload = maximumHours + ((payload || -1) * removedMaxHours);
 

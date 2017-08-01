@@ -51,8 +51,8 @@ const EstimateOptionsOutputType = new ObjectType({
   },
 });
 
-const UsersOutputType = new ObjectType({
-  name: 'UsersOutputType',
+const ContributorsOutputType = new ObjectType({
+  name: 'ContributorsOutputType',
   fields: () => ({
     userId: {
       type: StringType,
@@ -69,8 +69,8 @@ const UsersOutputType = new ObjectType({
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: () => ({
-    users: {
-      type: new ListType(UsersOutputType),
+    contributors: {
+      type: new ListType(ContributorsOutputType),
     },
     _id: {
       type: StringType,
@@ -122,6 +122,9 @@ const EstimateOutputType = new ObjectType({
     },
     estimates: {
       type: new ListType(EstimateOutputType),
+    },
+    userCanEditThisEstimate: {
+      type: BoolType,
     },
   }),
 });

@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
   GraphQLString as StringType,
@@ -6,6 +7,7 @@ import {
 import {
   UserError,
   MongoError,
+  AccessDenied,
 } from '../errors';
 import Estimate from '../models';
 
@@ -21,7 +23,14 @@ const estimateRemove = {
       throw new UserError({});
     }
 
-    console.log(id);
+    const { owner, contributors = [] } = await Estimate.findOne({ _id: id });
+    const userId = user._id.toString();
+    const userCanNotEditThisEstimate =
+          !(owner === userId || _.findWhere(contributors, { userId }));
+
+    if (userCanNotEditThisEstimate) {
+      throw new AccessDenied({});
+    }
 
     try {
       const { ok } = await Estimate.update({ _id: id }, { $set: { isRemoved: true } });

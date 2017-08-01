@@ -58,7 +58,6 @@ if (__DEV__) {
 // Login using passport
 
 app.use((req, res, next) => {
-  console.log('isAuthenticated', req.isAuthenticated());
   next();
 });
 
@@ -93,7 +92,6 @@ app.get(
 );
 
 app.get('/auth/logout', (req, res) => {
-  console.log('logging out ...');
   req.logout();
   req.session.destroy();
   res.redirect('/');
@@ -214,6 +212,7 @@ app.get('*', async (req, res, next) => {
         styles.forEach(style => css.add(style._getCss()));
       },
       fetch,
+      user,
       // You can access redux through react-redux connect
       store,
       storeSubscription: null,

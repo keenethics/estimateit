@@ -1,5 +1,7 @@
-import React, { Component } from 'react';
+import _ from 'underscore';
 import gql from 'graphql-tag';
+import { connect } from 'react-redux';
+import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
 import PropTypes from 'prop-types';
 import {
@@ -16,9 +18,11 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 import axios from 'axios';
+import { Field } from 'redux-form';
+import history from '../../history';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { Field } from 'redux-form';
+
 
 import styles from './styles.scss';
 
@@ -28,6 +32,9 @@ import csvFilename from './lib/csvFilename';
 import MultiSelect from '../libs/MultiSelect';
 
 import { emailsArray } from '../libs/validation';
+import {
+  ESTIMATE_FORM,
+} from '../../constants';
 
 class Reports extends Component {
   constructor(props) {
@@ -40,19 +47,13 @@ class Reports extends Component {
     };
 
     this.toggle = this.toggle.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
     this.shareViaEmail = this.shareViaEmail.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
-    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
-  }
-
-  copyUrlToClipboard(url) {
-    this.customNotificationInput.value = url.trim();
-    this.customNotificationInput.select();
-    document.execCommand('copy');
+    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
 
   toggle() {
@@ -63,7 +64,8 @@ class Reports extends Component {
   estimateUpdate(values) {
     const { estimateUpdate } = this.props;
     delete values['emails'];
-    delete values['users'];
+    delete values['contributors'];
+    delete values['userCanEditThisEstimate'];
 
     estimateUpdate({
       variables: { input: { ...values } },
@@ -96,13 +98,7 @@ class Reports extends Component {
       this.setState({
         modal: false,
       });
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Success',
-        level: 'success',
-        message: 'Estimate removed',
-      });
+      history.replace('/');
     }).catch((error) => {
       this.setState({
         modal: false,
@@ -335,13 +331,16 @@ class Reports extends Component {
 }
 
 Reports.contextTypes = {
-  handleSubmit: PropTypes.func,
   fetch: PropTypes.func,
+  user: PropTypes.object,
+  handleSubmit: PropTypes.func,
 };
 
 Reports.propTypes = {
+  owner: PropTypes.string,
   estimateId: PropTypes.string,
   tasks: PropTypes.array.isRequired,
+  contributors: PropTypes.array.isRequired,
   estimateUpdate: PropTypes.func.isRequired,
   estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
@@ -367,7 +366,13 @@ const estimateRemove = gql`
   },
 `;
 
+function mapStateToProps({ form }) {
+  const { contributors, owner } = form[ESTIMATE_FORM].values;
+  return { owner, contributors };
+}
+
 export default compose(
+  connect(mapStateToProps),
   graphql(estimateUpdate, {
     name: 'estimateUpdate',
   }),

@@ -107,3 +107,13 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.owner_item {
+  span {
+    font-size: 1rem;
+  }
+  display: flex;
+  margin: 10px 0;
+  align-items: center;
+  justify-content: space-between;
+}

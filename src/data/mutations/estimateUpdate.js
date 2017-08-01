@@ -1,3 +1,4 @@
+import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
@@ -5,6 +6,7 @@ import {
 import {
   UserError,
   MongoError,
+  AccessDenied,
 } from '../errors';
 import {
   EstimateInputType,
@@ -23,8 +25,18 @@ const estimateUpdate = {
       throw new UserError({});
     }
 
+    const { owner, users: contributors = [] } = await Estimate.findOne({ _id: input._id });
+    const userId = user._id.toString();
+    const userCanNotEditThisEstimate =
+      !(owner === userId || _.findWhere(contributors, { userId }));
+
+    if (userCanNotEditThisEstimate) {
+      throw new AccessDenied({});
+    }
+
     try {
       const { _id } = input;
+
       const { ok } = await Estimate.update({ _id }, { $set: { ...input } });
 
       return ok;

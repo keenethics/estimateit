@@ -7,6 +7,7 @@ import Estimate from '../models';
 import {
   UserError,
   MongoError,
+  AccessDenied,
 } from '../errors';
 import { EstimateAddNewContributor } from '../types';
 import sendEmail from '../../core/sendEmail';
@@ -25,16 +26,25 @@ const estimateAddNewContributor = {
     if (!user) {
       throw new UserError({});
     }
-    const { users = [] } = await Estimate.findOne({ _id: estimateId });
 
-    if (_.findWhere(users, { userId })) {
+    const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
+
+    const currentUserId = user._id.toString();
+    const userCanNotEditThisEstimate =
+          !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+
+    if (userCanNotEditThisEstimate) {
+      throw new AccessDenied({});
+    }
+
+    if (_.findWhere(contributors, { userId })) {
       throw new MongoError({ message: 'This users alreday added' });
     }
 
     try {
       const { ok } = await Estimate.update(
         { _id: estimateId },
-        { $push: { users: { userId, username, userEmail } } },
+        { $push: { contributors: { userId, username, userEmail } } },
       );
 
       sendEmail({

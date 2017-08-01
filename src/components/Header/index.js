@@ -6,8 +6,9 @@ import {
   FormGroup,
   CardTitle,
 } from 'reactstrap';
-import { Field, FieldArray } from 'redux-form';
+import { connect } from 'react-redux';
 import 'react-select/dist/react-select.css';
+import { Field, FieldArray } from 'redux-form';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import datepicker from 'react-datepicker/dist/react-datepicker.css';
 
@@ -16,7 +17,16 @@ import styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
-import { required, currency, requiredArray, maxLength } from '../libs/validation';
+import {
+  required,
+  currency,
+  maxLength,
+  requiredArray,
+  arrayItemMaxLength,
+} from '../libs/validation';
+import {
+  ESTIMATE_FORM,
+} from '../../constants';
 
 
 class Header extends Component {
@@ -27,6 +37,8 @@ class Header extends Component {
   }
 
   renderHeader() {
+    const { userCanEditThisEstimate } = this.props;
+
     return (
       <div className={styles.right}>
         <Field
@@ -34,6 +46,7 @@ class Header extends Component {
           name="date"
           validate={[required]}
           component={renderDateField}
+          disabled={!userCanEditThisEstimate}
           fieldClassName={styles.right__group_item}
           wrapperClassName={styles.right__group_item}
         />
@@ -43,8 +56,9 @@ class Header extends Component {
             id="clientName"
             name="clientName"
             label="Client name:"
-            validate={[required, maxLength(30)]}
             component={renderField}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, maxLength(30)]}
             className={styles.right__group_item}
           />
         </FormGroup>
@@ -54,8 +68,9 @@ class Header extends Component {
             id="projectName"
             name="projectName"
             label="Project name:"
-            validate={[required, maxLength(30)]}
             component={renderField}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, maxLength(30)]}
             className={styles.right__group_item}
           />
         </FormGroup>
@@ -66,6 +81,7 @@ class Header extends Component {
             id="sprintNumber"
             name="sprintNumber"
             component={renderField}
+            disabled={!userCanEditThisEstimate}
             validate={[required, currency, maxLength(30)]}
             className={styles.right__group_item}
           />
@@ -79,6 +95,7 @@ class Header extends Component {
       value: element,
       label: element,
     }));
+    const { userCanEditThisEstimate } = this.props;
 
     return (
       <div>
@@ -117,7 +134,8 @@ class Header extends Component {
             options={options}
             name="technologies"
             component={MultiSelect}
-            validate={[requiredArray]}
+            disabled={!userCanEditThisEstimate}
+            validate={[requiredArray, arrayItemMaxLength(30)]}
             placeholder="Technologies"
           />
         </FormGroup>
@@ -125,14 +143,16 @@ class Header extends Component {
           level={0}
           name="tasks"
           component={Task}
+          userCanEditThisEstimate={userCanEditThisEstimate}
         />
         <FormGroup className={styles.right__group}>
           <Field
             name="comments"
             type="textarea"
             label="Comments"
-            validate={[required, maxLength(5000)]}
             component={renderField}
+            disabled={!userCanEditThisEstimate}
+            validate={[required, maxLength(5000)]}
           />
         </FormGroup>
       </div>
@@ -142,6 +162,16 @@ class Header extends Component {
 
 Header.propTypes = {
   fields: PropTypes.array,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
-export default withStyles(styles, datepicker)(Header);
+
+function mapStateToProps({ form }) {
+  const { userCanEditThisEstimate } = form[ESTIMATE_FORM].values;
+  return { userCanEditThisEstimate };
+}
+
+
+export default connect(mapStateToProps)(
+  withStyles(styles, datepicker)(Header),
+);

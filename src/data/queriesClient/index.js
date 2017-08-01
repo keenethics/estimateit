@@ -6,6 +6,7 @@ export const estimate = gql`
       _id
       owner
       date
+      userCanEditThisEstimate,
       clientName
       projectName
       sprintNumber
@@ -16,7 +17,7 @@ export const estimate = gql`
       position
       moneyRate
       technologies
-      users {
+      contributors {
         userId
         username
         userEmail
