@@ -248,64 +248,57 @@ class Reports extends Component {
     const { userCanEditThisEstimate } = this.props;
 
     return (
-      <Card className={styles.final}>
-        {
-          // <Field
-          //   multi
-          //   name="emails"
-          //   placeholder="Emails"
-          //   component={MultiSelect}
-          //   value={this.state.value}
-          //   validate={[emailsArray]}
-          //   className={styles.emails}
-          // />
-
-        }
-        <Dropdown
-          dropup
-          id="screenShot"
-          toggle={this.toggle}
-          className={styles.final__result}
-          isOpen={this.state.dropdownOpen}
-        >
-          <DropdownToggle
-            caret
-            color="danger"
-            className={styles.final__result_info}
+      <div>
+        <Card className={styles.final}>
+          users
+        </Card>
+        <CardBlock className={styles.final__wrapper}>
+          { userCanEditThisEstimate &&
+            <div>
+              <Button
+                color="danger"
+                onClick={handleSubmit(this.estimateUpdate)}
+              >
+                Save
+              </Button>
+              <Button
+                color="danger"
+                onClick={this.toggleModal}
+              >
+                Delete
+              </Button>
+            </div>
+          }
+          <Dropdown
+            dropup
+            id="screenShot"
+            toggle={this.toggle}
+            className={styles.final__result}
+            isOpen={this.state.dropdownOpen}
           >
-            Download
-          </DropdownToggle>
-          <DropdownMenu>
-            <DropdownItem
-              type="submit"
-              onClick={handleSubmit(this.downloadPdf)}
+            <DropdownToggle
+              caret
+              className={styles.final__result_info}
             >
-              PDF
-            </DropdownItem>
-            <DropdownItem
-              type="submit"
-              onClick={handleSubmit(this.saveAsCSV)}
-            >
-              CSV
-            </DropdownItem>
-          </DropdownMenu>
-        </Dropdown>
-        { userCanEditThisEstimate &&
-          <CardBlock className={styles.final__wrapper}>
-            <Button
-              color="danger"
-              onClick={handleSubmit(this.estimateUpdate)}
-            >
-              Save
-            </Button>
-            <Button
-              color="danger"
-              onClick={this.toggleModal}
-            >
-              Delete
-            </Button>
-          </CardBlock>
-        }
+              Download
+            </DropdownToggle>
+            <DropdownMenu>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.downloadPdf)}
+              >
+                PDF
+              </DropdownItem>
+              <DropdownItem
+                type="submit"
+                onClick={handleSubmit(this.saveAsCSV)}
+              >
+                CSV
+              </DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
+
+        </CardBlock>
         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
           <ModalBody>
@@ -317,7 +310,7 @@ class Reports extends Component {
           </ModalFooter>
         </Modal>
         <Notification ref={ref => this.notificationSystem = ref} />
-      </Card>
+      </div>
     );
   }
 }

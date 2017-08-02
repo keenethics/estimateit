@@ -4,22 +4,31 @@
   justify-content: center;
   &__wrapper {
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-end;
     align-items: center;
     flex-wrap: wrap;
     flex-direction: row;
     @media screen and (max-width: 800px){
       flex-direction: column;
     }
+    div {
+      button {
+        margin: 0 0.8rem;
+      }
+    }
   }
   &__result {
-    display: inline-block;
+    display: flex;
+    margin: 0 0.8rem;
+    justify-content: center;
     min-width: 140px;
     margin: .5rem 0;
     @media screen and (max-width: 800px){
       width: 100%;
     }
     &_info {
+      font-size: 1rem;
+      color: white;
       display: inline-block;
       font-weight: normal;
       line-height: 1.25;
@@ -31,7 +40,17 @@
       font-size: 1rem;
       border-radius: .25rem;
       background: #ddd;
-      width: 100%;
+    }
+    &_info:hover{
+      color: white;
+      background: #b3b3b3;
+      border-color: #b3b3b3;
+    }
+    &_info:focus{
+      box-shadow: none;
+      color: white;
+      background: #b3b3b3;
+      border-color: #b3b3b3;
     }
   }
 }
@@ -59,4 +78,16 @@
 
 .emails {
   width: 300px;
+}
+
+:global {
+  .dropdown-menu {
+    margin-left: 0.8rem;
+  }
+  .btn-secondary.active, .show > .btn-secondary.dropdown-toggle {
+    background: #b3b3b3;
+    border-color: #b3b3b3;
+    font-size: 1rem;
+    color: white;
+  }
 }
