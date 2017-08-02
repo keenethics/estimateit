@@ -17,14 +17,14 @@ import { ESTIMATE_FORM } from '../../constants';
 class Main extends Component {
   render() {
     const {
-      estimateId,
       time,
       tasks,
       percent,
       moneyRate,
       totalHours,
+      estimateId,
       estimateOptions,
-      userCanEditThisEstimate,
+      userCanEditThisEstimate = false,
       devHours: {
         minHours,
         maxHours,
@@ -102,9 +102,8 @@ function mapStateToProps(state) {
     tasks,
     moneyRate,
     estimateOptions,
-    userCanEditThisEstimate,
   } } = state.form[ESTIMATE_FORM];
-
+  const { estimate: { userCanEditThisEstimate = false } } = state;
   return {
     time,
     tasks,

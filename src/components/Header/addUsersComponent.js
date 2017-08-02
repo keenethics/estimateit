@@ -11,9 +11,8 @@ import Notification from 'react-notification-system';
 import styles from './styles.scss';
 import { renderSelectField } from '../libs/helpers';
 import { requiredSelect } from '../libs/validation';
-import { estimate } from '../../data/queriesClient';
+import { estimateGeneralInfo } from '../../data/queriesClient';
 import {
-  ESTIMATE_FORM,
   ADD_USER_TO_ESTIMATE_FORM,
 } from '../../constants';
 
@@ -40,13 +39,15 @@ class AddUsers extends React.Component {
       variables: { input: { estimateId, userId, username, userEmail } },
       update: (store) => {
         const data = store.readQuery({
-          query: estimate,
+          query: estimateGeneralInfo,
           variables: { id: estimateId },
         });
 
         data.estimate.contributors.push({ userId, username, userEmail });
 
-        store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
+        store.writeQuery({
+          query: estimateGeneralInfo, data, variables: { id: estimateId },
+        });
       },
     }).then(() => {
       reset();
@@ -76,14 +77,16 @@ class AddUsers extends React.Component {
       variables: { input: { userId, estimateId } },
       update: (store) => {
         const data = store.readQuery({
-          query: estimate,
+          query: estimateGeneralInfo,
           variables: { id: estimateId },
         });
 
         data.estimate.contributors =
           data.estimate.contributors.filter(e => e.userId !== userId);
 
-        store.writeQuery({ query: estimate, data, variables: { id: estimateId } });
+        store.writeQuery({
+          query: estimateGeneralInfo, data, variables: { id: estimateId },
+        });
       },
     }).then(() => {
       this.notificationSystem.addNotification({
@@ -195,8 +198,8 @@ AddUsers = reduxForm({
   form: ADD_USER_TO_ESTIMATE_FORM,
 })(AddUsers);
 
-function mapStateToProps({ form }) {
-  const { owner, _id: estimateId, contributors } = form[ESTIMATE_FORM].values;
+function mapStateToProps({ estimate }) {
+  const { owner, _id: estimateId, contributors } = estimate;
   return { estimateId, contributors, owner };
 }
 

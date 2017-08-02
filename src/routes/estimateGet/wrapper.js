@@ -1,19 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import { ESTIMATE_FORM } from '../../constants';
 import { calculateAtFirstTime } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import { estimate } from '../../data/queriesClient';
+import {
+  estimateFormValues,
+  estimateGeneralInfo,
+} from '../../data/queriesClient';
+import changeGeneralEstimateInfo from '../../actions/estimate';
+
 
 class Wrapper extends React.Component {
   static propTypes = {
-    data: PropTypes.object.isRequired,
     children: PropTypes.node.isRequired,
     dispatch: PropTypes.func.isRequired,
+    estimateFormValues: PropTypes.object.isRequired,
+    estimateGeneralInfo: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -27,15 +31,19 @@ class Wrapper extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loading, estimate } = nextProps.data;
-    if (!loading && JSON.stringify(estimate) !== JSON.stringify(this.props.data.estimate)) {
-      this.getEstimate(nextProps);
+    const oldEstimate = this.props.estimateFormValues.estimate;
+    const { loading, estimate } = nextProps.estimateFormValues;
+    const { estimate: generalInfo } = nextProps.estimateGeneralInfo;
+
+    if (!loading && JSON.stringify(estimate) !== JSON.stringify(oldEstimate)) {
+      this.getEstimate(estimate);
+      this.props.dispatch(changeGeneralEstimateInfo(generalInfo))
     }
   }
 
-  getEstimate(nextProps) {
+  getEstimate(estimate) {
     const { dispatch } = this.props;
-    const { data: { estimate } } = nextProps;
+
     dispatch({
       type: '@@redux-form/INITIALIZE',
       meta: {
@@ -49,12 +57,14 @@ class Wrapper extends React.Component {
 
   render() {
     const {
-      data,
+      estimateGeneralInfo: { loading: loadingGeneralInfo },
+      estimateFormValues: { loading: loadingFormValue },
     } = this.props;
+
     return (
       <div style={{ position: 'relative' }}>
         {
-          data.loading
+          loadingGeneralInfo || loadingFormValue
           ? <Loading />
           : <div>
             {this.props.children}
@@ -65,14 +75,22 @@ class Wrapper extends React.Component {
   }
 }
 
-
 export default compose(
   connect(),
-  graphql(estimate, {
+  graphql(estimateFormValues, {
     options: props => ({
       variables: {
         id: props.id,
       },
     }),
+    name: 'estimateFormValues',
+  }),
+  graphql(estimateGeneralInfo, {
+    options: props => ({
+      variables: {
+        id: props.id,
+      },
+    }),
+    name: 'estimateGeneralInfo',
   }),
 )(Wrapper);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
-import { addDashboardData } from '../../actions/Main';
+import addDashboardData from '../../actions/Main';
 import Loading from '../../components/libs/Loading';
 
 class Wrapper extends React.Component {
