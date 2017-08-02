@@ -11,7 +11,7 @@ import styles from './styles.scss';
 
 class Contacts extends Component {
   render() {
-    const { userCanEditThisEstimate } = this.props;
+    const { userCanEditThisEstimate = false } = this.props;
 
     return (
       <Card className={styles.contacts}>

@@ -24,10 +24,6 @@ import {
   requiredArray,
   arrayItemMaxLength,
 } from '../libs/validation';
-import {
-  ESTIMATE_FORM,
-} from '../../constants';
-
 
 class Header extends Component {
   constructor(props) {
@@ -37,7 +33,7 @@ class Header extends Component {
   }
 
   renderHeader() {
-    const { userCanEditThisEstimate } = this.props;
+    const { userCanEditThisEstimate = false } = this.props;
 
     return (
       <div className={styles.right}>
@@ -95,7 +91,7 @@ class Header extends Component {
       value: element,
       label: element,
     }));
-    const { userCanEditThisEstimate } = this.props;
+    const { userCanEditThisEstimate = false } = this.props;
 
     return (
       <div>
@@ -134,9 +130,9 @@ class Header extends Component {
             options={options}
             name="technologies"
             component={MultiSelect}
+            placeholder="Technologies"
             disabled={!userCanEditThisEstimate}
             validate={[requiredArray, arrayItemMaxLength(30)]}
-            placeholder="Technologies"
           />
         </FormGroup>
         <FieldArray
@@ -166,8 +162,7 @@ Header.propTypes = {
 };
 
 
-function mapStateToProps({ form }) {
-  const { userCanEditThisEstimate } = form[ESTIMATE_FORM].values;
+function mapStateToProps({ estimate: { userCanEditThisEstimate = false } }) {
   return { userCanEditThisEstimate };
 }
 

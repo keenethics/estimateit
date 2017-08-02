@@ -18,32 +18,26 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 import axios from 'axios';
-import { Field } from 'redux-form';
-import history from '../../history';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-
+import { Field } from 'redux-form';
+import history from '../../history';
 import styles from './styles.scss';
-
 import columns from '../../constants/csvCoulumns';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import MultiSelect from '../libs/MultiSelect';
-
 import { emailsArray } from '../libs/validation';
-import {
-  ESTIMATE_FORM,
-} from '../../constants';
 
 class Reports extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      axios: [],
-      dropdownOpen: false,
       csv: '',
+      axios: [],
       modal: false,
+      dropdownOpen: false,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -62,13 +56,19 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
+    const estimateId = values._id;
     const { estimateUpdate } = this.props;
+
     delete values['emails'];
     delete values['contributors'];
     delete values['userCanEditThisEstimate'];
 
     estimateUpdate({
       variables: { input: { ...values } },
+      refetchQueries: [{
+        query: estimate,
+        variables: { id: estimateId },
+      }],
     }).then(() => {
       this.notificationSystem.addNotification({
         autoDismiss: 6,
@@ -251,7 +251,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
-
+    console.log(this);
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>
@@ -265,11 +265,11 @@ class Reports extends Component {
             className={styles.emails}
           />
           <Dropdown
+            dropup
             id="screenShot"
             toggle={this.toggle}
             className={styles.final__result}
             isOpen={this.state.dropdownOpen}
-            dropup
           >
             <DropdownToggle
               caret
@@ -314,7 +314,6 @@ class Reports extends Component {
           </Dropdown>
           <Button color="danger" onClick={this.toggleModal}>Delete</Button>
         </CardBlock>
-        <Notification ref={ref => this.notificationSystem = ref} />
         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
           <ModalBody>
@@ -325,6 +324,7 @@ class Reports extends Component {
             <Button color="secondary" onClick={this.toggleModal}>No</Button>
           </ModalFooter>
         </Modal>
+        <Notification ref={ref => {console.log(ref); this.notificationSystem = ref; }} />
       </Card>
     );
   }
@@ -337,10 +337,8 @@ Reports.contextTypes = {
 };
 
 Reports.propTypes = {
-  owner: PropTypes.string,
   estimateId: PropTypes.string,
   tasks: PropTypes.array.isRequired,
-  contributors: PropTypes.array.isRequired,
   estimateUpdate: PropTypes.func.isRequired,
   estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
@@ -366,13 +364,8 @@ const estimateRemove = gql`
   },
 `;
 
-function mapStateToProps({ form }) {
-  const { contributors, owner } = form[ESTIMATE_FORM].values;
-  return { owner, contributors };
-}
 
 export default compose(
-  connect(mapStateToProps),
   graphql(estimateUpdate, {
     name: 'estimateUpdate',
   }),

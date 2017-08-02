@@ -53,7 +53,7 @@ class Dashboard extends React.Component {
   }
 
   render() {
-    const {isAuthenticated} = this.context;
+    const { isAuthenticated } = this.context;
 
     return (
       <div className={styles.wrapper}>

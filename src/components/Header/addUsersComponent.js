@@ -11,9 +11,7 @@ import Notification from 'react-notification-system';
 import styles from './styles.scss';
 import { renderSelectField } from '../libs/helpers';
 import { requiredSelect } from '../libs/validation';
-import { estimate } from '../../data/queriesClient';
 import {
-  ESTIMATE_FORM,
   ADD_USER_TO_ESTIMATE_FORM,
 } from '../../constants';
 
@@ -195,8 +193,8 @@ AddUsers = reduxForm({
   form: ADD_USER_TO_ESTIMATE_FORM,
 })(AddUsers);
 
-function mapStateToProps({ form }) {
-  const { owner, _id: estimateId, contributors } = form[ESTIMATE_FORM].values;
+function mapStateToProps({ estimate }) {
+  const { owner, _id: estimateId, contributors } = estimate;
   return { estimateId, contributors, owner };
 }
 

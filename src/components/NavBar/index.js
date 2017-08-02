@@ -11,7 +11,7 @@ import {
 
 class NavBar extends Component {
   render() {
-    const { userCanEditThisEstimate } = this.props;
+    const { userCanEditThisEstimate = false } = this.props;
     if (!userCanEditThisEstimate) return null;
 
     return (
@@ -35,8 +35,7 @@ NavBar.propTypes = {
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps({ form }) {
-  const { userCanEditThisEstimate } = form[ESTIMATE_FORM].values;
+function mapStateToProps({ estimate: { userCanEditThisEstimate = false } }) {
   return { userCanEditThisEstimate };
 }
 
