@@ -75,11 +75,12 @@ class Main extends Component {
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
-        <Col xs="12">
-          <Contributors
-            userCanEditThisEstimate={userCanEditThisEstimate}
-          />
-        </Col>
+        {
+          userCanEditThisEstimate &&
+          <Col xs="12">
+            <Contributors />
+          </Col>
+        }
         <Col xs="12">
           <Reports
             tasks={tasks}

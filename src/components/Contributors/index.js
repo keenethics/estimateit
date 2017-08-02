@@ -176,9 +176,6 @@ class Contributors extends React.Component {
   }
 
   render() {
-    const { userCanEditThisEstimate } = this.props;
-    if (!userCanEditThisEstimate) return null;
-
     return (
       <Card>
         <CardHeader>Contributors</CardHeader>
@@ -222,7 +219,6 @@ Contributors.propTypes = {
   estimateId: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   contributors: PropTypes.array.isRequired,
-  userCanEditThisEstimate: PropTypes.bool.isRequired,
   estimateAddNewContributor: PropTypes.func.isRequired,
   estimateRemoveContributor: PropTypes.func.isRequired,
 };
