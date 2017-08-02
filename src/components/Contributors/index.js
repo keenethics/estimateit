@@ -1,12 +1,19 @@
 import React from 'react';
 import _ from 'underscore';
-import gql from 'graphql-tag';
 import PropTypes from 'prop-types';
-import { Button } from 'reactstrap';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { Form, Field, reduxForm } from 'redux-form';
 import Notification from 'react-notification-system';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import {
+  Card,
+  Button,
+  CardBlock,
+  ListGroup,
+  CardHeader,
+  ListGroupItem,
+} from 'reactstrap';
 
 import styles from './styles.scss';
 import { renderSelectField } from '../libs/helpers';
@@ -18,21 +25,23 @@ import {
   estimateRemoveContributor,
 } from '../../data/queriesClient';
 import {
-  ADD_USER_TO_ESTIMATE_FORM,
+  ADD_COTRIBUTORS_TO_ESTIMATE_FORM,
 } from '../../constants';
 
 
-class AddUsers extends React.Component {
+class Contributors extends React.Component {
   constructor(props) {
     super(props);
 
     this.options = this.options.bind(this);
-    this.addUser = this.addUser.bind(this);
-    this.removeUser = this.removeUser.bind(this);
+    this.renderOwner = this.renderOwner.bind(this);
+    this.addContributor = this.addContributor.bind(this);
+    this.removeContributor = this.removeContributor.bind(this);
+    this.renderContributors = this.renderContributors.bind(this);
   }
 
-  addUser({
-    addUser: {
+  addContributor({
+    addContributor: {
       value: userId,
       label: username,
       email: userEmail,
@@ -79,7 +88,7 @@ class AddUsers extends React.Component {
     });
   }
 
-  removeUser({ target: { id: userId } }) {
+  removeContributor({ target: { id: userId } }) {
     const {
       estimateId,
       estimateRemoveContributor: removeContributor,
@@ -136,82 +145,95 @@ class AddUsers extends React.Component {
       }));
   }
 
-  render() {
-    const {
-      owner,
-      contributors = [],
-      usersList: { usersList: users = [] },
-    } = this.props;
+  renderOwner() {
+    const { owner, usersList: { usersList: users = [] } } = this.props;
     const ownerObject = _.findWhere(users, { _id: owner });
 
-    return (
-      <div>
-        <Form
-          form={ADD_USER_TO_ESTIMATE_FORM}
-          onSubmit={this.props.handleSubmit(this.addUser)}
+    return ownerObject && (
+      <ListGroupItem className={styles.owner_item}>
+        {ownerObject.name}
+        <span>Owner</span>
+      </ListGroupItem>
+    );
+  }
+
+  renderContributors() {
+    const { contributors = [] } = this.props;
+
+    return contributors.map(({ username, userId }) => (
+      <ListGroupItem className={styles.contributor_item}>
+        {username}
+        <Button
+          size="sm"
+          id={userId}
+          color="danger"
+          onClick={this.removeContributor}
         >
-          <div>
-            <Field
-              multi
-              name="addUser"
-              placeholder="Find user"
-              options={this.options()}
-              validate={[requiredSelect]}
-              component={renderSelectField}
-            />
-            <Button
-              type="submit"
-              color="danger"
-            >
-              Add contributor
-            </Button>
-          </div>
-        </Form>
-        { ownerObject &&
-          <div className={styles.owner_item}>
-            {ownerObject.name}
-            <span>Owner</span>
-          </div>
-        }
-        {
-          contributors.map(({ username, userId }) => (
-            <div className={styles.contributor_item}>
-              {username}
+          Remove
+        </Button>
+      </ListGroupItem>
+    ));
+  }
+
+  render() {
+    const { userCanEditThisEstimate } = this.props;
+    if (!userCanEditThisEstimate) return null;
+
+    return (
+      <Card>
+        <CardHeader>Contributors</CardHeader>
+        <CardBlock>
+          <Form
+            form={ADD_COTRIBUTORS_TO_ESTIMATE_FORM}
+            onSubmit={this.props.handleSubmit(this.addContributor)}
+          >
+            <div>
+              <Field
+                multi
+                name="addContributor"
+                placeholder="Find user"
+                options={this.options()}
+                validate={[requiredSelect]}
+                component={renderSelectField}
+              />
               <Button
-                id={userId}
+                type="submit"
                 color="danger"
-                onClick={this.removeUser}
               >
-                Remove
+                Add contributor
               </Button>
             </div>
-          ),
-          )
-        }
-        <Notification ref={ref => this.notificationSystem = ref} />
-      </div>
+          </Form>
+          <ListGroup>
+            {this.renderOwner()}
+            {this.renderContributors()}
+          </ListGroup>
+          <Notification ref={ref => this.notificationSystem = ref} />
+        </CardBlock>
+      </Card>
     );
   }
 }
 
-AddUsers.propTypes = {
+Contributors.propTypes = {
   reset: PropTypes.func.isRequired,
   owner: PropTypes.string.isRequired,
   usersList: PropTypes.object.isRequired,
   estimateId: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   contributors: PropTypes.array.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
   estimateAddNewContributor: PropTypes.func.isRequired,
   estimateRemoveContributor: PropTypes.func.isRequired,
 };
 
 
-AddUsers = reduxForm({
-  form: ADD_USER_TO_ESTIMATE_FORM,
-})(AddUsers);
+Contributors = reduxForm({
+  form: ADD_COTRIBUTORS_TO_ESTIMATE_FORM,
+})(Contributors);
 
 function mapStateToProps({ estimate }) {
-  const { owner, _id: estimateId, contributors } = estimate;
+  const { owner, contributors, _id: estimateId } = estimate;
   return { estimateId, contributors, owner };
 }
 
@@ -220,4 +242,4 @@ export default compose(
   graphql(usersList, { name: 'usersList' }),
   graphql(estimateAddNewContributor, { name: 'estimateAddNewContributor' }),
   graphql(estimateRemoveContributor, { name: 'estimateRemoveContributor' }),
-)(AddUsers);
+)(withStyles(styles)(Contributors));

@@ -1,0 +1,17 @@
+.owner_item {
+  span {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contributor_item {
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
