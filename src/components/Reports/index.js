@@ -249,9 +249,6 @@ class Reports extends Component {
 
     return (
       <div>
-        <Card className={styles.final}>
-          users
-        </Card>
         <CardBlock className={styles.final__wrapper}>
           { userCanEditThisEstimate &&
             <div>
