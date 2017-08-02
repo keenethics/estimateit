@@ -6,7 +6,6 @@ const estimateFormValues = gql`
       _id
       owner
       date
-      userCanEditThisEstimate,
       clientName
       projectName
       sprintNumber
@@ -16,13 +15,7 @@ const estimateFormValues = gql`
       email
       position
       moneyRate
-      technologies
-      contributors {
-        userId
-        username
-        userEmail
-        __typename @skip(if: true)
-      }
+      technologies,
       estimateOptions {
         qa
         pm

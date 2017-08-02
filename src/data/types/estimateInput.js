@@ -9,9 +9,6 @@ import {
 const TaskInputType = new InputObjectType({
   name: 'TaskInputType',
   fields: () => ({
-    id: {
-      type: StringType,
-    },
     taskName: {
       type: StringType,
     },
@@ -20,9 +17,6 @@ const TaskInputType = new InputObjectType({
     },
     maximumHours: {
       type: FloatType,
-    },
-    parent: {
-      type: StringType,
     },
     isChecked: {
       type: BoolType,

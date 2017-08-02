@@ -29,6 +29,7 @@ import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
 import MultiSelect from '../libs/MultiSelect';
 import { emailsArray } from '../libs/validation';
+import { estimateFormValues } from '../../data/queriesClient';
 
 class Reports extends Component {
   constructor(props) {
@@ -60,13 +61,14 @@ class Reports extends Component {
     const { estimateUpdate } = this.props;
 
     delete values['emails'];
-    delete values['contributors'];
-    delete values['userCanEditThisEstimate'];
 
+    console.log('update');
+    console.log(values);
+    console.log(this);
     estimateUpdate({
       variables: { input: { ...values } },
       refetchQueries: [{
-        query: estimate,
+        query: estimateFormValues,
         variables: { id: estimateId },
       }],
     }).then(() => {
@@ -251,7 +253,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
-    console.log(this);
+
     return (
       <Card className={styles.final}>
         <CardBlock className={styles.final__wrapper}>

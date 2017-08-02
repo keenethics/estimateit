@@ -29,7 +29,6 @@ class Layout extends React.Component {
   }
 
   render() {
-    console.log('helllo');
     return (
       <div>
         <Header />
