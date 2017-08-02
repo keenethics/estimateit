@@ -21,7 +21,6 @@ import {
   required,
   currency,
   maxLength,
-  requiredArray,
   arrayItemMaxLength,
 } from '../libs/validation';
 
@@ -40,7 +39,6 @@ class Header extends Component {
         <Field
           id="date"
           name="date"
-          validate={[required]}
           component={renderDateField}
           disabled={!userCanEditThisEstimate}
           fieldClassName={styles.right__group_item}
@@ -54,7 +52,7 @@ class Header extends Component {
             label="Client name:"
             component={renderField}
             disabled={!userCanEditThisEstimate}
-            validate={[required, maxLength(30)]}
+            validate={[maxLength(30)]}
             className={styles.right__group_item}
           />
         </FormGroup>
@@ -78,7 +76,7 @@ class Header extends Component {
             name="sprintNumber"
             component={renderField}
             disabled={!userCanEditThisEstimate}
-            validate={[required, currency, maxLength(30)]}
+            validate={[currency, maxLength(30)]}
             className={styles.right__group_item}
           />
         </FormGroup>
@@ -132,7 +130,7 @@ class Header extends Component {
             component={MultiSelect}
             placeholder="Technologies"
             disabled={!userCanEditThisEstimate}
-            validate={[requiredArray, arrayItemMaxLength(30)]}
+            validate={[arrayItemMaxLength(30)]}
           />
         </FormGroup>
         <FieldArray
@@ -148,7 +146,7 @@ class Header extends Component {
             label="Comments"
             component={renderField}
             disabled={!userCanEditThisEstimate}
-            validate={[required, maxLength(5000)]}
+            validate={[maxLength(5000)]}
           />
         </FormGroup>
       </div>

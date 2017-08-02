@@ -72,7 +72,7 @@ const EstimateInputType = new InputObjectType({
       type: StringType,
     },
     sprintNumber: {
-      type: FloatType,
+      type: StringType,
     },
     comments: {
       type: StringType,

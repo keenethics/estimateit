@@ -4,8 +4,8 @@ import { Card, CardBlock, CardHeader } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { Field } from 'redux-form';
-import { renderField } from '../libs/helpers.js';
-import { required, email, alphaNumeric, maxLength } from '../libs/validation.js';
+import { renderField } from '../libs/helpers';
+import { email, alphaNumeric, maxLength } from '../libs/validation';
 
 import styles from './styles.scss';
 
@@ -24,7 +24,7 @@ class Contacts extends Component {
             component={renderField}
             className={styles.contacts__input}
             disabled={!userCanEditThisEstimate}
-            validate={[required, alphaNumeric, maxLength(100)]}
+            validate={[alphaNumeric, maxLength(100)]}
           />
           <Field
             type="text"
@@ -33,7 +33,7 @@ class Contacts extends Component {
             component={renderField}
             className={styles.contacts__input}
             disabled={!userCanEditThisEstimate}
-            validate={[required, alphaNumeric, maxLength(100)]}
+            validate={[alphaNumeric, maxLength(100)]}
           />
           <Field
             type="email"
@@ -42,7 +42,7 @@ class Contacts extends Component {
             component={renderField}
             className={styles.contacts__input}
             disabled={!userCanEditThisEstimate}
-            validate={[required, email, maxLength(60)]}
+            validate={[email, maxLength(60)]}
           />
           <Field
             type="text"
@@ -51,7 +51,7 @@ class Contacts extends Component {
             component={renderField}
             className={styles.contacts__input}
             disabled={!userCanEditThisEstimate}
-            validate={[required, alphaNumeric, maxLength(60)]}
+            validate={[alphaNumeric, maxLength(60)]}
           />
         </CardBlock>
       </Card>

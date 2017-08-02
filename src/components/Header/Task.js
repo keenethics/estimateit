@@ -73,7 +73,7 @@ class Task extends React.Component {
       dispatchChange,
       dispatchRemove,
       dispatchAddSubTask,
-      userCanEditThisEstimate
+      userCanEditThisEstimate,
     } = this.props;
     const selector = formValueSelector(form);
     const disabled = !userCanEditThisEstimate;

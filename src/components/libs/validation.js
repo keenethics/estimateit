@@ -75,5 +75,9 @@ export const alphaNumeric = value =>
     : undefined
   );
 
-export const currency = value =>
-  (value && /^[1-9]{1}[0-9]*$/.test(value.toString()) ? undefined : 'Should be integer');
+export const currency = (value) => {
+  if (value) {
+    return /^[1-9]{1}[0-9]*$/.test(value.toString()) ? undefined : 'Should be integer';
+  }
+  return undefined;
+};
