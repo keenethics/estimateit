@@ -32,12 +32,17 @@ class Wrapper extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const oldEstimate = this.props.estimateFormValues.estimate;
-    const { loading, estimate } = nextProps.estimateFormValues;
-    const { estimate: generalInfo } = nextProps.estimateGeneralInfo;
+    const { estimate, loading: loadingFormValues } = nextProps.estimateFormValues;
 
-    if (!loading && JSON.stringify(estimate) !== JSON.stringify(oldEstimate)) {
+    if (!loadingFormValues && JSON.stringify(estimate) !== JSON.stringify(oldEstimate)) {
       this.getEstimate(estimate);
-      this.props.dispatch(changeGeneralEstimateInfo(generalInfo))
+    }
+
+    const oldGeneralInfo = this.props.estimateGeneralInfo.estimate;
+    const { estimate: generalInfo, loading: loadingGeneralInfo } = nextProps.estimateGeneralInfo;
+
+    if (!loadingGeneralInfo && JSON.stringify(generalInfo) !== JSON.stringify(oldGeneralInfo)) {
+      this.props.dispatch(changeGeneralEstimateInfo(generalInfo));
     }
   }
 

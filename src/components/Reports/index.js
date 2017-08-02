@@ -1,9 +1,10 @@
-import _ from 'underscore';
+import axios from 'axios';
 import gql from 'graphql-tag';
-import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
-import PropTypes from 'prop-types';
+import Notification from 'react-notification-system';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import {
   Button,
   Modal,
@@ -17,19 +18,17 @@ import {
   Dropdown,
   DropdownToggle,
 } from 'reactstrap';
-import axios from 'axios';
-import Notification from 'react-notification-system';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import { Field } from 'redux-form';
-import history from '../../history';
 import styles from './styles.scss';
-import columns from '../../constants/csvCoulumns';
+import history from '../../history';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';
-import MultiSelect from '../libs/MultiSelect';
-import { emailsArray } from '../libs/validation';
-import { estimateFormValues } from '../../data/queriesClient';
+import columns from '../../constants/csvCoulumns';
+import {
+  estimateUpdate,
+  estimateRemove,
+  estimateFormValues,
+} from '../../data/queriesClient';
 
 class Reports extends Component {
   constructor(props) {
@@ -45,10 +44,8 @@ class Reports extends Component {
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.downloadPdf = this.downloadPdf.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
-    this.shareViaEmail = this.shareViaEmail.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
-    this.sendPdfToEmails = this.sendPdfToEmails.bind(this);
   }
 
   toggle() {
@@ -56,16 +53,16 @@ class Reports extends Component {
     this.setState({ dropdownOpen });
   }
 
+  toggleModal() {
+    this.setState({
+      modal: !this.state.modal,
+    });
+  }
+
   estimateUpdate(values) {
     const estimateId = values._id;
-    const { estimateUpdate } = this.props;
 
-    delete values['emails'];
-
-    console.log('update');
-    console.log(values);
-    console.log(this);
-    estimateUpdate({
+    this.props.estimateUpdate({
       variables: { input: { ...values } },
       refetchQueries: [{
         query: estimateFormValues,
@@ -113,53 +110,6 @@ class Reports extends Component {
         message: error.message,
       });
     });
-  }
-
-  toggleModal() {
-    this.setState({
-      modal: !this.state.modal,
-    });
-  }
-
-  sendPdfToEmails({ emails }) {
-    const { fetch } = this.context;
-
-    if (!emails || !emails.length) {
-      this.notificationSystem.addNotification({
-        title: 'Error',
-        level: 'error',
-        position: 'br',
-        autoDismiss: 6,
-        message: 'Enter emails',
-      });
-      return null;
-    }
-
-    fetch('/api/sendPpfToEmails', {
-      body: JSON.stringify({
-        emails: decodeURIComponent(emails),
-        url: decodeURIComponent(location.href),
-      }),
-    })
-      .then(() => {
-        this.notificationSystem.addNotification({
-          title: 'Success',
-          level: 'success',
-          position: 'br',
-          autoDismiss: 6,
-          message: 'PDF will be send to the emails!',
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-        this.notificationSystem.addNotification({
-          title: 'Error',
-          level: 'error',
-          position: 'br',
-          autoDismiss: 6,
-          message: 'internal server error',
-        });
-      });
   }
 
   downloadPdf() {
@@ -210,62 +160,112 @@ class Reports extends Component {
     });
   }
 
-  shareViaEmail({ emails }) {
-    const { fetch } = this.context;
+  // shareViaEmail({ emails }) {
+  //   const { fetch } = this.context;
+  //
+  //   if (!emails || !emails.length) {
+  //     this.notificationSystem.addNotification({
+  //       title: 'Error',
+  //       level: 'error',
+  //       position: 'br',
+  //       autoDismiss: 6,
+  //       message: 'Enter emails',
+  //     });
+  //     return null;
+  //   }
+  //
+  //   fetch('/api/shareViaEmails', {
+  //     body: JSON.stringify({
+  //       emails: decodeURIComponent(emails),
+  //       url: decodeURIComponent(location.href),
+  //     }),
+  //   })
+  //     .then(() => {
+  //       this.notificationSystem.addNotification({
+  //         title: 'Success',
+  //         level: 'success',
+  //         position: 'br',
+  //         autoDismiss: 6,
+  //         message: 'This estimate is shared',
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       this.notificationSystem.addNotification({
+  //         title: 'Error',
+  //         level: 'error',
+  //         position: 'br',
+  //         autoDismiss: 6,
+  //         message: 'internal server error',
+  //       });
+  //     });
+  // }
+  //
+  // sendPdfToEmails({ emails }) {
+  //   const { fetch } = this.context;
+  //
+  //   if (!emails || !emails.length) {
+  //     this.notificationSystem.addNotification({
+  //       title: 'Error',
+  //       level: 'error',
+  //       position: 'br',
+  //       autoDismiss: 6,
+  //       message: 'Enter emails',
+  //     });
+  //     return null;
+  //   }
+  //
+  //   fetch('/api/sendPpfToEmails', {
+  //     body: JSON.stringify({
+  //       emails: decodeURIComponent(emails),
+  //       url: decodeURIComponent(location.href),
+  //     }),
+  //   })
+  //     .then(() => {
+  //       this.notificationSystem.addNotification({
+  //         title: 'Success',
+  //         level: 'success',
+  //         position: 'br',
+  //         autoDismiss: 6,
+  //         message: 'PDF will be send to the emails!',
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //       this.notificationSystem.addNotification({
+  //         title: 'Error',
+  //         level: 'error',
+  //         position: 'br',
+  //         autoDismiss: 6,
+  //         message: 'internal server error',
+  //       });
+  //     });
+  // }
 
-    if (!emails || !emails.length) {
-      this.notificationSystem.addNotification({
-        title: 'Error',
-        level: 'error',
-        position: 'br',
-        autoDismiss: 6,
-        message: 'Enter emails',
-      });
-      return null;
-    }
-
-    fetch('/api/shareViaEmails', {
-      body: JSON.stringify({
-        emails: decodeURIComponent(emails),
-        url: decodeURIComponent(location.href),
-      }),
-    })
-      .then(() => {
-        this.notificationSystem.addNotification({
-          title: 'Success',
-          level: 'success',
-          position: 'br',
-          autoDismiss: 6,
-          message: 'This estimate is shared',
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-        this.notificationSystem.addNotification({
-          title: 'Error',
-          level: 'error',
-          position: 'br',
-          autoDismiss: 6,
-          message: 'internal server error',
-        });
-      });
-  }
 
   render() {
     const { handleSubmit } = this.context;
+    const { userCanEditThisEstimate } = this.props;
 
     return (
-      <Card className={styles.final}>
+      <div>
         <CardBlock className={styles.final__wrapper}>
-          <Field
-            multi
-            name="emails"
-            placeholder="Emails"
-            component={MultiSelect}
-            value={this.state.value}
-            validate={[emailsArray]}
-            className={styles.emails}
-          />
+          { userCanEditThisEstimate &&
+            <div>
+              <Button
+                color="danger"
+                onClick={handleSubmit(this.estimateUpdate)}
+              >
+                Save
+              </Button>
+              <Button
+                color="danger"
+                onClick={this.toggleModal}
+              >
+                Delete
+              </Button>
+            </div>
+          }
           <Dropdown
             dropup
             id="screenShot"
@@ -275,46 +275,26 @@ class Reports extends Component {
           >
             <DropdownToggle
               caret
-              color="danger"
               className={styles.final__result_info}
             >
-              Report
+              Download
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem header>Type</DropdownItem>
-              <DropdownItem
-                type="submit"
-                onClick={handleSubmit(this.estimateUpdate)}
-              >
-                Save Estimate
-              </DropdownItem>
-              <DropdownItem
-                type="submit"
-                onClick={handleSubmit(this.shareViaEmail)}
-              >
-                Share via emails
-              </DropdownItem>
-              <DropdownItem
-                type="submit"
-                onClick={handleSubmit(this.sendPdfToEmails)}
-              >
-                Send PDF to emails
-              </DropdownItem>
               <DropdownItem
                 type="submit"
                 onClick={handleSubmit(this.downloadPdf)}
               >
-                Download PDF
+                PDF
               </DropdownItem>
               <DropdownItem
                 type="submit"
                 onClick={handleSubmit(this.saveAsCSV)}
               >
-                Generate CSV
+                CSV
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-          <Button color="danger" onClick={this.toggleModal}>Delete</Button>
+
         </CardBlock>
         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
@@ -326,15 +306,14 @@ class Reports extends Component {
             <Button color="secondary" onClick={this.toggleModal}>No</Button>
           </ModalFooter>
         </Modal>
-        <Notification ref={ref => {console.log(ref); this.notificationSystem = ref; }} />
-      </Card>
+        <Notification ref={ref => this.notificationSystem = ref} />
+      </div>
     );
   }
 }
 
 Reports.contextTypes = {
   fetch: PropTypes.func,
-  user: PropTypes.object,
   handleSubmit: PropTypes.func,
 };
 
@@ -344,35 +323,11 @@ Reports.propTypes = {
   estimateUpdate: PropTypes.func.isRequired,
   estimateRemove: PropTypes.func.isRequired,
   estimateOptions: PropTypes.object.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
-const estimateUpdate = gql`
-  mutation Mutation (
-    $input: EstimateInputType
-  ) {
-    estimateUpdate (
-      input: $input
-    )
-  },
-`;
-
-const estimateRemove = gql`
-  mutation Mutation (
-    $id: String!
-  ) {
-    estimateRemove (
-      id: $id
-    )
-  },
-`;
-
-
 export default compose(
-  graphql(estimateUpdate, {
-    name: 'estimateUpdate',
-  }),
-  graphql(estimateRemove, {
-    name: 'estimateRemove',
-  }),
+  graphql(estimateUpdate, { name: 'estimateUpdate' }),
+  graphql(estimateRemove, { name: 'estimateRemove' }),
   withStyles(styles),
 )(Reports);
