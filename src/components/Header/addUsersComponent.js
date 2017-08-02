@@ -11,7 +11,12 @@ import Notification from 'react-notification-system';
 import styles from './styles.scss';
 import { renderSelectField } from '../libs/helpers';
 import { requiredSelect } from '../libs/validation';
-import { estimateGeneralInfo } from '../../data/queriesClient';
+import {
+  usersList,
+  estimateGeneralInfo,
+  estimateAddNewContributor,
+  estimateRemoveContributor,
+} from '../../data/queriesClient';
 import {
   ADD_USER_TO_ESTIMATE_FORM,
 } from '../../constants';
@@ -33,9 +38,13 @@ class AddUsers extends React.Component {
       email: userEmail,
     },
   }) {
-    const { estimateAddNewContributor, estimateId, reset } = this.props;
+    const {
+      reset,
+      estimateId,
+      estimateAddNewContributor: addNewContributor,
+    } = this.props;
 
-    estimateAddNewContributor({
+    addNewContributor({
       variables: { input: { estimateId, userId, username, userEmail } },
       update: (store) => {
         const data = store.readQuery({
@@ -71,9 +80,12 @@ class AddUsers extends React.Component {
   }
 
   removeUser({ target: { id: userId } }) {
-    const { estimateRemoveContributor, estimateId } = this.props;
+    const {
+      estimateId,
+      estimateRemoveContributor: removeContributor,
+    } = this.props;
 
-    estimateRemoveContributor({
+    removeContributor({
       variables: { input: { userId, estimateId } },
       update: (store) => {
         const data = store.readQuery({
@@ -112,10 +124,10 @@ class AddUsers extends React.Component {
     const {
       owner,
       contributors = [],
-      data: { usersList = [] },
+      usersList: { usersList: users = [] },
     } = this.props;
 
-    return usersList
+    return users
       .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner))
       .map(({ _id, name, email }) => ({
         email,
@@ -128,9 +140,9 @@ class AddUsers extends React.Component {
     const {
       owner,
       contributors = [],
-      data: { usersList = [] },
+      usersList: { usersList: users = [] },
     } = this.props;
-    const ownerObject = _.findWhere(usersList, { _id: owner });
+    const ownerObject = _.findWhere(users, { _id: owner });
 
     return (
       <div>
@@ -184,8 +196,8 @@ class AddUsers extends React.Component {
 
 AddUsers.propTypes = {
   reset: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired,
   owner: PropTypes.string.isRequired,
+  usersList: PropTypes.object.isRequired,
   estimateId: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
   contributors: PropTypes.array.isRequired,
@@ -203,41 +215,9 @@ function mapStateToProps({ estimate }) {
   return { estimateId, contributors, owner };
 }
 
-
-const userLIst = gql`
-  query usersList {
-    usersList {
-      _id,
-      name,
-      email,
-    }
-  },
-`;
-
-const addNewContributor = gql`
-  mutation Mutation (
-    $input: estimateAddNewContributor
-  ) {
-    estimateAddNewContributor (
-      input: $input
-    )
-  },
-`;
-
-const removeContributor = gql`
-  mutation Mutation (
-    $input: estimateRemoveContributor
-  ) {
-    estimateRemoveContributor (
-      input: $input
-    )
-  },
-`;
-
-
 export default compose(
   connect(mapStateToProps),
-  graphql(userLIst),
-  graphql(addNewContributor, { name: 'estimateAddNewContributor' }),
-  graphql(removeContributor, { name: 'estimateRemoveContributor' }),
+  graphql(usersList, { name: 'usersList' }),
+  graphql(estimateAddNewContributor, { name: 'estimateAddNewContributor' }),
+  graphql(estimateRemoveContributor, { name: 'estimateRemoveContributor' }),
 )(AddUsers);

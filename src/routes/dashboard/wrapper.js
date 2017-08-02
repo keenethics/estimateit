@@ -5,6 +5,8 @@ import gql from 'graphql-tag';
 import { graphql, compose } from 'react-apollo';
 import addDashboardData from '../../actions/Main';
 import Loading from '../../components/libs/Loading';
+import { estimateAll } from '../../data/queriesClient';
+
 
 class Wrapper extends React.Component {
   static contextTypes = {
@@ -19,24 +21,25 @@ class Wrapper extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { loading, allEstimates } = nextProps.data;
-    if (!loading && allEstimates !== this.props.data.allEstimates) {
+    const { loading, allEstimates } = nextProps.estimates;
+    if (!loading && allEstimates !== this.props.estimates.allEstimates) {
       this.getEstimate(nextProps);
     }
   }
 
   getEstimate(props) {
-    const { dispatch, data: { allEstimates } } = props;
+    const { dispatch, estimates: { allEstimates } } = props;
     dispatch(addDashboardData({ allEstimates }));
   }
 
   render() {
     const {
-      data,
+      estimates,
     } = this.props;
+
     return (
       <div>
-        {data.loading
+        {estimates.loading
           ? <Loading />
           : <div>
             {this.props.children}
@@ -46,25 +49,7 @@ class Wrapper extends React.Component {
   }
 }
 
-const initializeValues = (state) => {
-  const initialValues = {
-    moneyRate: '25',
-  };
-  return { initialValues };
-};
-const estimates = gql`
-query allEstimates {
-  allEstimates {
-    _id
-    clientName
-    projectName
-    sprintNumber
-    date
-  }
-}
-`;
-
 export default compose(
-  connect(initializeValues),
-  graphql(estimates),
+  connect(),
+  graphql(estimateAll, { name: 'estimates' }),
 )(Wrapper);
