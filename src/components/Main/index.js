@@ -12,6 +12,7 @@ import LineChart from '../LineChart';
 import Calculation from '../Calculation';
 import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
+import Contributors from '../Contributors';
 import { ESTIMATE_FORM } from '../../constants';
 
 class Main extends Component {
@@ -71,6 +72,11 @@ class Main extends Component {
         </Col>
         <Col xs="12">
           <Contacts
+            userCanEditThisEstimate={userCanEditThisEstimate}
+          />
+        </Col>
+        <Col xs="12">
+          <Contributors
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
