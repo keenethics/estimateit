@@ -1,7 +1,9 @@
+import { Field } from 'redux-form';
 import React, { Component } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import ReactHighcharts from 'react-highcharts';
 
+import Slider from '../Slider';
 
 export default class LineChart extends Component {
   constructor(props) {
@@ -19,10 +21,9 @@ export default class LineChart extends Component {
 
   generateData() {
     const data = this.props.labels.sort((a, b) => a - b)
-      .map((item, i) => [item, Math.round((100 * i / (this.props.labels.length - 1)) * 100) / 100]);
+      .map((item, i) => [item, Math.round(((100 * i) / (this.props.labels.length - 1)) * 100) / 100]);
     this.config = {
       chart: {
-        inverted: false,
         type: 'spline',
         inverted: false,
       },
@@ -80,15 +81,30 @@ export default class LineChart extends Component {
 
   render() {
     this.generateData();
+    const {
+      totalHours,
+      calculateTotalHours,
+      userCanEditThisEstimate,
+    } = this.props;
+
     return (
       <Card>
         <CardBlock>
           <ReactHighcharts
-            config={this.config}
+            width="800"
+            height="500"
             ref={this.getChart}
-            width="800" height="500"
+            config={this.config}
           />
         </CardBlock>
+        <Field
+          title="Probability"
+          component={Slider}
+          totalHours={totalHours}
+          name="estimateOptions.completing"
+          disabled={!userCanEditThisEstimate}
+          calculateTotalHours={calculateTotalHours}
+        />
       </Card>
     );
   }

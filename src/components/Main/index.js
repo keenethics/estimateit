@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-
+import { bindActionCreators } from 'redux';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -9,11 +8,12 @@ import Reports from '../Reports';
 import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
-import EstimateOptions from '../EstimateOptions';
+import Contributors from '../Contributors';
 import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
-import Contributors from '../Contributors';
 import { ESTIMATE_FORM } from '../../constants';
+import EstimateOptions from '../EstimateOptions';
+import * as actionsCalculate from '../../actions/Calculation';
 
 class Main extends Component {
   render() {
@@ -25,6 +25,7 @@ class Main extends Component {
       totalHours,
       estimateId,
       estimateOptions,
+      calculateTotalHours,
       userCanEditThisEstimate = false,
       devHours: {
         minHours,
@@ -36,7 +37,13 @@ class Main extends Component {
       <Row className={styles.main}>
         <Col xs="12">
           {
-            <LineChart labels={time} data={percent} />
+            <LineChart
+              labels={time}
+              data={percent}
+              totalHours={totalHours}
+              calculateTotalHours={calculateTotalHours}
+              userCanEditThisEstimate={userCanEditThisEstimate}
+            />
           }
         </Col>
         <Col xs="12">
@@ -60,7 +67,7 @@ class Main extends Component {
         <Col xs="12">
           <EstimateOptions
             totalHours={totalHours}
-            estimateOptions={estimateOptions}
+            calculateTotalHours={calculateTotalHours}
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
@@ -122,4 +129,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(Main));
+function mapDispatchToProps(dispatch) {
+  return { ...bindActionCreators(actionsCalculate, dispatch) };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(Main),
+);
