@@ -9,12 +9,10 @@ import {
   InputGroup,
 } from 'reactstrap';
 
-import { renderOptionsField } from '../libs/helpers';
-import { required, currency } from '../libs/validation';
-
-
 import Slider from '../Slider';
 import styles from './styles.scss';
+import { renderOptionsField } from '../libs/helpers';
+import { required, currency } from '../libs/validation';
 
 class EstimateOptions extends Component {
   render() {

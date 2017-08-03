@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 import styles from './styles.scss';
@@ -54,4 +55,4 @@ Slider.propTypes = {
   probabilityTime: PropTypes.number.isRequired,
 };
 
-export default Slider;
+export default withStyles(styles)(Slider);

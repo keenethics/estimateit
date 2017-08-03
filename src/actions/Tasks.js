@@ -4,7 +4,7 @@ import {
   formValueSelector,
 } from 'redux-form';
 
-import { calculateHours, calculateProbabilityTime } from './Calculation';
+import { calculateHours } from './Calculation';
 
 
 const changeWrapper = (dispatch, form, field, payload, touch = true) => {
