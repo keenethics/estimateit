@@ -1,11 +1,12 @@
 import { Field } from 'redux-form';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import ReactHighcharts from 'react-highcharts';
 
 import Slider from '../Slider';
 
-export default class LineChart extends Component {
+class LineChart extends Component {
   constructor(props) {
     super(props);
 
@@ -97,15 +98,25 @@ export default class LineChart extends Component {
             config={this.config}
           />
         </CardBlock>
-        <Field
-          title="Probability"
-          component={Slider}
-          totalHours={totalHours}
-          name="estimateOptions.completing"
-          disabled={!userCanEditThisEstimate}
-          calculateTotalHours={calculateTotalHours}
-        />
+        <CardBlock>
+          <Field
+            title="Probability"
+            component={Slider}
+            totalHours={totalHours}
+            name="estimateOptions.completing"
+            disabled={!userCanEditThisEstimate}
+            calculateTotalHours={calculateTotalHours}
+          />
+        </CardBlock>
       </Card>
     );
   }
 }
+
+LineChart.propTypes = {
+  totalHours: PropTypes.number.isRequired,
+  calculateTotalHours: PropTypes.func.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
+};
+
+export default LineChart;
