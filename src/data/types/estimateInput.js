@@ -42,7 +42,7 @@ const EstimateOptionsInputType = new InputObjectType({
     bugFixes: {
       type: FloatType,
     },
-    completing: {
+    probability: {
       type: FloatType,
     },
   },

@@ -24,11 +24,11 @@ class Task extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleToggle = this.handleToggle.bind(this);
-    this.handleBlur = this.handleBlur.bind(this);
+    this.handleBlurCheckbox = this.handleBlurCheckbox.bind(this);
+    this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this);
   }
 
-  handleToggle(field, event) {
+  handleToggleCheckbox(field, event) {
     const { store } = this.context;
     const { target: { checked: payload } } = event;
     const { meta: { form }, dispatchToggle } = this.props;
@@ -47,7 +47,7 @@ class Task extends React.Component {
     dispatchToggle({ form, field, payload });
   }
 
-  handleBlur(field) {
+  handleBlurCheckbox(field) {
     const { store } = this.context;
     const { target: { value: payload } } = event;
     const { meta: { form } } = this.props;
@@ -109,8 +109,8 @@ class Task extends React.Component {
                   id={`${task}.isChecked`}
                   name={`${task}.isChecked`}
                   className={styles.subtasks__checkbox}
-                  onChange={e => this.handleToggle(task, e)}
-                  onBlur={e => this.handleBlur(task, taskObj, e)}
+                  onChange={e => this.handleToggleCheckbox(task, e)}
+                  onBlur={e => this.handleBlurCheckbox(task, taskObj, e)}
                 />
                 <Field
                   type="text"

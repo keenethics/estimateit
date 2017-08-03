@@ -50,32 +50,32 @@ class EstimateOptions extends Component {
                 component={Slider}
                 totalHours={totalHours}
                 name="estimateOptions.qa"
+                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
-                calculateTotalHours={calculateTotalHours}
               />
               <Field
                 title="PM"
                 component={Slider}
                 totalHours={totalHours}
                 name="estimateOptions.pm"
+                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
-                calculateTotalHours={calculateTotalHours}
               />
               <Field
                 title="Bug Fixes"
                 component={Slider}
                 totalHours={totalHours}
                 name="estimateOptions.bugFixes"
+                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
-                calculateTotalHours={calculateTotalHours}
               />
               <Field
                 title="Risks"
                 component={Slider}
                 totalHours={totalHours}
                 name="estimateOptions.risks"
+                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
-                calculateTotalHours={calculateTotalHours}
               />
             </div>
           </Col>

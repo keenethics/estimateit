@@ -1,6 +1,7 @@
 import {
   CALCULATE_TOTAL_HOURS,
   CALCULATE_GENERAL_HOURS,
+  CALCULATE_PROBABILITY_TIME,
 } from '../constants/actionTypes';
 import formatTime from '../components/libs/formatTime';
 
@@ -119,7 +120,7 @@ const nAry = (base = 2) => (length = 0) => {
   };
 };
 
-const calculateHourss = (tasks) => {
+const calculateAllPossibilityTimes = (tasks) => {
   if (tasks.length === 0) return [0, 0];
 
   if (tasks.length === 1) {
@@ -201,7 +202,7 @@ export const calculateHours = form =>
     const { values: { tasks } } = getState().form[form];
     const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
 
-    const time = calculateHourss(checkedTasks);
+    const time = calculateAllPossibilityTimes(checkedTasks);
     const percent = time.map((item, i) =>
       Math.round((100 * i) / (time.length - 1)),
     );
@@ -220,6 +221,31 @@ export const calculateHours = form =>
       },
     });
     dispatch(calculateTotalHours(form));
+  };
+
+export const calculateProbabilityTime = form =>
+  (dispatch, getState) => {
+    const state = getState();
+    const { calculation: { time, percent } } = state;
+    const { values: { estimateOptions: { probability } } } = state.form[form];
+    console.log(time);
+    console.log(percent);
+
+
+    let highestIndex = percent.findIndex(item => item > probability);
+    console.log(highestIndex);
+    if (highestIndex === -1) {
+      highestIndex = percent.length - 1;
+    }
+    console.log(highestIndex);
+    const probabilityTime = time[highestIndex];
+    console.log(probabilityTime);
+    dispatch({
+      type: CALCULATE_PROBABILITY_TIME,
+      payload: {
+        probabilityTime,
+      },
+    });
   };
 
 export const calculateAtFirstTime = form =>

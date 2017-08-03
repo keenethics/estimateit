@@ -4,7 +4,7 @@ import {
   formValueSelector,
 } from 'redux-form';
 
-import { calculateHours } from './Calculation';
+import { calculateHours, calculateProbabilityTime } from './Calculation';
 
 
 const changeWrapper = (dispatch, form, field, payload, touch = true) => {
@@ -47,6 +47,7 @@ export const dispatchToggle = ({ form, field, payload }) =>
     }
 
     dispatch(calculateHours(form));
+    dispatch(calculateProbabilityTime(form));
   };
 
 
@@ -80,6 +81,7 @@ export const dispatchRemove = ({ form, field, index }) =>
     }
 
     dispatch(calculateHours(form));
+    dispatch(calculateProbabilityTime(form));
   };
 
 export const dispatchChange = ({ form, field, payload }) =>
@@ -108,6 +110,7 @@ export const dispatchChange = ({ form, field, payload }) =>
     }
 
     dispatch(calculateHours(form));
+    dispatch(calculateProbabilityTime(form));
   };
 
 

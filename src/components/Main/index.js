@@ -24,8 +24,10 @@ class Main extends Component {
       moneyRate,
       totalHours,
       estimateId,
+      probabilityTime,
       estimateOptions,
       calculateTotalHours,
+      calculateProbabilityTime,
       userCanEditThisEstimate = false,
       devHours: {
         minHours,
@@ -35,17 +37,6 @@ class Main extends Component {
 
     return (
       <Row className={styles.main}>
-        <Col xs="12">
-          {
-            <LineChart
-              labels={time}
-              data={percent}
-              totalHours={totalHours}
-              calculateTotalHours={calculateTotalHours}
-              userCanEditThisEstimate={userCanEditThisEstimate}
-            />
-          }
-        </Col>
         <Col xs="12">
           <Card className={styles.final}>
             <CardBlock className={styles.final__wrapper}>
@@ -63,6 +54,17 @@ class Main extends Component {
               </div>
             </CardBlock>
           </Card>
+        </Col>
+        <Col xs="12">
+          {
+            <LineChart
+              labels={time}
+              data={percent}
+              probabilityTime={probabilityTime}
+              userCanEditThisEstimate={userCanEditThisEstimate}
+              calculateProbabilityTime={calculateProbabilityTime}
+            />
+          }
         </Col>
         <Col xs="12">
           <EstimateOptions
@@ -110,6 +112,7 @@ function mapStateToProps(state) {
     percent,
     devHours,
     totalHours,
+    probabilityTime,
   } } = state;
   const { values: {
     tasks,
@@ -124,6 +127,7 @@ function mapStateToProps(state) {
     devHours,
     moneyRate,
     totalHours,
+    probabilityTime,
     estimateOptions,
     userCanEditThisEstimate,
   };

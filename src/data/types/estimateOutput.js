@@ -45,7 +45,7 @@ const EstimateOptionsOutputType = new ObjectType({
     bugFixes: {
       type: FloatType,
     },
-    completing: {
+    probability: {
       type: FloatType,
     },
   },

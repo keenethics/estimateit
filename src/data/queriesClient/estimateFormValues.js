@@ -21,7 +21,7 @@ const estimateFormValues = gql`
         pm
         risks
         bugFixes
-        completing
+        probability
         __typename @skip(if: true)
       }
       tasks {

@@ -8,6 +8,7 @@ const Slider = ({
   title,
   disabled,
   totalHours,
+  probabilityTime,
   input: {
     value,
     onChange,
@@ -15,12 +16,12 @@ const Slider = ({
   meta: {
     form,
   },
-  calculateTotalHours,
+  handleChange,
 }) => {
-  const hours = Math.round(totalHours * (value / 100));
-  const handleChange = ({ target }) => {
+  const hours = probabilityTime || Math.round(totalHours * (value / 100));
+  const onHandleChange = ({ target }) => {
     onChange(parseInt(target.value, 10));
-    calculateTotalHours(form);
+    handleChange(form);
   };
 
   return (
@@ -34,7 +35,7 @@ const Slider = ({
         value={value}
         disabled={disabled}
         className="radarChartPart"
-        onChange={e => handleChange(e)}
+        onChange={e => onHandleChange(e)}
       />
       <InputGroupAddon>
         {value}%, {hours} h
@@ -49,7 +50,8 @@ Slider.propTypes = {
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   totalHours: PropTypes.number.isRequired,
-  calculateTotalHours: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  probabilityTime: PropTypes.number.isRequired,
 };
 
 export default Slider;

@@ -83,9 +83,9 @@ class LineChart extends Component {
   render() {
     this.generateData();
     const {
-      totalHours,
-      calculateTotalHours,
+      probabilityTime,
       userCanEditThisEstimate,
+      calculateProbabilityTime,
     } = this.props;
 
     return (
@@ -102,10 +102,10 @@ class LineChart extends Component {
           <Field
             title="Probability"
             component={Slider}
-            totalHours={totalHours}
-            name="estimateOptions.completing"
+            probabilityTime={probabilityTime}
+            name="estimateOptions.probability"
             disabled={!userCanEditThisEstimate}
-            calculateTotalHours={calculateTotalHours}
+            handleChange={calculateProbabilityTime}
           />
         </CardBlock>
       </Card>
@@ -114,9 +114,9 @@ class LineChart extends Component {
 }
 
 LineChart.propTypes = {
-  totalHours: PropTypes.number.isRequired,
-  calculateTotalHours: PropTypes.func.isRequired,
+  probabilityTime: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
+  calculateProbabilityTime: PropTypes.func.isRequired,
 };
 
 export default LineChart;
