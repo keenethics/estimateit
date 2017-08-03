@@ -9,7 +9,7 @@ import Reports from '../Reports';
 import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
-import Calculation from '../Calculation';
+import EstimateOptions from '../EstimateOptions';
 import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
 import Contributors from '../Contributors';
@@ -58,7 +58,7 @@ class Main extends Component {
           </Card>
         </Col>
         <Col xs="12">
-          <Calculation
+          <EstimateOptions
             totalHours={totalHours}
             estimateOptions={estimateOptions}
             userCanEditThisEstimate={userCanEditThisEstimate}
