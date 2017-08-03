@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import {
   Card,
@@ -11,10 +9,9 @@ import {
   InputGroup,
 } from 'reactstrap';
 
-import { renderOptionsField } from '../libs/helpers.js';
-import { required, currency } from '../libs/validation.js';
+import { renderOptionsField } from '../libs/helpers';
+import { required, currency } from '../libs/validation';
 
-import * as actionsCalculate from '../../actions/Calculation';
 
 import Slider from '../Slider';
 import styles from './styles.scss';
@@ -31,7 +28,8 @@ class EstimateOptions extends Component {
       <Card className={styles.calculation}>
         <CardBlock className={styles.calculation__wrapper}>
           <Col
-            xs="12" lg="9"
+            lg="9"
+            xs="12"
             className={styles.calculation__options}
           >
             <div className={styles.range}>
@@ -90,19 +88,8 @@ class EstimateOptions extends Component {
 
 EstimateOptions.propTypes = {
   totalHours: PropTypes.number.isRequired,
-  estimateOptions: PropTypes.object.isRequired,
   calculateTotalHours: PropTypes.func.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 
-function mapStateToProps() {
-  return { };
-}
-
-function mapDispatchToProps(dispatch) {
-  return { ...bindActionCreators(actionsCalculate, dispatch) };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  withStyles(styles)(EstimateOptions),
-);
+export default withStyles(styles)(EstimateOptions);
