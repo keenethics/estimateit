@@ -32,12 +32,12 @@ class LineChart extends Component {
     const veriticalLine = [
       [probabilityTime, 0],
       [probabilityTime, probabilityPercent],
-    ]
+    ];
     const horizontalLine = [
       [time[0], probabilityPercent],
       [probabilityTime, probabilityPercent],
-    ]
-    console.log(veriticalLine);
+    ];
+
     this.config = {
       chart: {
         type: 'spline',
@@ -77,17 +77,13 @@ class LineChart extends Component {
       legend: {
         enabled: false,
       },
-      tooltip: {
-        enable: false,
-      },
       plotOptions: {
         spline: {
           marker: {
             enable: false,
           },
-        }
+        },
       },
-      // chart.plotOptions.line.marker.enabled = false
       series: [
         {
           name: 'Probability',
@@ -179,6 +175,7 @@ LineChart.propTypes = {
   time: PropTypes.array.isRequired,
   percent: PropTypes.array.isRequired,
   probabilityTime: PropTypes.number.isRequired,
+  probabilityPercent: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
   calculateProbabilityTime: PropTypes.func.isRequired,
 };

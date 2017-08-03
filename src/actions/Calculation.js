@@ -167,27 +167,19 @@ export const calculateTotalHours = form =>
   (dispatch, getState) => {
     const state = getState();
     const { calculation: {
-      time,
-      percent,
+      probabilityTime,
     } } = state;
     const { values: { estimateOptions: {
       pm,
       qa,
       risks,
       bugFixes,
-      completing,
     } } } = state.form[form];
 
-    let highestIndex = percent.findIndex(item => item > completing);
-
-    if (highestIndex === -1) {
-      highestIndex = percent.length - 1;
-    }
-    const developmentHours = time[highestIndex];
     const { fromatedDigitValue: additionalHours }
-      = formatTime(developmentHours * ((pm + qa + bugFixes + risks) / 100));
+      = formatTime(probabilityTime * ((pm + qa + bugFixes + risks) / 100));
 
-    const { hours, minutes } = formatTime(developmentHours + additionalHours);
+    const { hours, minutes } = formatTime(probabilityTime + additionalHours);
     const totalHours = minutes >= 30 ? hours + 1 : hours;
     dispatch({
       type: CALCULATE_TOTAL_HOURS,
@@ -195,6 +187,31 @@ export const calculateTotalHours = form =>
         totalHours,
       },
     });
+  };
+
+export const calculateProbabilityTime = form =>
+  (dispatch, getState) => {
+    const state = getState();
+    const { calculation: { time, percent } } = state;
+    const { values: { estimateOptions: { probability } } } = state.form[form];
+
+
+    let highestIndex = percent.findIndex(item => item >= probability);
+
+    if (highestIndex === -1) {
+      highestIndex = percent.length - 1;
+    }
+
+    const probabilityTime = time[highestIndex];
+    const probabilityPercent = percent[highestIndex];
+    dispatch({
+      type: CALCULATE_PROBABILITY_TIME,
+      payload: {
+        probabilityTime,
+        probabilityPercent,
+      },
+    });
+    dispatch(calculateTotalHours(form));
   };
 
 export const calculateHours = form =>
@@ -220,35 +237,10 @@ export const calculateHours = form =>
         devHours,
       },
     });
-    dispatch(calculateTotalHours(form));
-  };
-
-export const calculateProbabilityTime = form =>
-  (dispatch, getState) => {
-    const state = getState();
-    const { calculation: { time, percent } } = state;
-    const { values: { estimateOptions: { probability } } } = state.form[form];
-
-
-    let highestIndex = percent.findIndex(item => item >= probability);
-
-    if (highestIndex === -1) {
-      highestIndex = percent.length - 1;
-    }
-
-    const probabilityTime = time[highestIndex];
-    const probabilityPercent = percent[highestIndex];
-    dispatch({
-      type: CALCULATE_PROBABILITY_TIME,
-      payload: {
-        probabilityTime,
-        probabilityPercent,
-      },
-    });
+    dispatch(calculateProbabilityTime(form));
   };
 
 export const calculateAtFirstTime = form =>
   (dispatch) => {
     dispatch(calculateHours(form));
-    dispatch(calculateTotalHours(form));
   };
