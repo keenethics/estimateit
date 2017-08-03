@@ -83,6 +83,9 @@
 :global {
   .dropdown-menu {
     margin-left: 0.8rem;
+    .dropdown-item {
+      margin-left: 0;
+    }
   }
   .btn-secondary.active, .show > .btn-secondary.dropdown-toggle {
     background: #b3b3b3;
