@@ -26,6 +26,7 @@ class Main extends Component {
       estimateId,
       probabilityTime,
       estimateOptions,
+      probabilityPercent,
       calculateTotalHours,
       calculateProbabilityTime,
       userCanEditThisEstimate = false,
@@ -56,15 +57,14 @@ class Main extends Component {
           </Card>
         </Col>
         <Col xs="12">
-          {
-            <LineChart
-              labels={time}
-              data={percent}
-              probabilityTime={probabilityTime}
-              userCanEditThisEstimate={userCanEditThisEstimate}
-              calculateProbabilityTime={calculateProbabilityTime}
-            />
-          }
+          <LineChart
+            time={time}
+            percent={percent}
+            probabilityTime={probabilityTime}
+            probabilityPercent={probabilityPercent}
+            userCanEditThisEstimate={userCanEditThisEstimate}
+            calculateProbabilityTime={calculateProbabilityTime}
+          />
         </Col>
         <Col xs="12">
           <EstimateOptions
@@ -113,6 +113,7 @@ function mapStateToProps(state) {
     devHours,
     totalHours,
     probabilityTime,
+    probabilityPercent,
   } } = state;
   const { values: {
     tasks,
@@ -129,6 +130,7 @@ function mapStateToProps(state) {
     totalHours,
     probabilityTime,
     estimateOptions,
+    probabilityPercent,
     userCanEditThisEstimate,
   };
 }

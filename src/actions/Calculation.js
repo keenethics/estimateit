@@ -228,22 +228,21 @@ export const calculateProbabilityTime = form =>
     const state = getState();
     const { calculation: { time, percent } } = state;
     const { values: { estimateOptions: { probability } } } = state.form[form];
-    console.log(time);
-    console.log(percent);
 
 
-    let highestIndex = percent.findIndex(item => item > probability);
-    console.log(highestIndex);
+    let highestIndex = percent.findIndex(item => item >= probability);
+
     if (highestIndex === -1) {
       highestIndex = percent.length - 1;
     }
-    console.log(highestIndex);
+
     const probabilityTime = time[highestIndex];
-    console.log(probabilityTime);
+    const probabilityPercent = percent[highestIndex];
     dispatch({
       type: CALCULATE_PROBABILITY_TIME,
       payload: {
         probabilityTime,
+        probabilityPercent,
       },
     });
   };

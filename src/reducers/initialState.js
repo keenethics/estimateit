@@ -11,6 +11,7 @@ export default {
     percent: [],
     totalHours: 0,
     probabilityTime: 0,
+    probabilityPercent: 0,
     devHours: {
       minHours: 0,
       maxHours: 0,

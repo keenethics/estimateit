@@ -21,8 +21,23 @@ class LineChart extends Component {
   }
 
   generateData() {
-    const data = this.props.labels.sort((a, b) => a - b)
-      .map((item, i) => [item, Math.round(((100 * i) / (this.props.labels.length - 1)) * 100) / 100]);
+    const { percent } = this.props;
+    const data = this.props.time.map((item, i) => [item, percent[i]]);
+    const {
+      probabilityTime,
+      probabilityPercent,
+      time,
+    } = this.props;
+
+    const veriticalLine = [
+      [probabilityTime, 0],
+      [probabilityTime, probabilityPercent],
+    ]
+    const horizontalLine = [
+      [time[0], probabilityPercent],
+      [probabilityTime, probabilityPercent],
+    ]
+    console.log(veriticalLine);
     this.config = {
       chart: {
         type: 'spline',
@@ -63,20 +78,67 @@ class LineChart extends Component {
         enabled: false,
       },
       tooltip: {
-        headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x}h:  {point.y}%',
+        enable: false,
       },
       plotOptions: {
         spline: {
           marker: {
             enable: false,
           },
-        },
+        }
       },
-      series: [{
-        name: 'Probability',
-        data,
-      }],
+      // chart.plotOptions.line.marker.enabled = false
+      series: [
+        {
+          name: 'Probability',
+          data,
+          tooltip: {
+            headerFormat: '<b>{series.name}</b><br/>',
+            pointFormat: '{point.x}h:  {point.y}%',
+          },
+          zIndex: 9999,
+        },
+        {
+          type: 'line',
+          data: veriticalLine,
+          lineWidth: 1,
+          color: 'black',
+          dashStyle: 'Dash',
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
+          },
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+        {
+          type: 'line',
+          data: horizontalLine,
+          lineWidth: 1,
+          color: 'black',
+          dashStyle: 'Dash',
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
+          },
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
     };
   }
 
@@ -114,6 +176,8 @@ class LineChart extends Component {
 }
 
 LineChart.propTypes = {
+  time: PropTypes.array.isRequired,
+  percent: PropTypes.array.isRequired,
   probabilityTime: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
   calculateProbabilityTime: PropTypes.func.isRequired,
