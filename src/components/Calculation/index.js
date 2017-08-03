@@ -15,12 +15,6 @@ const Calculation = ({
   <Card className={styles.calculation}>
     <CardBlock className={styles.calculation__wrapper}>
       <Col
-        xs="12" lg="3"
-        className={styles.calculation__piechart}
-      >
-        <PieChart data={estimateOptions} />
-      </Col>
-      <Col
         xs="12" lg="9"
         className={styles.calculation__options}
       >
