@@ -82,15 +82,6 @@ class Task extends React.Component {
 
     return (
       <FormGroup className={styles.tasks}>
-        { (level === 0 && showButton) &&
-          <Button
-            color="danger"
-            onClick={() => fields.unshift({ isChecked: true })}
-            className={styles.tasks__add}
-          >
-            Add task
-          </Button>
-        }
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
           const haveSubtask = taskObj.tasks && taskObj.tasks.length;
@@ -199,6 +190,15 @@ class Task extends React.Component {
             </FormGroup>
           );
         })}
+        { (level === 0 && showButton) &&
+          <Button
+            color="danger"
+            onClick={() => fields.push({ isChecked: true })}
+            className={styles.tasks__add}
+          >
+            Add task
+          </Button>
+        }
       </FormGroup>
     );
   }
