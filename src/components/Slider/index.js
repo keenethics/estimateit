@@ -54,7 +54,7 @@ Slider.propTypes = {
   totalHours: PropTypes.number.isRequired,
   handleChange: PropTypes.func.isRequired,
   probabilityTime: PropTypes.number.isRequired,
-  calculateAdditionalTime: PropTypes.func.isRequired,
+  actionChangeAdditionalTime: PropTypes.func.isRequired,
   meta: PropTypes.objectOf(PropTypes.string).isRequired,
   input: PropTypes.objectOf(PropTypes.string).isRequired,
 };

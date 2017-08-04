@@ -30,7 +30,7 @@ class Task extends React.Component {
   handleToggleCheckbox(field, event) {
     const { store } = this.context;
     const { target: { checked: payload } } = event;
-    const { meta: { form }, dispatchToggle } = this.props;
+    const { meta: { form }, actionToggleTask } = this.props;
 
     store.dispatch({
       type: '@@redux-form/CHANGE',
@@ -43,7 +43,7 @@ class Task extends React.Component {
       payload,
     });
 
-    dispatchToggle({ form, field, payload });
+    actionToggleTask({ form, field, payload });
   }
 
   handleBlurCheckbox(field) {
@@ -68,10 +68,10 @@ class Task extends React.Component {
       level,
       fields,
       meta: { form },
-      dispatchToggle,
-      dispatchChange,
-      dispatchRemove,
-      dispatchAddSubTask,
+      actionToggleTask,
+      actionChangeTaskHours,
+      actionRemoveTask,
+      actionAddSubTask,
       userCanEditThisEstimate,
     } = this.props;
     const selector = formValueSelector(form);
@@ -130,7 +130,7 @@ class Task extends React.Component {
                     component={InputAndPopover}
                     id={`${task}.minimumMinutes`}
                     name={`${task}.minimumMinutes`}
-                    dispatchChange={dispatchChange}
+                    actionChangeTaskHours={actionChangeTaskHours}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
                     validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumMinutes`)]}
@@ -141,7 +141,7 @@ class Task extends React.Component {
                     component={InputAndPopover}
                     id={`${task}.maximumMinutes`}
                     name={`${task}.maximumMinutes`}
-                    dispatchChange={dispatchChange}
+                    actionChangeTaskHours={actionChangeTaskHours}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
                     validate={[taskHourValidation(disabled)]}
@@ -153,7 +153,7 @@ class Task extends React.Component {
                 <Button
                   color="danger"
                   className={styles.subtasks__item}
-                  onClick={() => dispatchAddSubTask({ form, field: `${task}.tasks` })}
+                  onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
                 >
                   Add subtask
                 </Button>
@@ -163,7 +163,7 @@ class Task extends React.Component {
                 <Button
                   color="danger"
                   className={styles.subtasks__item}
-                  onClick={() => dispatchRemove({ index, form, field: task, level })}
+                  onClick={() => actionRemoveTask({ index, form, field: task, level })}
                 >
                   Delete
                 </Button>
@@ -174,10 +174,10 @@ class Task extends React.Component {
                   level={level + 1}
                   component={Task}
                   name={`${task}.tasks`}
-                  dispatchToggle={dispatchToggle}
-                  dispatchRemove={dispatchRemove}
-                  dispatchChange={dispatchChange}
-                  dispatchAddSubTask={dispatchAddSubTask}
+                  actionToggleTask={actionToggleTask}
+                  actionRemoveTask={actionRemoveTask}
+                  actionChangeTaskHours={actionChangeTaskHours}
+                  actionAddSubTask={actionAddSubTask}
                   userCanEditThisEstimate={userCanEditThisEstimate}
                 />
               </div>
@@ -197,10 +197,10 @@ Task.propTypes = {
   meta: PropTypes.object.isRequired,
   level: PropTypes.number.isRequired,
   fields: PropTypes.object.isRequired,
-  dispatchChange: PropTypes.func.isRequired,
-  dispatchRemove: PropTypes.func.isRequired,
-  dispatchToggle: PropTypes.func.isRequired,
-  dispatchAddSubTask: PropTypes.func.isRequired,
+  actionChangeTaskHours: PropTypes.func.isRequired,
+  actionRemoveTask: PropTypes.func.isRequired,
+  actionToggleTask: PropTypes.func.isRequired,
+  actionAddSubTask: PropTypes.func.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 

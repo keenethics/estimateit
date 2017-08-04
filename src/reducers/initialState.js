@@ -1,14 +1,10 @@
 export default {
-  main: {
-    devHours: {
-      minHours: 0,
-      maxHours: 0,
-    },
+  estimates: {
     allEstimates: {},
   },
   calculation: {
     time: [],
-    percent: [],
+    percents: [],
     totalHours: 0,
     probabilityTime: 0,
     probabilityPercent: 0,
@@ -18,7 +14,7 @@ export default {
       risks: 0,
       bugFixes: 0,
     },
-    devHours: {
+    devTimes: {
       minHours: 0,
       maxHours: 0,
     },

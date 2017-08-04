@@ -1,24 +1,24 @@
 import {
-  CALCULATE_TOTAL_HOURS,
-  CALCULATE_GENERAL_HOURS,
-  CALCULATE_ADDITIONAL_TIME,
-  CALCULATE_PROBABILITY_TIME,
+  CALCULATE_TOTOAL_HOURS,
+  GENERAL_CALCULATION,
+  CHANGE_ADDITIONAL_TIME,
+  CHANGE_PROBABILITY_TIME,
 } from '../constants/actionTypes';
 
 import initialState from './initialState';
 
 export function calculation(state = initialState.calculation, action) {
   switch (action.type) {
-    case CALCULATE_GENERAL_HOURS:
+    case GENERAL_CALCULATION:
       return { ...state, ...action.payload };
 
-    case CALCULATE_TOTAL_HOURS:
+    case CALCULATE_TOTOAL_HOURS:
       return { ...state, ...action.payload };
 
-    case CALCULATE_PROBABILITY_TIME:
+    case CHANGE_PROBABILITY_TIME:
       return { ...state, ...action.payload };
 
-    case CALCULATE_ADDITIONAL_TIME:
+    case CHANGE_ADDITIONAL_TIME:
       return {
         ...state,
         additionalTime: { ...state.additionalTime, ...action.payload },

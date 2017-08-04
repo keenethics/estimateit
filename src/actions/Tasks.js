@@ -4,7 +4,7 @@ import {
   formValueSelector,
 } from 'redux-form';
 
-import { calculateHours } from './Calculation';
+import { actionGeneralCalculation } from './Calculation';
 
 
 const changeWrapper = (dispatch, form, field, payload, touch = true) => {
@@ -20,7 +20,7 @@ const changeWrapper = (dispatch, form, field, payload, touch = true) => {
   });
 };
 
-export const dispatchToggle = ({ form, field, payload }) =>
+export const actionToggleTask = ({ form, field, payload }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const removedTask = selector(getState(), field);
@@ -46,11 +46,11 @@ export const dispatchToggle = ({ form, field, payload }) =>
       address = address.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(calculateHours(form));
+    dispatch(actionGeneralCalculation(form));
   };
 
 
-export const dispatchRemove = ({ form, field, index }) =>
+export const actionRemoveTask = ({ form, field, index }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const removedTask = selector(getState(), field);
@@ -79,10 +79,10 @@ export const dispatchRemove = ({ form, field, index }) =>
       address = address.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(calculateHours(form));
+    dispatch(actionGeneralCalculation(form));
   };
 
-export const dispatchChange = ({ form, field, payload }) =>
+export const actionChangeTaskHours = ({ form, field, payload }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     let oldValue = selector(getState(), field) || 0;
@@ -107,23 +107,23 @@ export const dispatchChange = ({ form, field, payload }) =>
       address = address.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(calculateHours(form));
+    dispatch(actionGeneralCalculation(form));
   };
 
 
-export const dispatchAddSubTask = ({ form, field }) =>
+export const actionAddSubTask = ({ form, field }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const parentTask = field.replace(/.?tasks$/, '');
     const parentTaskObj = selector(getState(), parentTask);
 
     if (!parentTaskObj.tasks || !parentTaskObj.tasks.length) {
-      dispatch(dispatchChange({
+      dispatch(actionChangeTaskHours({
         form,
         payload: 0,
         field: `${parentTask}.minimumMinutes`,
       }));
-      dispatch(dispatchChange({
+      dispatch(actionChangeTaskHours({
         form,
         payload: 0,
         field: `${parentTask}.maximumMinutes`,

@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
 import { ESTIMATE_FORM } from '../../constants';
-import { calculateAtFirstTime } from '../../actions/Calculation';
+import { actionGeneralCalculation } from '../../actions/Calculation';
 import Loading from '../../components/libs/Loading';
 import {
   estimateFormValues,
   estimateGeneralInfo,
 } from '../../data/queriesClient';
-import changeGeneralEstimateInfo from '../../actions/estimate';
+import actionAddGeneralEstimateInfo from '../../actions/estimate';
 
 
 class Wrapper extends React.Component {
@@ -42,7 +42,7 @@ class Wrapper extends React.Component {
     const { estimate: generalInfo, loading: loadingGeneralInfo } = nextProps.estimateGeneralInfo;
 
     if (!loadingGeneralInfo && JSON.stringify(generalInfo) !== JSON.stringify(oldGeneralInfo)) {
-      this.props.dispatch(changeGeneralEstimateInfo(generalInfo));
+      this.props.dispatch(actionAddGeneralEstimateInfo(generalInfo));
     }
   }
 
@@ -57,7 +57,7 @@ class Wrapper extends React.Component {
       },
       payload: estimate,
     });
-    dispatch(calculateAtFirstTime(ESTIMATE_FORM));
+    dispatch(actionGeneralCalculation(ESTIMATE_FORM));
   }
 
   render() {

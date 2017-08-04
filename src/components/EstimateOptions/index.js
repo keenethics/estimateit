@@ -20,7 +20,7 @@ class EstimateOptions extends Component {
       totalHours,
       additionalTime,
       userCanEditThisEstimate,
-      calculateAdditionalTime,
+      actionChangeAdditionalTime,
     } = this.props;
 
     return (
@@ -51,7 +51,7 @@ class EstimateOptions extends Component {
                 time={additionalTime.qa}
                 name="estimateOptions.qa"
                 disabled={!userCanEditThisEstimate}
-                handleChange={calculateAdditionalTime}
+                handleChange={actionChangeAdditionalTime}
               />
               <Field
                 title="PM"
@@ -60,7 +60,7 @@ class EstimateOptions extends Component {
                 time={additionalTime.pm}
                 name="estimateOptions.pm"
                 disabled={!userCanEditThisEstimate}
-                handleChange={calculateAdditionalTime}
+                handleChange={actionChangeAdditionalTime}
               />
               <Field
                 title="Bug Fixes"
@@ -69,7 +69,7 @@ class EstimateOptions extends Component {
                 time={additionalTime.bugFixes}
                 name="estimateOptions.bugFixes"
                 disabled={!userCanEditThisEstimate}
-                handleChange={calculateAdditionalTime}
+                handleChange={actionChangeAdditionalTime}
               />
               <Field
                 title="Risks"
@@ -78,7 +78,7 @@ class EstimateOptions extends Component {
                 time={additionalTime.risks}
                 name="estimateOptions.risks"
                 disabled={!userCanEditThisEstimate}
-                handleChange={calculateAdditionalTime}
+                handleChange={actionChangeAdditionalTime}
               />
             </div>
           </Col>
@@ -91,7 +91,6 @@ class EstimateOptions extends Component {
 
 EstimateOptions.propTypes = {
   totalHours: PropTypes.number.isRequired,
-  calculateTotalHours: PropTypes.func.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 

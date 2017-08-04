@@ -21,8 +21,8 @@ class LineChart extends Component {
   }
 
   generateData() {
-    const { percent } = this.props;
-    const data = this.props.time.map((item, i) => [Math.round(item / 60), percent[i]]);
+    const { percents } = this.props;
+    const data = this.props.time.map((item, i) => [Math.round(item / 60), percents[i]]);
     const {
       probabilityTime,
       probabilityPercent,
@@ -143,7 +143,7 @@ class LineChart extends Component {
     const {
       probabilityTime,
       userCanEditThisEstimate,
-      calculateProbabilityTime,
+      actionChangeProbability,
     } = this.props;
 
     return (
@@ -164,7 +164,7 @@ class LineChart extends Component {
             shortName="probability"
             name="estimateOptions.probability"
             disabled={!userCanEditThisEstimate}
-            handleChange={calculateProbabilityTime}
+            handleChange={actionChangeProbability}
           />
         </CardBlock>
       </Card>
@@ -174,11 +174,11 @@ class LineChart extends Component {
 
 LineChart.propTypes = {
   time: PropTypes.array.isRequired,
-  percent: PropTypes.array.isRequired,
+  percents: PropTypes.array.isRequired,
   probabilityTime: PropTypes.number.isRequired,
   probabilityPercent: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
-  calculateProbabilityTime: PropTypes.func.isRequired,
+  actionChangeProbability: PropTypes.func.isRequired,
 };
 
 export default LineChart;

@@ -24,7 +24,6 @@ class InputAndPopover extends React.Component {
 
     this.handleOnBlur = this.handleOnBlur.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.dispatchonChange = this.dispatchonChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,18 +36,14 @@ class InputAndPopover extends React.Component {
   }
 
   handleOnBlur({ target: { value } }) {
-    const { totalMinutes } = formatTime(value);
-    this.dispatchonChange(totalMinutes);
-  }
-
-  dispatchonChange(payload) {
+    const { totalMinutes: payload } = formatTime(value);
     const {
       meta: { form },
-      dispatchChange,
+      actionChangeTaskHours,
       input: { name: field },
     } = this.props;
 
-    dispatchChange({ form, field, payload });
+    actionChangeTaskHours({ form, field, payload });
   }
 
   render() {
@@ -104,7 +99,7 @@ InputAndPopover.propTypes = {
   disabled: PropTypes.bool,
   id: PropTypes.string.isRequired,
   addon: PropTypes.string.isRequired,
-  dispatchChange: PropTypes.func.isRequired,
+  actionChangeTaskHours: PropTypes.func.isRequired,
   meta: PropTypes.objectOf(PropTypes.string).isRequired,
   input: PropTypes.objectOf(PropTypes.string).isRequired,
 };

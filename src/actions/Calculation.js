@@ -1,9 +1,9 @@
 import _ from 'underscore';
 import {
-  CALCULATE_TOTAL_HOURS,
-  CALCULATE_GENERAL_HOURS,
-  CALCULATE_ADDITIONAL_TIME,
-  CALCULATE_PROBABILITY_TIME,
+  CALCULATE_TOTOAL_HOURS,
+  GENERAL_CALCULATION,
+  CHANGE_ADDITIONAL_TIME,
+  CHANGE_PROBABILITY_TIME,
 } from '../constants/actionTypes';
 import formatTime from '../components/libs/formatTime';
 
@@ -122,7 +122,7 @@ const nAry = (base = 2) => (length = 0) => {
   };
 };
 
-const calculateAllPossibilityTimes = (tasks) => {
+const actionCalculateAllPossibilityTimes = (tasks) => {
   if (tasks.length === 0) return [0, 0];
 
   if (tasks.length === 1) {
@@ -165,7 +165,7 @@ const calculateAllPossibilityTimes = (tasks) => {
   }).sort((a, b) => a - b);
 };
 
-export const calculateTotalHours = form =>
+export const actionCalculateTotalHours = () =>
   (dispatch, getState) => {
     const state = getState();
     const { calculation: {
@@ -185,50 +185,50 @@ export const calculateTotalHours = form =>
     const totalHours = minutes >= 30 ? res + 1 : res;
 
     dispatch({
-      type: CALCULATE_TOTAL_HOURS,
+      type: CALCULATE_TOTOAL_HOURS,
       payload: {
         totalHours,
       },
     });
   };
 
-  export const calculateAdditionalTime = ({ field, form }) =>
-    (dispatch, getState) => {
-      const state = getState();
-      const { probabilityTime } = state.calculation;
-      const value = state.form[form].values.estimateOptions[field];
-
-      const additionalTime = Math.round((value * probabilityTime) / 100);
-
-      dispatch({
-        type: CALCULATE_ADDITIONAL_TIME,
-        payload: {
-          [field]: additionalTime,
-        },
-      });
-
-      dispatch(calculateTotalHours(form));
-    };
-
-
-export const calculateProbabilityTime = ({ form }) =>
+export const actionChangeAdditionalTime = ({ field, form }) =>
   (dispatch, getState) => {
     const state = getState();
-    const { calculation: { time, percent, additionalTime } } = state;
+    const { probabilityTime } = state.calculation;
+    const value = state.form[form].values.estimateOptions[field];
+
+    const additionalTime = Math.round((value * probabilityTime) / 100);
+
+    dispatch({
+      type: CHANGE_ADDITIONAL_TIME,
+      payload: {
+        [field]: additionalTime,
+      },
+    });
+
+    dispatch(actionCalculateTotalHours(form));
+  };
+
+
+export const actionChangeProbability = ({ form }) =>
+  (dispatch, getState) => {
+    const state = getState();
+    const { calculation: { time, percents, additionalTime } } = state;
 
     const { values: { estimateOptions: { probability } } } = state.form[form];
 
 
-    let highestIndex = percent.findIndex(item => item >= probability);
+    let highestIndex = percents.findIndex(item => item >= probability);
 
     if (highestIndex === -1) {
-      highestIndex = percent.length - 1;
+      highestIndex = percents.length - 1;
     }
 
     const probabilityTime = time[highestIndex];
-    const probabilityPercent = percent[highestIndex];
+    const probabilityPercent = percents[highestIndex];
     dispatch({
-      type: CALCULATE_PROBABILITY_TIME,
+      type: CHANGE_PROBABILITY_TIME,
       payload: {
         probabilityTime,
         probabilityPercent,
@@ -236,39 +236,34 @@ export const calculateProbabilityTime = ({ form }) =>
     });
 
     _.keys(additionalTime).forEach(field =>
-      dispatch(calculateAdditionalTime({ field, form })),
+      dispatch(actionChangeAdditionalTime({ field, form })),
     );
 
-    dispatch(calculateTotalHours(form));
+    dispatch(actionCalculateTotalHours(form));
   };
 
-export const calculateHours = form =>
+export const actionGeneralCalculation = form =>
   (dispatch, getState) => {
     const { values: { tasks } } = getState().form[form];
     const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
 
-    const time = calculateAllPossibilityTimes(checkedTasks);
-    const percent = time.map((item, i) =>
+    const time = actionCalculateAllPossibilityTimes(checkedTasks);
+    const percents = time.map((item, i) =>
       Math.round((100 * i) / (time.length - 1)),
     );
 
-    const devHours = {
+    const devTimes = {
       minHours: time[0],
       maxHours: time[time.length - 1],
     };
 
     dispatch({
-      type: CALCULATE_GENERAL_HOURS,
+      type: GENERAL_CALCULATION,
       payload: {
         time,
-        percent,
-        devHours,
+        percents,
+        devTimes,
       },
     });
-    dispatch(calculateProbabilityTime({ form }));
-  };
-
-export const calculateAtFirstTime = form =>
-  (dispatch) => {
-    dispatch(calculateHours(form));
+    dispatch(actionChangeProbability({ form }));
   };

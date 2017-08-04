@@ -21,7 +21,7 @@ class Main extends Component {
     const {
       time,
       tasks,
-      percent,
+      percents,
       moneyRate,
       totalHours,
       estimateId,
@@ -29,10 +29,10 @@ class Main extends Component {
       probabilityTime,
       estimateOptions,
       probabilityPercent,
-      calculateAdditionalTime,
-      calculateProbabilityTime,
+      actionChangeAdditionalTime,
+      actionChangeProbability,
       userCanEditThisEstimate = false,
-      devHours: {
+      devTimes: {
         minHours,
         maxHours,
       },
@@ -61,18 +61,18 @@ class Main extends Component {
         <Col xs="12">
           <LineChart
             time={time}
-            percent={percent}
+            percents={percents}
             probabilityTime={probabilityTime}
             probabilityPercent={probabilityPercent}
             userCanEditThisEstimate={userCanEditThisEstimate}
-            calculateProbabilityTime={calculateProbabilityTime}
+            actionChangeProbability={actionChangeProbability}
           />
         </Col>
         <Col xs="12">
           <EstimateOptions
             additionalTime={additionalTime}
             probabilityTime={probabilityTime}
-            calculateAdditionalTime={calculateAdditionalTime}
+            actionChangeAdditionalTime={actionChangeAdditionalTime}
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
@@ -112,8 +112,8 @@ Main.propTypes = {
 function mapStateToProps(state) {
   const { calculation: {
     time,
-    percent,
-    devHours,
+    percents,
+    devTimes,
     totalHours,
     additionalTime,
     probabilityTime,
@@ -128,8 +128,8 @@ function mapStateToProps(state) {
   return {
     time,
     tasks,
-    percent,
-    devHours,
+    percents,
+    devTimes,
     moneyRate,
     totalHours,
     additionalTime,
