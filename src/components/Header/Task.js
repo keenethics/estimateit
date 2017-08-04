@@ -19,7 +19,6 @@ import {
   mixShouldBeLessThenMax,
 } from '../libs/validation';
 
-
 class Task extends React.Component {
   constructor(props) {
     super(props);
@@ -85,7 +84,9 @@ class Task extends React.Component {
         { (level === 0 && showButton) &&
           <Button
             color="danger"
-            onClick={() => fields.unshift({ isChecked: true })}
+            onClick={() => fields.push(
+              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0 },
+            )}
             className={styles.tasks__add}
           >
             Add task
@@ -127,39 +128,23 @@ class Task extends React.Component {
                     type="text"
                     addon={'min'}
                     component={InputAndPopover}
-                    id={`${task}.minimumHours`}
-                    name={`${task}.minimumHours`}
+                    id={`${task}.minimumMinutes`}
+                    name={`${task}.minimumMinutes`}
                     dispatchChange={dispatchChange}
-                    hoursInputName={'minHoursInput'}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
-                    minutesInputName={'minMinutesInput'}
-                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumHours`)]}
-                    buttonsNames={{
-                      plusHour: 'plusMinHour',
-                      minusHour: 'minusMinHour',
-                      plusMinute: 'plusMinMinute',
-                      minusMinute: 'minusMinMinute',
-                    }}
+                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumMinutes`)]}
                   />
                   <Field
                     type="text"
                     addon={'max'}
                     component={InputAndPopover}
-                    id={`${task}.maximumHours`}
-                    name={`${task}.maximumHours`}
+                    id={`${task}.maximumMinutes`}
+                    name={`${task}.maximumMinutes`}
                     dispatchChange={dispatchChange}
-                    hoursInputName={'maxHoursInput'}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
-                    minutesInputName={'maxMinutesInput'}
                     validate={[taskHourValidation(disabled)]}
-                    buttonsNames={{
-                      plusHour: 'plusMaxHour',
-                      minusHour: 'minusMaxHour',
-                      plusMinute: 'plusMaxMinute',
-                      minusMinute: 'minusMaxMinute',
-                    }}
                   />
                 </div>
               </div>

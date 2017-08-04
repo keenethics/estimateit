@@ -18,8 +18,9 @@ class EstimateOptions extends Component {
   render() {
     const {
       totalHours,
-      calculateTotalHours,
+      additionalTime,
       userCanEditThisEstimate,
+      calculateAdditionalTime,
     } = this.props;
 
     return (
@@ -45,35 +46,39 @@ class EstimateOptions extends Component {
               </InputGroup>
               <Field
                 title="QA"
+                shortName="qa"
                 component={Slider}
-                totalHours={totalHours}
+                time={additionalTime.qa}
                 name="estimateOptions.qa"
-                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
+                handleChange={calculateAdditionalTime}
               />
               <Field
                 title="PM"
+                shortName="pm"
                 component={Slider}
-                totalHours={totalHours}
+                time={additionalTime.pm}
                 name="estimateOptions.pm"
-                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
+                handleChange={calculateAdditionalTime}
               />
               <Field
                 title="Bug Fixes"
                 component={Slider}
-                totalHours={totalHours}
+                shortName="bugFixes"
+                time={additionalTime.bugFixes}
                 name="estimateOptions.bugFixes"
-                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
+                handleChange={calculateAdditionalTime}
               />
               <Field
                 title="Risks"
+                shortName="risks"
                 component={Slider}
-                totalHours={totalHours}
+                time={additionalTime.risks}
                 name="estimateOptions.risks"
-                handleChange={calculateTotalHours}
                 disabled={!userCanEditThisEstimate}
+                handleChange={calculateAdditionalTime}
               />
             </div>
           </Col>

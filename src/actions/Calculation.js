@@ -1,6 +1,8 @@
+import _ from 'underscore';
 import {
   CALCULATE_TOTAL_HOURS,
   CALCULATE_GENERAL_HOURS,
+  CALCULATE_ADDITIONAL_TIME,
   CALCULATE_PROBABILITY_TIME,
 } from '../constants/actionTypes';
 import formatTime from '../components/libs/formatTime';
@@ -125,11 +127,11 @@ const calculateAllPossibilityTimes = (tasks) => {
 
   if (tasks.length === 1) {
     const {
-      minimumHours = 0,
-      maximumHours = 0,
+      minimumMinutes = 0,
+      maximumMinutes = 0,
     } = tasks[0];
 
-    return [minimumHours, maximumHours];
+    return [minimumMinutes, maximumMinutes];
   }
   const maxNumberOfTask = 12;
   const array = nAry(2)(tasks.length);
@@ -137,7 +139,7 @@ const calculateAllPossibilityTimes = (tasks) => {
     ? array.all()
     : array.randomSet(2 ** (maxNumberOfTask - 1));
 
-  allComputations.push(array.zero, array.last);
+  // allComputations.push(array.zero, array.last);
 
   return allComputations.map((computation) => {
     if (!computation.length) return 0;
@@ -148,12 +150,12 @@ const calculateAllPossibilityTimes = (tasks) => {
       let result = acumulate;
 
       if (index === 1) {
-        minOrMax = acumulate ? 'maximumHours' : 'minimumHours';
+        minOrMax = acumulate ? 'maximumMinutes' : 'minimumMinutes';
         value = tasks[0][minOrMax] || 0;
         result = parseFloat(value, 10);
       }
 
-      minOrMax = item ? 'maximumHours' : 'minimumHours';
+      minOrMax = item ? 'maximumMinutes' : 'minimumMinutes';
       value = tasks[index][minOrMax] || 0;
 
       return result + parseFloat(value, 10);
@@ -167,20 +169,21 @@ export const calculateTotalHours = form =>
   (dispatch, getState) => {
     const state = getState();
     const { calculation: {
+      additionalTime,
       probabilityTime,
     } } = state;
-    const { values: { estimateOptions: {
-      pm,
-      qa,
-      risks,
-      bugFixes,
-    } } } = state.form[form];
 
-    const { fromatedDigitValue: additionalHours }
-      = formatTime(probabilityTime * ((pm + qa + bugFixes + risks) / 100));
+    let additionalMinutes = 0;
+    _.keys(additionalTime).forEach((field) => {
+      additionalMinutes = additionalMinutes + additionalTime[field];
+    });
 
-    const { hours, minutes } = formatTime(probabilityTime + additionalHours);
-    const totalHours = minutes >= 30 ? hours + 1 : hours;
+    const a = additionalMinutes + probabilityTime;
+    const minutes = a % 60;
+    const res = ((a - minutes) / 60);
+
+    const totalHours = minutes >= 30 ? res + 1 : res;
+
     dispatch({
       type: CALCULATE_TOTAL_HOURS,
       payload: {
@@ -189,10 +192,30 @@ export const calculateTotalHours = form =>
     });
   };
 
-export const calculateProbabilityTime = form =>
+  export const calculateAdditionalTime = ({ field, form }) =>
+    (dispatch, getState) => {
+      const state = getState();
+      const { probabilityTime } = state.calculation;
+      const value = state.form[form].values.estimateOptions[field];
+
+      const additionalTime = Math.round((value * probabilityTime) / 100);
+
+      dispatch({
+        type: CALCULATE_ADDITIONAL_TIME,
+        payload: {
+          [field]: additionalTime,
+        },
+      });
+
+      dispatch(calculateTotalHours(form));
+    };
+
+
+export const calculateProbabilityTime = ({ form }) =>
   (dispatch, getState) => {
     const state = getState();
-    const { calculation: { time, percent } } = state;
+    const { calculation: { time, percent, additionalTime } } = state;
+
     const { values: { estimateOptions: { probability } } } = state.form[form];
 
 
@@ -211,6 +234,11 @@ export const calculateProbabilityTime = form =>
         probabilityPercent,
       },
     });
+
+    _.keys(additionalTime).forEach(field =>
+      dispatch(calculateAdditionalTime({ field, form })),
+    );
+
     dispatch(calculateTotalHours(form));
   };
 
@@ -237,7 +265,7 @@ export const calculateHours = form =>
         devHours,
       },
     });
-    dispatch(calculateProbabilityTime(form));
+    dispatch(calculateProbabilityTime({ form }));
   };
 
 export const calculateAtFirstTime = form =>

@@ -14,6 +14,7 @@ import FinalEstimate from '../FinalEstimate';
 import { ESTIMATE_FORM } from '../../constants';
 import EstimateOptions from '../EstimateOptions';
 import * as actionsCalculate from '../../actions/Calculation';
+import parseMinutesToString from '../libs/parseMinutesToString';
 
 class Main extends Component {
   render() {
@@ -24,10 +25,11 @@ class Main extends Component {
       moneyRate,
       totalHours,
       estimateId,
+      additionalTime,
       probabilityTime,
       estimateOptions,
       probabilityPercent,
-      calculateTotalHours,
+      calculateAdditionalTime,
       calculateProbabilityTime,
       userCanEditThisEstimate = false,
       devHours: {
@@ -43,14 +45,14 @@ class Main extends Component {
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
                 <div className={styles.final__result_info}>
-                  Total developer min hours: {formatTime(minHours).formattedValue}
+                  Total developer min hours: {parseMinutesToString(minHours) || '0h'}
                 </div>
               </div>
               <div className={styles.final__result}>
                 <div
                   className={styles.final__result_info}
                 >
-                  Total developer max hours: {formatTime(maxHours).formattedValue}
+                  Total developer max hours: {parseMinutesToString(maxHours) || '0h'}
                 </div>
               </div>
             </CardBlock>
@@ -68,8 +70,9 @@ class Main extends Component {
         </Col>
         <Col xs="12">
           <EstimateOptions
-            totalHours={totalHours}
-            calculateTotalHours={calculateTotalHours}
+            additionalTime={additionalTime}
+            probabilityTime={probabilityTime}
+            calculateAdditionalTime={calculateAdditionalTime}
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
@@ -112,6 +115,7 @@ function mapStateToProps(state) {
     percent,
     devHours,
     totalHours,
+    additionalTime,
     probabilityTime,
     probabilityPercent,
   } } = state;
@@ -128,6 +132,7 @@ function mapStateToProps(state) {
     devHours,
     moneyRate,
     totalHours,
+    additionalTime,
     probabilityTime,
     estimateOptions,
     probabilityPercent,

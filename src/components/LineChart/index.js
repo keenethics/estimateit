@@ -160,7 +160,8 @@ class LineChart extends Component {
           <Field
             title="Probability"
             component={Slider}
-            probabilityTime={probabilityTime}
+            time={probabilityTime}
+            shortName="probability"
             name="estimateOptions.probability"
             disabled={!userCanEditThisEstimate}
             handleChange={calculateProbabilityTime}

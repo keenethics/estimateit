@@ -27,20 +27,20 @@ const estimateFormValues = gql`
       tasks {
         taskName
         isChecked
-        minimumHours
-        maximumHours
+        minimumMinutes
+        maximumMinutes
         __typename @skip(if: true)
         tasks {
           taskName
           isChecked
-          minimumHours
-          maximumHours
+          minimumMinutes
+          maximumMinutes
           __typename @skip(if: true)
           tasks {
             taskName
             isChecked
-            minimumHours
-            maximumHours
+            minimumMinutes
+            maximumMinutes
             __typename @skip(if: true)
           }
         }

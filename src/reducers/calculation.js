@@ -1,6 +1,7 @@
 import {
   CALCULATE_TOTAL_HOURS,
   CALCULATE_GENERAL_HOURS,
+  CALCULATE_ADDITIONAL_TIME,
   CALCULATE_PROBABILITY_TIME,
 } from '../constants/actionTypes';
 
@@ -16,6 +17,12 @@ export function calculation(state = initialState.calculation, action) {
 
     case CALCULATE_PROBABILITY_TIME:
       return { ...state, ...action.payload };
+
+    case CALCULATE_ADDITIONAL_TIME:
+      return {
+        ...state,
+        additionalTime: { ...state.additionalTime, ...action.payload },
+      };
 
     default:
       return state;

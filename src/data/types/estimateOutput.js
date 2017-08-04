@@ -12,10 +12,10 @@ const TaskOutputType = new ObjectType({
     taskName: {
       type: StringType,
     },
-    minimumHours: {
+    minimumMinutes: {
       type: FloatType,
     },
-    maximumHours: {
+    maximumMinutes: {
       type: FloatType,
     },
     parent: {
