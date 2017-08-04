@@ -1,13 +1,13 @@
 import { combineReducers } from 'redux';
 import { reducer as form } from 'redux-form'
 
-import Main from './Main';
+import estimates from './estimates';
 import estimate from './estimate';
 import calculation from './calculation';
 
 export default combineReducers({
-  Main,
   form,
   estimate,
+  estimates,
   calculation,
 });

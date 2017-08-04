@@ -12,10 +12,10 @@ const TaskInputType = new InputObjectType({
     taskName: {
       type: StringType,
     },
-    minimumHours: {
+    minimumMinutes: {
       type: FloatType,
     },
-    maximumHours: {
+    maximumMinutes: {
       type: FloatType,
     },
     isChecked: {
@@ -42,7 +42,7 @@ const EstimateOptionsInputType = new InputObjectType({
     bugFixes: {
       type: FloatType,
     },
-    completing: {
+    probability: {
       type: FloatType,
     },
   },

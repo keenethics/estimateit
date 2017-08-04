@@ -1,13 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 import styles from './styles.scss';
+import parseMinutesToString from '../libs/parseMinutesToString';
 
 const Slider = ({
   title,
   disabled,
-  totalHours,
+  time,
   input: {
     value,
     onChange,
@@ -15,14 +17,15 @@ const Slider = ({
   meta: {
     form,
   },
-  calculateTotalHours,
+  shortName,
+  handleChange,
 }) => {
-  const hours = Math.round(totalHours * (value / 100));
-  const handleChange = ({ target }) => {
+  const onHandleChange = ({ target }) => {
     onChange(parseInt(target.value, 10));
-    calculateTotalHours(form);
+    handleChange({ field: shortName, form });
   };
 
+  const hours = parseMinutesToString(time) || '0h';
   return (
     <InputGroup className={styles.range__item}>
       <InputGroupAddon>{title}</InputGroupAddon>
@@ -34,22 +37,26 @@ const Slider = ({
         value={value}
         disabled={disabled}
         className="radarChartPart"
-        onChange={e => handleChange(e)}
+        onChange={e => onHandleChange(e)}
       />
       <InputGroupAddon>
-        {value}%, {hours} h
+        {value}%, {hours}
       </InputGroupAddon>
     </InputGroup>
   );
 };
 
 Slider.propTypes = {
-  meta: PropTypes.object.isRequired,
-  input: PropTypes.object.isRequired,
+  time: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
+  shortName: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
-  calculateTotalHours: PropTypes.func.isRequired,
+  handleChange: PropTypes.func.isRequired,
+  probabilityTime: PropTypes.number.isRequired,
+  actionChangeAdditionalTime: PropTypes.func.isRequired,
+  meta: PropTypes.objectOf(PropTypes.string).isRequired,
+  input: PropTypes.objectOf(PropTypes.string).isRequired,
 };
 
-export default Slider;
+export default withStyles(styles)(Slider);

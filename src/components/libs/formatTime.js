@@ -10,7 +10,18 @@ const formatTime = (digit) => {
       fromatedDigitValue: 0,
     };
   }
+  if (typeof digit === 'object') {
 
+    const fromatedDigitValue = digit.hours + (digit.minutes / 100);
+
+    return {
+      totalMinutes: digit.totalMinutes,
+      hours: digit.hours,
+      minutes: digit.minutes,
+      formattedValue: `${digit.hours}${digit.minutes}`,
+      fromatedDigitValue,
+    };
+  }
   let hours;
   let minutes;
   let formattedValue;
@@ -47,8 +58,9 @@ const formatTime = (digit) => {
       const formattedMinutes = minutes ? `${minutes} m` : '';
       formattedValue = `${formattedHours}${formattedMinutes}`;
       const fromatedDigitValue = hours + (minutes / 100);
-
+      const totalMinutes = (hours * 60) + minutes;
       return {
+        totalMinutes,
         hours,
         minutes,
         formattedValue,
@@ -57,8 +69,9 @@ const formatTime = (digit) => {
     }
     hours = parseInt(tempDigit.match(/\d+/) && (tempDigit.match(/\d+/))[0], 10);
     formattedValue = hours ? `${hours} h` : '';
-
+    const totalMinutes = (hours * 60);
     return {
+      totalMinutes,
       hours,
       minutes: 0,
       formattedValue,
@@ -80,8 +93,9 @@ const formatTime = (digit) => {
   const formattedHours = hours ? `${hours} h ` : '';
   formattedValue = minutes ? `${formattedHours}${minutes} m` : `${formattedHours}`;
   const fromatedDigitValue = hours + (minutes / 100);
-
+  const totalMinutes = (hours * 60) + minutes;
   return {
+    totalMinutes,
     hours,
     minutes,
     formattedValue,

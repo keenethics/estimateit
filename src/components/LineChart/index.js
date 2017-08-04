@@ -1,9 +1,12 @@
+import { Field } from 'redux-form';
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Card, CardBlock } from 'reactstrap';
 import ReactHighcharts from 'react-highcharts';
 
+import Slider from '../Slider';
 
-export default class LineChart extends Component {
+class LineChart extends Component {
   constructor(props) {
     super(props);
 
@@ -18,11 +21,25 @@ export default class LineChart extends Component {
   }
 
   generateData() {
-    const data = this.props.labels.sort((a, b) => a - b)
-      .map((item, i) => [item, Math.round((100 * i / (this.props.labels.length - 1)) * 100) / 100]);
+    const { percents } = this.props;
+    const data = this.props.time.map((item, i) => [Math.round(item / 60), percents[i]]);
+    const {
+      probabilityTime,
+      probabilityPercent,
+      time,
+    } = this.props;
+
+    const veriticalLine = [
+      [Math.round(probabilityTime / 60), 0],
+      [Math.round(probabilityTime / 60), probabilityPercent],
+    ];
+    const horizontalLine = [
+      [Math.round(time[0] / 60), probabilityPercent],
+      [Math.round(probabilityTime / 60), probabilityPercent],
+    ];
+
     this.config = {
       chart: {
-        inverted: false,
         type: 'spline',
         inverted: false,
       },
@@ -60,10 +77,6 @@ export default class LineChart extends Component {
       legend: {
         enabled: false,
       },
-      tooltip: {
-        headerFormat: '<b>{series.name}</b><br/>',
-        pointFormat: '{point.x}h:  {point.y}%',
-      },
       plotOptions: {
         spline: {
           marker: {
@@ -71,25 +84,101 @@ export default class LineChart extends Component {
           },
         },
       },
-      series: [{
-        name: 'Probability',
-        data,
-      }],
+      series: [
+        {
+          name: 'Probability',
+          data,
+          tooltip: {
+            headerFormat: '<b>{series.name}</b><br/>',
+            pointFormat: '{point.x}h:  {point.y}%',
+          },
+          zIndex: 9999,
+        },
+        {
+          type: 'line',
+          data: veriticalLine,
+          lineWidth: 1,
+          color: 'black',
+          dashStyle: 'Dash',
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
+          },
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+        {
+          type: 'line',
+          data: horizontalLine,
+          lineWidth: 1,
+          color: 'black',
+          dashStyle: 'Dash',
+          marker: {
+            enabled: false,
+            states: {
+              hover: {
+                enabled: false,
+              },
+            },
+          },
+          states: {
+            hover: {
+              enabled: false,
+            },
+          },
+        },
+      ],
     };
   }
 
   render() {
     this.generateData();
+    const {
+      probabilityTime,
+      userCanEditThisEstimate,
+      actionChangeProbability,
+    } = this.props;
+
     return (
       <Card>
         <CardBlock>
           <ReactHighcharts
-            config={this.config}
+            width="800"
+            height="500"
             ref={this.getChart}
-            width="800" height="500"
+            config={this.config}
+          />
+        </CardBlock>
+        <CardBlock>
+          <Field
+            title="Probability"
+            component={Slider}
+            time={probabilityTime}
+            shortName="probability"
+            name="estimateOptions.probability"
+            disabled={!userCanEditThisEstimate}
+            handleChange={actionChangeProbability}
           />
         </CardBlock>
       </Card>
     );
   }
 }
+
+LineChart.propTypes = {
+  time: PropTypes.array.isRequired,
+  percents: PropTypes.array.isRequired,
+  probabilityTime: PropTypes.number.isRequired,
+  probabilityPercent: PropTypes.number.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
+  actionChangeProbability: PropTypes.func.isRequired,
+};
+
+export default LineChart;

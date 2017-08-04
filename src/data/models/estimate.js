@@ -69,7 +69,7 @@ const EstimateSchema = mongoose.Schema({
       type: String,
       default: 10,
     },
-    completing: {
+    probability: {
       type: String,
       default: 100,
     },

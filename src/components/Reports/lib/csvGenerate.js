@@ -20,7 +20,7 @@ export default function csv(columns, data, calculationData, separator = ',') {
   }
   const getSubTaskData = (subtasks) => {
     const regex = new RegExp(',', 'g');
-    const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), task.minimumHours, task.maximumHours].join(separator);
+    const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), task.minimumMinutes, task.maximumMinutes].join(separator);
     const assembleNo = (parentNo, No) => parentNo ? `${parentNo}.${No}` : No;
     const tasksToRows = (tasks, parentNo) => [].concat(
       ...tasks.map((task, i) => {

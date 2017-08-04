@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
-
+import { bindActionCreators } from 'redux';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
@@ -9,24 +8,31 @@ import Reports from '../Reports';
 import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
-import Calculation from '../Calculation';
+import Contributors from '../Contributors';
 import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
-import Contributors from '../Contributors';
 import { ESTIMATE_FORM } from '../../constants';
+import EstimateOptions from '../EstimateOptions';
+import * as actionsCalculate from '../../actions/Calculation';
+import parseMinutesToString from '../libs/parseMinutesToString';
 
 class Main extends Component {
   render() {
     const {
       time,
       tasks,
-      percent,
+      percents,
       moneyRate,
       totalHours,
       estimateId,
+      additionalTime,
+      probabilityTime,
       estimateOptions,
+      probabilityPercent,
+      actionChangeAdditionalTime,
+      actionChangeProbability,
       userCanEditThisEstimate = false,
-      devHours: {
+      devTimes: {
         minHours,
         maxHours,
       },
@@ -35,32 +41,38 @@ class Main extends Component {
     return (
       <Row className={styles.main}>
         <Col xs="12">
-          {
-            <LineChart labels={time} data={percent} />
-          }
-        </Col>
-        <Col xs="12">
           <Card className={styles.final}>
             <CardBlock className={styles.final__wrapper}>
               <div className={styles.final__result}>
                 <div className={styles.final__result_info}>
-                  Total developer min hours: {formatTime(minHours).formattedValue}
+                  Total developer min hours: {parseMinutesToString(minHours) || '0h'}
                 </div>
               </div>
               <div className={styles.final__result}>
                 <div
                   className={styles.final__result_info}
                 >
-                  Total developer max hours: {formatTime(maxHours).formattedValue}
+                  Total developer max hours: {parseMinutesToString(maxHours) || '0h'}
                 </div>
               </div>
             </CardBlock>
           </Card>
         </Col>
         <Col xs="12">
-          <Calculation
-            totalHours={totalHours}
-            estimateOptions={estimateOptions}
+          <LineChart
+            time={time}
+            percents={percents}
+            probabilityTime={probabilityTime}
+            probabilityPercent={probabilityPercent}
+            userCanEditThisEstimate={userCanEditThisEstimate}
+            actionChangeProbability={actionChangeProbability}
+          />
+        </Col>
+        <Col xs="12">
+          <EstimateOptions
+            additionalTime={additionalTime}
+            probabilityTime={probabilityTime}
+            actionChangeAdditionalTime={actionChangeAdditionalTime}
             userCanEditThisEstimate={userCanEditThisEstimate}
           />
         </Col>
@@ -100,9 +112,12 @@ Main.propTypes = {
 function mapStateToProps(state) {
   const { calculation: {
     time,
-    percent,
-    devHours,
+    percents,
+    devTimes,
     totalHours,
+    additionalTime,
+    probabilityTime,
+    probabilityPercent,
   } } = state;
   const { values: {
     tasks,
@@ -113,13 +128,23 @@ function mapStateToProps(state) {
   return {
     time,
     tasks,
-    percent,
-    devHours,
+    percents,
+    devTimes,
     moneyRate,
     totalHours,
+    additionalTime,
+    probabilityTime,
     estimateOptions,
+    probabilityPercent,
     userCanEditThisEstimate,
   };
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(Main));
+function mapDispatchToProps(dispatch) {
+  return { ...bindActionCreators(actionsCalculate, dispatch) };
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+  withStyles(styles)(Main),
+);

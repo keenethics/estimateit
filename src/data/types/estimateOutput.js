@@ -12,10 +12,10 @@ const TaskOutputType = new ObjectType({
     taskName: {
       type: StringType,
     },
-    minimumHours: {
+    minimumMinutes: {
       type: FloatType,
     },
-    maximumHours: {
+    maximumMinutes: {
       type: FloatType,
     },
     parent: {
@@ -45,7 +45,7 @@ const EstimateOptionsOutputType = new ObjectType({
     bugFixes: {
       type: FloatType,
     },
-    completing: {
+    probability: {
       type: FloatType,
     },
   },

@@ -6,7 +6,7 @@ export default [
       require('./dashboard').default,
       require('./login').default,
       require('./register').default,
-      require('./estimateGet').default,
+      require('./estimate').default,
       // require('./estimateCreate').default,
       require('./notFound').default,
     ],

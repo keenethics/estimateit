@@ -21,26 +21,26 @@ const estimateFormValues = gql`
         pm
         risks
         bugFixes
-        completing
+        probability
         __typename @skip(if: true)
       }
       tasks {
         taskName
         isChecked
-        minimumHours
-        maximumHours
+        minimumMinutes
+        maximumMinutes
         __typename @skip(if: true)
         tasks {
           taskName
           isChecked
-          minimumHours
-          maximumHours
+          minimumMinutes
+          maximumMinutes
           __typename @skip(if: true)
           tasks {
             taskName
             isChecked
-            minimumHours
-            maximumHours
+            minimumMinutes
+            maximumMinutes
             __typename @skip(if: true)
           }
         }

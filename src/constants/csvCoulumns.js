@@ -5,10 +5,10 @@ const columns = [[{
   id: 'taskName',
   displayName: 'Task',
 }, {
-  id: 'minimumHours',
+  id: 'minimumMinutes',
   displayName: 'Minimum hours',
 }, {
-  id: 'maximumHours',
+  id: 'maximumMinutes',
   displayName: 'Maximum hours',
 }, {
   id: 'tasks',

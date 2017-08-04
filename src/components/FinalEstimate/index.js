@@ -18,7 +18,7 @@ const FinalEstimate = ({ totalHours, moneyRate }) => {
       <CardBlock className={styles.final__wrapper}>
         <div className={styles.final__result}>
           <div className={styles.final__result_info}>
-            Total hours: {totalHours}
+            Total hours: {totalHours || '0h'}
           </div>
         </div>
         <div className={styles.final__result}>

@@ -92,7 +92,7 @@ class Dashboard extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    allEstimates: state.Main.allEstimates,
+    allEstimates: state.estimates.allEstimates,
   };
 }
 
