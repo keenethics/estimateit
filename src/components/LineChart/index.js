@@ -22,7 +22,7 @@ class LineChart extends Component {
 
   generateData() {
     const { percent } = this.props;
-    const data = this.props.time.map((item, i) => [item, percent[i]]);
+    const data = this.props.time.map((item, i) => [Math.round(item / 60), percent[i]]);
     const {
       probabilityTime,
       probabilityPercent,
@@ -30,12 +30,12 @@ class LineChart extends Component {
     } = this.props;
 
     const veriticalLine = [
-      [probabilityTime, 0],
-      [probabilityTime, probabilityPercent],
+      [Math.round(probabilityTime / 60), 0],
+      [Math.round(probabilityTime / 60), probabilityPercent],
     ];
     const horizontalLine = [
-      [time[0], probabilityPercent],
-      [probabilityTime, probabilityPercent],
+      [Math.round(time[0] / 60), probabilityPercent],
+      [Math.round(probabilityTime / 60), probabilityPercent],
     ];
 
     this.config = {
