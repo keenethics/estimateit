@@ -117,9 +117,11 @@ export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
 export const actionAddSubTask = ({ form, field }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
-    const parent = selector(getState(), field.replace(/.?tasks$/, ''));
+    const parent = field.replace(/.?tasks$/, '');
+    const parentObj = selector(getState(), parent);
 
-    if (!parent.tasks || !parent.tasks.length) {
+
+    if (!parentObj.tasks || !parentObj.tasks.length) {
       dispatch(actionChangeTaskHours({
         form,
         value: 0,

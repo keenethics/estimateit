@@ -48,6 +48,9 @@
 .subtasks {
   &__wrapper {
     position: relative;
+    display: flex;
+    flex-direction: row;
+    margin: 15px 0 10px 0;
   }
   &__checkbox {
     position: absolute;
@@ -56,10 +59,8 @@
     margin-top: 0;
   }
   &__item {
-    margin: 4px 8px 4px 0;
-    &:not(button) {
-      width: 100%;
-    }
+    margin: 0px 5px;
+    height: fit-content;
   }
 }
 
@@ -72,10 +73,10 @@
 }
 
 .input_group {
-  margin: 4px 8px 4px 0;
+  margin: 0;
 
   &_addon {
-    width: 60px;
+    width: fit-content !important;
   }
   &_addon:hover {
     cursor: default;

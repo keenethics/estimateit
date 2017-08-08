@@ -123,54 +123,51 @@ class Task extends React.Component {
                   className={styles.subtasks__item}
                   validate={[required, maxLength(100)]}
                 />
-                <div>
-                  <Field
-                    type="text"
-                    addon={'min'}
-                    fieldName="minimumMinutes"
-                    component={InputAndPopover}
-                    id={`${task}.minimumMinutes`}
-                    name={`${task}.minimumMinutes`}
+                <Field
+                  type="text"
+                  addon={'min'}
+                  fieldName="minimumMinutes"
+                  component={InputAndPopover}
+                  id={`${task}.minimumMinutes`}
+                  name={`${task}.minimumMinutes`}
+                  className={styles.subtasks__item}
+                  disabled={disabled || haveSubtask}
+                  actionChangeTaskHours={actionChangeTaskHours}
+                  validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumMinutes`)]}
+                />
+                <Field
+                  type="text"
+                  addon={'max'}
+                  fieldName="maximumMinutes"
+                  component={InputAndPopover}
+                  id={`${task}.maximumMinutes`}
+                  name={`${task}.maximumMinutes`}
+                  className={styles.subtasks__item}
+                  disabled={disabled || haveSubtask}
+                  validate={[taskHourValidation(disabled)]}
+                  actionChangeTaskHours={actionChangeTaskHours}
+                />
+                {
+                  (level < 2 && showButton) &&
+                  <Button
+                    color="danger"
                     className={styles.subtasks__item}
-                    disabled={disabled || haveSubtask}
-                    actionChangeTaskHours={actionChangeTaskHours}
-                    validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumMinutes`)]}
-                  />
-                  <Field
-                    type="text"
-                    addon={'max'}
-                    fieldName="maximumMinutes"
-                    component={InputAndPopover}
-                    id={`${task}.maximumMinutes`}
-                    name={`${task}.maximumMinutes`}
+                    onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
+                  >
+                    Add subtask
+                  </Button>
+                }
+                {
+                  showButton &&
+                  <Button
+                    color="danger"
                     className={styles.subtasks__item}
-                    disabled={disabled || haveSubtask}
-                    validate={[taskHourValidation(disabled)]}
-                    actionChangeTaskHours={actionChangeTaskHours}
-                  />
-                </div>
+                    onClick={() => actionRemoveTask({ index, form, field: task })}
+                  >
+                    Delete
+                  </Button>
+                }
               </div>
-              {
-                (level < 2 && showButton) &&
-                <Button
-                  color="danger"
-                  className={styles.subtasks__item}
-                  onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
-                >
-                  Add subtask
-                </Button>
-              }
-              {
-                showButton &&
-                <Button
-                  color="danger"
-                  className={styles.subtasks__item}
-                  onClick={() => actionRemoveTask({ index, form, field: task })}
-                >
-                  Delete
-                </Button>
-              }
-
               <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
                 <FieldArray
                   level={level + 1}

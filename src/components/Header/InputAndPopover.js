@@ -61,7 +61,9 @@ class InputAndPopover extends React.Component {
     const { value } = this.state;
 
     return (
-      <div>
+      <div
+        className={styles.subtasks__item}
+      >
         <div>
           <InputGroup id={newId} className={styles.input_group}>
             <Input
@@ -77,14 +79,6 @@ class InputAndPopover extends React.Component {
             >
               {addon}
             </InputGroupAddon>
-            <InputGroupAddon
-              onClick={this.toggle}
-              id="isPopoverOpenForMinHours"
-              className={styles.input_group_time}
-            >
-              &#9719;
-            </InputGroupAddon>
-
           </InputGroup>
         </div>
         <div>
