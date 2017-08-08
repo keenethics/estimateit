@@ -151,8 +151,11 @@ class Contributors extends React.Component {
 
     return ownerObject && (
       <ListGroupItem className={styles.owner_item}>
-        {ownerObject.name}
-        <span>Owner</span>
+        <span>
+          {ownerObject.name}
+          <span className={styles.emails}> ({ownerObject.email})</span>
+        </span>
+        <span className={styles.owner_item_label}>Owner</span>
       </ListGroupItem>
     );
   }
@@ -160,9 +163,12 @@ class Contributors extends React.Component {
   renderContributors() {
     const { contributors = [] } = this.props;
 
-    return contributors.map(({ username, userId }) => (
+    return contributors.map(({ username, userId, userEmail }) => (
       <ListGroupItem className={styles.contributor_item} key={userId}>
-        {username}
+        <span>
+          {username}
+          <span className={styles.emails}> ({userEmail})</span>
+        </span>
         <Button
           size="sm"
           id={userId}
@@ -205,7 +211,7 @@ class Contributors extends React.Component {
             {this.renderOwner()}
             {this.renderContributors()}
           </ListGroup>
-          <Notification ref={ref => this.notificationSystem = ref} />
+          <Notification ref={ref => (this.notificationSystem = ref)} />
         </CardBlock>
       </Card>
     );
@@ -215,16 +221,16 @@ class Contributors extends React.Component {
 Contributors.propTypes = {
   reset: PropTypes.func.isRequired,
   owner: PropTypes.string.isRequired,
-  usersList: PropTypes.object.isRequired,
   estimateId: PropTypes.string.isRequired,
   handleSubmit: PropTypes.func.isRequired,
-  contributors: PropTypes.array.isRequired,
   estimateAddNewContributor: PropTypes.func.isRequired,
   estimateRemoveContributor: PropTypes.func.isRequired,
+  usersList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  contributors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 
-Contributors = reduxForm({
+const ContributorsWrapper = reduxForm({
   form: ADD_COTRIBUTORS_TO_ESTIMATE_FORM,
 })(Contributors);
 
@@ -238,4 +244,4 @@ export default compose(
   graphql(usersList, { name: 'usersList' }),
   graphql(estimateAddNewContributor, { name: 'estimateAddNewContributor' }),
   graphql(estimateRemoveContributor, { name: 'estimateRemoveContributor' }),
-)(withStyles(styles)(Contributors));
+)(withStyles(styles)(ContributorsWrapper));

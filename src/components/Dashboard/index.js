@@ -18,8 +18,8 @@ class Dashboard extends React.Component {
   };
 
   static propTypes = {
-    allEstimates: PropTypes.array,
     mutate: PropTypes.func.isRequired,
+    allEstimates: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   static defaultProps = {
