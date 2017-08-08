@@ -7,9 +7,9 @@ export const requiredSelect = value =>
 export const taskHourValidation = haveSubTasks =>
   value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
-export const mixShouldBeLessThenMax = maxTimeId =>
+export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
   (value, allValues) => {
-    if (!allValues.tasks.length) return undefined;
+    if (!allValues.tasks.length || haveSubtask) return undefined;
 
     const address = maxTimeId
       .replace(/\]/g, '')
