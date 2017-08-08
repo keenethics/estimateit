@@ -58,7 +58,7 @@ class Reports extends Component {
   }
 
   estimateUpdate(values) {
-    const estimateId = values._id;
+    const { estimateId } = this.props;
 
     this.props.estimateUpdate({
       variables: { input: { ...values } },
@@ -304,7 +304,7 @@ class Reports extends Component {
             <Button color="secondary" onClick={this.toggleModal}>No</Button>
           </ModalFooter>
         </Modal>
-        <Notification ref={ref => this.notificationSystem = ref} />
+        <Notification ref={ref => (this.notificationSystem = ref)} />
       </div>
     );
   }
@@ -316,12 +316,12 @@ Reports.contextTypes = {
 };
 
 Reports.propTypes = {
-  estimateId: PropTypes.string,
-  tasks: PropTypes.array.isRequired,
+  estimateId: PropTypes.string.isRequired,
   estimateUpdate: PropTypes.func.isRequired,
   estimateRemove: PropTypes.func.isRequired,
-  estimateOptions: PropTypes.object.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
+  tasks: PropTypes.arrayOf(PropTypes.any).isRequired,
+  estimateOptions: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
 export default compose(

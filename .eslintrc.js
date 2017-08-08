@@ -54,6 +54,12 @@ module.exports = {
           allow: ['warn', 'error', 'info'],
         },
       ],
+      'no-underscore-dangle': [
+        'error',
+        {
+          'allow': ['_id'],
+        },
+      ],
 
       // Allow js files to use jsx syntax, too
       'react/jsx-filename-extension': 'off',

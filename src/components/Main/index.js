@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
@@ -9,7 +10,6 @@ import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
 import Contributors from '../Contributors';
-import formatTime from '../libs/formatTime';
 import FinalEstimate from '../FinalEstimate';
 import { ESTIMATE_FORM } from '../../constants';
 import EstimateOptions from '../EstimateOptions';
@@ -107,6 +107,20 @@ class Main extends Component {
 }
 
 Main.propTypes = {
+  totalHours: PropTypes.number.isRequired,
+  estimateId: PropTypes.string.isRequired,
+  additionalTime: PropTypes.number.isRequired,
+  probabilityTime: PropTypes.number.isRequired,
+  probabilityPercent: PropTypes.number.isRequired,
+  userCanEditThisEstimate: PropTypes.bool.isRequired,
+  tasks: PropTypes.objectOf(PropTypes.any).isRequired,
+  time: PropTypes.arrayOf(PropTypes.number).isRequired,
+  actionChangeAdditionalTime: PropTypes.func.isRequired,
+  actionChangeProbabilityTime: PropTypes.func.isRequired,
+  percents: PropTypes.arrayOf(PropTypes.number).isRequired,
+  moneyRate: PropTypes.arrayOf(PropTypes.number).isRequired,
+  devTimes: PropTypes.objectOf(PropTypes.number).isRequired,
+  estimateOptions: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
 function mapStateToProps(state) {

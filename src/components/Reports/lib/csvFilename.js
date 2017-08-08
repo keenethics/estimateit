@@ -1,13 +1,14 @@
 export default function downloadCsv(prefix = true, filename = 'estimate') {
+  let fn = filename;
   if (filename.indexOf('.csv') === -1) {
-    filename += '.csv';
+    fn += '.csv';
   }
   if (prefix) {
     if (typeof prefix === 'string' || typeof prefix === 'number') {
-      filename = `${prefix}_${filename}`;
+      fn = `${prefix}_${filename}`;
     } else {
-      filename = `${(new Date()).getTime()}_${filename}`;
+      fn = `${(new Date()).getTime()}_${filename}`;
     }
   }
-  return filename;
+  return fn;
 }

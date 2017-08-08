@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Creatable } from 'react-select';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
@@ -8,11 +9,14 @@ import s from './styles.scss';
 class MultiSelect extends Component {
   constructor(props) {
     super(props);
+
+    this.multiChangeHandler = this.multiChangeHandler.bind(this);
   }
 
-  multiChangeHandler(handleChange) {
+  multiChangeHandler() {
+    const { input: { onChange } } = this.props;
     return function handleMultiHandler(values) {
-      handleChange(values.map(value => value.value));
+      onChange(values.map(value => value.value));
     };
   }
 
@@ -20,13 +24,11 @@ class MultiSelect extends Component {
     const {
       meta,
       multi,
-      titles,
-      handler,
       options,
       className,
       searchable,
       placeholder,
-      input: { name, value, onBlur, onChange },
+      input: { name, value, onBlur },
       ...elements
     } = this.props;
 
@@ -48,7 +50,7 @@ class MultiSelect extends Component {
           searchable={searchable}
           placeholder={placeholder}
           onBlur={() => onBlur(value)}
-          onChange={this.multiChangeHandler(onChange)}
+          onChange={this.multiChangeHandler}
           {...elements}
         />
         <ValidationState {...meta} />
@@ -56,5 +58,16 @@ class MultiSelect extends Component {
     );
   }
 }
+
+MultiSelect.propTypes = {
+  multi: PropTypes.bool.isRequired,
+  searchable: PropTypes.bool.isRequired,
+  className: PropTypes.string.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  meta: PropTypes.objectOf(PropTypes.any).isRequired,
+  input: PropTypes.objectOf(PropTypes.any).isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
 
 export default withStyles(styles, s)(MultiSelect);

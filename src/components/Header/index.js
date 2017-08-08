@@ -95,7 +95,7 @@ class Header extends Component {
       <div>
         <Row className={styles.header}>
           <Col xs="12">
-            <img src={require('../../../public/logo_black.jpg')} height={30} />
+            <img src={require('../../../public/logo_black.jpg')} height={30} alt="" />
             <CardTitle>ESTIMATE</CardTitle>
           </Col>
           <Col
@@ -155,7 +155,6 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  fields: PropTypes.array,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 

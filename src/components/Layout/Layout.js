@@ -17,15 +17,15 @@ class Layout extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
   };
 
-  getChildContext() {
-    const { handleSubmit } = this.props;
-    return { handleSubmit };
-  }
-
-  handleOnKeyPress(event) {
+  static handleOnKeyPress(event) {
     if (event.key === 'Enter') {
       event.preventDefault();
     }
+  }
+
+  getChildContext() {
+    const { handleSubmit } = this.props;
+    return { handleSubmit };
   }
 
   render() {
@@ -59,7 +59,7 @@ Layout.childContextTypes = {
 };
 
 
-Layout = reduxForm({
+const LayoutWrapper = reduxForm({
   form: ESTIMATE_FORM,
   enableReinitialize: false,
   onSubmitFail: scrollToItem,
@@ -83,4 +83,4 @@ const initializeValues = () => {
 export default compose(
   connect(initializeValues),
   withStyles(normalizeCss, s),
-)(Layout);
+)(LayoutWrapper);

@@ -17,7 +17,6 @@ import { required, currency } from '../libs/validation';
 class EstimateOptions extends Component {
   render() {
     const {
-      totalHours,
       additionalTime,
       userCanEditThisEstimate,
       actionChangeAdditionalTime,
@@ -90,7 +89,9 @@ class EstimateOptions extends Component {
 
 
 EstimateOptions.propTypes = {
+  additionalTime: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
+  actionChangeAdditionalTime: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(EstimateOptions);
