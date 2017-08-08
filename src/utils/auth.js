@@ -40,11 +40,11 @@ passport.use(
           newUser.local.name = req.body.name;
           newUser.local.email = username;
           newUser.local.password = newUser.generateHash(password);
-          return newUser.save((err, res) => {
-            if (err) {
+          return newUser.save((error, res) => {
+            if (error) {
               return done(null, false, {
                 success: false,
-                message: `error saving user, ${err}`,
+                message: `error saving user, ${error}`,
               });
             }
             const { email, _id, createdAt } = res;
@@ -68,11 +68,11 @@ passport.use(
           newUser.local.name = req.body.name;
           newUser.local.email = username;
           newUser.local.password = newUser.generateHash(password);
-          return newUser.save((err, res) => {
-            if (err) {
+          return newUser.save((error, res) => {
+            if (error) {
               return done(null, false, {
                 success: false,
-                message: `Error saving user, ${err}`,
+                message: `Error saving user, ${error}`,
               });
             }
             const { _id, email, createdAt } = res;
@@ -156,14 +156,15 @@ passport.use(
               }
               if (user) {
                 if (!user.google.token) {
-                  user.google.token = accessToken;
-                  user.google.name = profile.displayName;
-                  user.google.email = (profile.emails[0].value || '').toLowerCase();
-                  user.save((err) => {
-                    if (err) {
+                  const u = user;
+                  u.google.token = accessToken;
+                  u.google.name = profile.displayName;
+                  u.google.email = (profile.emails[0].value || '').toLowerCase();
+                  u.save((error) => {
+                    if (error) {
                       return done(null, false, {
                         success: false,
-                        message: err,
+                        message: error,
                       });
                     }
                     return done(null, {
@@ -184,9 +185,9 @@ passport.use(
               newUser.google.token = accessToken;
               newUser.google.name = profile.displayName;
               newUser.google.email = (profile.emails[0].value || '').toLowerCase();
-              newUser.save((err) => {
-                if (err) {
-                  return done(err);
+              newUser.save((error) => {
+                if (error) {
+                  return done(error);
                 }
 
                 return done(null, {
