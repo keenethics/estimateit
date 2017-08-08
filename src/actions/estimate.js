@@ -1,6 +1,6 @@
 import * as types from '../constants/actionTypes';
 
-export default function actionAddGeneralEstimateInfo(value) {
+export default function actionChangeGeneralEstimateInfo(value) {
   return {
     type: types.CHANGE_GENERAL_ESTIMATE_INFO,
     payload: {

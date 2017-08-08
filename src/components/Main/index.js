@@ -30,7 +30,7 @@ class Main extends Component {
       estimateOptions,
       probabilityPercent,
       actionChangeAdditionalTime,
-      actionChangeProbability,
+      actionChangeProbabilityTime,
       userCanEditThisEstimate = false,
       devTimes: {
         minHours,
@@ -65,7 +65,7 @@ class Main extends Component {
             probabilityTime={probabilityTime}
             probabilityPercent={probabilityPercent}
             userCanEditThisEstimate={userCanEditThisEstimate}
-            actionChangeProbability={actionChangeProbability}
+            actionChangeProbabilityTime={actionChangeProbabilityTime}
           />
         </Col>
         <Col xs="12">

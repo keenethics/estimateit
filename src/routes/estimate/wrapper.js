@@ -9,7 +9,7 @@ import {
   estimateFormValues,
   estimateGeneralInfo,
 } from '../../data/queriesClient';
-import actionAddGeneralEstimateInfo from '../../actions/estimate';
+import actionChangeGeneralEstimateInfo from '../../actions/estimate';
 
 
 class Wrapper extends React.Component {
@@ -42,7 +42,7 @@ class Wrapper extends React.Component {
     const { estimate: generalInfo, loading: loadingGeneralInfo } = nextProps.estimateGeneralInfo;
 
     if (!loadingGeneralInfo && JSON.stringify(generalInfo) !== JSON.stringify(oldGeneralInfo)) {
-      this.props.dispatch(actionAddGeneralEstimateInfo(generalInfo));
+      this.props.dispatch(actionChangeGeneralEstimateInfo(generalInfo));
     }
   }
 
@@ -57,7 +57,7 @@ class Wrapper extends React.Component {
       },
       payload: estimate,
     });
-    dispatch(actionGeneralCalculation(ESTIMATE_FORM));
+    dispatch(actionGeneralCalculation({ form: ESTIMATE_FORM }));
   }
 
   render() {

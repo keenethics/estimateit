@@ -143,7 +143,7 @@ class LineChart extends Component {
     const {
       probabilityTime,
       userCanEditThisEstimate,
-      actionChangeProbability,
+      actionChangeProbabilityTime,
     } = this.props;
 
     return (
@@ -164,7 +164,7 @@ class LineChart extends Component {
             shortName="probability"
             name="estimateOptions.probability"
             disabled={!userCanEditThisEstimate}
-            handleChange={actionChangeProbability}
+            handleChange={actionChangeProbabilityTime}
           />
         </CardBlock>
       </Card>
@@ -173,12 +173,12 @@ class LineChart extends Component {
 }
 
 LineChart.propTypes = {
-  time: PropTypes.array.isRequired,
-  percents: PropTypes.array.isRequired,
   probabilityTime: PropTypes.number.isRequired,
   probabilityPercent: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
-  actionChangeProbability: PropTypes.func.isRequired,
+  time: PropTypes.arrayOf(PropTypes.number).isRequired,
+  actionChangeProbabilityTime: PropTypes.func.isRequired,
+  percents: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default LineChart;

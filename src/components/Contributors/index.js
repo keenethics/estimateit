@@ -161,7 +161,7 @@ class Contributors extends React.Component {
     const { contributors = [] } = this.props;
 
     return contributors.map(({ username, userId }) => (
-      <ListGroupItem className={styles.contributor_item}>
+      <ListGroupItem className={styles.contributor_item} key={userId}>
         {username}
         <Button
           size="sm"

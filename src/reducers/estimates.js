@@ -1,12 +1,12 @@
 import {
-  ADD_DASHBOARD_STATE,
+  ADD_DASHBOARD_DATA,
 } from '../constants/actionTypes';
 
 import initialState from './initialState';
 
 export function estimates(state = initialState.estimates, action) {
   switch (action.type) {
-    case ADD_DASHBOARD_STATE:
+    case ADD_DASHBOARD_DATA:
       return Object.assign({}, state, action.data);
 
     default:

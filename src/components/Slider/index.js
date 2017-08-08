@@ -51,12 +51,9 @@ Slider.propTypes = {
   title: PropTypes.string.isRequired,
   disabled: PropTypes.bool.isRequired,
   shortName: PropTypes.string.isRequired,
-  totalHours: PropTypes.number.isRequired,
   handleChange: PropTypes.func.isRequired,
-  probabilityTime: PropTypes.number.isRequired,
-  actionChangeAdditionalTime: PropTypes.func.isRequired,
-  meta: PropTypes.objectOf(PropTypes.string).isRequired,
-  input: PropTypes.objectOf(PropTypes.string).isRequired,
+  meta: PropTypes.objectOf(PropTypes.any).isRequired,
+  input: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 export default withStyles(styles)(Slider);

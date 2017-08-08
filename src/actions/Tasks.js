@@ -7,7 +7,7 @@ import {
 import { actionGeneralCalculation } from './Calculation';
 
 
-const changeWrapper = (dispatch, form, field, payload, touch = true) => {
+const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
   dispatch({
     type: '@@redux-form/CHANGE',
     meta: {
@@ -20,33 +20,33 @@ const changeWrapper = (dispatch, form, field, payload, touch = true) => {
   });
 };
 
-export const actionToggleTask = ({ form, field, payload }) =>
+export const actionToggleTask = ({ form, field, checked }) =>
   (dispatch, getState) => {
+    const sign = checked || -1;
     const selector = formValueSelector(form);
-    const removedTask = selector(getState(), field);
+    const toggledTask = selector(getState(), field);
     const {
-      maximumMinutes: removedMaxHours = 0,
-      minimumMinutes: removedMinHours = 0,
-    } = removedTask;
+      minimumMinutes: toggledMinMinutes = 0,
+      maximumMinutes: toggledMaxMinutes = 0,
+    } = toggledTask;
 
-    let address = field.replace(/.?tasks\[\d+\]$/, '');
+    let parentField = field.replace(/.?tasks\[\d+\]$/, '');
+    // modify all parent tasks
+    while (parentField) {
+      const parent = selector(getState(), parentField);
+      const { isChecked, minimumMinutes = 0, maximumMinutes = 0 } = parent;
+      const minPayload = minimumMinutes + (sign * toggledMinMinutes);
+      const maxPayload = maximumMinutes + (sign * toggledMaxMinutes);
 
-    while (address) {
-      const element = selector(getState(), address);
-
-      const { isChecked, minimumMinutes = 0, maximumMinutes = 0 } = element;
-      const minPayload = minimumMinutes + ((payload || -1) * removedMinHours);
-      const maxPayload = maximumMinutes + ((payload || -1) * removedMaxHours);
-
-      changeWrapper(dispatch, form, `${address}.minimumMinutes`, minPayload);
-      changeWrapper(dispatch, form, `${address}.maximumMinutes`, maxPayload);
+      changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: minPayload });
+      changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, pauload: maxPayload });
 
       if (!isChecked) break;
 
-      address = address.replace(/\.?tasks\[\d+\]$/, '');
+      parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(actionGeneralCalculation(form));
+    dispatch(actionGeneralCalculation({ form }));
   };
 
 
@@ -64,69 +64,73 @@ export const actionRemoveTask = ({ form, field, index }) =>
 
     if (!removedIsChecked) return null;
 
-    let address = field.replace(/.?tasks\[\d+\]$/, '');
+    let parentField = field.replace(/.?tasks\[\d+\]$/, '');
 
-    while (address) {
-      const element = selector(getState(), address);
-      const { isChecked, minimumMinutes, maximumMinutes } = element;
+    // modify all parent tasks
+    while (parentField) {
+      const parent = selector(getState(), parentField);
+      const { isChecked, minimumMinutes, maximumMinutes } = parent;
       const minPayload = minimumMinutes - removedMinHours;
       const maxPayload = maximumMinutes - removedMaxHours;
 
-      changeWrapper(dispatch, form, `${address}.minimumMinutes`, minPayload);
-      changeWrapper(dispatch, form, `${address}.maximumMinutes`, maxPayload);
+      changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: minPayload });
+      changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, payload: maxPayload });
+
       if (!isChecked) break;
 
-      address = address.replace(/\.?tasks\[\d+\]$/, '');
+      parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(actionGeneralCalculation(form));
+    dispatch(actionGeneralCalculation({ form }));
+
+    return null;
   };
 
-export const actionChangeTaskHours = ({ form, field, payload }) =>
+export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     let oldValue = selector(getState(), field) || 0;
-    const changeType = field.match(/minimumMinutes$|maximumMinutes$/)[0];
-    const difference = payload - oldValue;
-    changeWrapper(dispatch, form, field, payload);
+    const difference = value - oldValue;
 
-    let address = field.replace(/\.minimumMinutes$|\.maximumMinutes$/, '')
+    changeWrapper({ dispatch, form, field, payload: value });
+
+    let parentField = field.replace(/\.minimumMinutes$|\.maximumMinutes$/, '')
       .replace(/.?tasks\[\d+\]$/, '');
 
-    // change values of all parent tasks
-
-    while (address) {
-      const element = selector(getState(), address);
-      oldValue = element[changeType] || 0;
+    // modify all parent tasks
+    while (parentField) {
+      const parent = selector(getState(), parentField);
+      oldValue = parent[fieldName] || 0;
       const newValue = oldValue + difference;
 
-      changeWrapper(dispatch, form, `${address}.${changeType}`, newValue);
+      changeWrapper({ dispatch, form, field: `${parentField}.${fieldName}`, payload: newValue });
 
-      if (!element.isChecked) break;
+      if (!parent.isChecked) break;
 
-      address = address.replace(/\.?tasks\[\d+\]$/, '');
+      parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
     }
 
-    dispatch(actionGeneralCalculation(form));
+    dispatch(actionGeneralCalculation({ form }));
   };
 
 
 export const actionAddSubTask = ({ form, field }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
-    const parentTask = field.replace(/.?tasks$/, '');
-    const parentTaskObj = selector(getState(), parentTask);
+    const parent = selector(getState(), field.replace(/.?tasks$/, ''));
 
-    if (!parentTaskObj.tasks || !parentTaskObj.tasks.length) {
+    if (!parent.tasks || !parent.tasks.length) {
       dispatch(actionChangeTaskHours({
         form,
-        payload: 0,
-        field: `${parentTask}.minimumMinutes`,
+        value: 0,
+        fieldName: 'minimumMinutes',
+        field: `${parent}.minimumMinutes`,
       }));
       dispatch(actionChangeTaskHours({
         form,
-        payload: 0,
-        field: `${parentTask}.maximumMinutes`,
+        value: 0,
+        fieldName: 'maximumMinutes',
+        field: `${parent}.maximumMinutes`,
       }));
     }
 

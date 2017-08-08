@@ -90,7 +90,6 @@ class EstimateOptions extends Component {
 
 
 EstimateOptions.propTypes = {
-  totalHours: PropTypes.number.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
 };
 

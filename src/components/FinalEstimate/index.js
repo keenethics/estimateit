@@ -32,7 +32,7 @@ const FinalEstimate = ({ totalHours, moneyRate }) => {
 };
 
 FinalEstimate.propTypes = {
-  moneyRate: PropTypes.number.isRequired,
+  moneyRate: PropTypes.string.isRequired,
   totalHours: PropTypes.number.isRequired,
 };
 

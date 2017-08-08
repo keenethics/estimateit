@@ -29,7 +29,7 @@ class Task extends React.Component {
 
   handleToggleCheckbox(field, event) {
     const { store } = this.context;
-    const { target: { checked: payload } } = event;
+    const { target: { checked } } = event;
     const { meta: { form }, actionToggleTask } = this.props;
 
     store.dispatch({
@@ -40,10 +40,10 @@ class Task extends React.Component {
         field: `${field}isChecked`,
         persistentSubmitErrors: false,
       },
-      payload,
+      payload: checked,
     });
 
-    actionToggleTask({ form, field, payload });
+    actionToggleTask({ form, field, checked });
   }
 
   handleBlurCheckbox(field) {
@@ -94,7 +94,7 @@ class Task extends React.Component {
         }
         {fields.map((task, index) => {
           const taskObj = selector(getState(), task);
-          const haveSubtask = taskObj.tasks && taskObj.tasks.length;
+          const haveSubtask = !!(taskObj.tasks && taskObj.tasks.length);
 
           return (
             <FormGroup
@@ -127,24 +127,26 @@ class Task extends React.Component {
                   <Field
                     type="text"
                     addon={'min'}
+                    fieldName="minimumMinutes"
                     component={InputAndPopover}
                     id={`${task}.minimumMinutes`}
                     name={`${task}.minimumMinutes`}
-                    actionChangeTaskHours={actionChangeTaskHours}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
+                    actionChangeTaskHours={actionChangeTaskHours}
                     validate={[taskHourValidation(disabled), mixShouldBeLessThenMax(`${task}.maximumMinutes`)]}
                   />
                   <Field
                     type="text"
                     addon={'max'}
+                    fieldName="maximumMinutes"
                     component={InputAndPopover}
                     id={`${task}.maximumMinutes`}
                     name={`${task}.maximumMinutes`}
-                    actionChangeTaskHours={actionChangeTaskHours}
                     className={styles.subtasks__item}
                     disabled={disabled || haveSubtask}
                     validate={[taskHourValidation(disabled)]}
+                    actionChangeTaskHours={actionChangeTaskHours}
                   />
                 </div>
               </div>
@@ -163,7 +165,7 @@ class Task extends React.Component {
                 <Button
                   color="danger"
                   className={styles.subtasks__item}
-                  onClick={() => actionRemoveTask({ index, form, field: task, level })}
+                  onClick={() => actionRemoveTask({ index, form, field: task })}
                 >
                   Delete
                 </Button>
@@ -194,14 +196,14 @@ Task.contextTypes = {
 };
 
 Task.propTypes = {
-  meta: PropTypes.object.isRequired,
   level: PropTypes.number.isRequired,
-  fields: PropTypes.object.isRequired,
-  actionChangeTaskHours: PropTypes.func.isRequired,
   actionRemoveTask: PropTypes.func.isRequired,
   actionToggleTask: PropTypes.func.isRequired,
   actionAddSubTask: PropTypes.func.isRequired,
+  actionChangeTaskHours: PropTypes.func.isRequired,
   userCanEditThisEstimate: PropTypes.bool.isRequired,
+  meta: PropTypes.objectOf(PropTypes.any).isRequired,
+  fields: PropTypes.objectOf(PropTypes.any).isRequired,
 };
 
 function mapStateToProps() {

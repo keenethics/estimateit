@@ -62,14 +62,13 @@ export const actionCalculateTotalHours = () =>
 
     let additionalMinutes = 0;
     _.keys(additionalTime).forEach((field) => {
-      additionalMinutes = additionalMinutes + additionalTime[field];
+      additionalMinutes += additionalTime[field];
     });
 
-    const a = additionalMinutes + probabilityTime;
-    const minutes = a % 60;
-    const res = ((a - minutes) / 60);
-
-    const totalHours = minutes >= 30 ? res + 1 : res;
+    const totalTime = additionalMinutes + probabilityTime;
+    const minutes = totalTime % 60;
+    let totalHours = ((totalTime - minutes) / 60);
+    totalHours = minutes >= 30 ? totalHours + 1 : totalHours;
 
     dispatch({
       type: CALCULATE_TOTOAL_HOURS,
@@ -94,16 +93,16 @@ export const actionChangeAdditionalTime = ({ field, form }) =>
       },
     });
 
-    dispatch(actionCalculateTotalHours(form));
+    dispatch(actionCalculateTotalHours());
   };
 
 
-export const actionChangeProbability = ({ form }) =>
+export const actionChangeProbabilityTime = ({ form }) =>
   (dispatch, getState) => {
     const state = getState();
     const { calculation: { time, percents, additionalTime } } = state;
 
-    const { values: { estimateOptions: { probability } } } = state.form[form];
+    const { probability } = state.form[form].values.estimateOptions;
 
 
     let highestIndex = percents.findIndex(item => item >= probability);
@@ -126,14 +125,13 @@ export const actionChangeProbability = ({ form }) =>
       dispatch(actionChangeAdditionalTime({ field, form })),
     );
 
-    dispatch(actionCalculateTotalHours(form));
+    dispatch(actionCalculateTotalHours());
   };
 
-export const actionGeneralCalculation = form =>
+export const actionGeneralCalculation = ({ form }) =>
   (dispatch, getState) => {
     const { values: { tasks } } = getState().form[form];
     const checkedTasks = tasks.filter(({ isChecked }) => isChecked);
-
     const time = actionCalculateAllPossibilityTimes(checkedTasks);
     const percents = time.map((item, i) =>
       Math.round((100 * i) / (time.length - 1)),
@@ -152,5 +150,5 @@ export const actionGeneralCalculation = form =>
         devTimes,
       },
     });
-    dispatch(actionChangeProbability({ form }));
+    dispatch(actionChangeProbabilityTime({ form }));
   };
