@@ -20,7 +20,7 @@ import createApolloClient from './core/createApolloClient/server';
 import createFetch from './createFetch';
 import router from './router';
 import schema from './data/schema';
-import User from './models/user';
+import User from './data/models/user';
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';

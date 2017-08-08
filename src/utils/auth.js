@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import { OAuth2Strategy } from 'passport-google-oauth';
-import User from '../models/user';
+import User from '../data/models/user';
 import config from '../config';
 
 const LocalStrategy = passportLocal.Strategy;

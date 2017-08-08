@@ -1,11 +1,10 @@
 import {
   GraphQLList as ListType,
-  GraphQLString as StringType,
 } from 'graphql';
 import {
   UsersOutputType,
 } from '../types';
-import Users from '../../models/user';
+import Users from '../../data/models/user';
 import {
   TokenError,
   MongoError,
