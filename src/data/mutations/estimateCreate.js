@@ -1,4 +1,4 @@
-import Estimate from '../models';
+import { Estimate } from '../models';
 import { UserError } from '../errors';
 import { EstimateCreateType } from '../types';
 

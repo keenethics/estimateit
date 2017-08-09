@@ -2,7 +2,7 @@ import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
-import Estimate from '../models';
+import { Estimate } from '../models';
 
 import {
   UserError,
@@ -11,7 +11,7 @@ import {
 } from '../errors';
 import { EstimateAddNewContributor } from '../types';
 import sendEmail from '../../core/sendEmail';
-
+console.log(Estimate);
 const estimateAddNewContributor = {
   type: BoolType,
   args: {
@@ -21,14 +21,19 @@ const estimateAddNewContributor = {
   },
   async resolve(
     { request: { user, headers } },
-    { input: { estimateId, username, userId, userEmail } },
+    { input: { estimateId, name, _id, email, newUser } },
   ) {
     if (!user) {
       throw new UserError({});
     }
 
+    console.log(estimateId);
+    console.log(name);
+    console.log(_id);
+    console.log(email);
+    console.log(newUser);
     const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
-
+    //
     const currentUserId = user._id.toString();
     const userCanNotEditThisEstimate =
           !(owner._id === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
@@ -37,22 +42,24 @@ const estimateAddNewContributor = {
       throw new AccessDenied({});
     }
 
-    if (_.findWhere(contributors, { userId })) {
+    if (_.findWhere(contributors, { _id })) {
       throw new MongoError({ message: 'This users alreday added' });
     }
+    if (newUser) {
 
+    }
     try {
-      const { ok } = await Estimate.update(
-        { _id: estimateId },
-        { $push: { contributors: { userId, username, userEmail } } },
-      );
+      // const { ok } = await Estimate.update(
+      //   { _id: estimateId },
+      //   { $push: { contributors: { userId, username, userEmail } } },
+      // );
+      //
+      // sendEmail({
+      //   emails: userEmail,
+      //   text: `Somebody added you to the estimate ${headers.referer}`,
+      // });
 
-      sendEmail({
-        emails: userEmail,
-        text: `Somebody added you to the estimate ${headers.referer}`,
-      });
-
-      return ok;
+      return true;
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

@@ -40,7 +40,8 @@ export class SelectAsync extends React.Component {
     return usersList.filter(({ _id }) =>
       (!_.findWhere(contributors, { userId: _id }) && _id !== owner._id),
     )
-    .map(({ _id, email }) => ({
+    .map(({ _id, email, name }) => ({
+      name,
       value: _id,
       label: email,
     }));

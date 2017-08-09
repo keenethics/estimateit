@@ -6,7 +6,7 @@ import {
 const EstimateRemoveContributor = new InputObjectType({
   name: 'estimateRemoveContributor',
   fields: {
-    userId: {
+    _id: {
       type: StringType,
     },
     estimateId: {

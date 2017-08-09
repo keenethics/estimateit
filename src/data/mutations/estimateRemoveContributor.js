@@ -2,7 +2,7 @@ import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
-import Estimate from '../models';
+import { Estimate } from '../models';
 import {
   UserError,
   MongoError,
@@ -17,7 +17,7 @@ const estimateRemoveContributor = {
       type: EstimateRemoveContributor,
     },
   },
-  async resolve({ request: { user } }, { input: { userId, estimateId } }) {
+  async resolve({ request: { user } }, { input: { _id, estimateId } }) {
     if (!user) {
       throw new UserError({});
     }
@@ -36,7 +36,7 @@ const estimateRemoveContributor = {
     try {
       const { ok } = await Estimate.update(
         { _id: estimateId },
-        { $pull: { contributors: { userId } } },
+        { $pull: { contributors: { _id } } },
       );
 
       return ok;

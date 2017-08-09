@@ -10,7 +10,7 @@ import {
 import {
   EstimateOutputType,
 } from '../types';
-import Estimate from '../../data/models/estimate';
+import { Estimate } from '../models';
 
 
 const estimates = {

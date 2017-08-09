@@ -51,40 +51,48 @@ class Contributors extends React.Component {
       estimateId,
       estimateAddNewContributor: addNewContributor,
     } = this.props;
-    console.log(value);
-    // addNewContributor({
-    //   variables: { input: { estimateId, userId, username, userEmail } },
-    //   update: (store) => {
-    //     const data = store.readQuery({
-    //       query: estimateGeneralInfo,
-    //       variables: { id: estimateId },
-    //     });
-    //
-    //     data.estimate.contributors.push({ userId, username, userEmail });
-    //
-    //     store.writeQuery({
-    //       query: estimateGeneralInfo, data, variables: { id: estimateId },
-    //     });
-    //   },
-    // }).then(() => {
-    //   reset();
-    //   this.notificationSystem.addNotification({
-    //     autoDismiss: 6,
-    //     position: 'br',
-    //     title: 'Success',
-    //     level: 'success',
-    //     message: 'User added',
-    //   });
-    // }).catch((error) => {
-    //   console.error(error.message);
-    //   this.notificationSystem.addNotification({
-    //     autoDismiss: 6,
-    //     position: 'br',
-    //     title: 'Error',
-    //     level: 'error',
-    //     message: error.message,
-    //   });
-    // });
+
+    const {
+      name = '',
+      className,
+      value: _id,
+      label: email,
+    } = value.addContributor;
+    const newUser = !!className;
+
+    addNewContributor({
+      variables: { input: { estimateId, _id, name, email, newUser } },
+      update: (store) => {
+        const data = store.readQuery({
+          query: estimateGeneralInfo,
+          variables: { id: estimateId },
+        });
+
+        data.estimate.contributors.push({ _id, name, email });
+
+        store.writeQuery({
+          query: estimateGeneralInfo, data, variables: { id: estimateId },
+        });
+      },
+    }).then(() => {
+      reset();
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Success',
+        level: 'success',
+        message: 'User added',
+      });
+    }).catch((error) => {
+      console.error(error.message);
+      this.notificationSystem.addNotification({
+        autoDismiss: 6,
+        position: 'br',
+        title: 'Error',
+        level: 'error',
+        message: error.message,
+      });
+    });
   }
 
   removeContributor({ target: { id: userId } }) {
@@ -94,7 +102,7 @@ class Contributors extends React.Component {
     } = this.props;
 
     removeContributor({
-      variables: { input: { userId, estimateId } },
+      variables: { input: { _id: userId, estimateId } },
       update: (store) => {
         const data = store.readQuery({
           query: estimateGeneralInfo,
@@ -161,15 +169,15 @@ class Contributors extends React.Component {
   renderContributors() {
     const { contributors = [] } = this.props;
 
-    return contributors.map(({ username, userId, userEmail }) => (
-      <ListGroupItem className={styles.contributor_item} key={userId}>
+    return contributors.map(({ name, _id, email }) => (
+      <ListGroupItem className={styles.contributor_item} key={_id}>
         <span>
-          {username}
-          <span className={styles.emails}> ({userEmail})</span>
+          {name}
+          <span className={styles.emails}> ({email})</span>
         </span>
         <Button
           size="sm"
-          id={userId}
+          id={_id}
           color="danger"
           onClick={this.removeContributor}
         >

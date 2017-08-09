@@ -11,7 +11,8 @@ import {
 import {
   EstimateInputType,
 } from '../types';
-import Estimate from '../models';
+import { Estimate } from '../models';
+
 
 const estimateUpdate = {
   type: BoolType,

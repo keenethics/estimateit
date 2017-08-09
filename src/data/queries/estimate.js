@@ -2,7 +2,7 @@ import _ from 'underscore';
 import { GraphQLString as StringType } from 'graphql';
 import { EstimateOutputType } from '../types';
 import { MongoError } from '../errors';
-import Estimate from '../../data/models/estimate';
+import { Estimate } from '../models';
 
 const estimate = {
   type: EstimateOutputType,

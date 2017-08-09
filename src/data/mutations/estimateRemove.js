@@ -9,7 +9,7 @@ import {
   MongoError,
   AccessDenied,
 } from '../errors';
-import Estimate from '../models';
+import { Estimate } from '../models';
 
 const estimateRemove = {
   type: BoolType,

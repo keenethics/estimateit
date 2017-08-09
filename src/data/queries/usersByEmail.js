@@ -5,12 +5,11 @@ import {
 import {
   UsersOutputType,
 } from '../types';
-import Users from '../../data/models/user';
+import { Users } from '../models';
 import {
   TokenError,
   MongoError,
 } from '../errors';
-import Estimate from '../../data/models/estimate';
 
 const usersByEmail = {
   type: new ListType(UsersOutputType),

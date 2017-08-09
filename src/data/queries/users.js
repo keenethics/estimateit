@@ -4,7 +4,7 @@ import {
 import {
   UsersOutputType,
 } from '../types';
-import Users from '../../data/models/user';
+import { Users } from '../models';
 import {
   TokenError,
   MongoError,

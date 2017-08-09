@@ -12,9 +12,9 @@ const estimateGeneralInfo = gql`
       }
       userCanEditThisEstimate,
       contributors {
-        userId
-        username
-        userEmail
+        _id,
+        name,
+        email,
         __typename @skip(if: true)
       }
       __typename @skip(if: true)

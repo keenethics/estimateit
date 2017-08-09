@@ -54,13 +54,13 @@ const EstimateOptionsOutputType = new ObjectType({
 const ContributorsOutputType = new ObjectType({
   name: 'ContributorsOutputType',
   fields: () => ({
-    userId: {
+    _id: {
       type: StringType,
     },
-    username: {
+    name: {
       type: StringType,
     },
-    userEmail: {
+    email: {
       type: StringType,
     },
   }),
