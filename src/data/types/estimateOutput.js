@@ -66,6 +66,21 @@ const ContributorsOutputType = new ObjectType({
   }),
 });
 
+const OwnerOutputType = new ObjectType({
+  name: 'OwnerOutputType',
+  fields: () => ({
+    _id: {
+      type: StringType,
+    },
+    name: {
+      type: StringType,
+    },
+    email: {
+      type: StringType,
+    },
+  }),
+});
+
 const EstimateOutputType = new ObjectType({
   name: 'EstimateOutputType',
   fields: () => ({
@@ -76,7 +91,7 @@ const EstimateOutputType = new ObjectType({
       type: StringType,
     },
     owner: {
-      type: StringType,
+      type: OwnerOutputType,
     },
     date: {
       type: StringType,

@@ -29,7 +29,7 @@ const estimates = {
       const { user: { _id: userId } } = req;
       const allEstimates = await Estimate.find({
         $or: [
-          { owner: userId },
+          { 'owner._id': userId.toString() },
           { 'contributors.userId': userId.toString() },
         ],
         isRemoved: { $exists: false },

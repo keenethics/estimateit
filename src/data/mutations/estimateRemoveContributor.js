@@ -26,7 +26,7 @@ const estimateRemoveContributor = {
 
     const currentUserId = user._id.toString();
     const userCanNotEditThisEstimate =
-          !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+          !(owner._id === currentUserId.toString() || _.findWhere(contributors, { userId: currentUserId }));
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});

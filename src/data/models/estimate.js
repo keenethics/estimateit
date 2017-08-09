@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const EstimateSchema = mongoose.Schema({
   owner: {
-    type: String,
+    type: Object,
     required: true,
   },
   date: {

@@ -16,8 +16,13 @@ import {
 } from 'reactstrap';
 
 import styles from './styles.scss';
-import { renderSelectField } from '../libs/helpers';
-import { requiredSelect } from '../libs/validation';
+import SelectAsync from '../SelectAsync';
+import {
+  requiredSelect,
+  emailFromSelect,
+  newContributorEmail,
+} from '../libs/validation';
+
 import {
   usersList,
   estimateGeneralInfo,
@@ -40,52 +45,46 @@ class Contributors extends React.Component {
     this.renderContributors = this.renderContributors.bind(this);
   }
 
-  addContributor({
-    addContributor: {
-      value: userId,
-      label: username,
-      email: userEmail,
-    },
-  }) {
+  addContributor(value) {
     const {
       reset,
       estimateId,
       estimateAddNewContributor: addNewContributor,
     } = this.props;
-
-    addNewContributor({
-      variables: { input: { estimateId, userId, username, userEmail } },
-      update: (store) => {
-        const data = store.readQuery({
-          query: estimateGeneralInfo,
-          variables: { id: estimateId },
-        });
-
-        data.estimate.contributors.push({ userId, username, userEmail });
-
-        store.writeQuery({
-          query: estimateGeneralInfo, data, variables: { id: estimateId },
-        });
-      },
-    }).then(() => {
-      reset();
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Success',
-        level: 'success',
-        message: 'User added',
-      });
-    }).catch((error) => {
-      console.error(error.message);
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Error',
-        level: 'error',
-        message: error.message,
-      });
-    });
+    console.log(value);
+    // addNewContributor({
+    //   variables: { input: { estimateId, userId, username, userEmail } },
+    //   update: (store) => {
+    //     const data = store.readQuery({
+    //       query: estimateGeneralInfo,
+    //       variables: { id: estimateId },
+    //     });
+    //
+    //     data.estimate.contributors.push({ userId, username, userEmail });
+    //
+    //     store.writeQuery({
+    //       query: estimateGeneralInfo, data, variables: { id: estimateId },
+    //     });
+    //   },
+    // }).then(() => {
+    //   reset();
+    //   this.notificationSystem.addNotification({
+    //     autoDismiss: 6,
+    //     position: 'br',
+    //     title: 'Success',
+    //     level: 'success',
+    //     message: 'User added',
+    //   });
+    // }).catch((error) => {
+    //   console.error(error.message);
+    //   this.notificationSystem.addNotification({
+    //     autoDismiss: 6,
+    //     position: 'br',
+    //     title: 'Error',
+    //     level: 'error',
+    //     message: error.message,
+    //   });
+    // });
   }
 
   removeContributor({ target: { id: userId } }) {
@@ -137,7 +136,7 @@ class Contributors extends React.Component {
     } = this.props;
 
     return users
-      .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner))
+      .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner._id))
       .map(({ _id, name, email }) => ({
         email,
         value: _id,
@@ -147,13 +146,12 @@ class Contributors extends React.Component {
 
   renderOwner() {
     const { owner, usersList: { usersList: users = [] } } = this.props;
-    const ownerObject = _.findWhere(users, { _id: owner });
 
-    return ownerObject && (
+    return owner && (
       <ListGroupItem className={styles.owner_item}>
         <span>
-          {ownerObject.name}
-          <span className={styles.emails}> ({ownerObject.email})</span>
+          {owner.name}
+          <span className={styles.emails}> ({owner.email})</span>
         </span>
         <span className={styles.owner_item_label}>Owner</span>
       </ListGroupItem>
@@ -182,6 +180,8 @@ class Contributors extends React.Component {
   }
 
   render() {
+    const { owner, contributors } = this.props;
+    console.log(this.props);
     return (
       <Card>
         <CardHeader>Contributors</CardHeader>
@@ -193,11 +193,15 @@ class Contributors extends React.Component {
             <div>
               <Field
                 multi
+                owner={owner}
                 name="addContributor"
                 placeholder="Find user"
-                options={this.options()}
-                validate={[requiredSelect]}
-                component={renderSelectField}
+                component={SelectAsync}
+                contributors={contributors}
+                validate={[
+                  requiredSelect,
+                  newContributorEmail({ contributors, owner }),
+                ]}
               />
               <Button
                 type="submit"
@@ -228,7 +232,6 @@ Contributors.propTypes = {
   usersList: PropTypes.arrayOf(PropTypes.object).isRequired,
   contributors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
-
 
 const ContributorsWrapper = reduxForm({
   form: ADD_COTRIBUTORS_TO_ESTIMATE_FORM,

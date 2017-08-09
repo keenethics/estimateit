@@ -18,7 +18,7 @@ const estimate = {
       const currentEstimate = await Estimate.findOne({ _id });
       const { owner, contributors } = currentEstimate;
       currentEstimate.userCanEditThisEstimate = !!user &&
-            (owner === userId || _.findWhere(contributors, { userId }));
+            (owner._id === userId || _.findWhere(contributors, { userId }));
 
       return currentEstimate;
     } catch (error) {

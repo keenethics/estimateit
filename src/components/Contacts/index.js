@@ -5,7 +5,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import { Field } from 'redux-form';
 import { renderField } from '../libs/helpers';
-import { email, alphaNumeric, maxLength } from '../libs/validation';
+import { emailValidation, alphaNumeric, maxLength } from '../libs/validation';
 
 import styles from './styles.scss';
 
@@ -42,7 +42,7 @@ class Contacts extends Component {
             component={renderField}
             className={styles.contacts__input}
             disabled={!userCanEditThisEstimate}
-            validate={[email, maxLength(60)]}
+            validate={[emailValidation, maxLength(60)]}
           />
           <Field
             type="text"

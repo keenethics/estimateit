@@ -5,10 +5,10 @@ import bt from 'bootstrap/dist/css/bootstrap.css';
 import styles from '../routes/estimateCreate/styles.scss';
 
 const ContextType = {
+  fetch: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   client: PropTypes.object.isRequired,
   insertCss: PropTypes.func.isRequired,
-  fetch: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   ...ReduxProvider.childContextTypes,
 };

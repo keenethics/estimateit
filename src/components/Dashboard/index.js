@@ -84,7 +84,7 @@ class Dashboard extends React.Component {
               <a href="/login" className="btn btn-xs btn-danger">Login</a>
             </div>}
         </div>
-        <Notification ref={ref => this.notificationSystem = ref}/>
+        <Notification ref={ref => (this.notificationSystem = ref)} />
       </div>
     );
   }

@@ -4,7 +4,6 @@ const estimateFormValues = gql`
   query estimate($id: String) {
     estimate(id: $id) {
       _id
-      owner
       date
       clientName
       projectName

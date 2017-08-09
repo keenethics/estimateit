@@ -28,6 +28,7 @@ import config from './config';
 import './utils/auth';
 import generatePDF from './core/generatePDF';
 import sendEmail from './core/sendEmail';
+var FileStore = require('session-file-store')(session);
 
 mongoose.connect(config.MONGO_URL);
 mongoose.Promise = global.Promise;
@@ -35,17 +36,18 @@ const app = express();
 
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
-console.log('_________________________________');
-console.log(__dirname);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
 app.use(cookieParser());
 app.use(expressValidator());
 app.use(
   session({
+    store: new FileStore(),
     secret: config.SECRET,
-    resave: false,
+    resave: true,
     saveUninitialized: true,
   }),
 );
@@ -68,6 +70,7 @@ app.post('/login', (req, res, next) => {
     if (!user) return res.json(info);
     return req.logIn(user, (error) => {
       if (error) return next(error);
+
       return res.json({ ...user, redirectUrl: '/' });
     });
   })(req, res, next);

@@ -9,6 +9,7 @@ import {
   estimate,
   usersList,
   allEstimates,
+  usersByEmail,
 } from './queries';
 
 const schema = new Schema({
@@ -18,6 +19,7 @@ const schema = new Schema({
       estimate,
       usersList,
       allEstimates,
+      usersByEmail,
     },
   }),
   mutation: Mutation,

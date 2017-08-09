@@ -31,7 +31,7 @@ const estimateAddNewContributor = {
 
     const currentUserId = user._id.toString();
     const userCanNotEditThisEstimate =
-          !(owner === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+          !(owner._id === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});

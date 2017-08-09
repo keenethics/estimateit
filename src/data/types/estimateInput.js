@@ -53,6 +53,22 @@ const EstimateOptionsInputType = new InputObjectType({
 // EstimateInputType
 //
 
+
+const OwnerInputType = new InputObjectType({
+  name: 'OwnerInputType',
+  fields: () => ({
+    _id: {
+      type: StringType,
+    },
+    name: {
+      type: StringType,
+    },
+    email: {
+      type: StringType,
+    },
+  }),
+});
+
 const EstimateInputType = new InputObjectType({
   name: 'EstimateInputType',
   fields: {
@@ -60,7 +76,7 @@ const EstimateInputType = new InputObjectType({
       type: StringType,
     },
     owner: {
-      type: StringType,
+      type: OwnerInputType,
     },
     date: {
       type: StringType,

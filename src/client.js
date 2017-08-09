@@ -14,13 +14,14 @@ import deepForceUpdate from 'react-deep-force-update';
 import FastClick from 'fastclick';
 import queryString from 'query-string';
 import { createPath } from 'history/PathUtils';
+import { ApolloProvider } from 'react-apollo';
 import App from './components/App';
 import createFetch from './createFetch';
 import configureStore from './store/configureStore';
 import history from './history';
 import { updateMeta } from './DOMUtils';
 import createApolloClient from './core/createApolloClient/client';
-import { ApolloProvider } from 'react-apollo';
+
 
 const apolloClient = createApolloClient();
 
