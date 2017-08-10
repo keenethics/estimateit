@@ -1,12 +1,11 @@
 import {
   GraphQLBoolean as BoolType,
   GraphQLString as StringType,
-  GraphQLObjectType as ObjectType,
   GraphQLInputObjectType as InputObjectType,
 } from 'graphql';
 
-const EstimateAddNewContributor = new InputObjectType({
-  name: 'estimateAddNewContributor',
+const EstimateAddNewContributorInputType = new InputObjectType({
+  name: 'EstimateAddNewContributorInputType',
   fields: {
     estimateId: {
       type: StringType,
@@ -26,4 +25,4 @@ const EstimateAddNewContributor = new InputObjectType({
   },
 });
 
-export default EstimateAddNewContributor;
+export default EstimateAddNewContributorInputType;

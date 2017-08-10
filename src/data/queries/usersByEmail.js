@@ -10,6 +10,9 @@ import {
   TokenError,
   MongoError,
 } from '../errors';
+import {
+  ACTIVE,
+} from '../../constants/userStatus';
 
 const usersByEmail = {
   type: new ListType(UsersOutputType),
@@ -29,13 +32,10 @@ const usersByEmail = {
 
     try {
       const regexp = new RegExp(`^${inputEmail}`);
-      const res = await User.find({ email: regexp });
-
-      return res.map(({ _id, name, email }) => ({
-        _id,
-        name,
-        email,
-      }));
+      return await User.find(
+        { email: regexp, status: ACTIVE },
+        { name: 1, email: 1 },
+      );
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

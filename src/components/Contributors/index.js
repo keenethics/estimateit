@@ -19,7 +19,6 @@ import styles from './styles.scss';
 import SelectAsync from '../SelectAsync';
 import {
   requiredSelect,
-  emailFromSelect,
   newContributorEmail,
 } from '../libs/validation';
 
@@ -32,7 +31,9 @@ import {
 import {
   ADD_COTRIBUTORS_TO_ESTIMATE_FORM,
 } from '../../constants';
-
+import {
+  PENDING,
+} from '../../constants/userStatus';
 
 class Contributors extends React.Component {
   constructor(props) {
@@ -62,13 +63,13 @@ class Contributors extends React.Component {
 
     addNewContributor({
       variables: { input: { estimateId, _id, name, email, newUser } },
-      update: (store) => {
+      update: (store, { data: { estimateAddNewContributor: newContributor } }) => {
         const data = store.readQuery({
           query: estimateGeneralInfo,
           variables: { id: estimateId },
         });
 
-        data.estimate.contributors.push({ _id, name, email });
+        data.estimate.contributors.push(newContributor);
 
         store.writeQuery({
           query: estimateGeneralInfo, data, variables: { id: estimateId },
@@ -95,26 +96,30 @@ class Contributors extends React.Component {
     });
   }
 
-  removeContributor({ target: { id: userId } }) {
+  removeContributor({ target: { id: contributorId } }) {
     const {
       estimateId,
       estimateRemoveContributor: removeContributor,
     } = this.props;
 
     removeContributor({
-      variables: { input: { _id: userId, estimateId } },
-      update: (store) => {
+      variables: { input: { _id: contributorId, estimateId } },
+      update: (store, { data: { estimateRemoveContributor: contributorIsRemoved } }) => {
+        if (!contributorIsRemoved) return null;
+
         const data = store.readQuery({
           query: estimateGeneralInfo,
           variables: { id: estimateId },
         });
 
         data.estimate.contributors =
-          data.estimate.contributors.filter(e => e.userId !== userId);
+          data.estimate.contributors.filter(e => e._id !== contributorId);
 
         store.writeQuery({
           query: estimateGeneralInfo, data, variables: { id: estimateId },
         });
+
+        return null;
       },
     }).then(() => {
       this.notificationSystem.addNotification({
@@ -142,7 +147,7 @@ class Contributors extends React.Component {
       contributors = [],
       usersList: { usersList: users = [] },
     } = this.props;
-
+    console.log(users);
     return users
       .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner._id))
       .map(({ _id, name, email }) => ({
@@ -153,7 +158,7 @@ class Contributors extends React.Component {
   }
 
   renderOwner() {
-    const { owner, usersList: { usersList: users = [] } } = this.props;
+    const { owner } = this.props;
 
     return owner && (
       <ListGroupItem className={styles.owner_item}>
@@ -169,27 +174,31 @@ class Contributors extends React.Component {
   renderContributors() {
     const { contributors = [] } = this.props;
 
-    return contributors.map(({ name, _id, email }) => (
-      <ListGroupItem className={styles.contributor_item} key={_id}>
-        <span>
-          {name}
-          <span className={styles.emails}> ({email})</span>
-        </span>
-        <Button
-          size="sm"
-          id={_id}
-          color="danger"
-          onClick={this.removeContributor}
-        >
-          Remove
-        </Button>
-      </ListGroupItem>
-    ));
+    return contributors.map(({ name, _id, email, status }) => {
+      const isPending = status === PENDING;
+
+      return (
+        <ListGroupItem className={styles.contributor_item} key={_id}>
+          <span>
+            {isPending ? email : name}
+            <span className={styles.emails}> ({isPending ? 'pending' : email})</span>
+          </span>
+          <Button
+            size="sm"
+            id={_id}
+            color="danger"
+            onClick={this.removeContributor}
+          >
+            Remove
+          </Button>
+        </ListGroupItem>
+      );
+    });
   }
 
   render() {
     const { owner, contributors } = this.props;
-    console.log(this.props);
+
     return (
       <Card>
         <CardHeader>Contributors</CardHeader>

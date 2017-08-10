@@ -1,7 +1,4 @@
 import _ from 'underscore';
-import {
-  GraphQLBoolean as BoolType,
-} from 'graphql';
 
 import {
   User,
@@ -13,14 +10,21 @@ import {
   MongoError,
   AccessDenied,
 } from '../errors';
-import { EstimateAddNewContributor } from '../types';
+import {
+  EstimateAddNewContributorInputType,
+  EstimateAddNewContributorOutputType,
+} from '../types';
 import sendEmail from '../../core/sendEmail';
+import {
+  ACTIVE,
+  PENDING,
+} from '../../constants/userStatus';
 
 const estimateAddNewContributor = {
-  type: BoolType,
+  type: EstimateAddNewContributorOutputType,
   args: {
     input: {
-      type: EstimateAddNewContributor,
+      type: EstimateAddNewContributorInputType,
     },
   },
   async resolve(
@@ -31,15 +35,8 @@ const estimateAddNewContributor = {
       throw new UserError({});
     }
 
-    console.log(estimateId);
-    console.log(name);
-    console.log(_id);
-    console.log(email);
-    console.log(newUser);
     const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
-    //
     const currentUserId = user._id.toString();
-    console.log(owner._id.equals(user._id));
     const userCanNotEditThisEstimate =
           !(owner._id === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
 
@@ -50,21 +47,44 @@ const estimateAddNewContributor = {
     if (_.findWhere(contributors, { _id })) {
       throw new MongoError({ message: 'This users alreday added' });
     }
-    if (newUser) {
 
-    }
     try {
-      // const { ok } = await Estimate.update(
-      //   { _id: estimateId },
-      //   { $push: { contributors: { userId, username, userEmail } } },
-      // );
-      //
-      // sendEmail({
-      //   emails: userEmail,
-      //   text: `Somebody added you to the estimate ${headers.referer}`,
-      // });
+      if (newUser) {
+        let newContributor = User.findOne({ email });
 
-      return true;
+        if (!newContributor) {
+          newContributor = new User({ email, status: PENDING });
+          await newContributor.save();
+        }
+
+        await Estimate.update(
+          { _id: estimateId },
+          { $push: { contributors: {
+            email,
+            status: PENDING,
+            _id: newContributor._id.toString(),
+          } } },
+        );
+
+        sendEmail({
+          emails: email,
+          text: `Somebody added you to the estimate ${headers.referer}`,
+        });
+
+        return { name, email, status: PENDING, _id: newContributor._id.toString() };
+      }
+
+      await Estimate.update(
+        { _id: estimateId },
+        { $push: { contributors: { _id, name, email, status: ACTIVE } } },
+      );
+
+      sendEmail({
+        emails: email,
+        text: `Somebody added you to the estimate ${headers.referer}`,
+      });
+
+      return { email, satus: ACTIVE, name, _id };
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

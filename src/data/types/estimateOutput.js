@@ -63,6 +63,9 @@ const ContributorsOutputType = new ObjectType({
     email: {
       type: StringType,
     },
+    status: {
+      type: StringType,
+    },
   }),
 });
 

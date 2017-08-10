@@ -9,6 +9,9 @@ import {
   TokenError,
   MongoError,
 } from '../errors';
+import {
+  ACTIVE,
+} from '../../constants/userStatus';
 
 const usersList = {
   type: new ListType(UsersOutputType),
@@ -21,11 +24,20 @@ const usersList = {
     try {
       const res = await User.find();
 
-      return res.map(({ _id, email, name }) => ({
-        _id,
-        name,
-        email,
-      }));
+      const activeUsers = [];
+
+      res.reduce((acc, item, index) => {
+        if (index === 1 && acc.statuc === ACTIVE) {
+          activeUsers.push(acc);
+        }
+
+        if (item.status === ACTIVE) {
+          activeUsers.push(item);
+        }
+        return item;
+      });
+
+      return activeUsers;
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

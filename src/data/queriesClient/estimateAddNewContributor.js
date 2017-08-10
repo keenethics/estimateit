@@ -2,11 +2,16 @@ import gql from 'graphql-tag';
 
 const estimateAddNewContributor = gql`
   mutation Mutation (
-    $input: estimateAddNewContributor
+    $input: EstimateAddNewContributorInputType
   ) {
     estimateAddNewContributor (
       input: $input
-    )
+    ) {
+      _id,
+      name,
+      email,
+      status,
+    }
   },
 `;
 

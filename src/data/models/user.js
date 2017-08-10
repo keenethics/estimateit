@@ -1,14 +1,25 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt-nodejs';
+import {
+  ACTIVE,
+  PENDING,
+} from '../../constants/userStatus';
 
 mongoose.set('debug', true);
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
   name: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
   local: {
     password: String,
+  },
+  status: {
+    type: String,
+    enum: [ACTIVE, PENDING],
   },
   google: {
     id: String,
