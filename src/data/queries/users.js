@@ -4,7 +4,7 @@ import {
 import {
   UsersOutputType,
 } from '../types';
-import { Users } from '../models';
+import { User } from '../models';
 import {
   TokenError,
   MongoError,
@@ -19,12 +19,12 @@ const usersList = {
     }
 
     try {
-      const res = await Users.find();
+      const res = await User.find();
 
-      return res.map(({ _id, google, local }) => ({
+      return res.map(({ _id, email, name }) => ({
         _id,
-        name: google.name ? google.name : local.name,
-        email: google.email ? google.email : local.email,
+        name,
+        email,
       }));
     } catch (error) {
       console.error(error);

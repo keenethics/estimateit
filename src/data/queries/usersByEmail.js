@@ -5,7 +5,7 @@ import {
 import {
   UsersOutputType,
 } from '../types';
-import { Users } from '../models';
+import { User } from '../models';
 import {
   TokenError,
   MongoError,
@@ -18,27 +18,23 @@ const usersByEmail = {
       type: StringType,
     },
   },
-  async resolve(__, { email }, req) {
+  async resolve(__, { email: inputEmail }, req) {
     if (!req.user) {
       throw new TokenError({});
     }
 
-    if (/^$|\s+/.test(email)) {
+    if (/^$|\s+/.test(inputEmail)) {
       return [];
     }
 
     try {
-      const regexp = new RegExp(`^${email}`);
-      const res = await Users.find({
-        $or: [
-          { 'google.email': regexp },
-          { 'local.email': regexp },
-        ] });
+      const regexp = new RegExp(`^${inputEmail}`);
+      const res = await User.find({ email: regexp });
 
-      return res.map(({ _id, google, local }) => ({
+      return res.map(({ _id, name, email }) => ({
         _id,
-        name: google.name ? google.name : local.name,
-        email: google.email ? google.email : local.email,
+        name,
+        email,
       }));
     } catch (error) {
       console.error(error);

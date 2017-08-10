@@ -1,7 +1,7 @@
 import passport from 'passport';
 import passportLocal from 'passport-local';
 import { OAuth2Strategy } from 'passport-google-oauth';
-import User from '../data/models/user';
+import { User } from '../data/models';
 import config from '../config';
 
 const LocalStrategy = passportLocal.Strategy;
@@ -37,8 +37,8 @@ passport.use(
             });
           }
           const newUser = new User();
-          newUser.local.name = req.body.name;
-          newUser.local.email = username;
+          newUser.name = req.body.name;
+          newUser.email = username;
           newUser.local.password = newUser.generateHash(password);
           return newUser.save((error, res) => {
             if (error) {
@@ -55,7 +55,7 @@ passport.use(
             });
           });
         });
-      } else if (!req.user.local.email) {
+      } else if (!req.user.email) {
         return User.findOne({ 'local.email': username }, (err, user) => {
           if (err) return done(err);
           if (user) {
@@ -65,8 +65,8 @@ passport.use(
             });
           }
           const newUser = req.user;
-          newUser.local.name = req.body.name;
-          newUser.local.email = username;
+          newUser.name = req.body.name;
+          newUser.email = username;
           newUser.local.password = newUser.generateHash(password);
           return newUser.save((error, res) => {
             if (error) {
@@ -158,8 +158,8 @@ passport.use(
                 if (!user.google.token) {
                   const u = user;
                   u.google.token = accessToken;
-                  u.google.name = profile.displayName;
-                  u.google.email = (profile.emails[0].value || '').toLowerCase();
+                  u.name = profile.displayName;
+                  u.email = (profile.emails[0].value || '').toLowerCase();
                   u.save((error) => {
                     if (error) {
                       return done(null, false, {
@@ -183,13 +183,12 @@ passport.use(
               const newUser = new User();
               newUser.google.id = profile.id;
               newUser.google.token = accessToken;
-              newUser.google.name = profile.displayName;
-              newUser.google.email = (profile.emails[0].value || '').toLowerCase();
+              newUser.name = profile.displayName;
+              newUser.email = (profile.emails[0].value || '').toLowerCase();
               newUser.save((error) => {
                 if (error) {
                   return done(error);
                 }
-
                 return done(null, {
                   success: true,
                   message: 'Successfully Logged In',
@@ -202,8 +201,8 @@ passport.use(
           const user = req.user;
           user.google.token = profile.id;
           user.google.token = accessToken;
-          user.google.name = profile.displayName;
-          user.google.email = (profile.emails[0].value || '').toLowerCase();
+          user.name = profile.displayName;
+          user.email = (profile.emails[0].value || '').toLowerCase();
           user.save((err) => {
             if (err) {
               return done(err);

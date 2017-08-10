@@ -2,7 +2,11 @@ import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
-import { Estimate } from '../models';
+
+import {
+  User,
+  Estimate,
+} from '../models';
 
 import {
   UserError,
@@ -11,7 +15,7 @@ import {
 } from '../errors';
 import { EstimateAddNewContributor } from '../types';
 import sendEmail from '../../core/sendEmail';
-console.log(Estimate);
+
 const estimateAddNewContributor = {
   type: BoolType,
   args: {
@@ -35,6 +39,7 @@ const estimateAddNewContributor = {
     const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
     //
     const currentUserId = user._id.toString();
+    console.log(owner._id.equals(user._id));
     const userCanNotEditThisEstimate =
           !(owner._id === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
 

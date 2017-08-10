@@ -5,21 +5,14 @@ mongoose.set('debug', true);
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+  name: String,
+  email: String,
   local: {
-    name: String,
-    email: String,
     password: String,
   },
   google: {
     id: String,
-    name: String,
-    email: String,
     token: String,
-  },
-  role: {
-    type: String,
-    default: 'customer',
-    enum: ['admin', 'manager', 'customer'],
   },
   created_at: {
     type: Date,
@@ -31,25 +24,13 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.pre('save', (next) => {
-  const email = this.local.email || this.google.email;
-  const emailDomain = email.substring(email.lastIndexOf('@') + 1);
-  if (emailDomain === 'keenethics.com') {
-    this.role = 'manager';
-  }
-  next();
-});
+userSchema.methods.generateHash = function foo(password) {
+  return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
 
-userSchema.methods.generateHash = password => (
-  bcrypt.hashSync(password, bcrypt.genSaltSync(8), null)
-);
+userSchema.methods.validPassword = function foo(password) {
+  return bcrypt.compareSync(password, this.local.password);
+};
 
-userSchema.methods.validPassword = password => (
-  bcrypt.compareSync(password, this.local.password)
-);
-
-userSchema.index({
-  role: 'text',
-});
 
 export default mongoose.model('user', userSchema);
