@@ -19,6 +19,7 @@ import styles from './styles.scss';
 import SelectAsync from '../SelectAsync';
 import {
   requiredSelect,
+  emailFromSelect,
   newContributorEmail,
 } from '../libs/validation';
 
@@ -189,6 +190,7 @@ class Contributors extends React.Component {
                 contributors={contributors}
                 validate={[
                   requiredSelect,
+                  emailFromSelect,
                   newContributorEmail({ contributors, owner }),
                 ]}
               />
