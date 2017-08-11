@@ -3,6 +3,10 @@ import passportLocal from 'passport-local';
 import { OAuth2Strategy } from 'passport-google-oauth';
 import { User } from '../data/models';
 import config from '../config';
+import {
+  ACTIVE,
+  PENDING,
+} from '../constants/userStatus';
 
 const LocalStrategy = passportLocal.Strategy;
 
@@ -28,18 +32,56 @@ passport.use(
         return done(errors);
       }
       if (!req.user) {
-        return User.findOne({ 'local.email': username }, (err, user) => {
+        console.log('local');
+        return User.findOne({ email: username }, (err, user) => {
+          console.log(user);
+          console.log(err);
           if (err) return done(err);
-          if (user) {
+          if (user && user.status === ACTIVE) {
             return done(null, false, {
               success: false,
               message: 'Email Already exists',
             });
           }
+
+          if (user && user.status === PENDING) {
+            const inactivedUser = user;
+            inactivedUser.name = req.body.name;
+            const passwordHash = user.generateHash(password);
+
+            return User.update(
+              { _id: user._id },
+              { $set: {
+                name: req.body.name,
+                'local.password': passwordHash,
+                status: 'ACTIVE',
+              } },
+              (error, res) => {
+
+                if (error) {
+                  console.log('eerrrroooorrr');
+                  console.log(error);
+                  return done(null, false, {
+                    success: false,
+                    message: `error saving user, ${error}`,
+                  });
+                }
+                console.log('rrreeess');
+                console.log(res);
+                console.log(user);
+                const { email, _id, createdAt } = user;
+                return done(null, {
+                  success: true,
+                  message: 'Successfully Registered',
+                  user: { _id, email, createdAt },
+                });
+              });
+          }
           const newUser = new User();
           newUser.name = req.body.name;
           newUser.email = username;
           newUser.local.password = newUser.generateHash(password);
+          newUser.status = ACTIVE;
           return newUser.save((error, res) => {
             if (error) {
               return done(null, false, {
@@ -68,6 +110,7 @@ passport.use(
           newUser.name = req.body.name;
           newUser.email = username;
           newUser.local.password = newUser.generateHash(password);
+          newUser.status = ACTIVE;
           return newUser.save((error, res) => {
             if (error) {
               return done(null, false, {
@@ -108,7 +151,7 @@ passport.use(
         });
         return done(errors);
       }
-      return User.findOne({ 'local.email': username }, (err, user) => {
+      return User.findOne({ email: username }, (err, user) => {
         if (err) {
           return done(null, false, err);
         }

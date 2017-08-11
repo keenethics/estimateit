@@ -50,7 +50,7 @@ const estimateAddNewContributor = {
 
     try {
       if (newUser) {
-        let newContributor = User.findOne({ email });
+        let newContributor = await User.findOne({ email });
 
         if (!newContributor) {
           newContributor = new User({ email, status: PENDING });
