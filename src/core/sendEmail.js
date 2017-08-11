@@ -1,19 +1,21 @@
 import nodemailer from 'nodemailer';
+import mg from 'nodemailer-mailgun-transport';
+
+if (!process.env.MAIL_API_KEY) console.log('WARNING! PLEASE, PROVIDE VALID <MAIL_API_KEY> AS NODE ENVIRONMENT VARIABLE');
 
 const sendEmail = ({ emails, attach, text }) => {
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+  const transporter = nodemailer.createTransport(mg({
     auth: {
-      user: 'nazar.kukarkin@keenethics.com',
-      pass: 'kee#eth!cs',
+      api_key: process.env.MAIL_API_KEY,
+      domain: 'keenethics.com',
     },
-  });
+  }));
 
   const mailOptions = {
     text,
     to: emails,
     subject: 'estimate',
-    from: 'estimator@gmail.com',
+    from: 'estimator@keenethics.com',
   };
 
   if (attach) {

@@ -1,4 +1,4 @@
-## Keenethics Estimator 
+## Keenethics Estimator
 
 A simple project estimation application. This program is designed to calculate tasks time for the project and create PDF / CSV report.
 
@@ -9,7 +9,7 @@ Development
 ```
 git clone https://github.com/keenethics/estimateit.git && cd estimateit
 npm install
-npm run start    #Yes, ONE command for both server AND client development!
+MAIL_API_KEY=key-********* npm run start    #Yes, ONE command for both server AND client development!
 ```
 
 Production
