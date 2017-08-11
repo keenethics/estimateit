@@ -155,7 +155,7 @@ class Contributors extends React.Component {
         <ListGroupItem className={styles.contributor_item} key={_id}>
           <span>
             {isPending ? email : name}
-            <span className={styles.emails}> ({isPending ? 'pending' : email})</span>
+            <span className={styles.emails}> ({isPending ? 'not registered yet' : email})</span>
           </span>
           <Button
             size="sm"

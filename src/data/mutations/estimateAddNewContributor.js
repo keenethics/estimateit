@@ -51,6 +51,10 @@ const estimateAddNewContributor = {
       let newContributorId = _id;
 
       if (newUser) {
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+          throw new MongoError({ message: 'Invalid email address' });
+        }
+
         status = PENDING;
 
         let newContributor = await User.findOne({ email });
