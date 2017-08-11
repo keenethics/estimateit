@@ -24,7 +24,6 @@ import {
 } from '../libs/validation';
 
 import {
-  usersList,
   estimateGeneralInfo,
   estimateAddNewContributor,
   estimateRemoveContributor,
@@ -234,7 +233,6 @@ function mapStateToProps({ estimate }) {
 
 export default compose(
   connect(mapStateToProps),
-  graphql(usersList, { name: 'usersList' }),
   graphql(estimateAddNewContributor, { name: 'estimateAddNewContributor' }),
   graphql(estimateRemoveContributor, { name: 'estimateRemoveContributor' }),
 )(withStyles(styles)(ContributorsWrapper));

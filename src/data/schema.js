@@ -7,10 +7,8 @@ import Mutation from './mutations';
 
 import {
   estimate,
-  usersList,
   allEstimates,
   usersByEmail,
-  estimateContributors,
 } from './queries';
 
 const schema = new Schema({
@@ -18,7 +16,6 @@ const schema = new Schema({
     name: 'Query',
     fields: {
       estimate,
-      usersList,
       allEstimates,
       usersByEmail,
     },
