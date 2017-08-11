@@ -10,6 +10,7 @@ import {
   usersList,
   allEstimates,
   usersByEmail,
+  estimateContributors,
 } from './queries';
 
 const schema = new Schema({

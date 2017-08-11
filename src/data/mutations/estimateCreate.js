@@ -11,14 +11,10 @@ const estimateCreate = {
     }
 
     let url;
-    const { _id, name, email } = user;
+    const { _id } = user;
 
     try {
-      const newEstimate = new Estimate({ owner: {
-        _id: _id.toString(),
-        name,
-        email,
-      } });
+      const newEstimate = new Estimate({ owner: _id.toString() });
 
       const { _id: estiamteId } = await newEstimate.save();
 

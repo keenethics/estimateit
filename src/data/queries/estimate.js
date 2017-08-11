@@ -1,8 +1,10 @@
-import _ from 'underscore';
 import { GraphQLString as StringType } from 'graphql';
 import { EstimateOutputType } from '../types';
 import { MongoError } from '../errors';
-import { Estimate } from '../models';
+import {
+  User,
+  Estimate,
+} from '../models';
 
 const estimate = {
   type: EstimateOutputType,
@@ -16,11 +18,27 @@ const estimate = {
     try {
       const userId = user && user._id.toString();
       const currentEstimate = await Estimate.findOne({ _id });
-      const { owner, contributors } = currentEstimate;
-      currentEstimate.userCanEditThisEstimate = !!user &&
-            (owner._id === userId || _.findWhere(contributors, { _id: userId }));
+      const { owner, contributors = [] } = currentEstimate;
 
-      return currentEstimate;
+      const userCanEditThisEstimate = !!user &&
+            (owner === userId || contributors.indexOf(userId) > -1);
+
+      const contributorsObjs = await User.find(
+        { _id: { $in: contributors } },
+        { email: 1, name: 1, status: 1 },
+      );
+
+      const ownerObj = await User.findOne(
+        { _id: owner },
+        { email: 1, name: 1, status: 1 },
+      );
+
+      return {
+        ...currentEstimate._doc,
+        owner: ownerObj,
+        userCanEditThisEstimate,
+        contributors: contributorsObjs,
+      };
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

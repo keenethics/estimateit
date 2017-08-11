@@ -8,6 +8,7 @@ const estimateGeneralInfo = gql`
         _id,
         name,
         email,
+        status,
         __typename @skip(if: true)
       }
       userCanEditThisEstimate,

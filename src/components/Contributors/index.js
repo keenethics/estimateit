@@ -36,17 +36,8 @@ import {
 } from '../../constants/userStatus';
 
 class Contributors extends React.Component {
-  constructor(props) {
-    super(props);
 
-    this.options = this.options.bind(this);
-    this.renderOwner = this.renderOwner.bind(this);
-    this.addContributor = this.addContributor.bind(this);
-    this.removeContributor = this.removeContributor.bind(this);
-    this.renderContributors = this.renderContributors.bind(this);
-  }
-
-  addContributor(value) {
+  addContributor = (value) => {
     const {
       reset,
       estimateId,
@@ -96,7 +87,7 @@ class Contributors extends React.Component {
     });
   }
 
-  removeContributor({ target: { id: contributorId } }) {
+  removeContributor = ({ target: { id: contributorId } }) => {
     const {
       estimateId,
       estimateRemoveContributor: removeContributor,
@@ -141,23 +132,7 @@ class Contributors extends React.Component {
     });
   }
 
-  options = () => {
-    const {
-      owner,
-      contributors = [],
-      usersList: { usersList: users = [] },
-    } = this.props;
-    console.log(users);
-    return users
-      .filter(({ _id }) => (!_.findWhere(contributors, { userId: _id }) && _id !== owner._id))
-      .map(({ _id, name, email }) => ({
-        email,
-        value: _id,
-        label: name,
-      }));
-  }
-
-  renderOwner() {
+  renderOwner = () => {
     const { owner } = this.props;
 
     return owner && (
@@ -171,10 +146,8 @@ class Contributors extends React.Component {
     );
   }
 
-  renderContributors() {
-    const { contributors = [] } = this.props;
-
-    return contributors.map(({ name, _id, email, status }) => {
+  renderContributors = () =>
+    this.props.contributors.map(({ name, _id, email, status }) => {
       const isPending = status === PENDING;
 
       return (
@@ -193,8 +166,7 @@ class Contributors extends React.Component {
           </Button>
         </ListGroupItem>
       );
-    });
-  }
+    })
 
   render() {
     const { owner, contributors } = this.props;
@@ -246,7 +218,6 @@ Contributors.propTypes = {
   handleSubmit: PropTypes.func.isRequired,
   estimateAddNewContributor: PropTypes.func.isRequired,
   estimateRemoveContributor: PropTypes.func.isRequired,
-  usersList: PropTypes.arrayOf(PropTypes.object).isRequired,
   contributors: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
@@ -256,7 +227,7 @@ const ContributorsWrapper = reduxForm({
 
 function mapStateToProps({ estimate }) {
   const { owner, contributors, _id: estimateId } = estimate;
-  return { estimateId, contributors, owner };
+  return { owner, estimateId, contributors };
 }
 
 export default compose(
