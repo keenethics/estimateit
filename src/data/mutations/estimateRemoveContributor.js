@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';

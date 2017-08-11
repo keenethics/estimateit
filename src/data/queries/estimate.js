@@ -1,6 +1,10 @@
 import { GraphQLString as StringType } from 'graphql';
 import { EstimateOutputType } from '../types';
-import { MongoError } from '../errors';
+import {
+  TokenError,
+  MongoError,
+  AccessDenied,
+} from '../errors';
 import {
   User,
   Estimate,
@@ -15,6 +19,11 @@ const estimate = {
   },
   async resolve(__, args, { user }) {
     const { id: _id } = args;
+
+    if (!user) {
+      throw new TokenError({});
+    }
+
     try {
       const userId = user && user._id.toString();
       const currentEstimate = await Estimate.findOne({ _id });
@@ -22,6 +31,10 @@ const estimate = {
 
       const userCanEditThisEstimate = !!user &&
             (owner === userId || contributors.indexOf(userId) > -1);
+
+      if (!userCanEditThisEstimate) {
+        throw new AccessDenied({});
+      }
 
       const contributorsObjs = await User.find(
         { _id: { $in: contributors } },
