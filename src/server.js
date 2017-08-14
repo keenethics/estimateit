@@ -12,6 +12,7 @@ import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
 import { formatError } from 'apollo-errors';
+import MongoConnect from 'connect-mongo';
 import App from './components/App';
 import Html from './components/Html';
 import { ErrorPageWithoutStyle } from './routes/error/ErrorPage';
@@ -28,7 +29,8 @@ import config from './config';
 import './utils/auth';
 import generatePDF from './core/generatePDF';
 import sendEmail from './core/sendEmail';
-var FileStore = require('session-file-store')(session);
+
+const MongoStore = MongoConnect(session);
 
 mongoose.connect(config.MONGO_URL);
 mongoose.Promise = global.Promise;
@@ -45,7 +47,9 @@ app.use(cookieParser());
 app.use(expressValidator());
 app.use(
   session({
-    store: new FileStore(),
+    store: new MongoStore({
+      url: config.MONGO_URL,
+    }),
     secret: config.SECRET,
     resave: true,
     saveUninitialized: true,
