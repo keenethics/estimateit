@@ -38,7 +38,7 @@ export class SelectAsync extends React.Component {
     const { contributors, owner } = this.props;
 
     return usersList.filter(({ _id }) =>
-      (!_.findWhere(contributors, { userId: _id }) && _id !== owner._id),
+      (!_.findWhere(contributors, { _id }) && _id !== owner._id),
     )
     .map(({ _id, email, name }) => ({
       name,

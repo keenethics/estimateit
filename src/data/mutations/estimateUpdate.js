@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
@@ -29,7 +28,7 @@ const estimateUpdate = {
     const { owner, users: contributors = [] } = await Estimate.findOne({ _id: input._id });
     const userId = user._id.toString();
     const userCanNotEditThisEstimate =
-      !(owner._id === userId.toString() || _.findWhere(contributors, { userId }));
+          !(owner === userId || contributors.indexOf(userId) > -1);
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});

@@ -1,5 +1,3 @@
-import _ from 'underscore';
-
 import {
   User,
   Estimate,
@@ -36,47 +34,42 @@ const estimateAddNewContributor = {
     }
 
     const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
-    const currentUserId = user._id.toString();
+    const userId = user._id.toString();
     const userCanNotEditThisEstimate =
-          !(owner._id === currentUserId || _.findWhere(contributors, { userId: currentUserId }));
+          !(owner === userId || contributors.indexOf(userId) > -1);
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});
     }
 
-    if (_.findWhere(contributors, { _id })) {
+    if (contributors.indexOf(_id) > -1) {
       throw new MongoError({ message: 'This users alreday added' });
     }
 
     try {
+      let status = ACTIVE;
+      let newContributorId = _id;
+
       if (newUser) {
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+          throw new MongoError({ message: 'Invalid email address' });
+        }
+
+        status = PENDING;
+
         let newContributor = await User.findOne({ email });
 
         if (!newContributor) {
-          newContributor = new User({ email, status: PENDING });
+          newContributor = new User({ email, status });
           await newContributor.save();
         }
 
-        await Estimate.update(
-          { _id: estimateId },
-          { $push: { contributors: {
-            email,
-            status: PENDING,
-            _id: newContributor._id.toString(),
-          } } },
-        );
-
-        sendEmail({
-          emails: email,
-          text: `Somebody added you to the estimate ${headers.referer}`,
-        });
-
-        return { name, email, status: PENDING, _id: newContributor._id.toString() };
+        newContributorId = newContributor._id.toString();
       }
 
       await Estimate.update(
         { _id: estimateId },
-        { $push: { contributors: { _id, name, email, status: ACTIVE } } },
+        { $push: { contributors: newContributorId } },
       );
 
       sendEmail({
@@ -84,7 +77,7 @@ const estimateAddNewContributor = {
         text: `Somebody added you to the estimate ${headers.referer}`,
       });
 
-      return { email, satus: ACTIVE, name, _id };
+      return { name, email, status, _id: newContributorId };
     } catch (error) {
       console.error(error);
       throw new MongoError({ message: error.message });

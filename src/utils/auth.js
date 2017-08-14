@@ -32,10 +32,7 @@ passport.use(
         return done(errors);
       }
       if (!req.user) {
-        console.log('local');
         return User.findOne({ email: username }, (err, user) => {
-          console.log(user);
-          console.log(err);
           if (err) return done(err);
           if (user && user.status === ACTIVE) {
             return done(null, false, {
@@ -54,21 +51,15 @@ passport.use(
               { $set: {
                 name: req.body.name,
                 'local.password': passwordHash,
-                status: 'ACTIVE',
+                status: ACTIVE,
               } },
               (error, res) => {
-
                 if (error) {
-                  console.log('eerrrroooorrr');
-                  console.log(error);
                   return done(null, false, {
                     success: false,
                     message: `error saving user, ${error}`,
                   });
                 }
-                console.log('rrreeess');
-                console.log(res);
-                console.log(user);
                 const { email, _id, createdAt } = user;
                 return done(null, {
                   success: true,
@@ -187,22 +178,23 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
-      process.nextTick(() => {
+      process.nextTick(async () => {
         if (!req.user) {
-          User.findOne(
-            {
-              'google.id': profile.id,
-            },
-            (err, user) => {
-              if (err) {
-                return done(err);
-              }
-              if (user) {
-                if (!user.google.token) {
+          const email = (profile.emails[0].value || '').toLowerCase();
+          try {
+            const userWithEmail = await User.findOne({ email });
+            if (userWithEmail && userWithEmail.status === PENDING) {
+              User.findOne({ email }, (err, user) => {
+                if (err) {
+                  return done(err);
+                }
+                if (user) {
                   const u = user;
-                  u.google.token = accessToken;
                   u.name = profile.displayName;
-                  u.email = (profile.emails[0].value || '').toLowerCase();
+                  u.google.token = accessToken;
+                  u.email = email;
+                  u.status = ACTIVE;
+
                   u.save((error) => {
                     if (error) {
                       return done(null, false, {
@@ -217,31 +209,68 @@ passport.use(
                     });
                   });
                 }
-                return done(null, {
-                  success: true,
-                  message: 'Successfully Logged In',
-                  user,
-                });
-              }
-              const newUser = new User();
-              newUser.google.id = profile.id;
-              newUser.google.token = accessToken;
-              newUser.name = profile.displayName;
-              newUser.email = (profile.emails[0].value || '').toLowerCase();
-              newUser.save((error) => {
-                if (error) {
-                  return done(error);
-                }
-                return done(null, {
-                  success: true,
-                  message: 'Successfully Logged In',
-                  user: newUser,
-                });
               });
-            },
-          );
+            } else {
+              User.findOne(
+                {
+                  'google.id': profile.id,
+                },
+                (err, user) => {
+                  if (err) {
+                    return done(err);
+                  }
+                  if (user) {
+                    if (!user.google.token) {
+                      const u = user;
+                      u.google.token = accessToken;
+                      u.name = profile.displayName;
+                      u.status = ACTIVE;
+                      u.email = (profile.emails[0].value || '').toLowerCase();
+                      u.save((error) => {
+                        if (error) {
+                          return done(null, false, {
+                            success: false,
+                            message: error,
+                          });
+                        }
+                        return done(null, {
+                          success: true,
+                          message: 'Successfully Logged In',
+                          user,
+                        });
+                      });
+                    }
+                    return done(null, {
+                      success: true,
+                      message: 'Successfully Logged In',
+                      user,
+                    });
+                  }
+                  const newUser = new User();
+                  newUser.status = ACTIVE;
+                  newUser.google.id = profile.id;
+                  newUser.google.token = accessToken;
+                  newUser.name = profile.displayName;
+                  newUser.email = (profile.emails[0].value || '').toLowerCase();
+                  newUser.save((error) => {
+                    if (error) {
+                      return done(error);
+                    }
+                    return done(null, {
+                      success: true,
+                      message: 'Successfully Logged In',
+                      user: newUser,
+                    });
+                  });
+                },
+              );
+            }
+          } catch (error) {
+            return done(error);
+          }
         } else {
           const user = req.user;
+          user.status = ACTIVE;
           user.google.token = profile.id;
           user.google.token = accessToken;
           user.name = profile.displayName;

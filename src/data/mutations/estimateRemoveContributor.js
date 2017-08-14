@@ -1,4 +1,3 @@
-import _ from 'underscore';
 import {
   GraphQLBoolean as BoolType,
 } from 'graphql';
@@ -22,13 +21,10 @@ const estimateRemoveContributor = {
       throw new UserError({});
     }
 
+    const userId = user._id.toString();
     const { owner, contributors = [] } = await Estimate.findOne({ _id: estimateId });
-    const currentUserId = user._id.toString();
     const userCanNotEditThisEstimate =
-          !(
-            owner._id === currentUserId.toString()
-            || _.findWhere(contributors, { _id: currentUserId })
-          );
+          !(owner === userId || contributors.indexOf(userId) > -1);
 
     if (userCanNotEditThisEstimate) {
       throw new AccessDenied({});
@@ -38,7 +34,7 @@ const estimateRemoveContributor = {
     try {
       const { ok } = await Estimate.update(
         { _id: estimateId },
-        { $pull: { contributors: { _id } } },
+        { $pull: { contributors: _id } },
       );
 
       return ok;
