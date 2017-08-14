@@ -4,6 +4,14 @@ import mg from 'nodemailer-mailgun-transport';
 if (!process.env.MAIL_API_KEY) console.log('WARNING! PLEASE, PROVIDE VALID <MAIL_API_KEY> AS NODE ENVIRONMENT VARIABLE');
 
 const sendEmail = ({ emails, attach, text }) => {
+  if (!process.env.MAIL_API_KEY) {
+    console.log('[EMAIL]');
+    console.log('to:', emails);
+    console.log('text:', text);
+
+    return;
+  }
+
   const transporter = nodemailer.createTransport(mg({
     auth: {
       api_key: process.env.MAIL_API_KEY,
