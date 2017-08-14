@@ -145,8 +145,9 @@ class Task extends React.Component {
                     color="danger"
                     className={styles.subtasks__item}
                     onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
+                    title="Add subtask"
                   >
-                    Add subtask
+                    <b>+</b>
                   </Button>
                 }
                 {
@@ -155,8 +156,9 @@ class Task extends React.Component {
                     color="danger"
                     className={styles.subtasks__item}
                     onClick={() => actionRemoveTask({ index, form, field: task })}
+                    title="Delete task (including subtasks)"
                   >
-                    Delete
+                    ✗
                   </Button>
                 }
               </div>
