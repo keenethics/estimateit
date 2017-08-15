@@ -56,7 +56,7 @@
     "react": "^15.5.4",
     "react-addons-css-transition-group": "^15.5.2",
     "react-addons-transition-group": "^15.5.2",
-    "react-apollo": "^1.4.6",
+    "react-apollo": "1.4.6",
     "react-chartjs2": "^1.1.2",
     "react-datepicker": "^0.48.0",
     "react-dom": "^15.5.4",
