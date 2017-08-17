@@ -1,6 +1,6 @@
 import ApolloClient, { createNetworkInterface } from 'apollo-client';
 import {
-  MONGO_ERROR,
+  ACCESS_DENIED,
   UNAUTHORIZED_USER,
   INVALID_PERMISSION,
 } from '../../data/errors/types';
@@ -18,7 +18,11 @@ const logErrors = {
       if (!res.errors || !res.errors.length) return next();
 
       res.errors.forEach(({ name }) => {
-        if (name === UNAUTHORIZED_USER || name === INVALID_PERMISSION) {
+        if (
+          name === ACCESS_DENIED ||
+          name === UNAUTHORIZED_USER ||
+          name === INVALID_PERMISSION
+        ) {
           location.replace('/404');
         }
       });

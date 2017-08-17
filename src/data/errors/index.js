@@ -19,5 +19,5 @@ export const UserError = createError(UNAUTHORIZED_USER, {
 export const MongoError = createError(MONGO_ERROR, {});
 
 export const AccessDenied = createError(ACCESS_DENIED, {
-  message: 'You have not right edit this document',
+  message: 'You have not right edit this documentaa',
 });

@@ -6,6 +6,10 @@ import {
   AccessDenied,
 } from '../errors';
 import {
+  ACCESS_DENIED,
+} from '../errors/types';
+
+import {
   User,
   Estimate,
 } from '../models';
@@ -20,6 +24,7 @@ const estimate = {
   async resolve(__, args, { user }) {
     const { id: _id } = args;
 
+
     if (!user) {
       throw new TokenError({});
     }
@@ -33,7 +38,7 @@ const estimate = {
             (owner === userId || contributors.indexOf(userId) > -1);
 
       if (!userCanEditThisEstimate) {
-        throw new AccessDenied({});
+        throw new AccessDenied();
       }
 
       const contributorsObjs = await User.find(
@@ -53,7 +58,9 @@ const estimate = {
         contributors: contributorsObjs,
       };
     } catch (error) {
-      console.error(error);
+      if (error.name === ACCESS_DENIED) {
+        throw new AccessDenied();
+      }
       throw new MongoError({ message: error.message });
     }
   },

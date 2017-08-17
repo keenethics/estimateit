@@ -7,7 +7,6 @@ export default [
       require('./login').default,
       require('./register').default,
       require('./estimate').default,
-      // require('./estimateCreate').default,
       require('./notFound').default,
     ],
     async action({ next, isAuthenticated }) {
