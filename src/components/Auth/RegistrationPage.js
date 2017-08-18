@@ -2,6 +2,13 @@ import React from 'react';
 import axios from 'axios';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from './styles.scss';
+import { Field, reduxForm } from 'redux-form';
+import {
+  notEmpty,
+  emailValidation,
+  minLength,
+} from '../libs/validation';
+import { renderField, renderPasswordField } from '../libs/helpers';
 
 class RegistrationPage extends React.Component {
   constructor() {
@@ -12,11 +19,8 @@ class RegistrationPage extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleSubmit(e) {
-    e.preventDefault();
-    const name = e.target.name.value;
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+  handleSubmit(value) {
+    const { name, email, password } = value;
     return axios
       .post(
         '/register',
@@ -47,25 +51,28 @@ class RegistrationPage extends React.Component {
   render() {
     return (
       <div className={styles.wrapper}>
-        <form className={styles.form_signin} onSubmit={this.handleSubmit}>
+        <form
+          className={styles.form_signin}
+          onSubmit={this.props.handleSubmit(this.handleSubmit)}
+        >
           <h2 className={styles.form_signin_heading}>Registration</h2>
-          <input
-            type="text"
-            className="form-control"
+          <Field
             name="name"
-            placeholder="Your name"
+            component={renderField}
+            label="Your name"
+            validate={[notEmpty, minLength(2)]}
           />
-          <input
-            type="text"
-            className="form-control"
+          <Field
             name="email"
-            placeholder="Email Address"
+            component={renderField}
+            label="Email Address"
+            validate={[emailValidation]}
           />
-          <input
-            type="password"
-            className="form-control"
+          <Field
             name="password"
-            placeholder="Password"
+            component={renderPasswordField}
+            label="Password"
+            validate={[minLength(6)]}
           />
           <button className="btn btn-xs btn-danger btn-block" type="submit">
             Registration
@@ -81,4 +88,11 @@ class RegistrationPage extends React.Component {
     );
   }
 }
-export default withStyles(styles)(RegistrationPage);
+
+
+const RegistrationWrapper = reduxForm({
+  form: 'AUTH',
+})(RegistrationPage);
+
+
+export default withStyles(styles)(RegistrationWrapper);
