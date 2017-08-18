@@ -7,7 +7,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
-import Nightmare from 'nightmare';
 import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
@@ -27,7 +26,6 @@ import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
-import generatePDF from './core/generatePDF';
 import sendEmail from './core/sendEmail';
 
 const MongoStore = MongoConnect(session);
@@ -119,60 +117,6 @@ app.use(
     pretty: __DEV__,
   })),
 );
-
-app.post('/api/sendPpfToEmails', (req, res) => {
-  const { url, emails = '' } = req.body;
-  res.end('ok');
-  generatePDF(req.cookies, url, emails);
-});
-
-app.post('/api/shareViaEmails', (req, res) => {
-  const { url, emails = '' } = req.body;
-  res.end('ok');
-  sendEmail({
-    emails,
-    text: `somebody share this estimate ${url} with you`,
-  });
-});
-
-app.post('/api/downloadPpdf', (req, res) => {
-  const { url } = req.body;
-
-  let nightmare = Nightmare({
-    show: false,
-  });
-
-  nightmare
-    .goto(url)
-    .cookies.clear('connect.sid')
-    .cookies.set({
-      name: 'connect.sid',
-      value: req.cookies['connect.sid'],
-      path: '/',
-    })
-    .refresh()
-    .goto(url)
-    .viewport(1300, 900)
-    .wait(2000)
-    .pdf({
-      printBackground: true,
-      marginsType: 0,
-      pageSize: 'A4',
-      landscape: false,
-    })
-    .then((pdfBuffer) => {
-      res.set('Content-Type', 'application/pdf');
-      res.set('Content-Disposition: attachment; filename=filename.pdf');
-      res.send(new Buffer(pdfBuffer, 'binary'));
-
-      nightmare.end();
-      nightmare.ended = true;
-      nightmare = null;
-    })
-    .catch((err) => {
-      console.error(err);
-    });
-});
 
 //
 // Register server-side rendering middleware
