@@ -13,11 +13,9 @@ class MultiSelect extends Component {
     this.multiChangeHandler = this.multiChangeHandler.bind(this);
   }
 
-  multiChangeHandler() {
+  multiChangeHandler(values) {
     const { input: { onChange } } = this.props;
-    return function handleMultiHandler(values) {
-      onChange(values.map(value => value.value));
-    };
+    onChange(values.map(value => value.value));
   }
 
   render() {
