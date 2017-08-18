@@ -40,7 +40,6 @@ class Reports extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
-    this.downloadPdf = this.downloadPdf.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
@@ -110,37 +109,6 @@ class Reports extends Component {
     });
   }
 
-  downloadPdf() {
-    axios.post('/api/downloadPpdf', {
-      url: decodeURIComponent(location.href),
-    }, { responseType: 'arraybuffer' })
-      .then((response) => {
-        const file = new Blob([response.data], { type: 'application/pdf' });
-        const link = document.createElement('a');
-
-        link.href = window.URL.createObjectURL(file);
-        link.download = 'keenethics_report.pdf';
-        link.click();
-        this.notificationSystem.addNotification({
-          title: 'Success',
-          message: 'generation of the PDF was successful!',
-          level: 'success',
-          autoDismiss: 6,
-          position: 'br',
-        });
-      })
-      .catch((error) => {
-        console.error(error);
-        this.notificationSystem.addNotification({
-          title: 'Error',
-          level: 'error',
-          position: 'br',
-          autoDismiss: 6,
-          message: 'internal server error',
-        });
-      });
-  }
-
   saveAsCSV() {
     const {
       tasks,
@@ -157,89 +125,6 @@ class Reports extends Component {
       a.click();
     });
   }
-
-  // shareViaEmail({ emails }) {
-  //   const { fetch } = this.context;
-  //
-  //   if (!emails || !emails.length) {
-  //     this.notificationSystem.addNotification({
-  //       title: 'Error',
-  //       level: 'error',
-  //       position: 'br',
-  //       autoDismiss: 6,
-  //       message: 'Enter emails',
-  //     });
-  //     return null;
-  //   }
-  //
-  //   fetch('/api/shareViaEmails', {
-  //     body: JSON.stringify({
-  //       emails: decodeURIComponent(emails),
-  //       url: decodeURIComponent(location.href),
-  //     }),
-  //   })
-  //     .then(() => {
-  //       this.notificationSystem.addNotification({
-  //         title: 'Success',
-  //         level: 'success',
-  //         position: 'br',
-  //         autoDismiss: 6,
-  //         message: 'This estimate is shared',
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       this.notificationSystem.addNotification({
-  //         title: 'Error',
-  //         level: 'error',
-  //         position: 'br',
-  //         autoDismiss: 6,
-  //         message: 'internal server error',
-  //       });
-  //     });
-  // }
-  //
-  // sendPdfToEmails({ emails }) {
-  //   const { fetch } = this.context;
-  //
-  //   if (!emails || !emails.length) {
-  //     this.notificationSystem.addNotification({
-  //       title: 'Error',
-  //       level: 'error',
-  //       position: 'br',
-  //       autoDismiss: 6,
-  //       message: 'Enter emails',
-  //     });
-  //     return null;
-  //   }
-  //
-  //   fetch('/api/sendPpfToEmails', {
-  //     body: JSON.stringify({
-  //       emails: decodeURIComponent(emails),
-  //       url: decodeURIComponent(location.href),
-  //     }),
-  //   })
-  //     .then(() => {
-  //       this.notificationSystem.addNotification({
-  //         title: 'Success',
-  //         level: 'success',
-  //         position: 'br',
-  //         autoDismiss: 6,
-  //         message: 'PDF will be send to the emails!',
-  //       });
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       this.notificationSystem.addNotification({
-  //         title: 'Error',
-  //         level: 'error',
-  //         position: 'br',
-  //         autoDismiss: 6,
-  //         message: 'internal server error',
-  //       });
-  //     });
-  // }
-
 
   render() {
     const { handleSubmit } = this.context;
@@ -278,12 +163,6 @@ class Reports extends Component {
               Download
             </DropdownToggle>
             <DropdownMenu>
-              <DropdownItem
-                type="submit"
-                onClick={handleSubmit(this.downloadPdf)}
-              >
-                PDF
-              </DropdownItem>
               <DropdownItem
                 type="submit"
                 onClick={handleSubmit(this.saveAsCSV)}
