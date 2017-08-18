@@ -64,7 +64,7 @@ class LineChart extends Component {
         reversed: false,
         title: {
           enabled: true,
-          text: 'Probability (Code Quality)',
+          text: 'Probability',
         },
         labels: {
           formatter() {
