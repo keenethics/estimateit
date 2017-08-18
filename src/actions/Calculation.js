@@ -26,7 +26,7 @@ const actionCalculateAllPossibilityTimes = (tasks) => {
     ? array.all()
     : array.randomSet(2 ** (maxNumberOfTask - 1));
 
-  // allComputations.push(array.zero, array.last);
+  allComputations.push(array.zero, array.last);
 
   return allComputations.map((computation) => {
     if (!computation.length) return 0;

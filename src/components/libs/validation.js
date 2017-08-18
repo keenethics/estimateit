@@ -6,8 +6,8 @@ export const required = value =>
 export const requiredSelect = value =>
   (value && value.value ? undefined : 'Required');
 
-export const taskHourValidation = haveSubTasks =>
-  value => (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
+export const taskHourValidation = haveSubTasks => value =>
+  (typeof value === 'number' || haveSubTasks ? undefined : 'Required');
 
 export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
   (value, allValues) => {
@@ -20,7 +20,7 @@ export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
     const maxTime = address.split('.')
       .reduce((obj, i) => obj && obj[i], allValues);
 
-    return (!maxTime || maxTime >= value)
+    return (maxTime >= value)
       ? undefined
       : 'min time > max time';
   };
