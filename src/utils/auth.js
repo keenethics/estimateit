@@ -183,6 +183,7 @@ passport.use(
           const email = (profile.emails[0].value || '').toLowerCase();
           try {
             const userWithEmail = await User.findOne({ email });
+
             if (userWithEmail && userWithEmail.status === PENDING) {
               User.findOne({ email }, (err, user) => {
                 if (err) {
@@ -190,6 +191,7 @@ passport.use(
                 }
                 if (user) {
                   const u = user;
+                  u.google.id = profile.id;
                   u.name = profile.displayName;
                   u.google.token = accessToken;
                   u.email = email;
@@ -222,6 +224,7 @@ passport.use(
                   if (user) {
                     if (!user.google.token) {
                       const u = user;
+                      u.google.id = profile.id;
                       u.google.token = accessToken;
                       u.name = profile.displayName;
                       u.status = ACTIVE;
@@ -246,6 +249,7 @@ passport.use(
                       user,
                     });
                   }
+
                   const newUser = new User();
                   newUser.status = ACTIVE;
                   newUser.google.id = profile.id;
