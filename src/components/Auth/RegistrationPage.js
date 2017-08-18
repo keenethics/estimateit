@@ -59,19 +59,19 @@ class RegistrationPage extends React.Component {
           <Field
             name="name"
             component={renderField}
-            placeholder="Your name"
+            label="Your name"
             validate={[notEmpty, minLength(2)]}
           />
           <Field
             name="email"
             component={renderField}
-            placeholder="Email Address"
+            label="Email Address"
             validate={[emailValidation]}
           />
           <Field
             name="password"
             component={renderPasswordField}
-            placeholder="Password"
+            label="Password"
             validate={[minLength(6)]}
           />
           <button className="btn btn-xs btn-danger btn-block" type="submit">
