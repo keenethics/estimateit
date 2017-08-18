@@ -30,6 +30,19 @@ export const renderField = ({ className, input, label, type, meta, disabled }) =
   </FormGroup>
 );
 
+export const renderPasswordField = ({ className, input, label, type, meta, disabled }) => (
+  <FormGroup className={className}>
+    <Input
+      {...input}
+      type="password"
+      disabled={disabled}
+      placeholder={label}
+      className={className}
+    />
+    <ValidationState {...meta} />
+  </FormGroup>
+);
+
 export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange, disabled }) => (
   <div style={{ width: '100%' }}>
     <InputGroup>
