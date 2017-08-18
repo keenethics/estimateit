@@ -7,7 +7,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import mongoose from 'mongoose';
 import PrettyError from 'pretty-error';
-import Nightmare from 'nightmare';
 import passport from 'passport';
 import expressValidator from 'express-validator';
 import session from 'express-session';
