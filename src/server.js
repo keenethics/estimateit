@@ -26,7 +26,6 @@ import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
-import sendEmail from './core/sendEmail';
 
 const MongoStore = MongoConnect(session);
 
@@ -216,7 +215,7 @@ const pe = new PrettyError();
 pe.skipNodeFiles();
 pe.skipPackage('express');
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   // eslint-disable-line no-unused-vars
   console.error(pe.render(err));
   const html = ReactDOM.renderToStaticMarkup(

@@ -6,7 +6,7 @@ import {
   InputGroupAddon,
 } from 'reactstrap';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import formatTime from '../libs/formatTime';
 import { ValidationState } from '../libs/helpers';
 import parseMinutesToString from '../libs/parseMinutesToString';

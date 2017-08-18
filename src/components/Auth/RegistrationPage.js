@@ -1,8 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import styles from './styles.scss';
+import PropTypes from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
+import withStyles from 'isomorphic-style-loader/lib/withStyles';
+
+import * as styles from './styles.scss';
 import {
   notEmpty,
   emailValidation,
@@ -11,6 +13,10 @@ import {
 import { renderField, renderPasswordField } from '../libs/helpers';
 
 class RegistrationPage extends React.Component {
+  static propTypes = {
+    handleSubmit: PropTypes.func.isRequired,
+  };
+
   constructor() {
     super();
     this.state = {
@@ -44,7 +50,7 @@ class RegistrationPage extends React.Component {
         }
       })
       .catch((error) => {
-        console.log('handle errors', error.message);
+        console.error('handle errors', error.message);
       });
   }
 

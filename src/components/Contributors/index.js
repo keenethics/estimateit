@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'underscore';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
@@ -15,7 +14,7 @@ import {
   ListGroupItem,
 } from 'reactstrap';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import SelectAsync from '../SelectAsync';
 import {
   requiredSelect,

@@ -10,7 +10,7 @@ import {
 } from '../../data/queriesClient';
 
 
-export class SelectAsync extends React.Component {
+class SelectAsync extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

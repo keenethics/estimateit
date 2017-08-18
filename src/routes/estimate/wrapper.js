@@ -16,8 +16,8 @@ class Wrapper extends React.Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     dispatch: PropTypes.func.isRequired,
-    estimateFormValues: PropTypes.object.isRequired,
-    estimateGeneralInfo: PropTypes.object.isRequired,
+    estimateFormValues: PropTypes.objectOf(PropTypes.any).isRequired,
+    estimateGeneralInfo: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   static defaultProps = {

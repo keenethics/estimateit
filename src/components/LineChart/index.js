@@ -10,11 +10,10 @@ class LineChart extends Component {
   constructor(props) {
     super(props);
 
-    this.getChart = this.getChart.bind(this);
     this.generateData = this.generateData.bind(this);
   }
 
-  getChart(chartComponent) {
+  getChart = (chartComponent) => {
     if (chartComponent) {
       chartComponent.getChart();
     }

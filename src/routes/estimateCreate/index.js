@@ -16,7 +16,5 @@ export default {
           <Main />
         </Layout>),
     }),
-  },
-    require('../estimateGet').default,
-  ],
+  }],
 };

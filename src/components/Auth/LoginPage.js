@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 class LoginPage extends React.Component {
   constructor() {
@@ -39,7 +39,7 @@ class LoginPage extends React.Component {
         }
       })
       .catch((error) => {
-        console.log('handle errors', error.message);
+        console.error('handle errors', error.message);
       });
   }
 

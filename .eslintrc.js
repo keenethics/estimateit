@@ -57,7 +57,7 @@ module.exports = {
       'no-underscore-dangle': [
         'error',
         {
-          'allow': ['_id', '_doc'],
+          'allow': ['_id', '_doc', '_getCss'],
         },
       ],
 

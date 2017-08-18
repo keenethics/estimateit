@@ -151,6 +151,4 @@ const EstimateOutputType = new ObjectType({
 });
 
 
-export {
-  EstimateOutputType,
-};
+export default EstimateOutputType;

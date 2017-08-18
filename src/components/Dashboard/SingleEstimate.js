@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 const SingleEstimate = ({ estimate }) => (
   <a

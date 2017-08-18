@@ -9,7 +9,7 @@ import {
 } from '../constants/userStatus';
 
 const LocalStrategy = passportLocal.Strategy;
-
+/* eslint-disable */
 passport.use(
   'local.signup',
   new LocalStrategy(
@@ -53,7 +53,7 @@ passport.use(
                 'local.password': passwordHash,
                 status: ACTIVE,
               } },
-              (error, res) => {
+              (error) => {
                 if (error) {
                   return done(null, false, {
                     success: false,

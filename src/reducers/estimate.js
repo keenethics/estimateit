@@ -3,7 +3,7 @@ import {
 } from '../constants/actionTypes';
 
 
-export function estimate(state = {}, action) {
+export default function estimate(state = {}, action) {
   switch (action.type) {
     case CHANGE_GENERAL_ESTIMATE_INFO:
       return { ...state, ...action.payload.value };
@@ -12,5 +12,3 @@ export function estimate(state = {}, action) {
       return state;
   }
 }
-
-export default estimate;

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { graphql, compose } from 'react-apollo';
@@ -17,7 +16,7 @@ import {
   DropdownToggle,
 } from 'reactstrap';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import history from '../../history';
 import csvGenerate from './lib/csvGenerate';
 import csvFilename from './lib/csvFilename';

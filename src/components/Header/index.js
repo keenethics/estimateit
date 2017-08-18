@@ -1,3 +1,4 @@
+/* eslint global-require:  */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -13,7 +14,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import datepicker from 'react-datepicker/dist/react-datepicker.css';
 
 import Task from './Task';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 import technologiesList from '../../constants/technologies';
 import { renderField, renderDateField } from '../libs/helpers';
@@ -113,7 +114,7 @@ class Header extends Component {
                   founders@keenethics.com
                 </a>
               </p>
-              <p><a href="https://keenethics.com/" target="_blank" rel="noreferrer">keenethics.com</a></p>
+              <p><a href="https://keenethics.com/" target="_blank" rel="noopener noreferrer">keenethics.com</a></p>
             </div>
           </Col>
           <Col xs="12" md="7" className={styles.header__right}>
