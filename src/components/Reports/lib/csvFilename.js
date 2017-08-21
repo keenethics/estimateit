@@ -10,5 +10,5 @@ export default function downloadCsv(prefix = true, filename = 'estimate') {
       fn = `${(new Date()).getTime()}_${filename}`;
     }
   }
-  return fn;
+  return fn + '.csv';
 }
