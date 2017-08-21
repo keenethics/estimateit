@@ -18,9 +18,12 @@ export default function csv(columns, data, calculationData, separator = ',') {
       content.push(columnOrder.join(separator));
     }
   }
+
+  const minutesToHours = minutes => `${Math.floor(minutes / 60)}:${(minutes % 60).toString().padStart(2, '0')}`;
+
   const getSubTaskData = (subtasks) => {
     const regex = new RegExp(',', 'g');
-    const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), task.minimumMinutes, task.maximumMinutes].join(separator);
+    const taskToRow = (task, No) => [No, task.taskName.replace(regex, ''), minutesToHours(task.minimumMinutes), minutesToHours(task.maximumMinutes)].join(separator);
     const assembleNo = (parentNo, No) => (parentNo ? `${parentNo}.${No}` : No);
     const tasksToRows = (tasks, parentNo) => [].concat(
       ...tasks.map((task, i) => {
