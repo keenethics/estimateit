@@ -118,11 +118,16 @@ class Reports extends Component {
     this.setState({
       csv: csvGenerate(columns, tasks, estimateOptions),
     }, () => {
-      const a = document.createElement('a');
-      a.textContent = 'download';
-      a.download = csvFilename();
-      a.href = `data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(this.state.csv)}`;
-      a.click();
+      this.notificationSystem.addNotification({
+        autoDismiss: 26,
+        position: 'br',
+        title: 'Saving CSV',
+        level: 'success',
+        message: <a id="csv-link" download={csvFilename()} href={`data:text/csv;charset=utf-8,%EF%BB%BF${encodeURIComponent(this.state.csv)}`} />,
+      });
+      setTimeout(() => {
+        document.getElementById('csv-link').click();
+      }, 0);
     });
   }
 
