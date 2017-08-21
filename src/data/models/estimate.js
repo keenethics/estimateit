@@ -32,6 +32,10 @@ const EstimateSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  solutionScope: {
+    type: Array,
+    default: [],
+  },
   pm: {
     type: String,
     default: '',

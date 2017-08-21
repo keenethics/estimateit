@@ -15,6 +15,7 @@ const estimateFormValues = gql`
       position
       moneyRate
       technologies,
+      solutionScope,
       estimateOptions {
         qa
         pm

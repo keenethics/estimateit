@@ -134,6 +134,21 @@ class Header extends Component {
             validate={[arrayItemMaxLength(30)]}
           />
         </FormGroup>
+
+        <FormGroup className={styles.right__group}>
+          <Field
+            multi
+            creatable
+            searchable
+            options={options}
+            name="solutionScope"
+            component={MultiSelect}
+            placeholder="Solution scope"
+            disabled={!userCanEditThisEstimate}
+            validate={[]}
+          />
+        </FormGroup>
+
         <FieldArray
           level={0}
           name="tasks"

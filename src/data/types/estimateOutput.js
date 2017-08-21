@@ -120,6 +120,9 @@ const EstimateOutputType = new ObjectType({
     technologies: {
       type: new ListType(StringType),
     },
+    solutionScope: {
+      type: new ListType(StringType),
+    },
     pm: {
       type: StringType,
     },
