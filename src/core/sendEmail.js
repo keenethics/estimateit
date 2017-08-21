@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import mg from 'nodemailer-mailgun-transport';
+/* eslint-disable no-console */
 
 if (!process.env.MAIL_API_KEY) console.log('WARNING! PLEASE, PROVIDE VALID <MAIL_API_KEY> AS NODE ENVIRONMENT VARIABLE');
 

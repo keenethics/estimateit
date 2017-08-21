@@ -6,7 +6,7 @@ import { graphql, compose } from 'react-apollo';
 import Notification from 'react-notification-system';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import history from '../../history';
 import SingleEstimate from './SingleEstimate';
 
@@ -64,8 +64,8 @@ class Dashboard extends React.Component {
               <div className={styles.estimate__body_items}>
                 <div className="row">
                   {!!this.props.allEstimates.length &&
-                    this.props.allEstimates.map((estimate, key) =>
-                      <SingleEstimate estimate={estimate} key={key} />,
+                    this.props.allEstimates.map(estimate =>
+                      <SingleEstimate estimate={estimate} key={estimate._id} />,
                     )
                   }
                 </div>

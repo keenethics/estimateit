@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 
 class Loading extends Component {

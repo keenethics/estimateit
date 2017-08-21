@@ -8,7 +8,7 @@ import {
 
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 const FinalEstimate = ({ totalHours, moneyRate }) => {
   const totalSum = Math.round(totalHours * moneyRate);

@@ -10,7 +10,6 @@
 /* @flow */
 
 import fetch from 'isomorphic-fetch';
-import { createApolloFetch } from 'apollo-fetch';
 
 type Options = {
   baseUrl: string,

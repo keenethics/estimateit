@@ -7,7 +7,7 @@ import { compose } from 'react-apollo';
 import { Container, Col, Card } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import Header from '../libs/Header';
-import s from './Layout.scss';
+import * as s from './Layout.scss';
 import scrollToItem from '../libs/scroll';
 import { ESTIMATE_FORM } from '../../constants';
 

@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 
 import Slider from '../Slider';
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import { renderOptionsField } from '../libs/helpers';
 import { required, currency } from '../libs/validation';
 

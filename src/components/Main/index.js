@@ -6,9 +6,9 @@ import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import Reports from '../Reports';
-import styles from './styles.scss';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
+import * as styles from './styles.scss';
 import Contributors from '../Contributors';
 import FinalEstimate from '../FinalEstimate';
 import { ESTIMATE_FORM } from '../../constants';

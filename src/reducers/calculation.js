@@ -7,7 +7,7 @@ import {
 
 import initialState from './initialState';
 
-export function calculation(state = initialState.calculation, action) {
+export default function calculation(state = initialState.calculation, action) {
   switch (action.type) {
     case GENERAL_CALCULATION:
       return { ...state, ...action.payload };
@@ -28,5 +28,3 @@ export function calculation(state = initialState.calculation, action) {
       return state;
   }
 }
-
-export default calculation;

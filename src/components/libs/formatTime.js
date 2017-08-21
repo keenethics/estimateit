@@ -11,7 +11,6 @@ const formatTime = (digit) => {
     };
   }
   if (typeof digit === 'object') {
-
     const fromatedDigitValue = digit.hours + (digit.minutes / 100);
 
     return {

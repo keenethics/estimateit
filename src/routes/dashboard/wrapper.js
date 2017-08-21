@@ -11,13 +11,12 @@ class Wrapper extends React.Component {
   static contextTypes = {
     client: PropTypes.object,
   };
+
   static propTypes = {
     children: PropTypes.node.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    estimates: PropTypes.objectOf(PropTypes.any).isRequired,
   };
-  constructor(props) {
-    super(props);
-    this.getEstimate = this.getEstimate.bind(this);
-  }
 
   componentWillReceiveProps(nextProps) {
     const { loading, allEstimates } = nextProps.estimates;
@@ -26,7 +25,7 @@ class Wrapper extends React.Component {
     }
   }
 
-  getEstimate(props) {
+  getEstimate = (props) => {
     const { dispatch, estimates: { allEstimates } } = props;
     dispatch(addDashboardData({ allEstimates }));
   }

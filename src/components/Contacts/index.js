@@ -7,7 +7,7 @@ import { Field } from 'redux-form';
 import { renderField } from '../libs/helpers';
 import { emailValidation, alphaNumeric, maxLength } from '../libs/validation';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 
 class Contacts extends Component {
   render() {

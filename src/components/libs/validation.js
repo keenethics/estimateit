@@ -89,7 +89,7 @@ export const currency = (value) => {
 
 export const notEmpty = (value) => {
   if (value && value.trim()) {
-    return undefined
+    return undefined;
   }
   return 'Should not be empty';
 };

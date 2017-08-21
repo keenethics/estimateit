@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
-import s from './styles.scss';
+import * as s from './styles.scss';
+
 
 class Header extends React.Component {
   static contextTypes = {

@@ -4,7 +4,7 @@ import {
 
 import initialState from './initialState';
 
-export function estimates(state = initialState.estimates, action) {
+export default function estimates(state = initialState.estimates, action) {
   switch (action.type) {
     case ADD_DASHBOARD_DATA:
       return Object.assign({}, state, action.data);
@@ -14,4 +14,4 @@ export function estimates(state = initialState.estimates, action) {
   }
 }
 
-export default estimates;
+// export default estimates;

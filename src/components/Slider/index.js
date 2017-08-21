@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import { Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
-import styles from './styles.scss';
+import * as styles from './styles.scss';
 import parseMinutesToString from '../libs/parseMinutesToString';
 
 const Slider = ({
