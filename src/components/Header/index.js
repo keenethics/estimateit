@@ -17,6 +17,7 @@ import Task from './Task';
 import * as styles from './styles.scss';
 import MultiSelect from '../libs/MultiSelect';
 import technologiesList from '../../constants/technologies';
+import solutionsList from '../../constants/solutions';
 import { renderField, renderDateField } from '../libs/helpers';
 import {
   required,
@@ -90,6 +91,10 @@ class Header extends Component {
       value: element,
       label: element,
     }));
+    const solutionOptions = solutionsList.map(element => ({
+      value: element,
+      label: element,
+    }));
     const { userCanEditThisEstimate = false } = this.props;
 
     return (
@@ -140,7 +145,7 @@ class Header extends Component {
             multi
             creatable
             searchable
-            options={options}
+            options={solutionOptions}
             name="solutionScope"
             component={MultiSelect}
             placeholder="Solution scope"

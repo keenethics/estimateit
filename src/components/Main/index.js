@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import { Card, CardBlock, Row, Col } from 'reactstrap';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
+import Disclaimer from '../Disclaimer';
 import Reports from '../Reports';
 import Contacts from '../Contacts';
 import LineChart from '../LineChart';
@@ -93,6 +94,9 @@ class Main extends Component {
             <Contributors />
           </Col>
         }
+        <Col xs="12">
+          <Disclaimer />
+        </Col>
         <Col xs="12">
           <Reports
             tasks={tasks}
