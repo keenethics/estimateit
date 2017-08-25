@@ -86,7 +86,7 @@ app.post('/register', (req, res, next) => {
 
 app.get(
   '/auth/google/',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
+  passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'] }),
 );
 app.get(
   '/auth/google/callback',
