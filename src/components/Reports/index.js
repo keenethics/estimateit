@@ -42,6 +42,7 @@ class Reports extends Component {
     this.toggleModal = this.toggleModal.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
+    this.exportToGoogleSheet = this.exportToGoogleSheet.bind(this);
   }
 
   toggle() {
@@ -53,6 +54,19 @@ class Reports extends Component {
     this.setState({
       modal: !this.state.modal,
     });
+  }
+
+  exportToGoogleSheet() {
+    const { estimateId } = this.props;
+    const { token, refreshToken } = window.App.user.google;
+    fetch('/spreadsheets', {
+        method: 'POST',
+        body: JSON.stringify({ token, refreshToken, estimateId }),
+        headers: {
+          'Accept': 'application/json, text/plain, */*',
+          'Content-Type': 'application/json'
+        },
+    })
   }
 
   estimateUpdate(values) {
@@ -133,12 +147,20 @@ class Reports extends Component {
   render() {
     const { handleSubmit } = this.context;
     const { userCanEditThisEstimate } = this.props;
-
+    const token = window.App.user.google && window.App.user.google.token;
     return (
       <div>
         <CardBlock className={styles.final__wrapper}>
           { userCanEditThisEstimate &&
             <div>
+              {token &&
+                <Button
+                  color="danger"
+                  onClick={handleSubmit(this.exportToGoogleSheet)}
+                >
+               export to google Sheets
+              </Button>
+              }
               <Button
                 color="danger"
                 onClick={handleSubmit(this.estimateUpdate)}

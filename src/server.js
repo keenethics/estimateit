@@ -21,11 +21,14 @@ import createFetch from './createFetch';
 import router from './router';
 import schema from './data/schema';
 import User from './data/models/user';
+import Estimate from './data/models/estimate';
+
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
+import spreadSheets from './utils/spreadsheets';
 
 const MongoStore = MongoConnect(session);
 
@@ -86,7 +89,11 @@ app.post('/register', (req, res, next) => {
 
 app.get(
   '/auth/google/',
-  passport.authenticate('google', { scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'] }),
+  passport.authenticate('google', {
+    scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'],
+    accessType: 'offline',
+    prompt: 'consent'
+  }),
 );
 app.get(
   '/auth/google/callback',
@@ -100,6 +107,23 @@ app.get('/auth/logout', (req, res) => {
   req.logout();
   req.session.destroy();
   res.redirect('/');
+});
+
+app.post('/spreadsheets', async (req, res) => {
+  const { token, refreshToken, estimateId } = req.body;
+  const credentials = { access_token: token, refresh_token: refreshToken };
+  const spHelper = spreadSheets(credentials);
+  const estimate = await Estimate.findById(estimateId);
+  spHelper.createSpreadsheet('opachki', async (err, sp) => {
+    if (err) {
+      // if access_token has been expired
+      // it should be recreated by refreshToken
+      console.log(err.code);
+      if (err.code == 401) {
+        const newCredentials = await spHelper.updateCredentials();
+      }
+    }
+  });
 });
 
 //

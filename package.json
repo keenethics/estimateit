@@ -28,6 +28,8 @@
     "express-session": "^1.15.3",
     "express-validator": "^3.2.0",
     "fastclick": "^1.0.6",
+    "google-auth-library": "^0.10.0",
+    "googleapis": "^21.2.0",
     "graphql": "^0.9.3",
     "graphql-tag": "^2.2.2",
     "history": "^4.6.1",

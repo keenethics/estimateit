@@ -178,6 +178,8 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
+      console.log('refershToken');
+      console.log(refreshToken);
       process.nextTick(async () => {
         if (!req.user) {
           const email = (profile.emails[0].value || '').toLowerCase();
@@ -194,9 +196,9 @@ passport.use(
                   u.google.id = profile.id;
                   u.name = profile.displayName;
                   u.google.token = accessToken;
+                  u.google.refreshToken = refreshToken;
                   u.email = email;
                   u.status = ACTIVE;
-
                   u.save((error) => {
                     if (error) {
                       return done(null, false, {
@@ -226,6 +228,7 @@ passport.use(
                       const u = user;
                       u.google.id = profile.id;
                       u.google.token = accessToken;
+                      u.google.refreshToken = refreshToken;
                       u.name = profile.displayName;
                       u.status = ACTIVE;
                       u.email = (profile.emails[0].value || '').toLowerCase();
@@ -254,8 +257,13 @@ passport.use(
                   newUser.status = ACTIVE;
                   newUser.google.id = profile.id;
                   newUser.google.token = accessToken;
+                  newUser.google.refreshToken = refreshToken;
                   newUser.name = profile.displayName;
                   newUser.email = (profile.emails[0].value || '').toLowerCase();
+                  console.log('user');
+                  console.log(newUser);
+                  console.log('refreshToken');
+                  console.log(refreshToken);
                   newUser.save((error) => {
                     if (error) {
                       return done(error);
@@ -277,6 +285,7 @@ passport.use(
           user.status = ACTIVE;
           user.google.token = profile.id;
           user.google.token = accessToken;
+          user.google.refreshToken = refreshToken;
           user.name = profile.displayName;
           user.email = (profile.emails[0].value || '').toLowerCase();
           user.save((err) => {
