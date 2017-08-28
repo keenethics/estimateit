@@ -7,7 +7,7 @@ const solutionsList = [
   'Edge',
   'iOS',
   'Android',
-  'Desctop view',
+  'Desktop view',
   'Tablet view',
   'Mobile view',
   'Unit tests coverage',
