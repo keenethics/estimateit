@@ -15,7 +15,7 @@ const EstimateSchema = mongoose.Schema({
   },
   projectName: {
     type: String,
-    default: '',
+    default: 'Untitled Project',
   },
   data: {
     type: String,
