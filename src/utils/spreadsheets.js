@@ -13,6 +13,7 @@ const SheetsHelper = function(credentials) {
   this.service = google.sheets({version: 'v4', auth: oauth2Client});
 };
 
+
 SheetsHelper.prototype.updateCredentials = function() {
   return new Promise((resolve, reject) => {
     oauth2Client.refreshAccessToken(function(err, tokens) {
@@ -38,6 +39,21 @@ SheetsHelper.prototype.createSpreadsheet = function(title, callback) {
       },
       sheets: [
         {
+          data: [
+            {
+              startRow: 0,
+              startColumn: 0,
+              rowData: [
+                {
+                  values: [{
+                    userEnteredValue: {
+                      numberValue: 5,
+                    }
+                  }],
+                }
+              ],
+            }
+          ],
           properties: {
             title: 'Data',
             gridProperties: {
