@@ -114,7 +114,10 @@ app.post('/spreadsheets', async (req, res) => {
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
   const estimate = await Estimate.findById(estimateId);
-  spHelper.createSpreadsheet('opachki', async (err, sp) => {
+  console.log(estimate);
+  const { tasks } = estimate;
+  const options = { tasks };
+  spHelper.createSpreadsheet(options, async (err, sp) => {
     if (err) {
       // if access_token has been expired
       // it should be recreated by refreshToken

@@ -30,12 +30,44 @@ SheetsHelper.prototype.updateCredentials = function() {
   })
 }
 
-SheetsHelper.prototype.createSpreadsheet = function(title, callback) {
+const createTaskRow = (task, rowNumber) => {
+  const { maximumMinutes, minimumMinutes, taskName } = task;
+  return {
+    startRow: rowNumber,
+    startColumn: 0,
+    rowData: [{
+      values: [
+        {
+          userEnteredValue: {
+            stringValue: taskName,
+          },
+        },
+        {
+          userEnteredValue: {
+            numberValue: parseInt(minimumMinutes, 10),
+          },
+        },
+        {
+          userEnteredValue: {
+            numberValue: parseInt(maximumMinutes, 10),
+          }
+        }
+      ]}]
+    };
+
+}
+
+SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
+  const { tasks } = options;
+  const tasksRows = [];
+  tasks.forEach((t,i) => {
+    tasksRows.push(createTaskRow(t, i));
+  })
   var request = {
     resource: {
       properties: {
-        title: title
+        title: 'title'
       },
       sheets: [
         {
@@ -45,11 +77,18 @@ SheetsHelper.prototype.createSpreadsheet = function(title, callback) {
               startColumn: 0,
               rowData: [
                 {
-                  values: [{
-                    userEnteredValue: {
-                      numberValue: 5,
+                  values: [
+                    {
+                      userEnteredValue: {
+                        numberValue: 5,
+                      }
+                    },
+                    {
+                      userEnteredValue: {
+                        numberValue: 15,
+                      }
                     }
-                  }],
+                  ],
                 }
               ],
             }
