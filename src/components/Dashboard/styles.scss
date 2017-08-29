@@ -29,7 +29,6 @@ input[type="password"] {
   }
 }
 
-
 .estimate {
   width: 100%;
   &__heading {
@@ -50,39 +49,20 @@ input[type="password"] {
   margin: 0 0 25px;
   &:hover {
     text-decoration: none;
+    .singleEstimate__header {
+        color: white;
+        background: #d9534f;
+    }
+  }
+  &__header {
+    color: black;
   }
   &__text {
     align-self: flex-start;
     overflow-wrap: break-word;
     word-break: break-word;
     font-size: 14px;
-  }
-}
-
-.card_pf {
-  background: #fff;
-  border: 2px solid #f5f5f5;
-  border-radius: 5px;
-  min-height: 160px;
-  text-align: left;
-  color: #9a9a9a;
-  &__body {
-    padding: 15px 20px;
-  }
-  &__title {
-    font-size: 18px;
-    font-weight: 500;
-    color: #6c6c6c;
-    margin: 0 0 8px;
-  }
-  &:hover {
-    text-decoration: none;
-    border-color: #2278ec;
-    background: #2278ec;
-    color: #a2c7f6;
-
-    .card_pf__title {
-      color: #fff;
-    }
+    text-align: left;
+    color: #9a9a9a;
   }
 }
