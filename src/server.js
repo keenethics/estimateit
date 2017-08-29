@@ -118,9 +118,13 @@ app.post('/spreadsheets', async (req, res) => {
     if (err) {
       // if access_token has been expired
       // it should be recreated by refreshToken
-      console.log(err.code);
       if (err.code == 401) {
         const newCredentials = await spHelper.updateCredentials();
+        if (newCredentials) {
+          const query = { 'google.token': token };
+          const projection = { $set: { google: newCredentials } };
+          User.update(query, projection);
+        }
       }
     }
   });

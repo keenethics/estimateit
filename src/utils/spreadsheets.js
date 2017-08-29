@@ -1,11 +1,12 @@
 import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';
+const oAuth2 = require('googleapis').auth.OAuth2;
 
 let helper = null;
 
-const oAuth2 = require('googleapis').auth.OAuth2;
-const oauth2Client = new oAuth2();
+const { GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = process.env;
+const oauth2Client = new oAuth2(GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL);
 
 const SheetsHelper = function(credentials) {
   oauth2Client.setCredentials(credentials);
@@ -18,7 +19,12 @@ SheetsHelper.prototype.updateCredentials = function() {
       if (err) {
         reject(err);
       }
-      resolve(tokens);
+      const newCreds = {
+        access_token: tokens.access_token,
+        refresh_token: tokens.refresh_token,
+      };
+      oauth2Client.setCredentials(newCreds)
+      resolve({ token: tokens.access_token, refreshToken });
     })
   })
 }
