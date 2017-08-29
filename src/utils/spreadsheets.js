@@ -37,27 +37,33 @@ const createTaskCell = (value) => {
   return { numberValue: parseInt(value, 10) };
 }
 
-const createTaskRow = (task, rowNumber) => {
-  const { maximumMinutes, minimumMinutes, taskName } = task;
+let spPosition = 0;
+
+const createRow = (columns, rowNumber) => {
+  const values = columns.map(co => ({ userEnteredValue: createTaskCell(co) }));
+  spPosition++;
   return {
     startRow: rowNumber,
     startColumn: 0,
     rowData: [{
-      values: [
-        { userEnteredValue: createTaskCell(taskName) },
-        { userEnteredValue: createTaskCell(minimumMinutes) },
-        { userEnteredValue: createTaskCell(maximumMinutes) }
-      ]
+      values,
     }]
   };
 }
 
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
-  const { tasks } = options;
-  const tasksRows = [ createTaskRow({ taskName: 'task', maximumMinutes: 'maximum minutes', minimumMinutes: 'minimum minutes' }, 0)];
+  const { tasks, technologies } = options;
+  const rows = [];
+  rows.push(createRow(['Suggested technologies'], spPosition++));
+  technologies.map(t => {
+    rows.push(createRow([t], spPosition++));
+  });
+  rows.push(createRow(['task', 'maximum minutes', 'minimum minutes'], spPosition++));
+
   tasks.forEach((t,i) => {
-    tasksRows.push(createTaskRow(t, i + 1));
+    const { maximumMinutes, minimumMinutes, taskName } = t;
+    rows.push(createRow([taskName, minimumMinutes, maximumMinutes], spPosition++));
   })
   var request = {
     resource: {
@@ -66,7 +72,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       },
       sheets: [
         {
-          data: tasksRows,
+          data: rows,
           properties: {
             title: 'Data',
             gridProperties: {
@@ -80,6 +86,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   };
   self.service.spreadsheets.create(request, function(err, spreadsheet) {
     if (err) {
+      console.log(err);
       return callback(err);
     }
     // need to save spreadsheet id into db
