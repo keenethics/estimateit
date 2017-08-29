@@ -30,6 +30,13 @@ SheetsHelper.prototype.updateCredentials = function() {
   })
 }
 
+const createTaskCell = (value) => {
+  if (/[A-Za-z]+/g.test(value)) {
+   return { stringValue: value }
+  }
+  return { numberValue: parseInt(value, 10) };
+}
+
 const createTaskRow = (task, rowNumber) => {
   const { maximumMinutes, minimumMinutes, taskName } = task;
   return {
@@ -37,32 +44,20 @@ const createTaskRow = (task, rowNumber) => {
     startColumn: 0,
     rowData: [{
       values: [
-        {
-          userEnteredValue: {
-            stringValue: taskName,
-          },
-        },
-        {
-          userEnteredValue: {
-            numberValue: parseInt(minimumMinutes, 10),
-          },
-        },
-        {
-          userEnteredValue: {
-            numberValue: parseInt(maximumMinutes, 10),
-          }
-        }
-      ]}]
-    };
-
+        { userEnteredValue: createTaskCell(taskName) },
+        { userEnteredValue: createTaskCell(minimumMinutes) },
+        { userEnteredValue: createTaskCell(maximumMinutes) }
+      ]
+    }]
+  };
 }
 
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
   const { tasks } = options;
-  const tasksRows = [];
+  const tasksRows = [ createTaskRow({ taskName: 'task', maximumMinutes: 'maximum minutes', minimumMinutes: 'minimum minutes' }, 0)];
   tasks.forEach((t,i) => {
-    tasksRows.push(createTaskRow(t, i));
+    tasksRows.push(createTaskRow(t, i + 1));
   })
   var request = {
     resource: {
@@ -71,28 +66,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       },
       sheets: [
         {
-          data: [
-            {
-              startRow: 0,
-              startColumn: 0,
-              rowData: [
-                {
-                  values: [
-                    {
-                      userEnteredValue: {
-                        numberValue: 5,
-                      }
-                    },
-                    {
-                      userEnteredValue: {
-                        numberValue: 15,
-                      }
-                    }
-                  ],
-                }
-              ],
-            }
-          ],
+          data: tasksRows,
           properties: {
             title: 'Data',
             gridProperties: {
