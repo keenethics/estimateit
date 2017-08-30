@@ -16,9 +16,9 @@ const estimateCreate = {
     try {
       const newEstimate = new Estimate({ owner: _id.toString() });
 
-      const { _id: estiamteId } = await newEstimate.save();
+      const { _id: estimateId } = await newEstimate.save();
 
-      url = `estimate/${estiamteId}`;
+      url = `estimate/${estimateId}`;
     } catch (error) {
       return console.error(error);
     }

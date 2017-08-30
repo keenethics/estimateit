@@ -22,7 +22,7 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
 
 export const actionToggleTask = ({ form, field, checked }) =>
   (dispatch, getState) => {
-    const sign = checked || -1;
+    const sign = checked ? 1 : -1;
     const selector = formValueSelector(form);
     const toggledTask = selector(getState(), field);
     const {
@@ -31,18 +31,18 @@ export const actionToggleTask = ({ form, field, checked }) =>
     } = toggledTask;
 
     let parentField = field.replace(/.?tasks\[\d+\]$/, '');
+
     // modify all parent tasks
     while (parentField) {
       const parent = selector(getState(), parentField);
       const { isChecked, minimumMinutes = 0, maximumMinutes = 0 } = parent;
-      const minPayload = minimumMinutes + (sign * toggledMinMinutes);
-      const maxPayload = maximumMinutes + (sign * toggledMaxMinutes);
+      const minPayload = +minimumMinutes + (sign * toggledMinMinutes);
+      const maxPayload = +maximumMinutes + (sign * toggledMaxMinutes);
 
-      changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: minPayload });
-      changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, pauload: maxPayload });
+      changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: +minPayload });
+      changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, payload: +maxPayload });
 
       if (!isChecked) break;
-
       parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
     }
 

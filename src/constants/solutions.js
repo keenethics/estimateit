@@ -7,9 +7,11 @@ const solutionsList = [
   'Edge',
   'iOS',
   'Android',
-  'Desctop view',
+  'Desktop view',
   'Tablet view',
   'Mobile view',
+  'Unit tests coverage',
+  'Functional tests covarage',
 ];
 
 export default solutionsList;
