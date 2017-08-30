@@ -20,7 +20,7 @@ export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
     const maxTime = address.split('.')
       .reduce((obj, i) => obj && obj[i], allValues);
 
-    return (maxTime >= value)
+    return ((maxTime || 0) >= (value || 0))
       ? undefined
       : 'min time > max time';
   };
