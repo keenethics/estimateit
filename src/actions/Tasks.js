@@ -20,6 +20,31 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
   });
 };
 
+const recalculateSubtask = (field, getState, selector) => {
+  console.log('1)',field);
+  const currentTask = selector(getState(), field);
+  console.log('2)',currentTask.tasks);
+
+  const sumTasks = (currentTask.tasks && currentTask.tasks.length) ? (
+    currentTask.tasks.filter(({ isChecked }) => isChecked).reduce((sum, item) => ({
+      min: sum.min + item.minimumMinutes,
+      max: sum.max + item.maximumMinutes,
+    }), { min: 0, max: 0 })
+  ) : ({
+    min: currentTask.isChecked ? currentTask.minimumMinutes : 0,
+    max: currentTask.isChecked ? currentTask.maximumMinutes : 0,
+  });
+  console.log('2.5)',{ min: sumTasks.min/60, max: sumTasks.max/60,  });
+
+  const parentField = field.replace(/.?tasks\[\d+\]$/, '');
+  console.log('3)',parentField);
+
+  if (parentField) return recalculateSubtask(parentField, getState, selector)
+
+
+  // return ;
+}
+
 export const actionToggleTask = ({ form, field, checked }) =>
   (dispatch, getState) => {
     const sign = checked ? 1 : -1;
@@ -29,6 +54,9 @@ export const actionToggleTask = ({ form, field, checked }) =>
       minimumMinutes: toggledMinMinutes = 0,
       maximumMinutes: toggledMaxMinutes = 0,
     } = toggledTask;
+
+    recalculateSubtask(field, getState, selector);
+
 
     let parentField = field.replace(/.?tasks\[\d+\]$/, '');
 
