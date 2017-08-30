@@ -6,7 +6,7 @@ import withStyles from 'isomorphic-style-loader/lib/withStyles';
 
 import * as styles from './styles.scss';
 import {
-  notEmpty,
+  required,
   emailValidation,
   minLength,
 } from '../libs/validation';
@@ -66,7 +66,7 @@ class RegistrationPage extends React.Component {
             name="name"
             component={renderField}
             label="Your name"
-            validate={[notEmpty, minLength(2)]}
+            validate={[required, minLength(2)]}
           />
           <Field
             name="email"
