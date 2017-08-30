@@ -16,7 +16,9 @@ export const UserError = createError(UNAUTHORIZED_USER, {
   message: 'User not authorized',
 });
 
-export const MongoError = createError(MONGO_ERROR, {});
+export const MongoError = createError(MONGO_ERROR, {
+  message: 'Mongo Error',
+});
 
 export const AccessDenied = createError(ACCESS_DENIED, {
   message: 'You have not right edit this documentaa',
