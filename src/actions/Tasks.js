@@ -21,7 +21,7 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
   });
 };
 
-const recalculateSubtask = (field, getState, selector, dispatch, form, currentTarget) => {
+const recalculateSubtask = (field, getState, selector, dispatch, form, currentTarget = false) => {
   console.log('1)',field, dispatch);
   const currentTask = selector(getState(), field);
   console.log('2)',currentTask.tasks);
@@ -45,10 +45,10 @@ const recalculateSubtask = (field, getState, selector, dispatch, form, currentTa
   const parentField = field.replace(/.?tasks\[\d+\]$/, '');
   console.log('4)', parentField);
 
-  if (parentField) return recalculateSubtask(parentField, getState, selector, dispatch, form)
+  if (parentField) return recalculateSubtask(parentField, getState, selector, dispatch, form);
 
 
-  return null; // <<<<<<<
+  return null; // ??
 }
 
 export const actionToggleTask = ({ form, field, checked }) =>
@@ -64,21 +64,21 @@ export const actionToggleTask = ({ form, field, checked }) =>
     recalculateSubtask(field, getState, selector, dispatch, form, true);
 
 
-    let parentField = field.replace(/.?tasks\[\d+\]$/, '');
-
-    // modify all parent tasks
-    while (parentField) {
-      const parent = selector(getState(), parentField);
-      const { isChecked, minimumMinutes = 0, maximumMinutes = 0 } = parent;
-      const minPayload = +minimumMinutes + (sign * toggledMinMinutes);
-      const maxPayload = +maximumMinutes + (sign * toggledMaxMinutes);
-
-      changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: +minPayload });
-      changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, payload: +maxPayload });
-
-      if (!isChecked) break;
-      parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
-    }
+    // let parentField = field.replace(/.?tasks\[\d+\]$/, '');
+    //
+    // // modify all parent tasks
+    // while (parentField) {
+    //   const parent = selector(getState(), parentField);
+    //   const { isChecked, minimumMinutes = 0, maximumMinutes = 0 } = parent;
+    //   const minPayload = +minimumMinutes + (sign * toggledMinMinutes);
+    //   const maxPayload = +maximumMinutes + (sign * toggledMaxMinutes);
+    //
+    //   changeWrapper({ dispatch, form, field: `${parentField}.minimumMinutes`, payload: +minPayload });
+    //   changeWrapper({ dispatch, form, field: `${parentField}.maximumMinutes`, payload: +maxPayload });
+    //
+    //   if (!isChecked) break;
+    //   parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
+    // }
 
     dispatch(actionGeneralCalculation({ form }));
   };
