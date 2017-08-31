@@ -45,11 +45,9 @@ const createCell = (value) => ({ userEnteredValue: createTaskCell(value) });
 
 const createCellData = (columns) => (columns.map(co => ({ userEnteredValue: createTaskCell(co) })));
 
-SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
-  var self = this;
-  const { tasks, technologies } = options;
+const createTaskTable = (startRow ,tasks) => {
   const GridData = {
-    startRow: 0,
+    startRow,
     startColumn: 0,
     rowData: [],
     columnMetadata: [
@@ -58,26 +56,52 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       { pixelSize: 150 },
     ]
   };
-
-
   const columnFormat =  { horizontalAlignment: 1 }
   const titleCells = [];
   titleCells.push(formatCell(createCell('task'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
   titleCells.push(formatCell(createCell('min hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
   titleCells.push(formatCell(createCell('max hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
   GridData.rowData.push({ values: titleCells });
+
   tasks.forEach((t,i) => {
     const { maximumMinutes , minimumMinutes, taskName } = t;
     const rowCells = [];
+    let subTaskCellsObj = {};
     const formatOptions = (i % 2 == 0) ? columnFormat
     : Object.assign({}, columnFormat, { backgroundColor: {red: 0.89, green: 0.89, blue: 0.89, alpha: 1 }});
-    rowCells.push(formatCell(createCell(taskName), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 20 } })}));
+    rowCells.push(formatCell(createCell(`${i}. ${taskName}`), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 20 } })}));
     rowCells.push(formatCell(createCell(minimumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
     rowCells.push(formatCell(createCell(maximumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+    // prink subtasks
+    if (t.tasks) {
+      t.tasks.forEach((subTask,j) => {
+        const subTaskCells = [];
+        const { maximumMinutes , minimumMinutes, taskName } = subTask;
+        subTaskCells.push(formatCell(createCell(`${i}.${j}. ${taskName}`), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 40 } })}));
+        subTaskCells.push(formatCell(createCell(minimumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+        subTaskCells.push(formatCell(createCell(maximumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+        if (!subTaskCellsObj[i]) { subTaskCellsObj[i] = [] };
+        subTaskCellsObj[i].push(subTaskCells);
+      });
+
+    }
 
     GridData.rowData.push({ values: rowCells });
-  });
+    if (subTaskCellsObj[i]) {
+      subTaskCellsObj[i].forEach(subTaskCell => {
+        GridData.rowData.push({ values: subTaskCell });
+      })
+    }
 
+  });
+  return GridData;
+}
+
+SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
+  var self = this;
+  const { tasks, technologies } = options;
+  const Grids = [];
+  Grids.push(createTaskTable(0,tasks));
   var request = {
     resource: {
       properties: {
@@ -85,7 +109,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       },
       sheets: [
         {
-          data: [GridData],
+          data: [Grids],
           properties: {
             title: 'Data',
             gridProperties: {
