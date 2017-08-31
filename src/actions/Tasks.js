@@ -8,6 +8,7 @@ import { actionGeneralCalculation } from './Calculation';
 
 
 const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
+  console.log('wrapper::', form,  field, payload);
   dispatch({
     type: '@@redux-form/CHANGE',
     meta: {
@@ -20,8 +21,8 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
   });
 };
 
-const recalculateSubtask = (field, getState, selector) => {
-  console.log('1)',field);
+const recalculateSubtask = (field, getState, selector, dispatch, form, currentTarget) => {
+  console.log('1)',field, dispatch);
   const currentTask = selector(getState(), field);
   console.log('2)',currentTask.tasks);
 
@@ -34,15 +35,20 @@ const recalculateSubtask = (field, getState, selector) => {
     min: currentTask.isChecked ? currentTask.minimumMinutes : 0,
     max: currentTask.isChecked ? currentTask.maximumMinutes : 0,
   });
-  console.log('2.5)',{ min: sumTasks.min/60, max: sumTasks.max/60,  });
+  console.log('3)',{ min: sumTasks.min/60, max: sumTasks.max/60,  });
+
+  if (!currentTarget) {
+    changeWrapper({ dispatch, form, field: `${field}.minimumMinutes`, payload: sumTasks.min });
+    changeWrapper({ dispatch, form, field: `${field}.maximumMinutes`, payload: sumTasks.max });
+  }
 
   const parentField = field.replace(/.?tasks\[\d+\]$/, '');
-  console.log('3)',parentField);
+  console.log('4)', parentField);
 
-  if (parentField) return recalculateSubtask(parentField, getState, selector)
+  if (parentField) return recalculateSubtask(parentField, getState, selector, dispatch, form)
 
 
-  // return ;
+  return null; // <<<<<<<
 }
 
 export const actionToggleTask = ({ form, field, checked }) =>
@@ -55,7 +61,7 @@ export const actionToggleTask = ({ form, field, checked }) =>
       maximumMinutes: toggledMaxMinutes = 0,
     } = toggledTask;
 
-    recalculateSubtask(field, getState, selector);
+    recalculateSubtask(field, getState, selector, dispatch, form, true);
 
 
     let parentField = field.replace(/.?tasks\[\d+\]$/, '');
