@@ -39,31 +39,45 @@ const createTaskCell = (value) => {
 
 let spPosition = 0;
 
-const createRow = (columns, rowNumber) => {
-  const values = columns.map(co => ({ userEnteredValue: createTaskCell(co) }));
-  spPosition++;
-  return {
-    startRow: rowNumber,
-    startColumn: 0,
-    rowData: [{
-      values,
-    }]
-  };
-}
+const formatCell = (cell, options) => (Object.assign({}, cell, options));
+
+const createCell = (value) => ({ userEnteredValue: createTaskCell(value) });
+
+const createCellData = (columns) => (columns.map(co => ({ userEnteredValue: createTaskCell(co) })));
 
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
   const { tasks, technologies } = options;
-  const rows = [];
-  rows.push(createRow(['Suggested technologies'], spPosition++));
-  technologies.map(t => {
-    rows.push(createRow([t], spPosition++));
-  });
-  rows.push(createRow(['task', 'minimum hours', 'maximum hours'], spPosition++));
+  const GridData = {
+    startRow: 0,
+    startColumn: 0,
+    rowData: [],
+    columnMetadata: [
+      { pixelSize: 550 },
+      { pixelSize: 150 },
+      { pixelSize: 150 },
+    ]
+  };
+
+
+  const columnFormat =  { horizontalAlignment: 1 }
+  const titleCells = [];
+  titleCells.push(formatCell(createCell('task'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
+  titleCells.push(formatCell(createCell('min hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
+  titleCells.push(formatCell(createCell('max hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
+  GridData.rowData.push({ values: titleCells });
   tasks.forEach((t,i) => {
     const { maximumMinutes , minimumMinutes, taskName } = t;
-    rows.push(createRow([taskName, minimumMinutes / 60, maximumMinutes / 60], spPosition++));
-  })
+    const rowCells = [];
+    const formatOptions = (i % 2 == 0) ? columnFormat
+    : Object.assign({}, columnFormat, { backgroundColor: {red: 0.89, green: 0.89, blue: 0.89, alpha: 1 }});
+    rowCells.push(formatCell(createCell(taskName), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 20 } })}));
+    rowCells.push(formatCell(createCell(minimumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+    rowCells.push(formatCell(createCell(maximumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+
+    GridData.rowData.push({ values: rowCells });
+  });
+
   var request = {
     resource: {
       properties: {
@@ -71,7 +85,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       },
       sheets: [
         {
-          data: rows,
+          data: [GridData],
           properties: {
             title: 'Data',
             gridProperties: {
