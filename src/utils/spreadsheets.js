@@ -34,7 +34,7 @@ const createTaskCell = (value) => {
   if (/[A-Za-z]+/g.test(value)) {
    return { stringValue: value }
   }
-  return { numberValue: parseInt(value, 10) };
+  return { numberValue: Math.round(parseFloat(value) * 10) / 10 };
 }
 
 let spPosition = 0;
@@ -59,11 +59,10 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   technologies.map(t => {
     rows.push(createRow([t], spPosition++));
   });
-  rows.push(createRow(['task', 'maximum minutes', 'minimum minutes'], spPosition++));
-
+  rows.push(createRow(['task', 'minimum hours', 'maximum hours'], spPosition++));
   tasks.forEach((t,i) => {
-    const { maximumMinutes, minimumMinutes, taskName } = t;
-    rows.push(createRow([taskName, minimumMinutes, maximumMinutes], spPosition++));
+    const { maximumMinutes , minimumMinutes, taskName } = t;
+    rows.push(createRow([taskName, minimumMinutes / 60, maximumMinutes / 60], spPosition++));
   })
   var request = {
     resource: {
