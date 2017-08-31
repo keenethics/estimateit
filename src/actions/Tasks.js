@@ -17,7 +17,7 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
       touch,
       persistentSubmitErrors: false,
     },
-    payload: payload || '',
+    payload: payload || 0,
   });
 };
 
