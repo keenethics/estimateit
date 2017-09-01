@@ -13,7 +13,6 @@ const SheetsHelper = function(credentials) {
   this.service = google.sheets({version: 'v4', auth: oauth2Client});
 };
 
-
 SheetsHelper.prototype.updateCredentials = function() {
   return new Promise((resolve, reject) => {
     oauth2Client.refreshAccessToken(function(err, tokens) {
@@ -37,17 +36,14 @@ const createTaskCell = (value) => {
   return { numberValue: Math.round(parseFloat(value) * 10) / 10 };
 }
 
-let spPosition = 0;
-
 const formatCell = (cell, options) => (Object.assign({}, cell, options));
 
 const createCell = (value) => ({ userEnteredValue: createTaskCell(value) });
 
 const createCellData = (columns) => (columns.map(co => ({ userEnteredValue: createTaskCell(co) })));
 
-const createTaskTable = (startRow ,tasks) => {
-  const GridData = {
-    startRow,
+const GridDataProto = {
+    startRow: 0,
     startColumn: 0,
     rowData: [],
     columnMetadata: [
@@ -56,11 +52,18 @@ const createTaskTable = (startRow ,tasks) => {
       { pixelSize: 150 },
     ]
   };
+
+const createTitleCell = (title, options) => (
+  formatCell(createCell(title), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, options)}))
+
+
+const createTaskTable = (startRow ,tasks) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
   const columnFormat =  { horizontalAlignment: 1 }
   const titleCells = [];
-  titleCells.push(formatCell(createCell('task'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
-  titleCells.push(formatCell(createCell('min hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
-  titleCells.push(formatCell(createCell('max hours'), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, { padding: { left: 20 } })}));
+  titleCells.push(createTitleCell('task'));
+  titleCells.push(createTitleCell('min hours'));
+  titleCells.push(createTitleCell('max hours'));
   GridData.rowData.push({ values: titleCells });
 
   tasks.forEach((t,i) => {
@@ -97,11 +100,28 @@ const createTaskTable = (startRow ,tasks) => {
   return GridData;
 }
 
+const createTechTable = (startRow, technologies) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
+  const titleCells = [];
+  titleCells.push(createTitleCell('Suggested technologies'));
+  GridData.rowData.push({ values: titleCells });
+  const columnFormat = { horizontalAlignment: 2 };
+  technologies.forEach((t,i) => {
+    const rowCells = [];
+    const formatOptions = (i % 2 == 0) ? columnFormat
+    : Object.assign({}, columnFormat, { backgroundColor: {red: 0.89, green: 0.89, blue: 0.89, alpha: 1 }});
+    rowCells.push(formatCell(createCell(t), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+    GridData.rowData.push({ values: rowCells });
+  });
+  return GridData;
+};
+
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
   const { tasks, technologies } = options;
   const Grids = [];
   Grids.push(createTaskTable(0,tasks));
+  Grids.push(createTechTable(tasks.length + 4, technologies));
   var request = {
     resource: {
       properties: {
