@@ -48,16 +48,23 @@ const createTitleCell = (title, options) => (
   formatCell(createCell(title), { userEnteredFormat: Object.assign({}, options)}))
 
 
-const createTaskTable = (startRow ,tasks) => {
+const createTaskTable = (startRow ,tasks, moneyRate) => {
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
   const columnFormat =  { horizontalAlignment: 1 }
   const titleCells = [];
   titleCells.push(formatCell(createCell('task'), spreadsheetConfig.tableTitleCell));
   titleCells.push(formatCell(createCell('min hours'), spreadsheetConfig.tableTitleCell));
   titleCells.push(formatCell(createCell('max hours'), spreadsheetConfig.tableTitleCell));
-  GridData.rowData.push({ values: titleCells });
+  GridData.rowData.push({ values: [].concat(titleCells) });
+
+  let totalMin = 0;
+  let totalMax = 0;
 
   tasks.forEach((t,i) => {
+
+    totalMin += t.minimumMinutes / 60;
+    totalMax += t.maximumMinutes / 60;
+
     const { maximumMinutes , minimumMinutes, taskName } = t;
     const rowCells = [];
     let subTaskCellsObj = {};
@@ -93,6 +100,30 @@ const createTaskTable = (startRow ,tasks) => {
     }
 
   });
+
+  // add total development time row
+  let totalRow = [];
+  totalRow.push(formatCell(createCell('Total development time:'), spreadsheetConfig.totalDevTime ));
+  totalRow.push(formatCell(createCell(totalMin), spreadsheetConfig.tableTitleCell ));
+  totalRow.push(formatCell(createCell(totalMax), spreadsheetConfig.tableTitleCell ));
+  GridData.rowData.push({ values: [].concat(totalRow) });
+  totalRow = [];
+
+  // add rate info
+  totalRow.push(formatCell(createCell('Money rate:'), spreadsheetConfig.totalDevTime ));
+  totalRow.push(formatCell(createCell(moneyRate), spreadsheetConfig.tableTitleCell ));
+  GridData.rowData.push({ values: [].concat(totalRow) });
+  totalRow = [];
+
+   // add total price
+
+  totalRow.push(formatCell(createCell('Total price:'), spreadsheetConfig.totalDevTime ));
+  totalRow.push(formatCell(createCell(moneyRate * totalMin), spreadsheetConfig.tableTitleCell ));
+  totalRow.push(formatCell(createCell(moneyRate * totalMax), spreadsheetConfig.tableTitleCell ));
+  GridData.rowData.push({ values: [].concat(totalRow) });
+  totalRow = [];
+
+
   return GridData;
 }
 
@@ -111,12 +142,17 @@ const createTechTable = (startRow, technologies) => {
   return GridData;
 };
 
+const createPMInfo = (startRow, technologies) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
+
+};
+
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
-  const { tasks, technologies } = options;
+  const { tasks, technologies, moneyRate } = options;
   const Grids = [];
-  Grids.push(createTaskTable(0,tasks));
-  Grids.push(createTechTable(tasks.length + 4, technologies));
+  Grids.push(createTechTable(0, technologies));
+  Grids.push(createTaskTable(technologies.length + 7,tasks, moneyRate));
   var request = {
     resource: {
       properties: {

@@ -29,6 +29,7 @@ const cellsFormattingConfig = {
   taskHoursCell: { userEnteredFormat: { horizontalAlignment: 2 } },
   taskHoursCellHighlighted: { userEnteredFormat: { horizontalAlignment: 2, backgroundColor: highlightedTabBackground } },
   tableTitleCell: { userEnteredFormat: { horizontalAlignment: 2, textFormat: { bold: true } } },
+  totalDevTime: { userEnteredFormat: { horizontalAlignment: 1, textFormat: { bold: true } } },
 
 }
 
