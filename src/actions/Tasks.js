@@ -21,7 +21,7 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
   });
 };
 
-const recalculateSubtask = (field, getState, selector, dispatch, form, currentTarget = false) => {
+const recalculateTime = (field, getState, selector, dispatch, form) => {
   if (!field) return null;
 
   console.log('1)',field, dispatch);
@@ -55,7 +55,7 @@ const recalculateSubtask = (field, getState, selector, dispatch, form, currentTa
   console.log('4)', parentField);
 
   // if (parentField)
-  return recalculateSubtask(parentField, getState, selector, dispatch, form);
+  return recalculateTime(parentField, getState, selector, dispatch, form);
 
 
   // return null; // ??
@@ -71,7 +71,7 @@ export const actionToggleTask = ({ form, field, checked }) =>
     //   maximumMinutes: toggledMaxMinutes = 0,
     // } = toggledTask;
     const parentField = field.replace(/.?tasks\[\d+\]$/, '');
-    recalculateSubtask(parentField, getState, selector, dispatch, form);
+    recalculateTime(parentField, getState, selector, dispatch, form);
 
 
     // let parentField = field.replace(/.?tasks\[\d+\]$/, '');
@@ -97,19 +97,22 @@ export const actionToggleTask = ({ form, field, checked }) =>
 export const actionRemoveTask = ({ form, field, index }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
-    const removedTask = selector(getState(), field);
-    const {
-      maximumMinutes: removedMaxHours = 0,
-      minimumMinutes: removedMinHours = 0,
-      isChecked: removedIsChecked,
-    } = removedTask;
+    // const removedTask = selector(getState(), field);
+    // const {
+    //   maximumMinutes: removedMaxHours = 0,
+    //   minimumMinutes: removedMinHours = 0,
+    //   isChecked: removedIsChecked,
+    // } = removedTask;
 
     dispatch(arrayRemove(form, field.replace(/\[\d+\]$/, ''), index));
 
-    if (!removedIsChecked) return null;
+
+    // if (!removedIsChecked) return null;
 
     let parentField = field.replace(/.?tasks\[\d+\]$/, '');
 
+    recalculateTime(parentField, getState, selector, dispatch, form);
+    /*
     // modify all parent tasks
     while (parentField) {
       const parent = selector(getState(), parentField);
@@ -124,7 +127,7 @@ export const actionRemoveTask = ({ form, field, index }) =>
 
       parentField = parentField.replace(/\.?tasks\[\d+\]$/, '');
     }
-
+    */
     dispatch(actionGeneralCalculation({ form }));
 
     return null;
@@ -145,7 +148,7 @@ export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
     // const __field__ = field.replace(/\.minimumMinutes$|\.maximumMinutes$/, '');
     // console.log('>>>>>>>>>>>>>>',field, value, __field__, selector(getState(), __field__));
 
-    recalculateSubtask(parentField, getState, selector, dispatch, form);
+    recalculateTime(parentField, getState, selector, dispatch, form);
 
     /*
     // modify all parent tasks
