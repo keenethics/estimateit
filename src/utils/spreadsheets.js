@@ -2,6 +2,9 @@ import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';
 const oAuth2 = require('googleapis').auth.OAuth2;
+import spreadsheetConfig from './spreadsheetsConfig.js';
+
+const { GridDataProto } = spreadsheetConfig;
 
 let helper = null;
 
@@ -41,48 +44,41 @@ const formatCell = (cell, options) => (Object.assign({}, cell, options));
 const createCell = (value) => ({ userEnteredValue: createTaskCell(value) });
 
 const createCellData = (columns) => (columns.map(co => ({ userEnteredValue: createTaskCell(co) })));
-
-const GridDataProto = {
-    startRow: 0,
-    startColumn: 0,
-    rowData: [],
-    columnMetadata: [
-      { pixelSize: 550 },
-      { pixelSize: 150 },
-      { pixelSize: 150 },
-    ]
-  };
-
 const createTitleCell = (title, options) => (
-  formatCell(createCell(title), { userEnteredFormat: Object.assign({}, { horizontalAlignment: 2 }, options)}))
+  formatCell(createCell(title), { userEnteredFormat: Object.assign({}, options)}))
 
 
 const createTaskTable = (startRow ,tasks) => {
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
   const columnFormat =  { horizontalAlignment: 1 }
   const titleCells = [];
-  titleCells.push(createTitleCell('task'));
-  titleCells.push(createTitleCell('min hours'));
-  titleCells.push(createTitleCell('max hours'));
+  titleCells.push(formatCell(createCell('task'), spreadsheetConfig.tableTitleCell));
+  titleCells.push(formatCell(createCell('min hours'), spreadsheetConfig.tableTitleCell));
+  titleCells.push(formatCell(createCell('max hours'), spreadsheetConfig.tableTitleCell));
   GridData.rowData.push({ values: titleCells });
 
   tasks.forEach((t,i) => {
     const { maximumMinutes , minimumMinutes, taskName } = t;
     const rowCells = [];
     let subTaskCellsObj = {};
-    const formatOptions = (i % 2 == 0) ? columnFormat
-    : Object.assign({}, columnFormat, { backgroundColor: {red: 0.89, green: 0.89, blue: 0.89, alpha: 1 }});
-    rowCells.push(formatCell(createCell(`${i}. ${taskName}`), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 20 } })}));
-    rowCells.push(formatCell(createCell(minimumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
-    rowCells.push(formatCell(createCell(maximumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+    let taskNameOptions = spreadsheetConfig.taskNameCell;
+    let taskHoursOptions = spreadsheetConfig.taskHoursCell;
+    if (i % 2 == 0) {
+      taskNameOptions = spreadsheetConfig.taskNameCellHightlighted;
+      taskHoursOptions = spreadsheetConfig.taskHoursCellHighlighted;
+    }
+
+    rowCells.push(formatCell(createCell(`${i+1}. ${taskName}`), taskNameOptions ));
+    rowCells.push(formatCell(createCell(minimumMinutes / 60), taskHoursOptions ));
+    rowCells.push(formatCell(createCell(maximumMinutes / 60), taskHoursOptions ));
     // prink subtasks
     if (t.tasks) {
       t.tasks.forEach((subTask,j) => {
         const subTaskCells = [];
         const { maximumMinutes , minimumMinutes, taskName } = subTask;
-        subTaskCells.push(formatCell(createCell(`${i}.${j}. ${taskName}`), { userEnteredFormat: Object.assign({}, formatOptions, { padding: { left: 40 } })}));
-        subTaskCells.push(formatCell(createCell(minimumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
-        subTaskCells.push(formatCell(createCell(maximumMinutes / 60), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+        subTaskCells.push(formatCell(createCell(`${i+1}.${j+1}. ${taskName}`), taskNameOptions));
+        subTaskCells.push(formatCell(createCell(minimumMinutes / 60), taskHoursOptions));
+        subTaskCells.push(formatCell(createCell(maximumMinutes / 60), taskHoursOptions));
         if (!subTaskCellsObj[i]) { subTaskCellsObj[i] = [] };
         subTaskCellsObj[i].push(subTaskCells);
       });
@@ -103,14 +99,13 @@ const createTaskTable = (startRow ,tasks) => {
 const createTechTable = (startRow, technologies) => {
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
   const titleCells = [];
-  titleCells.push(createTitleCell('Suggested technologies'));
+  titleCells.push(formatCell(createCell('Suggested technologies'), spreadsheetConfig.tableTitleCell));
   GridData.rowData.push({ values: titleCells });
   const columnFormat = { horizontalAlignment: 2 };
   technologies.forEach((t,i) => {
     const rowCells = [];
-    const formatOptions = (i % 2 == 0) ? columnFormat
-    : Object.assign({}, columnFormat, { backgroundColor: {red: 0.89, green: 0.89, blue: 0.89, alpha: 1 }});
-    rowCells.push(formatCell(createCell(t), { userEnteredFormat: Object.assign({}, formatOptions, { horizontalAlignment: 2 })}));
+    const formatOptions = (i % 2 == 0) ? spreadsheetConfig.taskNameCellHightlighted : spreadsheetConfig.taskNameCell;
+    rowCells.push(formatCell(createCell(t), formatOptions));
     GridData.rowData.push({ values: rowCells });
   });
   return GridData;
