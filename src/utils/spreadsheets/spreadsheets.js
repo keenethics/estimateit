@@ -70,9 +70,12 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
     let subTaskCellsObj = {};
     let taskNameOptions = spreadsheetConfig.taskNameCell;
     let taskHoursOptions = spreadsheetConfig.taskHoursCell;
+    let subtaskNameOptions = spreadsheetConfig.subtaskNameCell;
+
     if (i % 2 == 0) {
       taskNameOptions = spreadsheetConfig.taskNameCellHightlighted;
       taskHoursOptions = spreadsheetConfig.taskHoursCellHighlighted;
+      subtaskNameOptions = spreadsheetConfig.subtaskNameCellHightlighted;
     }
 
     rowCells.push(formatCell(createCell(`${i+1}. ${taskName}`), taskNameOptions ));
@@ -83,7 +86,10 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
       t.tasks.forEach((subTask,j) => {
         const subTaskCells = [];
         const { maximumMinutes , minimumMinutes, taskName } = subTask;
-        subTaskCells.push(formatCell(createCell(`${i+1}.${j+1}. ${taskName}`), taskNameOptions));
+
+
+
+        subTaskCells.push(formatCell(createCell(`${i+1}.${j+1}. ${taskName}`), subtaskNameOptions));
         subTaskCells.push(formatCell(createCell(minimumMinutes / 60), taskHoursOptions));
         subTaskCells.push(formatCell(createCell(maximumMinutes / 60), taskHoursOptions));
         if (!subTaskCellsObj[i]) { subTaskCellsObj[i] = [] };

@@ -28,7 +28,7 @@ import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
-import spreadSheets from './utils/spreadsheets';
+import spreadSheets from './utils/spreadsheets/spreadsheets.js';
 
 const MongoStore = MongoConnect(session);
 
