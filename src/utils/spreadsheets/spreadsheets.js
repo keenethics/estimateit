@@ -132,6 +132,47 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
   return GridData;
 }
 
+
+const createEstimateOptionsTable = (startRow, estimateOptions) => {
+  const { qa, pm, risks, bugFixes, probability } = estimateOptions;
+  console.log(estimateOptions);
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] }, { columnMetadata: [{ pixelSize: 200 }, { pixelSize: 200 }] });
+  let rowCells = [];
+
+  const title = 'Estimate options'
+  rowCells.push(formatCell(createCell(title), spreadsheetConfig.tableTitleCell));
+  rowCells.push(formatCell(createCell('percentage'), spreadsheetConfig.tableTitleCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell('QA'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(`${qa}%`), spreadsheetConfig.taskHoursCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell('PM'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(`${pm}%`), spreadsheetConfig.taskHoursCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell('Risks'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(`${risks}%`), spreadsheetConfig.taskHoursCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell('Bug Fixes'), spreadsheetConfig.taskNameCell ));
+  rowCells.push(formatCell(createCell(`${bugFixes}%`), spreadsheetConfig.taskHoursCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell('Probability'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(`${probability}%`), spreadsheetConfig.taskHoursCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  return GridData
+}
+
 const createTechTable = (startRow, technologies) => {
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
   const titleCells = [];
@@ -156,18 +197,18 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
-  rowCells.push(formatCell(createCell('name'), spreadsheetConfig.tableTitleCell));
-  rowCells.push(formatCell(createCell(pm), spreadsheetConfig.tableTitleCell));
+  rowCells.push(formatCell(createCell('name'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(pm), spreadsheetConfig.taskHoursCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
-  rowCells.push(formatCell(createCell('email'), spreadsheetConfig.tableTitleCell));
-  rowCells.push(formatCell(createCell(email), spreadsheetConfig.tableTitleCell));
+  rowCells.push(formatCell(createCell('email'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(email), spreadsheetConfig.taskHoursCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
-  rowCells.push(formatCell(createCell('skype'), spreadsheetConfig.tableTitleCell));
-  rowCells.push(formatCell(createCell(skype), spreadsheetConfig.tableTitleCell));
+  rowCells.push(formatCell(createCell('skype'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(skype),  spreadsheetConfig.taskHoursCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
@@ -176,11 +217,23 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
 
 SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
   var self = this;
-  const { tasks, technologies, moneyRate, email, skype, pm, position } = options;
+  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = options;
   const Grids = [];
-  Grids.push(createTechTable(0, technologies));
-  Grids.push(createTaskTable(technologies.length + 3, tasks, moneyRate));
-  Grids.push(createPMInfo(technologies.length + tasks.length + 12, email, skype, pm));
+  const techTableStart = 0;
+  const taskTableStart = techTableStart + technologies.length + 2;
+  const estimateOptionsStart = taskTableStart + tasks.length + 8;
+  const pmInfoStart = estimateOptionsStart + 5 + 2;
+
+  console.log(techTableStart)
+  console.log(taskTableStart)
+  console.log(estimateOptionsStart)
+  console.log(pmInfoStart)
+
+  Grids.push(createTechTable(techTableStart, technologies));
+  Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
+  Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
+  Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
+
   var request = {
     resource: {
       properties: {
