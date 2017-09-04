@@ -67,6 +67,7 @@ SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
       console.log(err);
       return callback(err);
     }
+    console.log(spreadsheet);
     // need to save spreadsheet id into db
     return callback(null, spreadsheet);
   });

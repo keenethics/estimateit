@@ -35,6 +35,7 @@ class Reports extends Component {
       axios: [],
       modal: false,
       dropdownOpen: false,
+      updatingSpreadsheet: false,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -59,13 +60,35 @@ class Reports extends Component {
   exportToGoogleSheet() {
     const { estimateId } = this.props;
     const { token, refreshToken } = window.App.user.google;
+    this.setState({ updatingSpreadsheet: true });
     fetch('/spreadsheets', {
-        method: 'POST',
-        body: JSON.stringify({ token, refreshToken, estimateId }),
-        headers: {
-          'Accept': 'application/json, text/plain, */*',
-          'Content-Type': 'application/json'
-        },
+      method: 'POST',
+      body: JSON.stringify({ token, refreshToken, estimateId }),
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+    }).then((response) => {
+      this.setState({ updatingSpreadsheet: false });
+      return response.json()
+    }).then(res => {
+      if (res.error) {
+        this.notificationSystem.addNotification({
+          autoDismiss: 6,
+          position: 'br',
+          title: 'Error',
+          level: 'error',
+          message: res.message,
+        });
+      } else {
+        this.notificationSystem.addNotification({
+          autoDismiss: 6,
+          position: 'br',
+          title: 'Success',
+          level: 'success',
+          message: res.message,
+        });
+      }
     })
   }
 
@@ -146,6 +169,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
+    const { updatingSpreadsheet } = this.state;
     const { userCanEditThisEstimate } = this.props;
     const token = window.App.user.google && window.App.user.google.token;
     return (
@@ -155,10 +179,11 @@ class Reports extends Component {
             <div>
               {token &&
                 <Button
-                  color="danger"
+                  color={updatingSpreadsheet ? 'secondary' : 'danger'}
                   onClick={handleSubmit(this.exportToGoogleSheet)}
+                  disabled={updatingSpreadsheet}
                 >
-               export to google Sheets
+               {updatingSpreadsheet ? 'exporting...' : 'export to google Sheets'}
               </Button>
               }
               <Button

@@ -110,6 +110,7 @@ app.get('/auth/logout', (req, res) => {
 });
 
 app.post('/spreadsheets', async (req, res) => {
+  //res.status(500).json({ error: 'ololoshechki' });
   const { token, refreshToken, estimateId } = req.body;
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
@@ -128,7 +129,11 @@ app.post('/spreadsheets', async (req, res) => {
           User.update(query, projection);
         }
       }
+      res.status(400).send({ error: true, message: err });
+      res.end();
     }
+    res.status(200).send({ message: `Spreadsheet ${sp.spreadsheetId} updated` });
+    res.end();
   });
 });
 
