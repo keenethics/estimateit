@@ -174,5 +174,40 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
   return GridData;
 };
 
-export { createTechTable, createTaskTable, createEstimateOptionsTable, createPMInfo };
+const createEstimate = (estimate) => {
+  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
+  const Grids = [];
+  const techTableStart = 0;
+  const taskTableStart = techTableStart + technologies.length + 2;
+  const estimateOptionsStart = taskTableStart + tasks.length + 8;
+  const pmInfoStart = estimateOptionsStart + 5 + 2;
+
+  Grids.push(createTechTable(techTableStart, technologies));
+  Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
+  Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
+  Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
+
+  const request = {
+    resource: {
+      properties: {
+        title: 'title'
+      },
+      sheets: [
+        {
+          data: [Grids],
+          properties: {
+            title: 'Data',
+            gridProperties: {
+              columnCount: 6,
+              frozenRowCount: 1
+            }
+          }
+        },
+      ]
+    }
+  };
+  return request;
+}
+
+export { createEstimate };
 

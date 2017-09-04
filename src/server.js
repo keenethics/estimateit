@@ -115,26 +115,31 @@ app.post('/spreadsheets', async (req, res) => {
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
   const estimate = await Estimate.findById(estimateId);
-  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
-  const options = { tasks, technologies, moneyRate,  email, skype, pm, estimateOptions };
-  spHelper.createSpreadsheet(options, async (err, sp) => {
-    if (err) {
-      // if access_token has been expired
-      // it should be recreated by refreshToken
-      if (err.code == 401) {
-        const newCredentials = await spHelper.updateCredentials();
-        if (newCredentials) {
-          const query = { 'google.token': token };
-          const projection = { $set: { google: newCredentials } };
-          User.update(query, projection);
+  // probably estimate should be retrieved via grahpql
+  // if so - this piece of code should be replaced
+  if (!estimate.spreadsheetId || true) {
+    spHelper.createSpreadsheet(estimate, async (err, sp) => {
+      if (err) {
+        // if access_token has been expired
+        // it should be recreated by refreshToken
+        if (err.code == 401) {
+          const newCredentials = await spHelper.updateCredentials();
+          if (newCredentials) {
+            const query = { 'google.token': token };
+            const projection = { $set: { google: newCredentials } };
+            User.update(query, projection);
+          }
         }
+        res.status(400).send({ error: true, message: err });
+        res.end();
       }
-      res.status(400).send({ error: true, message: err });
+      const { spreadsheetId } = sp;
+      const estId = await Estimate.update({ _id: estimateId }, { $set: { spreadsheetId } });
+
+      res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
       res.end();
-    }
-    res.status(200).send({ message: `Spreadsheet ${sp.spreadsheetId} updated` });
-    res.end();
-  });
+    });
+  }
 });
 
 //

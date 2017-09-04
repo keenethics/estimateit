@@ -1,7 +1,7 @@
 import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';
-import { createTechTable, createTaskTable, createEstimateOptionsTable, createPMInfo } from './sheetHelper.js';
+import { createEstimate } from './sheetHelper.js';
 
 const oAuth2 = require('googleapis').auth.OAuth2;
 let helper = null;
@@ -29,39 +29,9 @@ SheetsHelper.prototype.updateCredentials = function() {
   })
 }
 
-SheetsHelper.prototype.createSpreadsheet = function(options, callback) {
-  var self = this;
-  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = options;
-  const Grids = [];
-  const techTableStart = 0;
-  const taskTableStart = techTableStart + technologies.length + 2;
-  const estimateOptionsStart = taskTableStart + tasks.length + 8;
-  const pmInfoStart = estimateOptionsStart + 5 + 2;
-
-  Grids.push(createTechTable(techTableStart, technologies));
-  Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
-  Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
-  Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
-
-  var request = {
-    resource: {
-      properties: {
-        title: 'title'
-      },
-      sheets: [
-        {
-          data: [Grids],
-          properties: {
-            title: 'Data',
-            gridProperties: {
-              columnCount: 6,
-              frozenRowCount: 1
-            }
-          }
-        },
-      ]
-    }
-  };
+SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
+  const self = this;
+  const request = createEstimate(estimate);
   self.service.spreadsheets.create(request, function(err, spreadsheet) {
     if (err) {
       console.log(err);
