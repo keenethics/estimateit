@@ -36,6 +36,7 @@ class Reports extends Component {
       modal: false,
       dropdownOpen: false,
       updatingSpreadsheet: false,
+      estimateHasBeenSaved: false,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -81,6 +82,7 @@ class Reports extends Component {
           message: res.message,
         });
       } else {
+        this.setState({ estimateHasBeenSaved: false });
         this.notificationSystem.addNotification({
           autoDismiss: 6,
           position: 'br',
@@ -102,6 +104,7 @@ class Reports extends Component {
         variables: { id: estimateId },
       }],
     }).then(() => {
+      this.setState({ estimateHasBeenSaved: true });
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -169,7 +172,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
-    const { updatingSpreadsheet } = this.state;
+    const { updatingSpreadsheet, estimateHasBeenSaved } = this.state;
     const { userCanEditThisEstimate } = this.props;
     const token = window.App.user.google && window.App.user.google.token;
     return (
@@ -179,9 +182,9 @@ class Reports extends Component {
             <div>
               {token &&
                 <Button
-                  color={updatingSpreadsheet ? 'secondary' : 'danger'}
+                  color={updatingSpreadsheet && estimateHasBeenSaved  ? 'secondary' : 'danger'}
                   onClick={handleSubmit(this.exportToGoogleSheet)}
-                  disabled={updatingSpreadsheet}
+                  disabled={updatingSpreadsheet || !estimateHasBeenSaved }
                 >
                {updatingSpreadsheet ? 'exporting...' : 'export to google Sheets'}
               </Button>

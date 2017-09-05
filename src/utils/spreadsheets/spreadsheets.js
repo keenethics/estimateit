@@ -1,7 +1,7 @@
 import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';
-import { createEstimate } from './sheetHelper.js';
+import { createEstimateRequest, getEstimateSheet, getRowsFromSheet  } from './sheetHelper.js';
 
 const oAuth2 = require('googleapis').auth.OAuth2;
 let helper = null;
@@ -31,7 +31,7 @@ SheetsHelper.prototype.updateCredentials = function() {
 
 SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
   const self = this;
-  const request = createEstimate(estimate);
+  const request = createEstimateRequest(estimate);
   self.service.spreadsheets.create(request, function(err, spreadsheet) {
     if (err) {
       console.log(err);
@@ -41,6 +41,91 @@ SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
     // need to save spreadsheet id into db
     return callback(null, spreadsheet);
   });
+};
+
+SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
+  const self = this;
+  const { spreadsheetId } = estimate
+  const sheeet = getEstimateSheet(estimate, 2);
+  const rows = getRowsFromSheet(sheeet)
+  console.log(rows)
+  console.log('rows');
+  const request = {
+    spreadsheetId,
+    resource: {
+      requests: [
+        {
+          addSheet: {
+            properties: {
+              sheetId: 3,
+              title: 'v2'
+            },
+          }
+        },
+        {
+          deleteSheet: {
+            sheetId: 2,
+          },
+        },
+         {
+          addSheet: {
+            properties: {
+              sheetId: 2,
+              title: 'estimate'
+            },
+          }
+         },
+        {
+          deleteSheet: {
+            sheetId: 3,
+          },
+        },
+        {
+          appendCells: {
+            sheetId: 2,
+            rows,
+            fields: '*',
+          }
+        },
+        {
+          updateDimensionProperties: {
+            range: {
+              sheetId: 2,
+              dimension: 'COLUMNS',
+              startIndex: 0,
+              endIndex: 1
+            },
+            properties: {
+              pixelSize: 560,
+            },
+            fields: 'pixelSize'
+          }
+        },
+        {
+          updateDimensionProperties: {
+            range: {
+              sheetId: 2,
+              dimension: 'COLUMNS',
+              startIndex: 1,
+              endIndex: 3
+            },
+            properties: {
+              pixelSize: 260,
+            },
+            fields: 'pixelSize'
+          }
+        }
+      ]
+    }
+  }
+  self.service.spreadsheets.batchUpdate(request, function(err, res) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    callback(null, res);
+  })
+
 };
 
 const getSpreadsheetHelper = (accessToken) => {

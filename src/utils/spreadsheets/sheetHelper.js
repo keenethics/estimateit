@@ -1,5 +1,5 @@
 import spreadsheetConfig from './spreadsheetsConfig.js';
-
+import fs from 'fs';
 const { GridDataProto } = spreadsheetConfig;
 
 const createTaskCell = (value) => {
@@ -94,7 +94,6 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
 
 const createEstimateOptionsTable = (startRow, estimateOptions) => {
   const { qa, pm, risks, bugFixes, probability } = estimateOptions;
-  console.log(estimateOptions);
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] }, { columnMetadata: [{ pixelSize: 200 }, { pixelSize: 200 }] });
   let rowCells = [];
 
@@ -133,7 +132,7 @@ const createEstimateOptionsTable = (startRow, estimateOptions) => {
 }
 
 const createTechTable = (startRow, technologies) => {
-  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] });
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { columnMetadata: [{ pixelSize: 500 }] }, { rowData: [] });
   const titleCells = [];
   titleCells.push(formatCell(createCell('Suggested technologies'), spreadsheetConfig.tableTitleCell));
   GridData.rowData.push({ values: titleCells });
@@ -174,7 +173,31 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
   return GridData;
 };
 
-const createEstimate = (estimate) => {
+const getEstimateSheet = (estimate, title, sheetId) => {
+  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
+  const Grids = [];
+  const techTableStart = 0;
+  const taskTableStart = techTableStart + technologies.length + 2;
+  const estimateOptionsStart = taskTableStart + tasks.length + 8;
+  const pmInfoStart = estimateOptionsStart + 5 + 2;
+  Grids.push(createTechTable(techTableStart, technologies));
+  Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
+  Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
+  Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
+  return {
+    data: [Grids],
+    properties: {
+      title: title || 'Estimate',
+      sheetId: sheetId || 1,
+      gridProperties: {
+        columnCount: 6,
+        frozenRowCount: 1
+      }
+    }
+  }
+}
+
+const createEstimateRequest = (estimate, id) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
   const Grids = [];
   const techTableStart = 0;
@@ -196,7 +219,8 @@ const createEstimate = (estimate) => {
         {
           data: [Grids],
           properties: {
-            title: 'Data',
+            title: 'estimate',
+            sheetId: id || 2,
             gridProperties: {
               columnCount: 6,
               frozenRowCount: 1
@@ -209,5 +233,18 @@ const createEstimate = (estimate) => {
   return request;
 }
 
-export { createEstimate };
+const getRowsFromSheet = (sheet) => {
+  const grid = sheet.data[0];
+  const rows = grid.map(d => {
+    return d.rowData;
+  })
+  const realRows = rows.reduce((prev, next) => {
+    return prev.concat(next);
+  })
+  console.log(realRows)
+
+    return rows;
+}
+
+export { createEstimateRequest, getEstimateSheet, getRowsFromSheet };
 
