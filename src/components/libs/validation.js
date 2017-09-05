@@ -20,7 +20,7 @@ export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
     const maxTime = address.split('.')
       .reduce((obj, i) => obj && obj[i], allValues);
 
-    return (maxTime >= value)
+    return ((maxTime || 0) >= (value || 0))
       ? undefined
       : 'min time > max time';
   };
@@ -85,11 +85,4 @@ export const currency = (value) => {
     return /^[1-9]{1}[0-9]*$/.test(value.toString()) ? undefined : 'Should be integer';
   }
   return undefined;
-};
-
-export const notEmpty = (value) => {
-  if (value && value.trim()) {
-    return undefined;
-  }
-  return 'Should not be empty';
 };

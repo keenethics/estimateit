@@ -123,7 +123,7 @@ class Task extends React.Component {
                   disabled={disabled || haveSubtask}
                   actionChangeTaskHours={actionChangeTaskHours}
                   validate={[
-                    taskHourValidation(haveSubtask),
+                    // taskHourValidation(haveSubtask),
                     mixShouldBeLessThenMax(`${task}.maximumMinutes`, haveSubtask),
                   ]}
                 />
@@ -136,7 +136,9 @@ class Task extends React.Component {
                   name={`${task}.maximumMinutes`}
                   className={styles.subtasks__item}
                   disabled={disabled || haveSubtask}
-                  validate={[taskHourValidation(haveSubtask)]}
+                  validate={[
+                    // taskHourValidation(haveSubtask),
+                  ]}
                   actionChangeTaskHours={actionChangeTaskHours}
                 />
                 {
