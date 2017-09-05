@@ -198,7 +198,7 @@ const getEstimateSheet = (estimate, title, sheetId) => {
 }
 
 const createEstimateRequest = (estimate, id) => {
-  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
+  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber } = estimate;
   const Grids = [];
   const techTableStart = 0;
   const taskTableStart = techTableStart + technologies.length + 2;
@@ -213,13 +213,13 @@ const createEstimateRequest = (estimate, id) => {
   const request = {
     resource: {
       properties: {
-        title: 'title'
+        title: projectName || 'title',
       },
       sheets: [
         {
           data: [Grids],
           properties: {
-            title: 'estimate',
+            title: `sprint ${sprintNumber}`,
             sheetId: id || 2,
             gridProperties: {
               columnCount: 6,

@@ -45,7 +45,7 @@ SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
 
 SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
   const self = this;
-  const { spreadsheetId } = estimate
+  const { spreadsheetId, sprintNumber } = estimate
   const sheeet = getEstimateSheet(estimate, 2);
   const rows = getRowsFromSheet(sheeet)
   console.log(rows)
@@ -71,7 +71,7 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
           addSheet: {
             properties: {
               sheetId: 2,
-              title: 'estimate'
+              title: `sprint ${sprintNumber}`,
             },
           }
          },
