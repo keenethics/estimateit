@@ -25,3 +25,8 @@ npm run serve
 * Express.js
 * MongoDB
 * GraphQL, Apollo
+
+# Deployment on Heroku
+Install Heroku CLI & login: `heroku login`
+Add a Heroku remote repo: `heroku git:remote -a estimator`
+Deploy with npm script: `npm run deploy`

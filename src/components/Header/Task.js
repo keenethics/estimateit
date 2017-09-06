@@ -15,7 +15,6 @@ import * as actionsTasks from '../../actions/Tasks';
 import {
   required,
   maxLength,
-  taskHourValidation,
   mixShouldBeLessThenMax,
 } from '../libs/validation';
 
@@ -123,7 +122,6 @@ class Task extends React.Component {
                   disabled={disabled || haveSubtask}
                   actionChangeTaskHours={actionChangeTaskHours}
                   validate={[
-                    // taskHourValidation(haveSubtask),
                     mixShouldBeLessThenMax(`${task}.maximumMinutes`, haveSubtask),
                   ]}
                 />
@@ -136,9 +134,7 @@ class Task extends React.Component {
                   name={`${task}.maximumMinutes`}
                   className={styles.subtasks__item}
                   disabled={disabled || haveSubtask}
-                  validate={[
-                    // taskHourValidation(haveSubtask),
-                  ]}
+                  validate={[]}
                   actionChangeTaskHours={actionChangeTaskHours}
                 />
                 {
