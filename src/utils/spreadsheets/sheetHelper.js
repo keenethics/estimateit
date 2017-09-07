@@ -151,7 +151,7 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
   const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }, { pixelSize: 300 }] });
   let rowCells = [];
 
-  const title = `If you have any questions about this estimate, please contact our ${position}`
+  const title = 'If you have any questions about this estimate, please contact our PM'
   rowCells.push(formatCell(createCell(title), spreadsheetConfig.tableTitleCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
@@ -222,7 +222,7 @@ const createHeaderTitle = (companyInfo) => {
 }
 
 const createEstimateInfo = (estimateType, date, customer, projectName) => {
-  const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
+  const GridData = Object.assign({}, GridDataProto, { startRow: 8 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
   const formattedDate = moment(date).format('Do.MM.YYYY');
   let rowCells = [];
   rowCells.push(formatCell(createCell(estimateType), spreadsheetConfig.companyName));
@@ -257,8 +257,8 @@ const createEstimateInfo = (estimateType, date, customer, projectName) => {
   return GridData;
 }
 
-const getDescriptionCell = (estimate, title, sheetId) => {
-  const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 },{ pixelSize: 150 },{ pixelSize: 150 },{ pixelSize: 500 }] });
+const getDescriptionCell = (startRow) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 },{ pixelSize: 150 },{ pixelSize: 150 },{ pixelSize: 500 }] });
   let rowCells = [];
   rowCells.push(formatCell(createCell('Description'), spreadsheetConfig.tableTitleRedCell));
   rowCells.push(formatCell(createCell(''), spreadsheetConfig.tableTitleRedCell));
@@ -280,14 +280,13 @@ const getOtherCommentsCell = (estimate, title, sheetId) => {
 const getEstimateSheet = (estimate, title, sheetId) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, clientName } = estimate;
   const Grids = [];
-  const techTableStart = 0;
+  const techTableStart = 16;
   const taskTableStart = techTableStart + technologies.length + 2;
   const estimateOptionsStart = taskTableStart + tasks.length + 8;
   const pmInfoStart = estimateOptionsStart + 5 + 2;
-
   Grids.push(createHeaderTitle(companyInfo));
   Grids.push(createEstimateInfo('Rough estimate', new Date(), clientName, projectName));
-  Grids.push(getDescriptionCell());
+  Grids.push(getDescriptionCell(15));
   Grids.push(createTechTable(techTableStart, technologies));
   Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
   Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
@@ -308,13 +307,16 @@ const getEstimateSheet = (estimate, title, sheetId) => {
 }
 
 const createEstimateRequest = (estimate, id) => {
-  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber } = estimate;
+  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber, clientName } = estimate;
   const Grids = [];
-  const techTableStart = 0;
+  const techTableStart = 16;
   const taskTableStart = techTableStart + technologies.length + 2;
   const estimateOptionsStart = taskTableStart + tasks.length + 8;
   const pmInfoStart = estimateOptionsStart + 5 + 2;
 
+  Grids.push(createHeaderTitle(companyInfo));
+  Grids.push(createEstimateInfo('Rough estimate', new Date(), clientName, projectName));
+  Grids.push(getDescriptionCell(15));
   Grids.push(createTechTable(techTableStart, technologies));
   Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
   Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
