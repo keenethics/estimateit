@@ -86,6 +86,7 @@ const cellsFormattingConfig = {
   keenApps: { userEnteredFormat: { padding: { left: 70 }, textFormat: { fontSize: 14 } } },
   companyInfo: { userEnteredFormat: { textFormat: { fontSize: 10, italic: true } } },
   notes: { userEnteredFormat: Object.assign({}, { backgroundColor: highlightedTabBackground }, userEnteredFormat, regularCellTextFormat,  paddingVertical10, { horizontalAlignment: 2, textFormat: { bold: true } }) },
+  italic: { userEnteredFormat: { textFormat: { italic: true } } },
 }
 
 export default cellsFormattingConfig;
