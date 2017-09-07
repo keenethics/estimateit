@@ -18,9 +18,9 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
   const columnFormat =  { horizontalAlignment: 1 }
   const titleCells = [];
 
-  titleCells.push(formatCell(createCell('task'), spreadsheetConfig.tableTitleCell));
-  titleCells.push(formatCell(createCell('min hours'), spreadsheetConfig.tableTitleCell));
-  titleCells.push(formatCell(createCell('max hours'), spreadsheetConfig.tableTitleCell));
+  titleCells.push(formatCell(createCell('task'), spreadsheetConfig.tableTitleRedCell));
+  titleCells.push(formatCell(createCell('min hours'), spreadsheetConfig.tableTitleRedCell));
+  titleCells.push(formatCell(createCell('max hours'), spreadsheetConfig.tableTitleRedCell));
 
   GridData.rowData.push({ values: [].concat(titleCells) });
 
@@ -173,6 +173,77 @@ const createPMInfo = (startRow, email, skype, pm, position) => {
   return GridData;
 };
 
+const companyInfo = {
+  name: 'KeenEthics',
+  title: 'Ethical development of keen web apps',
+  address: '3, Lytvynenka street, Lviv',
+  phone: 'Phone: [+38 073 440 27 18]',
+  email: 'e-mail: alexey.hermann@keenethics.com',
+  website: 'www.keenethics.com',
+}
+
+
+const createHeaderTitle = (companyInfo) => {
+  const { name, title, address, phone, email, website } = companyInfo;
+  const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
+
+  let rowCells = [];
+  //rowCells.push(formatCell(createCell('KeenEthics'), spreadsheetConfig.taskNameCell));
+  rowCells.push(formatCell(createCell(name), spreadsheetConfig.companyName));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(title), spreadsheetConfig.keenApps));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(address), spreadsheetConfig.companyInfo));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(name), spreadsheetConfig.companyInfo));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(phone), spreadsheetConfig.companyInfo));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(email), spreadsheetConfig.companyInfo));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+  rowCells.push(formatCell(createCell(website), spreadsheetConfig.companyInfo));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  rowCells = [];
+
+ return GridData;
+}
+
+const createEstimateInfo = () => {
+
+}
+
+const getDescriptionCell = (estimate, title, sheetId) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 },{ pixelSize: 150 },{ pixelSize: 150 },{ pixelSize: 500 }] });
+  let rowCells = [];
+  rowCells.push(formatCell(createCell('Description'), spreadsheetConfig.tableTitleRedCell));
+  rowCells.push(formatCell(createCell(''), spreadsheetConfig.tableTitleRedCell));
+  rowCells.push(formatCell(createCell(''), spreadsheetConfig.tableTitleRedCell));
+  rowCells.push(formatCell(createCell('Notes'), spreadsheetConfig.notes));
+
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  return GridData;
+}
+
+const getOtherCommentsCell = (estimate, title, sheetId) => {
+  const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
+  let rowCells = [];
+  rowCells.push(formatCell(createCell('Other comments'), spreadsheetConfig.tableTitleRedCell));
+  GridData.rowData.push({ values: [].concat(rowCells) });
+  return GridData;
+}
+
 const getEstimateSheet = (estimate, title, sheetId) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions } = estimate;
   const Grids = [];
@@ -180,10 +251,15 @@ const getEstimateSheet = (estimate, title, sheetId) => {
   const taskTableStart = techTableStart + technologies.length + 2;
   const estimateOptionsStart = taskTableStart + tasks.length + 8;
   const pmInfoStart = estimateOptionsStart + 5 + 2;
+
+  Grids.push(createHeaderTitle(companyInfo));
+  Grids.push(getDescriptionCell());
   Grids.push(createTechTable(techTableStart, technologies));
   Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
   Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
   Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
+  Grids.push(getOtherCommentsCell());
+
   return {
     data: [Grids],
     properties: {

@@ -80,6 +80,7 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
             sheetId: 3,
           },
         },
+        // append company info, technologies, tasks, estimate options, pm info
         {
           appendCells: {
             sheetId: 2,
@@ -87,6 +88,7 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
             fields: '*',
           }
         },
+        // set width of cells
         {
           updateDimensionProperties: {
             range: {
@@ -110,11 +112,25 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
               endIndex: 3
             },
             properties: {
-              pixelSize: 260,
+              pixelSize: 160,
             },
             fields: 'pixelSize'
           }
-        }
+        },
+        {
+          updateDimensionProperties: {
+            range: {
+              sheetId: 2,
+              dimension: 'COLUMNS',
+              startIndex: 3,
+              endIndex: 4,
+            },
+            properties: {
+              pixelSize: 400,
+            },
+            fields: 'pixelSize'
+          }
+        },
       ]
     }
   }
