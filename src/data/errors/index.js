@@ -21,5 +21,5 @@ export const MongoError = createError(MONGO_ERROR, {
 });
 
 export const AccessDenied = createError(ACCESS_DENIED, {
-  message: 'You have not right edit this documentaa',
+  message: 'You have not right edit this document',
 });

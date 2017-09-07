@@ -55,11 +55,26 @@ class Reports extends Component {
     });
   }
 
-  estimateUpdate(values) {
+  estimateUpdate(values, forceSave) {
     const { estimateId } = this.props;
 
+    // *************************************************************************
+    // It works but thow autentication error:
+    // *************************************************************************
+    // console.log('------->')
+    // fetch('/graphql', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({ query: `{ allEstimates {
+    // 		_id
+    //   	date
+    // 		projectName
+    //   } }` }),
+    // }).then(res => res.json()).then(doc => console.log(doc))
+    // *************************************************************************
+
     this.props.estimateUpdate({
-      variables: { input: { ...values } },
+      variables: { input: { ...values, forceSave } },
       refetchQueries: [{
         query: estimateFormValues,
         variables: { id: estimateId },
@@ -74,6 +89,12 @@ class Reports extends Component {
       });
     }).catch((error) => {
       console.error(error.message);
+      if (
+        error.message.includes('outdated') &&
+        confirm('Current estimate is outdated. Allow force update?')
+      ) {
+        this.estimateUpdate(values, true)
+      }
       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
@@ -175,7 +196,6 @@ class Reports extends Component {
               </DropdownItem>
             </DropdownMenu>
           </Dropdown>
-
         </CardBlock>
         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
