@@ -309,18 +309,7 @@ const createEstimateRequest = (estimate, id) => {
   return request;
 }
 
-const getRowsFromSheet = (sheet) => {
-  const grid = sheet.data[0];
-  const rows = grid.map(d => {
-    return d.rowData;
-  })
-  const realRows = rows.reduce((prev, next) => {
-    return prev.concat(next);
-  })
-  console.log(realRows)
-
-    return rows;
-}
+const getRowsFromSheet = (sheet) => (sheet.data[0].map(d => (d.rowData)).reduce((prev, next) => (prev.concat(next))))
 
 export { createEstimateRequest, getEstimateSheet, getRowsFromSheet };
 
