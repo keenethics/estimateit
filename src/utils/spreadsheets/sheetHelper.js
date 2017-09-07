@@ -189,7 +189,6 @@ const createHeaderTitle = (companyInfo) => {
   const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
 
   let rowCells = [];
-  //rowCells.push(formatCell(createCell('KeenEthics'), spreadsheetConfig.taskNameCell));
   rowCells.push(formatCell(createCell(name), spreadsheetConfig.companyName));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];

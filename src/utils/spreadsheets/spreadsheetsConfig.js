@@ -82,11 +82,11 @@ const cellsFormattingConfig = {
   tableTitleRedCell: { userEnteredFormat: Object.assign({}, redBackground, userEnteredFormat, regularCellTextFormat,  paddingVertical10, { horizontalAlignment: 2, textFormat: { bold: true } }) },
   tableTitleCell: { userEnteredFormat: Object.assign({}, userEnteredFormat, regularCellTextFormat, { horizontalAlignment: 2, textFormat: { bold: true } }) },
   totalDevTime: { userEnteredFormat: Object.assign({}, userEnteredFormat, regularCellTextFormat, { horizontalAlignment: 1, textFormat: { bold: true } }) },
-  companyName: { userEnteredFormat: { textFormat: { fontSize: 27 } } },
-  keenApps: { userEnteredFormat: { padding: { left: 70 }, textFormat: { fontSize: 14 } } },
-  companyInfo: { userEnteredFormat: { textFormat: { fontSize: 10, italic: true } } },
+  companyName: { userEnteredFormat: Object.assign({}, userEnteredFormat, { textFormat: { fontSize: 27 } }) },
+  keenApps: { userEnteredFormat: Object.assign({}, userEnteredFormat, { padding: { left: 70 }, textFormat: { fontSize: 14 } }) },
+  companyInfo: { userEnteredFormat: Object.assign({}, userEnteredFormat, { textFormat: { fontSize: 10, italic: true } }) },
   notes: { userEnteredFormat: Object.assign({}, { backgroundColor: highlightedTabBackground }, userEnteredFormat, regularCellTextFormat,  paddingVertical10, { horizontalAlignment: 2, textFormat: { bold: true } }) },
-  italic: { userEnteredFormat: { textFormat: { italic: true } } },
+  italic: { userEnteredFormat: Object.assign({}, userEnteredFormat, { textFormat: { italic: true } }) },
 }
 
 export default cellsFormattingConfig;
