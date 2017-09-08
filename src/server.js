@@ -68,25 +68,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local.login', (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.json(info);
-    return req.logIn(user, (error) => {
-      if (error) return next(error);
-
-      return res.json({ ...user, redirectUrl: '/' });
-    });
-  })(req, res, next);
-});
-
-app.post('/register', (req, res, next) => {
-  passport.authenticate('local.signup', (err, user, message) => {
-    if (user) return res.json({ ...user, redirectUrl: '/' });
-    return res.json({ success: false, err, ...message });
-  })(req, res, next);
-});
-
 app.get(
   '/auth/google/',
   passport.authenticate('google', {
