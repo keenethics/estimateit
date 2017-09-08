@@ -48,8 +48,6 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
   const { spreadsheetId, sprintNumber } = estimate
   const sheeet = getEstimateSheet(estimate, 2);
   const rows = getRowsFromSheet(sheeet)
-  console.log(rows)
-  console.log('rows');
   const request = {
     spreadsheetId,
     resource: {

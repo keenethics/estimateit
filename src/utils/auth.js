@@ -20,8 +20,6 @@ passport.use(
       passReqToCallback: true,
     },
     (req, accessToken, refreshToken, profile, done) => {
-      console.log('refershToken');
-      console.log(refreshToken);
       process.nextTick(async () => {
         if (!req.user) {
           const email = (profile.emails[0].value || '').toLowerCase();
@@ -102,10 +100,6 @@ passport.use(
                   newUser.google.refreshToken = refreshToken;
                   newUser.name = profile.displayName;
                   newUser.email = (profile.emails[0].value || '').toLowerCase();
-                  console.log('user');
-                  console.log(newUser);
-                  console.log('refreshToken');
-                  console.log(refreshToken);
                   newUser.save((error) => {
                     if (error) {
                       return done(error);

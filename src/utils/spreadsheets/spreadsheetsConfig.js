@@ -29,6 +29,7 @@ const userEnteredFormat = {
     },
   },
   verticalAlignment: 'MIDDLE',
+  hyperlinkDisplayType: 'PLAIN_TEXT',
   horizontalAlignment: 1,
 }
 
