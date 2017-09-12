@@ -6,6 +6,7 @@ import {
   UserError,
   MongoError,
   AccessDenied,
+  WarningOfOutdating,
 } from '../errors';
 import {
   EstimateInputType,
@@ -25,15 +26,16 @@ const estimateUpdate = {
       throw new UserError({});
     }
 
-    const { owner, contributors = [], date } = await Estimate.findOne({ _id: input._id });
+    const {
+      owner,
+      contributors = [],
+      date
+    } = await Estimate.findOne({ _id: input._id });
 
-    console.log('<BEGIN>');
     const oldDate = new Date(date).toString();
-    console.log(oldDate, '===', (oldDate === input.date),'===', input.date);
-
-    if (oldDate !== input.date && !input.forceSave) throw new MongoError({ message: 'outdated' })
-
-    console.log('<END>');
+    if (oldDate !== input.date && !input.forceUpdate) {
+      throw new WarningOfOutdating({ message: 'current estimate is outdated' });
+    }
 
     const userId = user._id.toString();
     const userCanNotEditThisEstimate =

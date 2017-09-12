@@ -34,12 +34,14 @@ class Reports extends Component {
       csv: '',
       axios: [],
       modal: false,
+      modal2: false,
       dropdownOpen: false,
     };
 
     this.toggle = this.toggle.bind(this);
     this.saveAsCSV = this.saveAsCSV.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.toggleModal2 = this.toggleModal2.bind(this);
     this.estimateUpdate = this.estimateUpdate.bind(this);
     this.estimateRemove = this.estimateRemove.bind(this);
   }
@@ -50,31 +52,18 @@ class Reports extends Component {
   }
 
   toggleModal() {
-    this.setState({
-      modal: !this.state.modal,
-    });
+    this.setState({ modal: !this.state.modal });
   }
 
-  estimateUpdate(values, forceSave) {
+  toggleModal2() {
+    this.setState({ modal2: !this.state.modal2 });
+  }
+
+  estimateUpdate(values, forceUpdate) {
     const { estimateId } = this.props;
 
-    // *************************************************************************
-    // It works but thow autentication error:
-    // *************************************************************************
-    // console.log('------->')
-    // fetch('/graphql', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ query: `{ allEstimates {
-    // 		_id
-    //   	date
-    // 		projectName
-    //   } }` }),
-    // }).then(res => res.json()).then(doc => console.log(doc))
-    // *************************************************************************
-
     this.props.estimateUpdate({
-      variables: { input: { ...values, forceSave } },
+      variables: { input: { ...values, forceUpdate } },
       refetchQueries: [{
         query: estimateFormValues,
         variables: { id: estimateId },
@@ -89,19 +78,17 @@ class Reports extends Component {
       });
     }).catch((error) => {
       console.error(error.message);
-      if (
-        error.message.includes('outdated') &&
-        confirm('Current estimate is outdated. Allow force update?')
-      ) {
-        this.estimateUpdate(values, true)
+      if (error.message.includes('outdated')) {
+        this.toggleModal2();
+      } else {
+        this.notificationSystem.addNotification({
+          autoDismiss: 6,
+          position: 'br',
+          title: 'Error',
+          level: 'error',
+          message: error.message,
+        });
       }
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Error',
-        level: 'error',
-        message: error.message,
-      });
     });
   }
 
@@ -197,6 +184,7 @@ class Reports extends Component {
             </DropdownMenu>
           </Dropdown>
         </CardBlock>
+
         <Modal isOpen={this.state.modal} toggle={this.toggleModal}>
           <ModalHeader toggle={this.toggleModal}>Remove estimate</ModalHeader>
           <ModalBody>
@@ -207,6 +195,29 @@ class Reports extends Component {
             <Button color="secondary" onClick={this.toggleModal}>No</Button>
           </ModalFooter>
         </Modal>
+
+        <Modal isOpen={this.state.modal2} toggle={this.toggleModal2}>
+          <ModalHeader toggle={this.toggleModal2}>
+            Current estimate is outdated
+          </ModalHeader>
+          <ModalBody>
+            Do you really want to force update the document?
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="danger"
+              onClick={() => {
+                handleSubmit(val => this.estimateUpdate(val, true))();
+                this.toggleModal2();
+              }}
+            >Yes</Button>{' '}
+            <Button
+              color="secondary"
+              onClick={this.toggleModal2}
+            >No</Button>
+          </ModalFooter>
+        </Modal>
+
         <Notification ref={ref => (this.notificationSystem = ref)} />
       </div>
     );

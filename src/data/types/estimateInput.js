@@ -123,7 +123,7 @@ const EstimateInputType = new InputObjectType({
     isRemoved: {
       type: BoolType,
     },
-    forceSave: {
+    forceUpdate: {
       type: BoolType,
     },
   },

@@ -4,6 +4,7 @@ import {
   ACCESS_DENIED,
   UNAUTHORIZED_USER,
   INVALID_PERMISSION,
+  WARNING_OF_OUTDATING,
 } from './types';
 
 export const TokenError = createError(INVALID_PERMISSION, {
@@ -22,4 +23,8 @@ export const MongoError = createError(MONGO_ERROR, {
 
 export const AccessDenied = createError(ACCESS_DENIED, {
   message: 'You have not right edit this document',
+});
+
+export const WarningOfOutdating = createError(WARNING_OF_OUTDATING, {
+  message: 'Document is outdated',
 });
