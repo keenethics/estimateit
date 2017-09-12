@@ -36,7 +36,6 @@ SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
       console.log(err);
       return callback(err);
     }
-    console.log(spreadsheet);
     // need to save spreadsheet id into db
     return callback(null, spreadsheet);
   });
@@ -109,7 +108,7 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
               endIndex: 3
             },
             properties: {
-              pixelSize: 160,
+              pixelSize: 250,
             },
             fields: 'pixelSize'
           }
