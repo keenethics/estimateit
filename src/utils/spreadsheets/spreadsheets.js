@@ -4,7 +4,6 @@ import util from 'util';
 import { createEstimateRequest, getEstimateSheet, getRowsFromSheet  } from './sheetHelper.js';
 
 const oAuth2 = require('googleapis').auth.OAuth2;
-let helper = null;
 const { GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = process.env;
 const oauth2Client = new oAuth2(GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL);
 
@@ -142,11 +141,6 @@ SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
 
 };
 
-const getSpreadsheetHelper = (accessToken) => {
-  if (!helper) {
-    helper = new SheetsHelper(accessToken);
-  }
-  return helper;
-}
+const getSpreadsheetHelper = (accessToken) => (new SheetsHelper(accessToken));
 
 export default getSpreadsheetHelper;
