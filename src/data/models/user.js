@@ -24,6 +24,7 @@ const userSchema = new Schema({
   google: {
     id: String,
     token: String,
+    refreshToken: String,
   },
   created_at: {
     type: Date,

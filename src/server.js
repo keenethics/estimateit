@@ -21,11 +21,14 @@ import createFetch from './createFetch';
 import router from './router';
 import schema from './data/schema';
 import User from './data/models/user';
+import Estimate from './data/models/estimate';
+
 import assets from './assets.json'; // eslint-disable-line import/no-unresolved
 import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
+import spreadSheets from './utils/spreadsheets/spreadsheets.js';
 
 const MongoStore = MongoConnect(session);
 
@@ -65,28 +68,13 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/login', (req, res, next) => {
-  passport.authenticate('local.login', (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.json(info);
-    return req.logIn(user, (error) => {
-      if (error) return next(error);
-
-      return res.json({ ...user, redirectUrl: '/' });
-    });
-  })(req, res, next);
-});
-
-app.post('/register', (req, res, next) => {
-  passport.authenticate('local.signup', (err, user, message) => {
-    if (user) return res.json({ ...user, redirectUrl: '/' });
-    return res.json({ success: false, err, ...message });
-  })(req, res, next);
-});
-
 app.get(
   '/auth/google/',
-  passport.authenticate('google', { scope: ['profile', 'email'] }),
+  passport.authenticate('google', {
+    scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'],
+    accessType: 'offline',
+    prompt: 'consent'
+  }),
 );
 app.get(
   '/auth/google/callback',
@@ -100,6 +88,47 @@ app.get('/auth/logout', (req, res) => {
   req.logout();
   req.session.destroy();
   res.redirect('/');
+});
+
+app.post('/spreadsheets', async (req, res) => {
+  //res.status(500).json({ error: 'ololoshechki' });
+  const { token, refreshToken, estimateId } = req.body;
+  const credentials = { access_token: token, refresh_token: refreshToken };
+  const spHelper = spreadSheets(credentials);
+  const estimate = await Estimate.findById(estimateId);
+  // probably estimate should be retrieved via grahpql
+  // if so - this piece of code should be replaced
+  if (!estimate.spreadsheetId) {
+    spHelper.createSpreadsheet(estimate, async (err, sp) => {
+      if (err) {
+        // if access_token has been expired
+        // it should be recreated by refreshToken
+        if (err.code == 401) {
+          const newCredentials = await spHelper.updateCredentials();
+          if (newCredentials) {
+            const query = { 'google.token': token };
+            const projection = { $set: { google: newCredentials } };
+            User.update(query, projection);
+          }
+        }
+        res.status(400).send({ error: true, message: err });
+        res.end();
+      }
+      const { spreadsheetId } = sp;
+      const estId = await Estimate.update({ _id: estimateId}, { $set: { spreadsheetId } });
+      res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
+      res.end();
+    });
+  } else {
+    spHelper.updateSpreadsheet(estimate, (err, sp) => {
+      if (err) {
+        res.status(400).send({ error: true, message: err });
+        res.end();
+      }
+      res.status(200).send({ message: `Spreadsheet updated` });
+      res.end();
+    });
+  }
 });
 
 //
