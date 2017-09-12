@@ -179,11 +179,22 @@ class Task extends React.Component {
           <Button
             color="danger"
             onClick={() => fields.push(
-              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0 },
+              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0, isTitle: false },
             )}
             className={styles.tasks__add}
           >
             Add task
+          </Button>
+        }
+        { (level === 0 && showButton) &&
+          <Button
+            color="danger"
+            onClick={() => fields.push(
+              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0, isTitle: true },
+            )}
+            className={styles.tasks__add}
+          >
+            Add title
           </Button>
         }
       </FormGroup>

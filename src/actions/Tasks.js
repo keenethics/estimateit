@@ -94,5 +94,5 @@ export const actionAddSubTask = ({ form, field }) =>
       }));
     }
 
-    dispatch(arrayPush(form, field, { isChecked: true, minimumMinutes: 0, maximumMinutes: 0 }));
+    dispatch(arrayPush(form, field, { isChecked: true, minimumMinutes: 0, maximumMinutes: 0, isTitle: false }));
   };

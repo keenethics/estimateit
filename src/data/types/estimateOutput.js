@@ -27,6 +27,9 @@ const TaskOutputType = new ObjectType({
     tasks: {
       type: new ListType(TaskOutputType),
     },
+    isTitle: {
+      type: BoolType,
+    },
   }),
 });
 
