@@ -183,33 +183,51 @@ const companyInfo = {
   website: 'www.keenethics.com',
 }
 
+const estimateInfo = {
+  estimateType: 'Rough Estimate',
+};
 
-const createHeaderTitle = (companyInfo) => {
+
+const createHeaderTitle = (companyInfo, estimateInfo) => {
   const { name, title, address, phone, email, website } = companyInfo;
+  const { estimateType, projectName, clientName } = estimateInfo;
+  console.log('estimateInfo');
+  console.log(estimateInfo);
+
+  const formattedDate = moment(new Date()).format('Do.MM.YYYY');
+
   const GridData = Object.assign({}, GridDataProto, { startRow: 0 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
 
   let rowCells = [];
   rowCells.push(formatCell(createCell(name), spreadsheetConfig.companyName));
+  rowCells.push(formatCell(createCell(estimateType), spreadsheetConfig.companyName));
+
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
   rowCells.push(formatCell(createCell(title), spreadsheetConfig.keenApps));
+  rowCells.push(formatCell(createCell(formattedDate), spreadsheetConfig.italic));
   GridData.rowData.push({ values: [].concat(rowCells) });
+
   rowCells = [];
 
   rowCells.push(formatCell(createCell(address), spreadsheetConfig.companyInfo));
+  rowCells.push(formatCell(createCell('Customer'), spreadsheetConfig.tableTitleRedCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
   rowCells.push(formatCell(createCell(name), spreadsheetConfig.companyInfo));
+  rowCells.push(formatCell(createCell(clientName), spreadsheetConfig.taskNameCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
   rowCells.push(formatCell(createCell(phone), spreadsheetConfig.companyInfo));
+  rowCells.push(formatCell(createCell('Project'), spreadsheetConfig.tableTitleRedCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
   rowCells.push(formatCell(createCell(email), spreadsheetConfig.companyInfo));
+  rowCells.push(formatCell(createCell(projectName), spreadsheetConfig.taskNameCell));
   GridData.rowData.push({ values: [].concat(rowCells) });
   rowCells = [];
 
@@ -218,42 +236,6 @@ const createHeaderTitle = (companyInfo) => {
   rowCells = [];
 
  return GridData;
-}
-
-const createEstimateInfo = (estimateType, date, customer, projectName) => {
-  const GridData = Object.assign({}, GridDataProto, { startRow: 8 }, { rowData: [] }, { columnMetadata: [{ pixelSize: 500 }] });
-  const formattedDate = moment(date).format('Do.MM.YYYY');
-  let rowCells = [];
-  rowCells.push(formatCell(createCell(estimateType), spreadsheetConfig.companyName));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  rowCells = [];
-  rowCells.push(formatCell(createCell(formattedDate), spreadsheetConfig.italic));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  rowCells = [];
-  rowCells.push(formatCell(createCell('Customer'), spreadsheetConfig.tableTitleRedCell));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  rowCells = [];
-  rowCells.push(formatCell(createCell(customer), spreadsheetConfig.taskNameCell));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  rowCells = [];
-  rowCells.push(formatCell(createCell('Project'), spreadsheetConfig.tableTitleRedCell));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  rowCells = [];
-  rowCells.push(formatCell(createCell(projectName), spreadsheetConfig.taskNameCell));
-  GridData.rowData.push({ values: [].concat(rowCells) });
-  rowCells = [];
-
-  return GridData;
 }
 
 const getDescriptionCell = (startRow) => {
@@ -279,13 +261,17 @@ const getOtherCommentsCell = (estimate, title, sheetId) => {
 const getEstimateSheet = (estimate, title, sheetId) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, clientName } = estimate;
   const Grids = [];
-  const techTableStart = 16;
+  const estInfo = {
+    projectName,
+    clientName,
+    estimateType: estimateInfo.estimateType
+  };
+  const techTableStart = 9;
   const taskTableStart = techTableStart + technologies.length + 2;
   const estimateOptionsStart = taskTableStart + tasks.length + 8;
   const pmInfoStart = estimateOptionsStart + 5 + 2;
-  Grids.push(createHeaderTitle(companyInfo));
-  Grids.push(createEstimateInfo('Rough estimate', new Date(), clientName, projectName));
-  Grids.push(getDescriptionCell(15));
+  Grids.push(createHeaderTitle(companyInfo, estInfo));
+  Grids.push(getDescriptionCell(8));
   Grids.push(createTechTable(techTableStart, technologies));
   Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
   Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
@@ -308,14 +294,17 @@ const getEstimateSheet = (estimate, title, sheetId) => {
 const createEstimateRequest = (estimate, id) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber, clientName } = estimate;
   const Grids = [];
-  const techTableStart = 16;
+  const techTableStart = 9;
   const taskTableStart = techTableStart + technologies.length + 2;
   const estimateOptionsStart = taskTableStart + tasks.length + 8;
   const pmInfoStart = estimateOptionsStart + 5 + 2;
-
-  Grids.push(createHeaderTitle(companyInfo));
-  Grids.push(createEstimateInfo('Rough estimate', new Date(), clientName, projectName));
-  Grids.push(getDescriptionCell(15));
+  const estInfo = {
+    projectName,
+    clientName,
+    estimateType: estimateInfo.estimateType
+  };
+  Grids.push(createHeaderTitle(companyInfo, estInfo));
+  Grids.push(getDescriptionCell(8));
   Grids.push(createTechTable(techTableStart, technologies));
   Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
   Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
