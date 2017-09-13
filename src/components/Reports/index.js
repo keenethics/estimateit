@@ -60,11 +60,12 @@ class Reports extends Component {
 
   exportToGoogleSheet() {
     const { estimateId } = this.props;
+    const userId = window.App.user._id
     const { token, refreshToken } = window.App.user.google;
     this.setState({ updatingSpreadsheet: true });
     fetch('/spreadsheets', {
       method: 'POST',
-      body: JSON.stringify({ token, refreshToken, estimateId }),
+      body: JSON.stringify({ token, refreshToken, estimateId, userId }),
       headers: {
         'Accept': 'application/json, text/plain, */*',
         'Content-Type': 'application/json'

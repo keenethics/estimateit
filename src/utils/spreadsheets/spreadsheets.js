@@ -41,13 +41,13 @@ SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
   });
 };
 
-SheetsHelper.prototype.updateSpreadsheet = function(estimate, callback) {
+SheetsHelper.prototype.updateSpreadsheet = function(estimate, userId, callback) {
   const self = this;
   const { spreadsheetId, sprintNumber } = estimate
   const sheeet = getEstimateSheet(estimate, 2);
   const rows = getRowsFromSheet(sheeet)
   const request = {
-    spreadsheetId,
+    spreadsheetId: spreadsheetId[userId],
     resource: {
       requests: [
         {

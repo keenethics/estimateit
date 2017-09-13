@@ -25,8 +25,8 @@ const EstimateSchema = mongoose.Schema({
     default: '',
   },
   spreadsheetId: {
-    type: String,
-    default: '',
+    type: Object,
+    default: {},
   },
   comments: {
     type: String,

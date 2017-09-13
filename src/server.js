@@ -92,13 +92,13 @@ app.get('/auth/logout', (req, res) => {
 
 app.post('/spreadsheets', async (req, res) => {
   //res.status(500).json({ error: 'ololoshechki' });
-  const { token, refreshToken, estimateId } = req.body;
+  const { token, refreshToken, estimateId, userId } = req.body;
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
   const estimate = await Estimate.findById(estimateId);
   // probably estimate should be retrieved via grahpql
   // if so - this piece of code should be replaced
-  if (!estimate.spreadsheetId) {
+  if (!estimate.spreadsheetId || !estimate.spreadsheetId[userId]) {
     spHelper.createSpreadsheet(estimate, async (err, sp) => {
       if (err) {
         // if access_token has been expired
@@ -115,12 +115,12 @@ app.post('/spreadsheets', async (req, res) => {
         res.end();
       }
       const { spreadsheetId } = sp;
-      const estId = await Estimate.update({ _id: estimateId}, { $set: { spreadsheetId } });
+      const estId = await Estimate.update({ _id: estimateId}, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
       res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
       res.end();
     });
   } else {
-    spHelper.updateSpreadsheet(estimate, (err, sp) => {
+    spHelper.updateSpreadsheet(estimate, userId, (err, sp) => {
       if (err) {
         res.status(400).send({ error: true, message: err });
         res.end();
