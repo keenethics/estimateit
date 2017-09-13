@@ -95,7 +95,7 @@ class Task extends React.Component {
                 ? <div className={styles.subtasks__wrapper}>
                   <Field
                     type="text"
-                    label="Task name:"
+                    label="Tasks group:"
                     disabled={disabled}
                     component={renderField}
                     id={`${task}.taskName`}
