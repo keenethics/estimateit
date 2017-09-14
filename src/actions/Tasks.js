@@ -8,7 +8,7 @@ import { actionGeneralCalculation } from './Calculation';
 
 
 const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
-  dispatch({
+  setTimeout(() => dispatch({
     type: '@@redux-form/CHANGE',
     meta: {
       form,
@@ -17,7 +17,7 @@ const changeWrapper = ({ dispatch, form, field, payload, touch = true }) => {
       persistentSubmitErrors: false,
     },
     payload: payload || 0,
-  });
+  }), 0);
 };
 
 const recalculateTime = (field, getState, selector, dispatch, form) => {

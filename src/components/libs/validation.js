@@ -25,7 +25,6 @@ export const mixShouldBeLessThenMax = (maxTimeId, haveSubtask) =>
       : 'min time > max time';
   };
 
-
 export const requiredArray = value =>
   (value && value.length ? undefined : 'Required');
 
