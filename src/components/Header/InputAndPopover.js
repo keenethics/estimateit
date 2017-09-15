@@ -8,7 +8,7 @@ import {
 
 import * as styles from './styles.scss';
 import formatTime from '../libs/formatTime';
-import { ValidationState } from '../libs/helpers';
+import ValidationState from '../libs/ValidationState';
 import parseMinutesToString from '../libs/parseMinutesToString';
 
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Creatable } from 'react-select';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import styles from 'react-select/dist/react-select.css';
-import { ValidationState } from '../../libs/helpers';
+import ValidationState from '../ValidationState';
 import * as s from './styles.scss';
 
 class MultiSelect extends Component {

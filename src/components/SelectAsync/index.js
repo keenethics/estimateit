@@ -4,7 +4,8 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { FormGroup } from 'reactstrap';
 
-import { ValidationState } from '../libs//helpers';
+import ValidationState from '../libs/ValidationState';
+
 import {
   usersByEmail,
 } from '../../data/queriesClient';

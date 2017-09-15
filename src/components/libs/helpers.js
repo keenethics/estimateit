@@ -3,37 +3,7 @@ import React from 'react';
 import moment from 'moment';
 import DateField from 'react-datepicker';
 import { FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import * as styles from './helpers.scss';
-
-export const ValidationState = ({ touched, error, warning }) => (
-  <div className={styles.validationStatus}>
-    {/*}
-    {console.log(
-      styles,
-      '\n',
-      touched,
-      error,
-      warning,
-      touched && (error && "text-danger" || warning &&  "text-warning") || styles.hidden
-    )}
-    <span
-      className={touched && (error && "text-danger" || warning &&  "text-warning") || styles.hidden}
-    >
-      {error || warning || ''}
-    </span>
-    {*/}
-
-    {touched &&
-      ((error &&
-        <div>
-          <span className="text-danger">{error}</span>
-        </div>) ||
-        (warning &&
-          <div>
-            <span className="text-warning">{warning}</span>
-          </div>))}
-  </div>
-);
+import ValidationState from './ValidationState';
 
 export const renderField = ({ className, input, label, type, meta, disabled }) => (
   <FormGroup className={className}>
