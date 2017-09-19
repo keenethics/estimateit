@@ -3,7 +3,8 @@ import React from 'react';
 import moment from 'moment';
 import DateField from 'react-datepicker';
 import { FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
-import ValidationState from './ValidationState';
+import ValidationState, { hintClass } from './ValidationState';
+
 
 export const renderField = ({ className, input, label, type, meta, disabled }) => (
   <FormGroup className={className}>
@@ -12,7 +13,8 @@ export const renderField = ({ className, input, label, type, meta, disabled }) =
       type={type}
       disabled={disabled}
       placeholder={label}
-      className={className}
+      className={className + ' ' + hintClass(meta)}
+      title={meta.error || meta.warning}
     />
     <ValidationState {...meta} />
   </FormGroup>
@@ -25,7 +27,8 @@ export const renderPasswordField = ({ className, input, label, type, meta, disab
       type="password"
       disabled={disabled}
       placeholder={label}
-      className={className}
+      className={className + ' ' + hintClass(meta)}
+      title={meta.error || meta.warning}
     />
     <ValidationState {...meta} />
   </FormGroup>
@@ -33,7 +36,8 @@ export const renderPasswordField = ({ className, input, label, type, meta, disab
 
 export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange, disabled }) => (
   <div style={{ width: '100%' }}>
-    <InputGroup>
+    <InputGroup
+    >
       <InputGroupAddon>{label}</InputGroupAddon>
       <Input
         min="0"
@@ -44,6 +48,8 @@ export const renderOptionsField = ({ className, input: { value, ...input }, labe
         disabled={disabled}
         onChange={onChange}
         {...input}
+        className={hintClass(meta)}
+        title={meta.error || meta.warning}
       />
     </InputGroup>
     <ValidationState {...meta} />

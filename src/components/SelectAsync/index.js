@@ -4,7 +4,7 @@ import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { FormGroup } from 'reactstrap';
 
-import ValidationState from '../libs/ValidationState';
+import ValidationState, { hintClass } from '../libs/ValidationState';
 
 import {
   usersByEmail,
@@ -57,7 +57,7 @@ class SelectAsync extends React.Component {
     const { isLoading } = this.state;
 
     return (
-      <FormGroup className={className}>
+      <FormGroup className={className} title={meta.error || meta.warning}>
         <Select.AsyncCreatable
           create
           value={value}
@@ -65,6 +65,7 @@ class SelectAsync extends React.Component {
           onChange={onChange}
           isLoading={isLoading}
           loadOptions={v => (this.getUser(v))}
+          className={hintClass(meta)}
         />
         <ValidationState {...meta} />
       </FormGroup>

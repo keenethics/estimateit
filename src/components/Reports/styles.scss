@@ -81,6 +81,19 @@
 }
 
 :global {
+  .error-hint {
+    border-color: #d9534f;
+    div {
+      border-color: #d9534f;
+    }
+  }
+  .error-hint:hover {
+    border-color: #c9302c;
+    div {
+      border-color: #c9302c;
+    }
+  }
+  
   .dropdown-menu {
     margin-left: 0.8rem;
     .dropdown-item {

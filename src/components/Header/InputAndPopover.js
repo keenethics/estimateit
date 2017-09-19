@@ -8,7 +8,7 @@ import {
 
 import * as styles from './styles.scss';
 import formatTime from '../libs/formatTime';
-import ValidationState from '../libs/ValidationState';
+import ValidationState, { hintClass } from '../libs/ValidationState';
 import parseMinutesToString from '../libs/parseMinutesToString';
 
 
@@ -73,6 +73,9 @@ class InputAndPopover extends React.Component {
               value={value}
               onBlur={this.handleOnBlur}
               onChange={this.handleOnChange}
+              {...input}
+              className={hintClass(meta)}
+              title={meta.error || meta.warning}
             />
             <InputGroupAddon
               className={styles.input_group_addon}
