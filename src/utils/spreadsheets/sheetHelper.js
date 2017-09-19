@@ -4,8 +4,8 @@ import moment from 'moment';
 const { GridDataProto } = spreadsheetConfig;
 
 const createTaskCell = (value) => {
-  if (/[A-Za-z]+/g.test(value)) {
-   return { stringValue: value }
+  if (/[^0-9\.]+/g.test(value)) {
+    return { stringValue: value }
   }
   return { numberValue: Math.round(parseFloat(value) * 10) / 10 };
 }
