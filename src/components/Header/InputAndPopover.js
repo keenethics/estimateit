@@ -73,7 +73,6 @@ class InputAndPopover extends React.Component {
               value={value}
               onBlur={this.handleOnBlur}
               onChange={this.handleOnChange}
-              {...input}
               className={hintClass(meta)}
               title={meta.error || meta.warning}
             />

@@ -36,8 +36,7 @@ export const renderPasswordField = ({ className, input, label, type, meta, disab
 
 export const renderOptionsField = ({ className, input: { value, ...input }, label, type, meta, name, onChange, disabled }) => (
   <div style={{ width: '100%' }}>
-    <InputGroup
-    >
+    <InputGroup>
       <InputGroupAddon>{label}</InputGroupAddon>
       <Input
         min="0"

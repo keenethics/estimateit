@@ -24,9 +24,6 @@ const TaskInputType = new InputObjectType({
     tasks: {
       type: new ListType(TaskInputType),
     },
-    isTitle: {
-      type: BoolType,
-    },
   }),
 });
 

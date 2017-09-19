@@ -90,101 +90,76 @@ class Task extends React.Component {
               name="tasks"
               className={styles.subtasks}
             >
-              {
-                taskObj.isTitle
-                ? <div className={styles.subtasks__wrapper}>
-                  <Field
-                    type="text"
-                    label="Tasks group:"
-                    disabled={disabled}
-                    component={renderField}
-                    id={`${task}.taskName`}
-                    name={`${task}.taskName`}
-                    className={styles.subtasks__item + ' ' + styles.subtasks__title}
-                    validate={[required, maxLength(100)]}
-                  />
-                  {
-                    showButton &&
-                    <Button
-                      color="danger"
-                      className={styles.subtasks__item}
-                      onClick={() => actionRemoveTask({ index, form, field: task })}
-                      title="Delete task (including subtasks)"
-                    >
-                      ✗
-                    </Button>
-                  }
-                </div>
-                : <div className={styles.subtasks__wrapper}>
-                  <Field
-                    type="checkbox"
-                    disabled={disabled}
-                    component={renderField}
-                    id={`${task}.isChecked`}
-                    name={`${task}.isChecked`}
-                    className={styles.subtasks__checkbox}
-                    onChange={e => this.handleToggleCheckbox(task, e)}
-                    onBlur={e => this.handleBlurCheckbox(task, taskObj, e)}
-                  />
-                  <Field
-                    type="text"
-                    label="Task name:"
-                    disabled={disabled}
-                    component={renderField}
-                    id={`${task}.taskName`}
-                    name={`${task}.taskName`}
+              <div className={styles.subtasks__wrapper}>
+                <Field
+                  type="checkbox"
+                  disabled={disabled}
+                  component={renderField}
+                  id={`${task}.isChecked`}
+                  name={`${task}.isChecked`}
+                  className={styles.subtasks__checkbox}
+                  onChange={e => this.handleToggleCheckbox(task, e)}
+                  onBlur={e => this.handleBlurCheckbox(task, taskObj, e)}
+                />
+                <Field
+                  type="text"
+                  label="Task name:"
+                  disabled={disabled}
+                  component={renderField}
+                  id={`${task}.taskName`}
+                  name={`${task}.taskName`}
+                  className={styles.subtasks__item}
+                  validate={[required, maxLength(100)]}
+                />
+                <Field
+                  type="text"
+                  addon={'min'}
+                  fieldName="minimumMinutes"
+                  component={InputAndPopover}
+                  id={`${task}.minimumMinutes`}
+                  name={`${task}.minimumMinutes`}
+                  className={styles.subtasks__item}
+                  disabled={disabled || haveSubtask}
+                  actionChangeTaskHours={actionChangeTaskHours}
+                  validate={[
+                    mixShouldBeLessThenMax(`${task}.maximumMinutes`, haveSubtask),
+                  ]}
+                />
+                <Field
+                  type="text"
+                  addon={'max'}
+                  fieldName="maximumMinutes"
+                  component={InputAndPopover}
+                  id={`${task}.maximumMinutes`}
+                  name={`${task}.maximumMinutes`}
+                  className={styles.subtasks__item}
+                  disabled={disabled || haveSubtask}
+                  validate={[]}
+                  actionChangeTaskHours={actionChangeTaskHours}
+                />
+                {
+                  (level < 2 && showButton) &&
+                  <Button
+                    color="danger"
                     className={styles.subtasks__item}
-                    validate={[required, maxLength(100)]}
-                  />
-                  <Field
-                    type="text"
-                    addon={'min'}
-                    fieldName="minimumMinutes"
-                    component={InputAndPopover}
-                    id={`${task}.minimumMinutes`}
-                    name={`${task}.minimumMinutes`}
+                    onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
+                    title="Add subtask"
+                  >
+                    <b>+</b>
+                  </Button>
+                }
+                {
+                  showButton &&
+                  <Button
+                    color="danger"
                     className={styles.subtasks__item}
-                    disabled={disabled || haveSubtask}
-                    actionChangeTaskHours={actionChangeTaskHours}
-                    validate={[
-                      mixShouldBeLessThenMax(`${task}.maximumMinutes`, haveSubtask),
-                    ]}
-                  />
-                  <Field
-                    type="text"
-                    addon={'max'}
-                    fieldName="maximumMinutes"
-                    component={InputAndPopover}
-                    id={`${task}.maximumMinutes`}
-                    name={`${task}.maximumMinutes`}
-                    className={styles.subtasks__item}
-                    disabled={disabled || haveSubtask}
-                    validate={[]}
-                    actionChangeTaskHours={actionChangeTaskHours}
-                  />
-                  {
-                    (level < 2 && showButton) &&
-                    <Button
-                      color="danger"
-                      className={styles.subtasks__item}
-                      onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
-                      title="Add subtask"
-                    >
-                      <b>+</b>
-                    </Button>
-                  }
-                  {
-                    showButton &&
-                    <Button
-                      color="danger"
-                      className={styles.subtasks__item}
-                      onClick={() => actionRemoveTask({ index, form, field: task })}
-                      title="Delete task (including subtasks)"
-                    >
-                      ✗
-                    </Button>
-                  }
-                </div>}
+                    onClick={() => actionRemoveTask({ index, form, field: task })}
+                    title="Delete task (including subtasks)"
+                  >
+                    ✗
+                  </Button>
+                }
+              </div>
 
               <div className={styles.item__wrapper} style={{ marginLeft: '20px' }}>
                 <FieldArray
@@ -205,22 +180,11 @@ class Task extends React.Component {
           <Button
             color="danger"
             onClick={() => fields.push(
-              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0, isTitle: false },
+              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0 },
             )}
             className={styles.tasks__add}
           >
             Add task
-          </Button>
-        }
-        { (level === 0 && showButton) &&
-          <Button
-            color="danger"
-            onClick={() => fields.push(
-              { isChecked: true, minimumMinutes: 0, maximumMinutes: 0, isTitle: true },
-            )}
-            className={styles.tasks__add}
-          >
-            Add title
           </Button>
         }
       </FormGroup>
