@@ -2,7 +2,9 @@
   width: 100%;
   margin: 0;
   &__input {
-    margin-bottom: .5rem;
     font-size: 14px !important;
+    &:not(:last-child) {
+      margin-bottom: .5rem !important;
+    }
   }
 }

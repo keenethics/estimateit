@@ -40,30 +40,40 @@
 }
 
 .tasks {
-  margin-bottom: 0!important;
+  margin-bottom: 0 !important;
   &__add {
-    margin: 4px 8px 4px 0;
+    margin-bottom: 1rem;
   }
 }
+
 .subtasks {
   &__wrapper {
     position: relative;
     display: flex;
+    justify-content: space-between;
     flex-direction: row;
     margin: 15px 0 10px 0;
   }
   &__checkbox {
     position: absolute;
     top: 50%;
+    right: -10px;
     transform: translateY(-50%);
-    margin-top: 0;
+    display: flex;
+    align-items: center;
+    & input[type="checkbox"] {
+      margin: 0 !important;
+    }
   }
   &__item {
-    margin: 0px 5px;
+    margin-bottom: 0 !important;
+    margin-left: 8px !important;
     height: fit-content;
+    &:first-child {
+      margin-left: 0!important;
+    }
   }
 }
-
 
 .popover_table {
   td {

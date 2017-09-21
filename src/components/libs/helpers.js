@@ -13,7 +13,7 @@ export const renderField = ({ className, input, label, type, meta, disabled }) =
       type={type}
       disabled={disabled}
       placeholder={label}
-      className={className + ' ' + hintClass(meta)}
+      className={hintClass(meta)}
       title={meta.error || meta.warning}
     />
     <ValidationState {...meta} />
