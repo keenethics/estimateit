@@ -9,7 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as styles from './styles.scss';
-import { renderField } from '../libs/helpers';
+import { renderField, renderTaskNameField } from '../libs/helpers';
 import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
 import {
@@ -69,6 +69,7 @@ class Task extends React.Component {
       meta: { form },
       actionToggleTask,
       actionChangeTaskHours,
+      actionChangeTaskName,
       actionRemoveTask,
       actionAddSubTask,
       userCanEditThisEstimate,
@@ -105,11 +106,12 @@ class Task extends React.Component {
                   type="text"
                   label="Task name:"
                   disabled={disabled}
-                  component={renderField}
+                  component={renderTaskNameField}
                   id={`${task}.taskName`}
                   name={`${task}.taskName`}
                   className={styles.subtasks__item}
-                  validate={[required, maxLength(100)]}
+                  actionChangeTaskName={actionChangeTaskName}
+                  validate={[required]}
                 />
                 <Field
                   type="text"
@@ -168,6 +170,7 @@ class Task extends React.Component {
                   name={`${task}.tasks`}
                   actionToggleTask={actionToggleTask}
                   actionRemoveTask={actionRemoveTask}
+                  actionChangeTaskName={actionChangeTaskName}
                   actionChangeTaskHours={actionChangeTaskHours}
                   actionAddSubTask={actionAddSubTask}
                   userCanEditThisEstimate={userCanEditThisEstimate}

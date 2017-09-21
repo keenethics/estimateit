@@ -6,6 +6,55 @@ import { FormGroup, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 import ValidationState, { hintClass } from './ValidationState';
 
 
+export class renderTaskNameField extends React.Component {
+  constructor(props) {
+    super(props);
+    const { input: { value } } = props;
+    this.state = {
+      value,
+    };
+
+    this.handleOnBlur = this.handleOnBlur.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { input: { value } } = nextProps;
+    this.setState({ value });
+  }
+
+  handleOnBlur({ target: { value } }) {
+    const {
+      fieldName,
+      meta: { form },
+      actionChangeTaskName,
+      input: { name: field },
+    } = this.props;
+
+    actionChangeTaskName({ form, field, value, fieldName });
+  }
+
+  render() {
+    const { className, input, label, type, meta, disabled } = this.props;
+
+    return (
+      <FormGroup className={className}>
+        <Input
+          {...input}
+          type={type}
+          disabled={disabled}
+          placeholder={label}
+          className={className + ' ' + hintClass(meta)}
+          title={meta.error || meta.warning}
+          onChange={({ target: { value } }) => this.setState({ value })}
+          value={this.state.value}
+          onBlur={this.handleOnBlur}
+        />
+        <ValidationState {...meta} />
+      </FormGroup>
+    );
+  }
+}
+
 export const renderField = ({ className, input, label, type, meta, disabled }) => (
   <FormGroup className={className}>
     <Input
