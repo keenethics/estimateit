@@ -63,7 +63,7 @@ export const emailFromSelect = ({ label }) =>
 export const newContributorEmail = ({ contributors, owner }) => ({ label }) =>
   ((!_.findWhere(contributors, { email: label }) && label !== owner.email)
     ? undefined
-    : 'User with this email alreday added to estimate'
+    : 'The user has already been added to the estimate'
   );
 
 

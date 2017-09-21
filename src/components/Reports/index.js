@@ -37,7 +37,6 @@ class Reports extends Component {
       modal2: false,
       dropdownOpen: false,
       updatingSpreadsheet: false,
-      // estimateHasBeenSaved: false,
     };
 
     this.toggle = this.toggle.bind(this);
@@ -88,7 +87,6 @@ class Reports extends Component {
           message: res.message,
         });
       } else {
-        // this.setState({ estimateHasBeenSaved: false });
         this.notificationSystem.addNotification({
           autoDismiss: 6,
           position: 'br',
@@ -101,8 +99,6 @@ class Reports extends Component {
   }
 
   estimateUpdate(values, forceUpdate = false, cb) {
-    console.log(Boolean(cb), '1callback-->', cb);
-
     const { estimateId } = this.props;
 
     this.props.estimateUpdate({
@@ -112,13 +108,8 @@ class Reports extends Component {
         variables: { id: estimateId },
       }],
     }).then(() => {
-      // this.setState({ estimateHasBeenSaved: true });
       console.log('<<<<<<<<<<<< after UPD DB >>>>>>>>>>>>>>');
-      if (cb) {
-
-        console.log(Boolean(cb), '2callback-->', cb);
-        cb();
-      }
+      if (cb) cb();
 
       this.notificationSystem.addNotification({
         autoDismiss: 6,
@@ -191,7 +182,7 @@ class Reports extends Component {
 
   render() {
     const { handleSubmit } = this.context;
-    const { updatingSpreadsheet/*, estimateHasBeenSaved*/ } = this.state;
+    const { updatingSpreadsheet } = this.state;
     const { userCanEditThisEstimate } = this.props;
     const token = window.App.user.google && window.App.user.google.token;
     return (
@@ -201,9 +192,9 @@ class Reports extends Component {
             <div>
               {token &&
                 <Button
-                  color={updatingSpreadsheet /*&& estimateHasBeenSaved */ ? 'secondary' : 'danger'}
+                  color={updatingSpreadsheet ? 'secondary' : 'danger'}
                   onClick={handleSubmit(val => this.estimateUpdate(val, false, this.exportToGoogleSheet))}
-                  disabled={updatingSpreadsheet /*|| !estimateHasBeenSaved */}
+                  disabled={updatingSpreadsheet}
                 >
                {updatingSpreadsheet ? 'Exporting...' : 'Save & export to Google Sheets'}
               </Button>

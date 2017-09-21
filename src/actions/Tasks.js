@@ -72,6 +72,11 @@ export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
     dispatch(actionGeneralCalculation({ form }));
   };
 
+export const actionChangeTaskName = ({ form, field, value, fieldName }) =>
+  (dispatch, getState) => {
+    changeWrapper({ dispatch, form, field, payload: value });
+  }
+
 
 export const actionAddSubTask = ({ form, field }) =>
   (dispatch, getState) => {
