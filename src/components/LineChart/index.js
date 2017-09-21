@@ -146,7 +146,7 @@ class LineChart extends Component {
     } = this.props;
 
     return (
-      <Card>
+      <Card style={{ height: '500px' }}>
         <CardBlock>
           <ReactHighcharts
             width="800"
