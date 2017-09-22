@@ -258,39 +258,6 @@ const getOtherCommentsCell = (estimate, title, sheetId) => {
   return GridData;
 }
 
-const getEstimateSheet = (estimate, title, sheetId) => {
-  const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, clientName } = estimate;
-  const Grids = [];
-  const estInfo = {
-    projectName,
-    clientName,
-    estimateType: estimateInfo.estimateType
-  };
-  const techTableStart = 9;
-  const taskTableStart = techTableStart + technologies.length + 2;
-  const estimateOptionsStart = taskTableStart + tasks.length + 8;
-  const pmInfoStart = estimateOptionsStart + 5 + 2;
-  Grids.push(createHeaderTitle(companyInfo, estInfo));
-  Grids.push(getDescriptionCell(8));
-  Grids.push(createTechTable(techTableStart, technologies));
-  Grids.push(createTaskTable(taskTableStart, tasks, moneyRate));
-  Grids.push(createEstimateOptionsTable(estimateOptionsStart, estimateOptions))
-  Grids.push(createPMInfo(pmInfoStart, email, skype, pm));
-  Grids.push(getOtherCommentsCell());
-
-  return {
-    data: [Grids],
-    properties: {
-      title: title || 'Estimate',
-      sheetId: sheetId || 1,
-      gridProperties: {
-        columnCount: 6,
-        frozenRowCount: 1
-      }
-    }
-  }
-}
-
 const createEstimateRequest = (estimate, id) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber, clientName } = estimate;
   const Grids = [];

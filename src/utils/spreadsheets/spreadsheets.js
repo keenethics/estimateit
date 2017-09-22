@@ -1,7 +1,7 @@
 import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';
-import { createEstimateRequest, getEstimateSheet, getRowsFromSheet  } from './sheetHelper.js';
+import { createEstimateRequest, getRowsFromSheet  } from './sheetHelper.js';
 
 const oAuth2 = require('googleapis').auth.OAuth2;
 const { GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CALLBACK_URL } = process.env;
@@ -10,6 +10,7 @@ const oauth2Client = new oAuth2(GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CA
 const SheetsHelper = function(credentials) {
   oauth2Client.setCredentials(credentials);
   this.service = google.sheets({version: 'v4', auth: oauth2Client});
+  this.drive = google.drive({version: 'v3', auth: oauth2Client});
 };
 
 SheetsHelper.prototype.updateCredentials = function() {
@@ -28,6 +29,26 @@ SheetsHelper.prototype.updateCredentials = function() {
   })
 }
 
+SheetsHelper.prototype.deleteFile = function(fileId) {
+  const self = this;
+  return new Promise((resolve, reject) => {
+    self.drive.files.delete({ fileId }, function (err, f) {
+      if (err) reject(false);
+      resolve(true);
+    })
+  });
+};
+
+SheetsHelper.prototype.getFile = function(fileId) {
+  const self = this;
+  return new Promise((resolve, reject) => {
+    self.drive.files.get({ fileId }, function (err, f) {
+      if (err) resolve(false);
+      resolve(f);
+    })
+  });
+};
+
 SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
   const self = this;
   const request = createEstimateRequest(estimate);
@@ -39,105 +60,6 @@ SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
     // need to save spreadsheet id into db
     return callback(null, spreadsheet);
   });
-};
-
-SheetsHelper.prototype.updateSpreadsheet = function(estimate, userId, callback) {
-  const self = this;
-  const { spreadsheetId, sprintNumber } = estimate
-  const sheeet = getEstimateSheet(estimate, 2);
-  const rows = getRowsFromSheet(sheeet)
-  const request = {
-    spreadsheetId: spreadsheetId[userId],
-    resource: {
-      requests: [
-        {
-          addSheet: {
-            properties: {
-              sheetId: 3,
-              title: 'v2'
-            },
-          }
-        },
-        {
-          deleteSheet: {
-            sheetId: 2,
-          },
-        },
-         {
-          addSheet: {
-            properties: {
-              sheetId: 2,
-              title: `sprint ${sprintNumber}`,
-            },
-          }
-         },
-        {
-          deleteSheet: {
-            sheetId: 3,
-          },
-        },
-        // append company info, technologies, tasks, estimate options, pm info
-        {
-          appendCells: {
-            sheetId: 2,
-            rows,
-            fields: '*',
-          }
-        },
-        // set width of cells
-        {
-          updateDimensionProperties: {
-            range: {
-              sheetId: 2,
-              dimension: 'COLUMNS',
-              startIndex: 0,
-              endIndex: 1
-            },
-            properties: {
-              pixelSize: 560,
-            },
-            fields: 'pixelSize'
-          }
-        },
-        {
-          updateDimensionProperties: {
-            range: {
-              sheetId: 2,
-              dimension: 'COLUMNS',
-              startIndex: 1,
-              endIndex: 3
-            },
-            properties: {
-              pixelSize: 250,
-            },
-            fields: 'pixelSize'
-          }
-        },
-        {
-          updateDimensionProperties: {
-            range: {
-              sheetId: 2,
-              dimension: 'COLUMNS',
-              startIndex: 3,
-              endIndex: 4,
-            },
-            properties: {
-              pixelSize: 400,
-            },
-            fields: 'pixelSize'
-          }
-        },
-      ]
-    }
-  }
-  self.service.spreadsheets.batchUpdate(request, function(err, res) {
-    if (err) {
-      callback(err);
-      return;
-    }
-    callback(null, res);
-  })
-
 };
 
 const getSpreadsheetHelper = (accessToken) => (new SheetsHelper(accessToken));
