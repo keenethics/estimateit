@@ -10,6 +10,7 @@ const oauth2Client = new oAuth2(GOOGLE_CLIEN_ID, GOOGLE_CLIENT_SECRET, GOOGLE_CA
 const SheetsHelper = function(credentials) {
   oauth2Client.setCredentials(credentials);
   this.service = google.sheets({version: 'v4', auth: oauth2Client});
+  this.drive = google.drive({version: 'v3', auth: oauth2Client});
 };
 
 SheetsHelper.prototype.updateCredentials = function() {
@@ -27,6 +28,26 @@ SheetsHelper.prototype.updateCredentials = function() {
     })
   })
 }
+
+SheetsHelper.prototype.deleteFile = function(fileId) {
+  const self = this;
+  return new Promise((resolve, reject) => {
+    self.drive.files.delete({ fileId }, function (err, f) {
+      if (err) reject(false);
+      resolve(true);
+    })
+  });
+};
+
+SheetsHelper.prototype.getFile = function(fileId) {
+  const self = this;
+  return new Promise((resolve, reject) => {
+    self.drive.files.get({ fileId }, function (err, f) {
+      if (err) resolve(false);
+      resolve(f);
+    })
+  });
+};
 
 SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
   const self = this;
