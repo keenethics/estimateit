@@ -5,7 +5,7 @@ import Policy from '../../components/Policy';
 const title = 'Page Not Found';
 
 export default {
-  path: '*',
+  path: '/policy',
 
   action() {
     return {
