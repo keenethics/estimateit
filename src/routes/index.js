@@ -5,6 +5,7 @@ export default [
     title: 'Dashboard',
     children: [
       require('./dashboard').default,
+      require('./policy').default,
       require('./estimate').default,
       require('./notFound').default,
     ],
