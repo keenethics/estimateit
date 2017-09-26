@@ -69,6 +69,7 @@
     margin-bottom: 0 !important;
     margin-left: 8px !important;
     height: fit-content;
+    width: 100%;
     &:first-child {
       margin-left: 0!important;
     }
@@ -110,4 +111,8 @@
   &_plus, &_minus, &_middle_input {
     width: 45px;
   }
+}
+
+.btn {
+  max-width: 46px;
 }
