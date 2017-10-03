@@ -143,7 +143,7 @@ class Task extends React.Component {
                   (level < 2 && showButton) &&
                   <Button
                     color="danger"
-                    className={styles.subtasks__item}
+                    className={[styles.subtasks__item, styles.btn].join(' ')}
                     onClick={() => actionAddSubTask({ form, field: `${task}.tasks` })}
                     title="Add subtask"
                   >
@@ -154,7 +154,7 @@ class Task extends React.Component {
                   showButton &&
                   <Button
                     color="danger"
-                    className={styles.subtasks__item}
+                    className={[styles.subtasks__item, styles.btn].join(' ')}
                     onClick={() => actionRemoveTask({ index, form, field: task })}
                     title="Delete task (including subtasks)"
                   >

@@ -19,7 +19,7 @@ const SingleEstimate = ({ estimate }) => (
       <CardHeader className={styles.singleEstimate__header}>
         {estimate.projectName}
       </CardHeader>
-      <CardBlock>
+      <CardBlock className={styles.singleEstimate__body}>
         <div className={styles.singleEstimate__text}>
           Client name: {estimate.clientName}
         </div>
