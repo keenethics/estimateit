@@ -33,10 +33,21 @@ class Header extends React.Component {
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               {isAuthenticated ? (
-                <NavItem>
-                  <NavLink href="/auth/logout">Logout</NavLink>
-                </NavItem>
-              ) : null}
+                <Nav>
+                  <NavItem>
+                    <NavLink href="/policy">Policy</NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/auth/logout">Logout</NavLink>
+                  </NavItem>
+                </Nav>
+                ) :
+                <Nav>
+                  <NavItem>
+                    <NavLink href="/policy">Policy</NavLink>
+                  </NavItem>
+                </Nav>
+              }
             </Nav>
           </Collapse>
         </Navbar>
