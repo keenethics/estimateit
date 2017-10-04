@@ -14,7 +14,6 @@ import InputAndPopover from './InputAndPopover';
 import * as actionsTasks from '../../actions/Tasks';
 import {
   required,
-  maxLength,
   mixShouldBeLessThenMax,
 } from '../libs/validation';
 
@@ -208,6 +207,7 @@ Task.propTypes = {
   userCanEditThisEstimate: PropTypes.bool.isRequired,
   meta: PropTypes.objectOf(PropTypes.any).isRequired,
   fields: PropTypes.objectOf(PropTypes.any).isRequired,
+  actionChangeTaskName: PropTypes.func.isRequired,
 };
 
 function mapStateToProps() {

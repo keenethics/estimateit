@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import google from 'googleapis';
 import googleAuth from 'google-auth-library'
 import util from 'util';

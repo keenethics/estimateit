@@ -8,8 +8,8 @@ import {
   PENDING,
 } from '../constants/userStatus';
 
-const LocalStrategy = passportLocal.Strategy;
 /* eslint-disable */
+const LocalStrategy = passportLocal.Strategy;
 passport.use(
   'google',
   new OAuth2Strategy(

@@ -35,9 +35,9 @@ const recalculateTime = (field, getState, selector, dispatch, form) => {
   const parentField = field.replace(/.?tasks\[\d+\]$/, '');
 
   return recalculateTime(parentField, getState, selector, dispatch, form);
-}
+};
 
-export const actionToggleTask = ({ form, field, checked }) =>
+export const actionToggleTask = ({ form, field }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const parentField = field.replace(/.?tasks\[\d+\]$/, '');
@@ -59,7 +59,7 @@ export const actionRemoveTask = ({ form, field, index }) =>
     // return null;
   };
 
-export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
+export const actionChangeTaskHours = ({ form, field, value }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     changeWrapper({ dispatch, form, field, payload: value });
@@ -72,10 +72,10 @@ export const actionChangeTaskHours = ({ form, field, value, fieldName }) =>
     dispatch(actionGeneralCalculation({ form }));
   };
 
-export const actionChangeTaskName = ({ form, field, value, fieldName }) =>
-  (dispatch, getState) => {
+export const actionChangeTaskName = ({ form, field, value }) =>
+  (dispatch) => {
     changeWrapper({ dispatch, form, field, payload: value });
-  }
+  };
 
 
 export const actionAddSubTask = ({ form, field }) =>

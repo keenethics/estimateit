@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const GridDataProto = {
     startRow: 0,
     startColumn: 0,

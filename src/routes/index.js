@@ -9,7 +9,7 @@ export default [
       require('./estimate').default,
       require('./notFound').default,
     ],
-    async action({ next, isAuthenticated }) {
+    async action({ next }) {
       const route = await next();
       route.title = `${route.title || 'Untitled Page'}`;
       route.description = route.description || '';

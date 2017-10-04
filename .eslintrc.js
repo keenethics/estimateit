@@ -67,5 +67,11 @@ module.exports = {
       // https://github.com/kriasoft/react-starter-kit/pull/961
       // You can reopen this if you still want this rule
       'react/prefer-stateless-function': 'off',
+
+      'react/no-unescaped-entities': 'warn',
+      'no-mixed-operators': 'off',
+      // 'arrow-parens': 'as-needed',
+      'jsx-a11y/anchor-has-content': 'warn',
+      'comma-dangle': 'warn',
     },
   };

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import spreadsheetConfig from './spreadsheetsConfig.js';
 import moment from 'moment';
 
@@ -303,4 +305,3 @@ const createEstimateRequest = (estimate, id) => {
 const getRowsFromSheet = (sheet) => (sheet.data[0].map(d => (d.rowData)).reduce((prev, next) => (prev.concat(next))))
 
 export { createEstimateRequest, getEstimateSheet, getRowsFromSheet };
-

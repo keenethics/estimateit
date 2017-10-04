@@ -63,21 +63,20 @@ class Reports extends Component {
 
   exportToGoogleSheet() {
     const { estimateId } = this.props;
-    const userId = window.App.user._id
+    const userId = window.App.user._id;
     const { token, refreshToken } = window.App.user.google;
     this.setState({ updatingSpreadsheet: true });
-    console.log('<<<<<<<<<<<< before UPD SPREEDSHEET >>>>>>>>>>>>>>');
     fetch('/spreadsheets', {
       method: 'POST',
       body: JSON.stringify({ token, refreshToken, estimateId, userId }),
       headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
       },
     }).then((response) => {
       this.setState({ updatingSpreadsheet: false });
-      return response.json()
-    }).then(res => {
+      return response.json();
+    }).then((res) => {
       if (res.error) {
         this.notificationSystem.addNotification({
           autoDismiss: 6,
@@ -95,7 +94,7 @@ class Reports extends Component {
           message: res.message,
         });
       }
-    })
+    });
   }
 
   estimateUpdate(values, forceUpdate = false, cb) {
@@ -108,7 +107,6 @@ class Reports extends Component {
         variables: { id: estimateId },
       }],
     }).then(() => {
-      console.log('<<<<<<<<<<<< after UPD DB >>>>>>>>>>>>>>');
       if (cb) cb();
 
       this.notificationSystem.addNotification({
@@ -193,12 +191,14 @@ class Reports extends Component {
               {token &&
                 <Button
                   color={updatingSpreadsheet ? 'secondary' : 'danger'}
-                  onClick={handleSubmit(val => this.estimateUpdate(val, false, this.exportToGoogleSheet))}
+                  onClick={
+                    handleSubmit(val =>
+                      this.estimateUpdate(val, false, this.exportToGoogleSheet)
+                    )}
                   disabled={updatingSpreadsheet}
                 >
-               {updatingSpreadsheet ? 'Exporting...' : 'Save & export to Google Sheets'}
-              </Button>
-              }
+                  {updatingSpreadsheet ? 'Exporting...' : 'Save & export to Google Sheets'}
+                </Button>}
               <Button
                 color="danger"
                 onClick={handleSubmit(val => this.estimateUpdate(val, false, false))}

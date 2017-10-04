@@ -28,7 +28,7 @@ import configureStore from './store/configureStore';
 import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
-import spreadSheets from './utils/spreadsheets/spreadsheets.js';
+import spreadSheets from './utils/spreadsheets/spreadsheets';
 
 const MongoStore = MongoConnect(session);
 
@@ -73,7 +73,7 @@ app.get(
   passport.authenticate('google', {
     scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'],
     accessType: 'offline',
-    prompt: 'consent'
+    prompt: 'consent',
   }),
 );
 app.get(
@@ -103,7 +103,7 @@ app.post('/spreadsheets', async (req, res) => {
   }
   spHelper.createSpreadsheet(estimate, async (err, sp) => {
     if (err) {
-      if (err.code == 401) {
+      if (err.code === 401) {
         const newCredentials = await spHelper.updateCredentials();
         if (newCredentials) {
           const query = { 'google.token': token };
@@ -115,7 +115,7 @@ app.post('/spreadsheets', async (req, res) => {
       res.end();
     }
     const { spreadsheetId } = sp;
-    const estId = await Estimate.update({ _id: estimateId}, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
+    await Estimate.update({ _id: estimateId }, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
     res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
     res.end();
   });

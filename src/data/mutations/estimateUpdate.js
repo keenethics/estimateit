@@ -29,7 +29,7 @@ const estimateUpdate = {
     const {
       owner,
       contributors = [],
-      date
+      date,
     } = await Estimate.findOne({ _id: input._id });
 
     const oldDate = new Date(date).toString();
@@ -47,7 +47,10 @@ const estimateUpdate = {
 
     try {
       const { _id } = input;
-      const { ok } = await Estimate.update({ _id }, { $set: { ...input, date: new Date().toISOString() } });
+      const { ok } = await Estimate.update({ _id }, { $set: {
+        ...input,
+        date: new Date().toISOString(),
+      } });
       return ok;
     } catch (error) {
       console.error(error);
