@@ -1,6 +1,8 @@
 ## Keenethics Estimator
 
-A simple project estimation application. This program is designed to calculate tasks time for the project and create PDF / CSV report.
+[![Known Vulnerabilities](https://snyk.io/test/github/keenethics/estimateit/badge.svg)](https://snyk.io/test/github/keenethics/estimateit)
+
+A simple project estimation application. This program is designed to calculate tasks time for the project and create Google Spreadsheet / CSV reports.
 
 ![Estimator](https://preview.ibb.co/bNfua5/Screenshot_from_2017_06_21_18_56_36.png)
 ## Install
