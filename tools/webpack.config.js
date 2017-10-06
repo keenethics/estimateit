@@ -292,6 +292,7 @@ const serverConfig = {
   output: {
     ...config.output,
     filename: '../../server.js',
+    sourceMapFilename: 'server.js.map', // XXX
     libraryTarget: 'commonjs2',
   },
 

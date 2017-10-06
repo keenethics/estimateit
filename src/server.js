@@ -1,3 +1,5 @@
+import Raven from 'raven';
+
 import path from 'path';
 import express from 'express';
 import cookieParser from 'cookie-parser';
@@ -29,6 +31,8 @@ import { setRuntimeVariable } from './actions/runtime';
 import config from './config';
 import './utils/auth';
 import spreadSheets from './utils/spreadsheets/spreadsheets';
+
+Raven.config(process.env.SENTRY_DSN).install();
 
 const MongoStore = MongoConnect(session);
 
