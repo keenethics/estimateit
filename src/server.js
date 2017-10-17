@@ -32,7 +32,8 @@ import config from './config';
 import './utils/auth';
 import spreadSheets from './utils/spreadsheets/spreadsheets';
 
-Raven.config(process.env.SENTRY_DSN).install();
+console.log('SENTRY_DSN:', process.env.SENTRY_DSN);
+Raven.config(process.env.SENTRY_DSN); // .install();
 
 const MongoStore = MongoConnect(session);
 
