@@ -19,8 +19,6 @@ SheetsHelper.prototype.updateCredentials = function() {
   return new Promise((resolve, reject) => {
     oauth2Client.refreshAccessToken(function(err, tokens) {
       if (err) {
-        console.log('updating credentials');
-        console.log(err);
         reject(err);
       }
       const newCreds = {

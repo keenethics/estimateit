@@ -106,20 +106,13 @@ app.post('/spreadsheets', async (req, res) => {
     }
   }
   spHelper.createSpreadsheet(estimate, async (err, sp) => {
-    let us = await User.find({ 'google.token': token });
-    console.log('oldToken');
-    console.log(us.google);
     if (err) {
-      console.log(err);
       if (err.code === 401) {
         const newCredentials = await spHelper.updateCredentials();
         console.log('!!!!!!!!!!!!');
         if (newCredentials) {
           const query = { 'google.token': token };
           const projection = { $set: { google: newCredentials } };
-          us = await User.update(query, projection);
-          console.log('newToken');
-          console.log(us.google);
         }
       }
       res.status(400).send({ error: true, message: err });
