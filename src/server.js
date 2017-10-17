@@ -110,8 +110,10 @@ app.post('/spreadsheets', async (req, res) => {
     console.log('oldToken');
     console.log(us.google);
     if (err) {
+      console.log(err);
       if (err.code === 401) {
         const newCredentials = await spHelper.updateCredentials();
+        console.log('!!!!!!!!!!!!');
         if (newCredentials) {
           const query = { 'google.token': token };
           const projection = { $set: { google: newCredentials } };
