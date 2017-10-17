@@ -37,7 +37,6 @@ passport.use(
                   u.name = profile.displayName;
                   u.google.token = accessToken;
                   u.google.refreshToken = refreshToken;
-                  u.email = email;
                   u.status = ACTIVE;
                   u.save((error) => {
                     if (error) {
@@ -70,7 +69,6 @@ passport.use(
                     u.google.refreshToken = refreshToken;
                     u.name = profile.displayName;
                     u.status = ACTIVE;
-                    u.email = (profile.emails[0].value || '').toLowerCase();
                     u.save((error) => {
                       if (error) {
                         return done(null, false, {
