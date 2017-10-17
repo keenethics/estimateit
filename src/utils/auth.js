@@ -64,32 +64,25 @@ passport.use(
                     return done(err);
                   }
                   if (user) {
-                    if (!user.google.token) {
-                      const u = user;
-                      u.google.id = profile.id;
-                      u.google.token = accessToken;
-                      u.google.refreshToken = refreshToken;
-                      u.name = profile.displayName;
-                      u.status = ACTIVE;
-                      u.email = (profile.emails[0].value || '').toLowerCase();
-                      u.save((error) => {
-                        if (error) {
-                          return done(null, false, {
-                            success: false,
-                            message: error,
-                          });
-                        }
-                        return done(null, {
-                          success: true,
-                          message: 'Successfully Logged In',
-                          user,
+                    const u = user;
+                    u.google.id = profile.id;
+                    u.google.token = accessToken;
+                    u.google.refreshToken = refreshToken;
+                    u.name = profile.displayName;
+                    u.status = ACTIVE;
+                    u.email = (profile.emails[0].value || '').toLowerCase();
+                    u.save((error) => {
+                      if (error) {
+                        return done(null, false, {
+                          success: false,
+                          message: error,
                         });
+                      }
+                      return done(null, {
+                        success: true,
+                        message: 'Successfully Logged In',
+                        user,
                       });
-                    }
-                    return done(null, {
-                      success: true,
-                      message: 'Successfully Logged In',
-                      user,
                     });
                   }
 
