@@ -109,10 +109,10 @@ app.post('/spreadsheets', async (req, res) => {
     if (err) {
       if (err.code === 401) {
         const newCredentials = await spHelper.updateCredentials();
-        console.log('!!!!!!!!!!!!');
         if (newCredentials) {
           const query = { 'google.token': token };
           const projection = { $set: { google: newCredentials } };
+          User.update(query, projection);
         }
       }
       res.status(400).send({ error: true, message: err });
