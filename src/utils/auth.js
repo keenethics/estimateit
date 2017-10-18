@@ -47,16 +47,11 @@ passport.use(
               const user = await User.findOne({ 'google.id': profile.id });
               let returnUser = user;
               if (user) {
-                if (!user.google.token) {
                   const u = user;
                   u.google.id = profile.id;
                   u.google.token = accessToken;
                   u.google.refreshToken = refreshToken;
-                  u.name = profile.displayName;
-                  u.status = ACTIVE;
-                  u.email = email;
                   returnUser = await u.save(); 
-                }
               } else {
                   const newUser = new User();
                   newUser.status = ACTIVE;
