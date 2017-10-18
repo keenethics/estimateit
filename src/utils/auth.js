@@ -51,7 +51,9 @@ passport.use(
             if (user) {
               user.google = google;
             } else {
+              console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
               user = Object.assign({}, userObj, new User()); 
+              console.log(user);
             }
             await user.save();
             return done(null, {
