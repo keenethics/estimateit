@@ -58,7 +58,7 @@ passport.use(
               });              
             }
           }
-          const user = Object.assign({}, userObj, req.user);
+          const user = Object.assign({}, userObj);
           await user.save();
           return done(null, {
             success: true,
