@@ -50,9 +50,9 @@ passport.use(
             let user = await User.findOne({ 'google.id': profile.id });
             if (user) {
               user.google = google;
-              await user.save(); 
+            } else {
+              user = Object.assign({}, userObj, new User()); 
             }
-            user = Object.assign({}, userObj, new User()); 
             await user.save();
             return done(null, {
               success: true,
