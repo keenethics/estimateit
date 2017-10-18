@@ -49,10 +49,10 @@ passport.use(
                 user = await new User(userObj); 
               }           
             }
+          await user.save();
           } else {
             user = req.user;
           } 
-          await user.save();
           return done(null, {
             success: true,
             message,
