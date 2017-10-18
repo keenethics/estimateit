@@ -36,32 +36,22 @@ passport.use(
       const message = 'Successfully Logged In';
       process.nextTick(async () => {
         try {
+          let user = req.user;
           if (!req.user) {
-            const userWithEmail = await User.findOne({ email });
-            if (userWithEmail && userWithEmail.status === PENDING) {
-              const u = Object.assign({}, userObj, userWithEmail);
-              await u.save();
-              return done(null, {
-                success: true,
-                message,
-                user: u,
-              });                 
-            }
-            let user = await User.findOne({ 'google.id': profile.id });
-            if (user) {
-              user.google = google;
+            user = await User.findOne({ email });
+            if (user && user.status === PENDING) {
+              user = Object.assign({}, userObj, user);
             } else {
-              user = await new User(userObj); 
+              user = await User.findOne({ 'google.id': profile.id });
+              if (user) {
+                user.google = google;
+              } else {
+                user = await new User(userObj); 
+              }           
             }
-            await user.save();
-            return done(null, {
-              success: true,
-              message,
-              user,
-            });          
-            
-          }
-          const user = req.user;
+          } else {
+            user = req.user;
+          } 
           await user.save();
           return done(null, {
             success: true,
@@ -69,7 +59,7 @@ passport.use(
             user,
           });
         } catch (error) {
-           return done(null, false, {
+            return done(null, false, {
             success: false,
             message: error,
           });           
