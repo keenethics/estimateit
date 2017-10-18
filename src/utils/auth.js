@@ -47,18 +47,21 @@ passport.use(
                 user: u,
               });                 
             }
-            const user = await User.findOne({ 'google.id': profile.id });
+            let user = await User.findOne({ 'google.id': profile.id });
             if (user) {
               user.google = google;
               await user.save(); 
-              return done(null, {
-                success: true,
-                message,
-                user,
-              });              
             }
+            user = Object.assign({}, userObj, new User()); 
+            await user.save();
+            return done(null, {
+              success: true,
+              message,
+              user,
+            });          
+            
           }
-          const user = Object.assign({}, userObj);
+          const user = req.user;
           await user.save();
           return done(null, {
             success: true,
