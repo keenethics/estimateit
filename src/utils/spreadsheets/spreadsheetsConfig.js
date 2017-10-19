@@ -78,7 +78,7 @@ const cellsFormattingConfig = {
   GridDataProto,
   taskNameCell: { userEnteredFormat },
   taskNameCellHightlighted: { userEnteredFormat:  Object.assign({},  userEnteredFormat, regularCellTextFormat,  { backgroundColor: highlightedTabBackground }) },
-  subtaskNameCellHightlighted: { userEnteredFormat:  Object.assign({}, userEnteredFormat, regularCellTextFormat, { backgroundColor: highlightedTabBackground, padding: {left: 40 } }) },
+  subtaskNameCellHightlighted: { userEnteredFormat:  Object.assign({}, userEnteredFormat, regularCellTextFormat, { backgroundColor: highlightedTabBackground }, { padding: {left: 40 } }) },
   taskHoursCell: { userEnteredFormat: Object.assign({}, userEnteredFormat, regularCellTextFormat, { horizontalAlignment: 2 }) },
   subtaskNameCell: { userEnteredFormat: Object.assign({}, userEnteredFormat, regularCellTextFormat,  { padding: { left: 40 } }) },
   taskHoursCellHighlighted: { userEnteredFormat: Object.assign({}, userEnteredFormat, regularCellTextFormat, { horizontalAlignment: 2, backgroundColor: highlightedTabBackground }) },
