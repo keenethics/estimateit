@@ -263,7 +263,7 @@ const getOtherCommentsCell = (estimate, title, sheetId) => {
 const createEstimateRequest = (estimate, id) => {
   const { tasks, technologies, moneyRate, email, skype, pm, position, estimateOptions, projectName, sprintNumber, clientName } = estimate;
   let taskLength = tasks.length;
-  tasks.forEach(t => { taskLength += t.tasks.length });
+  tasks.forEach(t => { taskLength += (t.tasks && t.tasks.length) || 0 });
   const Grids = [];
   const techTableStart = 9;
   const taskTableStart = techTableStart + technologies.length + 2;
