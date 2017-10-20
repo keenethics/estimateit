@@ -40,9 +40,8 @@ passport.use(
           if (!req.user) {
             user = await User.findOne({ email });
             if (user && user.status === PENDING) {
-            
-              user = Object.assign({}, userObj);
-              console.log('pending user', user);
+              const query = { _id: user._id };
+              user = await User.findOneAndUpdate(query, userObj);
             } else {
               user = await User.findOne({ 'google.id': profile.id });
               if (user) {
@@ -50,8 +49,9 @@ passport.use(
               } else {
                 user = await new User(userObj); 
               }           
+
+              await user.save();
             }
-          await user.save();
           } else {
             user = req.user;
           } 
