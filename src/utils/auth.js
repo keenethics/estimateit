@@ -40,7 +40,8 @@ passport.use(
           if (!req.user) {
             user = await User.findOne({ email });
             if (user && user.status === PENDING) {
-              user = Object.assign({}, userObj);
+              user = Object.assign({}, user, userObj);
+              console.log('pending user', user);
             } else {
               user = await User.findOne({ 'google.id': profile.id });
               if (user) {
