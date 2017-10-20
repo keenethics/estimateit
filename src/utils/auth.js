@@ -33,15 +33,15 @@ passport.use(
         email: email,
         status: ACTIVE,
       }
-      const fields = { google: 1, name: 1, email: 1, status: 1 };
       const message = 'Successfully Logged In';
       process.nextTick(async () => {
         try {
           let user = req.user;
           if (!req.user) {
-            user = await User.findOne({ email }, { fields });
+            user = await User.findOne({ email });
             if (user && user.status === PENDING) {
-              user = Object.assign({}, user, userObj);
+            
+              user = Object.assign({}, userObj);
               console.log('pending user', user);
             } else {
               user = await User.findOne({ 'google.id': profile.id });
