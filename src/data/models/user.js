@@ -14,9 +14,6 @@ const userSchema = new Schema({
     type: String,
     unique: true,
   },
-  local: {
-    password: String,
-  },
   status: {
     type: String,
     enum: [ACTIVE, PENDING],
@@ -34,7 +31,7 @@ const userSchema = new Schema({
     type: Date,
     default: Date.now(),
   },
-});
+}, { versionKey: false });
 
 userSchema.methods.generateHash = function foo(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
