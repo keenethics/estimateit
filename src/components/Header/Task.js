@@ -40,7 +40,8 @@ class Task extends React.Component {
       },
       payload: checked,
     });
-
+    console.log('form', form);
+    console.log('field', field)
     actionToggleTask({ form, field, checked });
   }
 
