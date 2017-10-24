@@ -44,7 +44,17 @@ export const actionToggleTask = ({ form, field }) =>
   (dispatch, getState) => {
     const selector = formValueSelector(form);
     const parentField = field.replace(/.?tasks\[\d+\]$/, '');
-
+    // find out task index
+    const match = field.split('.');
+    const task = match && match[0];
+    const replaceExp = /(task\[)|(\])/g;
+    const taskIndex = parseInt(task.replace(replaceExp), 10);
+    if (taskIndex >= 0) {
+      // toggle all subtasks 
+      const subtasks = getState().form[ESTIMATE_FORM].values.tasks[index].tasks
+      const subtaskCount = subtasks && subtasks.length;
+      console.log('subtaskCount'); 
+    }
     recalculateTime(parentField, getState, selector, dispatch, form);
 
     dispatch(actionGeneralCalculation({ form }));
