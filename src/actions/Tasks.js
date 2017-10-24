@@ -49,6 +49,10 @@ export const actionToggleTask = ({ form, field }) =>
     const task = match && match[0];
     const replaceExp = /(tasks\[)|(\])/g;
     const taskIndex = parseInt(task.replace(replaceExp), 10);
+    console.log('!!!!!!!!!');
+    console.log(taskIndex);
+    console.log(task);
+    console.log('!!!!!!!!!');
     if (taskIndex >= 0) {
       // toggle all subtasks 
       const subtasks = getState().form[ESTIMATE_FORM].values.tasks[index].tasks
