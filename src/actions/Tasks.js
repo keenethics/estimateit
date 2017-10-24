@@ -34,16 +34,6 @@ const recalculateTime = (field, getState, selector, dispatch, form) => {
   console.log('form', form);
   console.log('field', field);
   console.log('state', getState());
-
-  const parentField = field.replace(/.?tasks\[\d+\]$/, '');
-
-  return recalculateTime(parentField, getState, selector, dispatch, form);
-};
-
-export const actionToggleTask = ({ form, field }) =>
-  (dispatch, getState) => {
-    const selector = formValueSelector(form);
-    const parentField = field.replace(/.?tasks\[\d+\]$/, '');
     // find out task index
     const match = field.split('.');
     const task = match && match[0];
@@ -65,6 +55,16 @@ export const actionToggleTask = ({ form, field }) =>
         }
       } 
     }
+  const parentField = field.replace(/.?tasks\[\d+\]$/, '');
+
+  return recalculateTime(parentField, getState, selector, dispatch, form);
+};
+
+export const actionToggleTask = ({ form, field }) =>
+  (dispatch, getState) => {
+    const selector = formValueSelector(form);
+    const parentField = field.replace(/.?tasks\[\d+\]$/, '');
+
     recalculateTime(parentField, getState, selector, dispatch, form);
 
     dispatch(actionGeneralCalculation({ form }));
