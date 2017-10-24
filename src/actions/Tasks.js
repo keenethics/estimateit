@@ -31,6 +31,9 @@ const recalculateTime = (field, getState, selector, dispatch, form) => {
 
   changeWrapper({ dispatch, form, field: `${field}.minimumMinutes`, payload: sumTasks.min });
   changeWrapper({ dispatch, form, field: `${field}.maximumMinutes`, payload: sumTasks.max });
+  console.log('form', form);
+  console.log('field', field);
+  console.log('state', getState());
 
   const parentField = field.replace(/.?tasks\[\d+\]$/, '');
 
