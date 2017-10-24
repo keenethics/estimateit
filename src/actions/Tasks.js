@@ -56,7 +56,7 @@ export const actionToggleTask = ({ form, field }) =>
     console.log('!!!!!!!!!');
     if (taskIndex >= 0 && match.length < 2) {
       // toggle all subtasks 
-      const task = getState().form['ESTIMATE_FORM'].values.tasks[index];
+      const task = getState().form['ESTIMATE_FORM'].values.tasks[taskIndex];
       console.log('task', task);
       const subtasks = task && task.tasks
       const subtaskCount = subtasks && subtasks.length;
