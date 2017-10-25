@@ -116,27 +116,24 @@ class Reports extends Component {
     });
   }
 
-  estimateRemove(e) {
+  async estimateRemove(e) {
     e.preventDefault();
-
-    this.props.estimateRemove({
-      variables: { id: this.props.estimateId },
-    }).then(() => {
-      this.setState({
-        modal: false,
-      });
+    try {
+      await this.props.estimateRemove({
+        variables: { id: this.props.estimateId },
+      })   
       history.replace('/');
-    }).catch((error) => {
-      this.setState({
-        modal: false,
-      });
-      this.notificationSystem.addNotification({
+    } catch (error) {
+       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
         title: 'Error',
         level: 'error',
         message: error.message,
-      });
+      });        
+    }
+    this.setState({
+      modal: false,
     });
   }
 
