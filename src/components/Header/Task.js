@@ -41,7 +41,10 @@ class Task extends React.Component {
       payload: checked,
     });
     console.log('form', form);
-    console.log('field', field)
+    console.log('field', field);
+    console.log('context', this.context);
+    const exp = /task(\[){1,1}[0-9]+\]{1,1}/;
+    const tasks = field.split('.')[0];
     actionToggleTask({ form, field, checked });
   }
 
