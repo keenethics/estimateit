@@ -27,6 +27,8 @@ import {
   estimateFormValues,
 } from '../../data/queriesClient';
 
+import request from '../../utils/request.js';
+
 class Reports extends Component {
   constructor(props) {
     super(props);
@@ -63,17 +65,14 @@ class Reports extends Component {
 
   exportToGoogleSheet() {
     const { estimateId } = this.props;
-    const userId = window.App.user._id;
-    const { token, refreshToken } = window.App.user.google;
+    //
+    const { user } =  window.App;
+    //
+    const userId = user._id;
+    const { token, refreshToken } = user.google;
     this.setState({ updatingSpreadsheet: true });
-    fetch('/spreadsheets', {
-      method: 'POST',
-      body: JSON.stringify({ token, refreshToken, estimateId, userId }),
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
+    const body = { token, refreshToken, estimateId, userId };
+    request('/spreadsheets', body, 'POST').then((response) => {
       this.setState({ updatingSpreadsheet: false });
       return response.json();
     }).then((res) => {
