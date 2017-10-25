@@ -31,6 +31,7 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
   let totalMax = 0;
 
   tasks.forEach((t,i) => {
+    if (!t.isChecked) return;
     totalMin += t.minimumMinutes / 60;
     totalMax += t.maximumMinutes / 60;
     const { maximumMinutes , minimumMinutes, taskName } = t;
@@ -52,6 +53,7 @@ const createTaskTable = (startRow ,tasks, moneyRate) => {
     // prink subtasks
     if (t.tasks) {
       t.tasks.forEach((subTask,j) => {
+        if (!subTask.isChecked) return;
         const subTaskCells = [];
         const { maximumMinutes , minimumMinutes, taskName } = subTask;
         subTaskCells.push(formatCell(createCell(`${i+1}.${j+1}. ${taskName}`), subtaskNameOptions));
