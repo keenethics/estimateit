@@ -63,36 +63,24 @@ class Reports extends Component {
     this.setState({ modal2: !this.state.modal2 });
   }
 
-  exportToGoogleSheet() {
+  async exportToGoogleSheet() {
     const { estimateId } = this.props;
-    //
     const { user } =  window.App;
-    //
     const userId = user._id;
     const { token, refreshToken } = user.google;
     this.setState({ updatingSpreadsheet: true });
     const body = { token, refreshToken, estimateId, userId };
-    request('/spreadsheets', body, 'POST').then((response) => {
-      this.setState({ updatingSpreadsheet: false });
-      return response.json();
-    }).then((res) => {
-      if (res.error) {
-        this.notificationSystem.addNotification({
-          autoDismiss: 6,
-          position: 'br',
-          title: 'Error',
-          level: 'error',
-          message: res.message,
-        });
-      } else {
-        this.notificationSystem.addNotification({
-          autoDismiss: 6,
-          position: 'br',
-          title: 'Success',
-          level: 'success',
-          message: res.message,
-        });
-      }
+    const resp = await request('/spreadsheets', body, 'POST');
+    const parsedResp = await resp.json();
+    this.setState({ updatingSpreadsheet: false });
+    console.log(parsedResp);
+    const level = parsedResp.error ? 'error' : 'success';
+    this.notificationSystem.addNotification({
+      autoDismiss: 6,
+      position: 'br',
+      title: level,
+      level,
+      message: parsedResp.message,
     });
   }
 
