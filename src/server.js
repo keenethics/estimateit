@@ -76,7 +76,12 @@ app.use((req, res, next) => {
 app.get(
   '/auth/google/',
   passport.authenticate('google', {
-    scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'],
+    scope: [
+      'profile',
+      'email', 
+      'https://www.googleapis.com/auth/spreadsheets',
+      //'https://www.googleapis.com/auth/drive',
+    ],
     accessType: 'offline',
     prompt: 'consent',
   }),
@@ -100,11 +105,15 @@ app.post('/spreadsheets', async (req, res) => {
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
   const estimate = await Estimate.findById(estimateId);
+  const messages = [];
   if (estimate.spreadsheetId && estimate.spreadsheetId[userId]) {
-    const file = await spHelper.getFile(estimate.spreadsheetId[userId]);
-    if (file && file.id) {
-      await spHelper.deleteFile(file.id);
-    }
+      const getFileResult = await spHelper.getFile(estimate.spreadsheetId[userId]);
+      if (getFileResult.reason) messages.push(getFileResult);
+      const file = getFileResult;
+      if (file && file.id) {
+        let deleted = await spHelper.deleteFile(file.id);
+        if (deleted.reason) messages.push(deleted);
+      }
   }
   spHelper.createSpreadsheet(estimate, async (err, sp) => {
     if (err) {
@@ -115,15 +124,18 @@ app.post('/spreadsheets', async (req, res) => {
           const projection = { $set: { google: newCredentials } };
           User.update(query, projection);
         }
-      }
-      res.status(400).send({ error: true, message: err });
-      res.end();
+      } else messages.push(err);
     }
     const { spreadsheetId } = sp;
-    await Estimate.update({ _id: estimateId }, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
-    res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
+    const estimate = await Estimate.update({ _id: estimateId }, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
+    if (estimate) { 
+      messages.push({ message: `Spreadsheet ${spreadsheetId} updated` })
+    }
+    console.log(messages);
+    res.status(200).send({ messages });
     res.end();
   });
+
 });
 
 //
