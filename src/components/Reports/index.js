@@ -73,18 +73,16 @@ class Reports extends Component {
     const resp = await request('/spreadsheets', body, 'POST');
     const parsedResp = await resp.json();
     this.setState({ updatingSpreadsheet: false });
-    const { messages } = parsedResp;
-    messages.forEach(m => {
-      const level = m.reason ? 'error' : 'success';
-      const title = m.message;
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title,
-        level,
-        message: parsedResp.message,
-      });    
-    })
+    const { message, error } = parsedResp;
+    const level =  error ? 'error' : 'success';
+    const title = message;
+    this.notificationSystem.addNotification({
+      autoDismiss: 6,
+      position: 'br',
+      title: message,
+      level,
+      message: parsedResp.message,
+    });    
 
   }
 

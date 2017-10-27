@@ -23,9 +23,8 @@ SheetsHelper.prototype.updateCredentials = function() {
         if (err.errors && err.errors[0]) {
           const error = err.errors[0];
           const res = Object.assign({}, error, { message: `update credentials error: ${error.message}` });
-          resolve(res);
+          reject(res);
         }
-        reject(err);
       }
       const newCreds = {
         access_token: tokens.access_token,
@@ -45,7 +44,7 @@ SheetsHelper.prototype.deleteFile = function(fileId) {
         if (err.errors && err.errors[0]) {
           const error = err.errors[0];
           const res = Object.assign({}, error, { message: `delete file error: ${error.message}` });
-          resolve(res);
+          reject(res);
         } 
       }
       resolve(true);
@@ -61,7 +60,7 @@ SheetsHelper.prototype.getFile = function(fileId) {
         if (err.errors && err.errors[0])  {
           const error = err.errors[0];
           const res = Object.assign({}, error, { message: `get file error: ${error.message}` });
-          resolve(res);
+          reject(res);
         } 
       }
       resolve(f);
@@ -72,13 +71,17 @@ SheetsHelper.prototype.getFile = function(fileId) {
 SheetsHelper.prototype.createSpreadsheet = function(estimate, callback) {
   const self = this;
   const request = createEstimateRequest(estimate);
-  self.service.spreadsheets.create(request, function(err, spreadsheet) {
-    if (err) {
-      console.log(err);
-      return callback(err);
-    }
-    // need to save spreadsheet id into db
-    return callback(null, spreadsheet);
+  return new Promise((resolve, reject) => {
+    self.service.spreadsheets.create(request, function(err, spreadsheet) {
+      if (err) {
+        if (err.errors && err.errors[0]) {
+          const error = err.errors[0];
+          const res = Object.assign({}, error, { message: `export spreadsheet error: ${error.message}` });
+          reject(res);
+        } 
+      }
+      resolve(spreadsheet);
+    });
   });
 };
 
