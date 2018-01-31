@@ -37,7 +37,7 @@ Raven.config(process.env.SENTRY_DSN); // .install();
 
 const MongoStore = MongoConnect(session);
 
-mongoose.connect(config.MONGO_URL);
+mongoose.createConnection(config.MONGO_URL);
 mongoose.Promise = global.Promise;
 const app = express();
 
@@ -76,7 +76,12 @@ app.use((req, res, next) => {
 app.get(
   '/auth/google/',
   passport.authenticate('google', {
-    scope: ['profile', 'email', 'https://www.googleapis.com/auth/spreadsheets'],
+    scope: [
+      'profile',
+      'email', 
+      'https://www.googleapis.com/auth/spreadsheets',
+      'https://www.googleapis.com/auth/drive',
+    ],
     accessType: 'offline',
     prompt: 'consent',
   }),
@@ -99,31 +104,36 @@ app.post('/spreadsheets', async (req, res) => {
   const { token, refreshToken, estimateId, userId } = req.body;
   const credentials = { access_token: token, refresh_token: refreshToken };
   const spHelper = spreadSheets(credentials);
-  const estimate = await Estimate.findById(estimateId);
-  if (estimate.spreadsheetId && estimate.spreadsheetId[userId]) {
-    const file = await spHelper.getFile(estimate.spreadsheetId[userId]);
-    if (file && file.id) {
-      await spHelper.deleteFile(file.id);
+  let estimate = await Estimate.findById(estimateId);
+  let spreadsheet = null;
+  let spreadsheetId = null;
+  try {
+    if (estimate.spreadsheetId && estimate.spreadsheetId[userId]) {
+      const file = await spHelper.getFile(estimate.spreadsheetId[userId]);
+      let deleted = await spHelper.deleteFile(file.id);
     }
-  }
-  spHelper.createSpreadsheet(estimate, async (err, sp) => {
-    if (err) {
-      if (err.code === 401) {
-        const newCredentials = await spHelper.updateCredentials();
-        if (newCredentials) {
-          const query = { 'google.token': token };
-          const projection = { $set: { google: newCredentials } };
-          User.update(query, projection);
-        }
-      }
-      res.status(400).send({ error: true, message: err });
-      res.end();
+    try {
+      spreadsheet = await spHelper.createSpreadsheet(estimate);
+
+    } catch (err) {
+      const newCredentials = await spHelper.updateCredentials();
+      const query = { 'google.token': token };
+      const projection = { $set: { google: newCredentials } };
+      User.update(query, projection);
+      spreadsheet = spHelper.createSpreadsheet(estimate);     
     }
-    const { spreadsheetId } = sp;
-    await Estimate.update({ _id: estimateId }, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
-    res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
+
+    spreadsheetId = spreadsheet.spreadsheetId;
+    estimate = await Estimate.update({ _id: estimateId }, { $set: { [`spreadsheetId.${userId}`]: spreadsheetId } });
+
+  } catch (err) {
+    res.status(400).send({ error: true, message: err.message });
     res.end();
-  });
+    return;
+  }
+
+  res.status(200).send({ message: `Spreadsheet ${spreadsheetId} updated` });
+  res.end();
 });
 
 //

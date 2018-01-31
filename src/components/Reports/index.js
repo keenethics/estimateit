@@ -27,6 +27,8 @@ import {
   estimateFormValues,
 } from '../../data/queriesClient';
 
+import request from '../../utils/request.js';
+
 class Reports extends Component {
   constructor(props) {
     super(props);
@@ -61,98 +63,80 @@ class Reports extends Component {
     this.setState({ modal2: !this.state.modal2 });
   }
 
-  exportToGoogleSheet() {
+  async exportToGoogleSheet() {
     const { estimateId } = this.props;
-    const userId = window.App.user._id;
-    const { token, refreshToken } = window.App.user.google;
+    const { user } =  window.App;
+    const userId = user._id;
+    const { token, refreshToken } = user.google;
     this.setState({ updatingSpreadsheet: true });
-    fetch('/spreadsheets', {
-      method: 'POST',
-      body: JSON.stringify({ token, refreshToken, estimateId, userId }),
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Content-Type': 'application/json',
-      },
-    }).then((response) => {
-      this.setState({ updatingSpreadsheet: false });
-      return response.json();
-    }).then((res) => {
-      if (res.error) {
-        this.notificationSystem.addNotification({
-          autoDismiss: 6,
-          position: 'br',
-          title: 'Error',
-          level: 'error',
-          message: res.message,
-        });
-      } else {
-        this.notificationSystem.addNotification({
-          autoDismiss: 6,
-          position: 'br',
-          title: 'Success',
-          level: 'success',
-          message: res.message,
-        });
-      }
-    });
+    const body = { token, refreshToken, estimateId, userId };
+    const resp = await request('/spreadsheets', body, 'POST');
+    const parsedResp = await resp.json();
+    this.setState({ updatingSpreadsheet: false });
+    const { message, error } = parsedResp;
+    const level =  error ? 'error' : 'success';
+    const title = message;
+    this.notificationSystem.addNotification({
+      autoDismiss: 6,
+      position: 'br',
+      title: message,
+      level,
+      message: parsedResp.message,
+    });    
+
   }
 
-  estimateUpdate(values, forceUpdate = false, cb) {
+  async estimateUpdate(values, forceUpdate = false, cb) {
     const { estimateId } = this.props;
+    let msg = 'Estimate saved';
+    let title = 'Success';
+    let level = 'success';
+    try {
+      await this.props.estimateUpdate({
+        variables: { input: { ...values, forceUpdate } },
+        refetchQueries: [{
+          query: estimateFormValues,
+          variables: { id: estimateId },
+        }],
 
-    this.props.estimateUpdate({
-      variables: { input: { ...values, forceUpdate } },
-      refetchQueries: [{
-        query: estimateFormValues,
-        variables: { id: estimateId },
-      }],
-    }).then(() => {
-      if (cb) cb();
-
-      this.notificationSystem.addNotification({
-        autoDismiss: 6,
-        position: 'br',
-        title: 'Success',
-        level: 'success',
-        message: 'Estimate saved',
       });
-    }).catch((error) => {
-      console.error(error.message);
-      if (error.message.includes('outdated')) {
+    } catch (error) {
+      msg = error.message;
+      title = 'Error';
+      level = 'error';
+      if (msg.includes('outdated')) {
         this.toggleModal2();
-      } else {
-        this.notificationSystem.addNotification({
-          autoDismiss: 6,
-          position: 'br',
-          title: 'Error',
-          level: 'error',
-          message: error.message,
-        });
-      }
+        return;
+      } 
+    }
+    if (cb) cb();
+    this.notificationSystem.addNotification({
+      autoDismiss: 6,
+      position: 'br',
+      title,
+      level,
+      message: msg,
     });
   }
 
-  estimateRemove(e) {
+  async estimateRemove(e) {
     e.preventDefault();
-
-    this.props.estimateRemove({
-      variables: { id: this.props.estimateId },
-    }).then(() => {
-      this.setState({
-        modal: false,
-      });
+    try {
+      await this.props.estimateRemove({
+        variables: { id: this.props.estimateId },
+      })   
       history.replace('/');
-    }).catch((error) => {
-      this.setState({
-        modal: false,
-      });
-      this.notificationSystem.addNotification({
+    } catch (error) {
+       this.notificationSystem.addNotification({
         autoDismiss: 6,
         position: 'br',
         title: 'Error',
         level: 'error',
         message: error.message,
-      });
+      });        
+    }
+    this.setState({
+      modal: false,
     });
   }
 
