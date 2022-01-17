@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.7.1
+version: v1.22.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
   'npm:ip:20170304':
@@ -11,6 +11,190 @@ patch:
   'npm:debug:20170905':
     - nodemailer-mailgun-transport > mailgun-js > debug:
         patched: '2017-10-04T14:17:31.539Z'
+    - snyk > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - axios > follow-redirects > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > needle > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-config > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-module > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-try-require > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-policy > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-policy > snyk-module > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > snyk-module > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-policy > snyk-resolve > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > snyk-resolve > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-policy > snyk-try-require > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > snyk-try-require > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > clite > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > http-proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > https-proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > http-proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > https-proxy-agent > debug:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > get-uri > debug:
+        patched: '2022-01-17T15:06:27.907Z'
   'npm:ms:20170412':
     - nodemailer-mailgun-transport > mailgun-js > debug > ms:
         patched: '2017-10-04T14:17:31.539Z'
+  'npm:extend:20180424':
+    - google-auth-library > request > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > http-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > https-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > socks-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > http-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > https-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > socks-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > http-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > https-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > get-uri > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > socks-proxy-agent > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > http-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > https-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > proxy-agent > pac-proxy-agent > socks-proxy-agent > agent-base > extend:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:hoek:20180212':
+    - google-auth-library > request > hawk > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > request > hawk > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > request > hawk > sntp > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > hawk > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > hawk > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > hawk > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > hawk > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > hawk > sntp > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > hawk > sntp > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > hawk > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > hawk > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > hawk > sntp > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-01-17T15:06:27.907Z'
+  SNYK-JS-LODASH-567746:
+    - redux > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - express-validator > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - react-redux > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - redux-form > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - apollo-client > redux > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > async > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - mongoose > async > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > inquirer > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-resolve-deps > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - react-apollo > apollo-client > redux > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - snyk > snyk-go-plugin > graphlib > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+    - nodemailer-mailgun-transport > mailgun-js > form-data > async > lodash:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:mime:20170907':
+    - google-auth-library > gtoken > mime:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > mime:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:moment:20170905':
+    - react-datepicker > moment:
+        patched: '2022-01-17T15:06:27.907Z'
+    - jsonwebtoken > joi > moment:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:stringstream:20180511':
+    - google-auth-library > request > stringstream:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > stringstream:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > stringstream:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > stringstream:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:tough-cookie:20170905':
+    - google-auth-library > request > tough-cookie:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > tough-cookie:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > tough-cookie:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > tough-cookie:
+        patched: '2022-01-17T15:06:27.907Z'
+  'npm:tunnel-agent:20170305':
+    - google-auth-library > request > tunnel-agent:
+        patched: '2022-01-17T15:06:27.907Z'
+    - google-auth-library > gtoken > request > tunnel-agent:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > request > tunnel-agent:
+        patched: '2022-01-17T15:06:27.907Z'
+    - googleapis > google-auth-library > gtoken > request > tunnel-agent:
+        patched: '2022-01-17T15:06:27.907Z'
